@@ -398,9 +398,10 @@ class RwCoating(models.Model):
     insulationcontainschloride = models.IntegerField(db_column='InsulationContainsChloride',default=0, blank=True, null=True)  # Field name made lowercase.
     internallinercondition = models.CharField(db_column='InternalLinerCondition', max_length=50, blank=True, null=True)  # Field name made lowercase.
     internallinertype = models.CharField(db_column='InternalLinerType', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    claddingthickness = models.FloatField(db_column='CladdingThicknness', blank=True, null=True)
     claddingcorrosionrate = models.FloatField(db_column='CladdingCorrosionRate', blank=True, null=True)  # Field name made lowercase.
     supportconfignotallowcoatingmaint = models.IntegerField(db_column='SupportConfigNotAllowCoatingMaint',default=0, blank=True, null=True)  # Field name made lowercase.
-    claddingthickness = models.FloatField(db_column='CladdingThicknness', blank=True,null=True)
+
 
     class Meta:
         managed = False
@@ -654,6 +655,7 @@ class RwMaterial(models.Model):
     sigmaphase = models.FloatField(db_column='SigmaPhase', blank=True, null=True)  # Field name made lowercase.
     sulfurcontent = models.CharField(db_column='SulfurContent', max_length=50, blank=True, null=True)  # Field name made lowercase.
     heattreatment = models.CharField(db_column='HeatTreatment', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    steelproductform = models.CharField(db_column='SteelProductForm', max_length=50, blank=True, null=True)  # Field name made lowercase
     referencetemperature = models.FloatField(db_column='ReferenceTemperature', blank=True, null=True)  # Field name made lowercase.
     ptamaterialcode = models.CharField(db_column='PTAMaterialCode', max_length=70, blank=True, null=True)  # Field name made lowercase.
     hthamaterialcode = models.CharField(db_column='HTHAMaterialCode', max_length=50, blank=True, null=True)  # Field name made lowercase.
@@ -664,10 +666,10 @@ class RwMaterial(models.Model):
     carbonlowalloy = models.IntegerField(db_column='CarbonLowAlloy',default=0, blank=True, null=True)  # Field name made lowercase.
     nickelbased = models.IntegerField(db_column='NickelBased',default=0, blank=True, null=True)  # Field name made lowercase.
     chromemoreequal12 = models.IntegerField(db_column='ChromeMoreEqual12',default=0, blank=True, null=True)  # Field name made lowercase.
-    allowablestress = models.FloatField(db_column='AllowableStress', blank=True, null=True)  # Field name made lowercase.
     costfactor = models.FloatField(db_column='CostFactor', blank=True, null=True)  # Field name made lowercase.
     yieldstrength = models.FloatField(db_column='YieldStrength', blank=True,null=True)
     tensilestrength = models.FloatField(db_column='TensileStrength', blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'rw_material'

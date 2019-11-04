@@ -83,9 +83,9 @@ WSGI_APPLICATION = 'RbiCloud.wsgi.application'
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'riskwise6',
+         'NAME': 'rbi6',
          'USER': 'root',
-         'PASSWORD': 'root',
+         'PASSWORD': '1',
          'HOST': 'localhost',
          'PORT': '3306',
      }

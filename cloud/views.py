@@ -1102,12 +1102,12 @@ def NewProposal(request, componentID):
                                     mindesigntemperature=data['minDesignTemp'],
                                     brittlefracturethickness=data['BrittleFacture'], sigmaphase=data['sigmaPhase'],
                                     sulfurcontent=data['sulfurContent'], heattreatment=data['heatTreatment'],
-                                    referencetemperature=data['tempRef'],
+                                    referencetemperature=data['tempRef'],steelproductform=data['AusteniticSteel'],
                                     ptamaterialcode=data['PTAMaterialGrade'],
                                     hthamaterialcode=data['HTHAMaterialGrade'], ispta=materialPTA, ishtha=materialHTHA,
                                     austenitic=austeniticStell, temper=suscepTemp, carbonlowalloy=cacbonAlloy,
                                     nickelbased=nickelAlloy, chromemoreequal12=chromium,
-                                    allowablestress=data['allowStress'],costfactor=data['materialCostFactor'],
+                                    costfactor=data['materialCostFactor'],
                                     yieldstrength=data['yieldstrength'],tensilestrength=data['tensilestrength'])
             rwmaterial.save()
             rwinputca = models.RwInputCaLevel1(id=rwassessment, api_fluid=data['APIFluid'], system=data['Systerm'],
@@ -1544,7 +1544,7 @@ def NewTank(request, componentID):
                                     ispta=materialPTA, ptamaterialcode=data['PTAMaterialGrade'],
                                     costfactor=data['materialCostFactor'])
             rwmaterial.save()
-            rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=data['fluidHeight'],
+            rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=data['fluiAusteniticSteeldHeight'],
                                       shell_course_height=data['shellHieght'],
                                       tank_diametter=data['tankDiameter'], prevention_barrier=preventBarrier,
                                       environ_sensitivity=data['EnvSensitivity'],
