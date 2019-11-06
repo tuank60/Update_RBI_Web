@@ -31,7 +31,7 @@ def calculateNormal(proposalID):
             facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
         datafaci = models.Facility.objects.get(
             facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
-        comptype = models.ComponentType.objects.get(componenttypeid=comp.componenttypeid)
+        comptype = models.ComponentType.objects.get(componenttypeid=comp.componenttype_id)
 
 
         if not rwcoat.externalcoating:

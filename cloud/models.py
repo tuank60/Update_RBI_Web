@@ -398,10 +398,9 @@ class RwCoating(models.Model):
     insulationcontainschloride = models.IntegerField(db_column='InsulationContainsChloride',default=0, blank=True, null=True)  # Field name made lowercase.
     internallinercondition = models.CharField(db_column='InternalLinerCondition', max_length=50, blank=True, null=True)  # Field name made lowercase.
     internallinertype = models.CharField(db_column='InternalLinerType', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    claddingthickness = models.FloatField(db_column='CladdingThicknness', blank=True, null=True)
     claddingcorrosionrate = models.FloatField(db_column='CladdingCorrosionRate', blank=True, null=True)  # Field name made lowercase.
     supportconfignotallowcoatingmaint = models.IntegerField(db_column='SupportConfigNotAllowCoatingMaint',default=0, blank=True, null=True)  # Field name made lowercase.
-
+    claddingthickness = models.FloatField(db_column='CladdingThickness', blank=True,null=True)
 
     class Meta:
         managed = False
@@ -433,15 +432,15 @@ class RwComponent(models.Model):
     shakingamount = models.CharField(db_column='ShakingAmount', max_length=50, blank=True, null=True)  # Field name made lowercase.
     shakingdetected = models.IntegerField(db_column='ShakingDetected',default=0, blank=True, null=True)  # Field name made lowercase.
     shakingtime = models.CharField(db_column='ShakingTime', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    trampelements = models.IntegerField(db_column='TrampElements',default=0, blank=True, null=True)  # Field name made lowercase.
     shellheight = models.FloatField(db_column='ShellHeight', blank=True, null=True)  # Field name made lowercase.
     releasepreventionbarrier = models.IntegerField(db_column='ReleasePreventionBarrier',default=0, blank=True, null=True)  # Field name made lowercase.
     concretefoundation = models.IntegerField(db_column='ConcreteFoundation',default=0, blank=True, null=True)  # Field name made lowercase.
     severityofvibration = models.CharField(db_column='SeverityOfVibration', max_length=50, blank=True, null=True)  # Field name made lowercase.
     weldjointefficiency = models.FloatField(db_column='WeldJointEfficiency', blank=True,null=True)
-    alowablestress = models.FloatField(db_column='AlowableStress', blank=True,null=True)
+    alowablestress = models.FloatField(db_column='AllowableStress', blank=True,null=True)
     structuralthickness = models.FloatField(db_column='StructuralThickness', blank=True,null=True)
-    componentvolume = models.FloatField(db_column='ComponentVolue', blank=True,null=True)
+    crackscurrentcondition = models.CharField(db_column='CracksCurrentCondition', blank=True,null=True, max_length=100)
+    componentvolume = models.FloatField(db_column='ComponentVolume', blank=True,null=True)
     minstructuralthickness = models.IntegerField(db_column='MinimumStructuralThicknessGoverns',default=0, blank=True,null=True)
     hthadamage = models.IntegerField(db_column='HTHADamageObserved',default=0, blank=True,null=True)
     fabricatedsteel= models.IntegerField(db_column='FabricatedSteel',default=0, blank=True,null=True)
@@ -451,6 +450,7 @@ class RwComponent(models.Model):
     cyclicservice = models.IntegerField(db_column='CyclicServiceFatigueVibration',default=0, blank=True,null=True)
     equipmentcircuitshock = models.IntegerField(db_column='EquipmentCircuitShock',default=0, blank=True,null=True)
     confidencecorrosionrate = models.CharField(db_column='ConfidenceCorrosionRate',max_length=50,blank=True,null=True)
+    brittlefracturethickness = models.FloatField(db_column='BrittleFractureThickness', blank=True,null=True)  # Field name made lowercase.
     class Meta:
         managed = False
         db_table = 'rw_component'
@@ -487,7 +487,6 @@ class RwEquipment(models.Model):
     adjustmentsettle = models.CharField(db_column='AdjustmentSettle', max_length=100, blank=True, null=True)  # Field name made lowercase.
     componentiswelded = models.IntegerField(db_column='ComponentIsWelded',default=0, blank=True, null=True)  # Field name made lowercase.
     tankismaintained = models.IntegerField(db_column='TankIsMaintained',default=0, blank=True, null=True)  # Field name made lowercase.
-
 
     class Meta:
         managed = False
@@ -650,12 +649,12 @@ class RwMaterial(models.Model):
     designpressure = models.FloatField(db_column='DesignPressure', blank=True, null=True)  # Field name made lowercase.
     designtemperature = models.FloatField(db_column='DesignTemperature', blank=True, null=True)  # Field name made lowercase.
     mindesigntemperature = models.FloatField(db_column='MinDesignTemperature', blank=True, null=True)  # Field name made lowercase.
-    brittlefracturethickness = models.FloatField(db_column='BrittleFractureThickness', blank=True, null=True)  # Field name made lowercase.
+    brittlefracturethickness = models.FloatField(db_column='BrittleFractureThickness',blank=True,null=True)
     corrosionallowance = models.FloatField(db_column='CorrosionAllowance', blank=True, null=True)  # Field name made lowercase.
     sigmaphase = models.FloatField(db_column='SigmaPhase', blank=True, null=True)  # Field name made lowercase.
     sulfurcontent = models.CharField(db_column='SulfurContent', max_length=50, blank=True, null=True)  # Field name made lowercase.
     heattreatment = models.CharField(db_column='HeatTreatment', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    steelproductform = models.CharField(db_column='SteelProductForm', max_length=50, blank=True, null=True)  # Field name made lowercase
+    steelproductform = models.CharField(db_column='SteelProductForm',max_length=60,blank=True,null=True)
     referencetemperature = models.FloatField(db_column='ReferenceTemperature', blank=True, null=True)  # Field name made lowercase.
     ptamaterialcode = models.CharField(db_column='PTAMaterialCode', max_length=70, blank=True, null=True)  # Field name made lowercase.
     hthamaterialcode = models.CharField(db_column='HTHAMaterialCode', max_length=50, blank=True, null=True)  # Field name made lowercase.
@@ -669,7 +668,6 @@ class RwMaterial(models.Model):
     costfactor = models.FloatField(db_column='CostFactor', blank=True, null=True)  # Field name made lowercase.
     yieldstrength = models.FloatField(db_column='YieldStrength', blank=True,null=True)
     tensilestrength = models.FloatField(db_column='TensileStrength', blank=True, null=True)
-
     class Meta:
         managed = False
         db_table = 'rw_material'
@@ -689,6 +687,7 @@ class RwStream(models.Model):
     exposedtogasamine = models.IntegerField(db_column='ExposedToGasAmine',default=0, blank=True, null=True)  # Field name made lowercase.
     exposedtosulphur = models.IntegerField(db_column='ExposedToSulphur',default=0, blank=True, null=True)  # Field name made lowercase.
     exposuretoamine = models.CharField(db_column='ExposureToAmine', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    flammablefluidid = models.IntegerField(db_column='FlammableFluidID', blank=True,null=True,default=0)
     h2s = models.IntegerField(db_column='H2S',default=0, blank=True, null=True)  # Field name made lowercase.
     h2sinwater = models.FloatField(db_column='H2SInWater', blank=True, null=True)  # Field name made lowercase.
     hydrogen = models.IntegerField(db_column='Hydrogen',default=0, blank=True, null=True)  # Field name made lowercase.
@@ -709,6 +708,7 @@ class RwStream(models.Model):
     fluidleavedikeremainonsitepercent = models.FloatField(db_column='FluidLeaveDikeRemainOnSitePercent', blank=True, null=True)  # Field name made lowercase.
     fluidgooffsitepercent = models.FloatField(db_column='FluidGoOffSitePercent', blank=True, null=True)  # Field name made lowercase.
     flowrate = models.FloatField(db_column='FlowRate', blank=True,null=True)
+    liquidlevel = models.FloatField(db_column='LiquidLevel',blank=True,null=True)
     class Meta:
         managed = False
         db_table = 'rw_stream'

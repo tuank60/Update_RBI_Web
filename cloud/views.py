@@ -620,7 +620,8 @@ def ListProposal(request, componentID):
                     if request.POST.get('%d' %a.id):
                         ReCalculate.ReCalculate(a.id)
                 return redirect('proposalDisplay', componentID=componentID)
-    except:
+    except Exception as e:
+        print(e)
         raise Http404
     return render(request, 'FacilityUI/proposal/proposalListDisplay.html', {'page':'listProposal','obj':obj, 'istank': istank, 'isshell':isshell,
                                                                             'componentID':componentID,
@@ -756,11 +757,6 @@ def NewProposal(request, componentID):
             else:
                 HFICI = 0
 
-            if request.POST.get('TrampElements'):
-                TrampElement = 1
-            else:
-                TrampElement = 0
-
             if request.POST.get('HTHADamage'):
                 hthadamage = 1
             else:
@@ -846,7 +842,6 @@ def NewProposal(request, componentID):
             data['minDesignTemp'] = request.POST.get('MinDesignTemp')
             data['designPressure'] = request.POST.get('DesignPressure')
             data['tempRef'] = request.POST.get('ReferenceTemperature')
-            data['allowStress'] = request.POST.get('ASAT')
             data['BrittleFacture'] = request.POST.get('BFGT')
             data['CA'] = request.POST.get('CorrosionAllowance')
             data['sigmaPhase'] = request.POST.get('SigmaPhase')
@@ -1053,7 +1048,7 @@ def NewProposal(request, componentID):
                                       pipecondition=data['pipeCondition'],
                                       previousfailures=data['prevFailure'], shakingamount=data['shakingPipe'],
                                       shakingdetected=visibleSharkingProtect, shakingtime=data['timeShakingPipe'],
-                                      trampelements=TrampElement,weldjointefficiency=data['weldjointeff'],
+                                      weldjointefficiency=data['weldjointeff'],
                                       alowablestress = data['allowablestresss'],structuralthickness=data['structuralthickness'],
                                       componentvolume= data['compvolume'], hthadamage=hthadamage, minstructuralthickness= minstruc,
                                       fabricatedsteel = p1andp3,equipmentsatisfied=equipmentrequire, nominaloperatingconditions=operatingcondition,
@@ -1102,13 +1097,13 @@ def NewProposal(request, componentID):
                                     mindesigntemperature=data['minDesignTemp'],
                                     brittlefracturethickness=data['BrittleFacture'], sigmaphase=data['sigmaPhase'],
                                     sulfurcontent=data['sulfurContent'], heattreatment=data['heatTreatment'],
-                                    referencetemperature=data['tempRef'],steelproductform=data['AusteniticSteel'],
+                                    referencetemperature=data['tempRef'],
                                     ptamaterialcode=data['PTAMaterialGrade'],
                                     hthamaterialcode=data['HTHAMaterialGrade'], ispta=materialPTA, ishtha=materialHTHA,
                                     austenitic=austeniticStell, temper=suscepTemp, carbonlowalloy=cacbonAlloy,
                                     nickelbased=nickelAlloy, chromemoreequal12=chromium,
                                     costfactor=data['materialCostFactor'],
-                                    yieldstrength=data['yieldstrength'],tensilestrength=data['tensilestrength'])
+                                    yieldstrength=data['yieldstrength'],tensilestrength= data['tensilestrength'])
             rwmaterial.save()
             rwinputca = models.RwInputCaLevel1(id=rwassessment, api_fluid=data['APIFluid'], system=data['Systerm'],
                                         release_duration=data['ReleaseDuration'], detection_type=data['DetectionType'],
@@ -1125,6 +1120,7 @@ def NewProposal(request, componentID):
             ReCalculate.ReCalculate(rwassessment.id)
             return redirect('damgeFactor', proposalID= rwassessment.id)
     except Exception as e:
+        print(e)
         raise Http404
     return render(request, 'FacilityUI/proposal/proposalNormalNew.html',{'page':'newProposal','api':Fluid, 'componentID':componentID, 'equipmentID':comp.equipmentid_id,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
 def NewTank(request, componentID):
@@ -1544,7 +1540,7 @@ def NewTank(request, componentID):
                                     ispta=materialPTA, ptamaterialcode=data['PTAMaterialGrade'],
                                     costfactor=data['materialCostFactor'])
             rwmaterial.save()
-            rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=data['fluiAusteniticSteeldHeight'],
+            rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=data['fluidHeight'],
                                       shell_course_height=data['shellHieght'],
                                       tank_diametter=data['tankDiameter'], prevention_barrier=preventBarrier,
                                       environ_sensitivity=data['EnvSensitivity'],
