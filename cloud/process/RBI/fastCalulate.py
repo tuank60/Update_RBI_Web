@@ -25,14 +25,19 @@ def calculateNormal(proposalID):
         damageMachinsm = models.RwDamageMechanism.objects.filter(id_dm=proposalID)
         countRefullfc = models.RwFullFcof.objects.filter(id=proposalID)
         chart = models.RwDataChart.objects.filter(id=proposalID)
+        print("cuong2")
 
         comp = models.ComponentMaster.objects.get(componentid=rwassessment.componentid_id)
+        print("cuong3")
         target = models.FacilityRiskTarget.objects.get(
             facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
+        print("cuong4")
         datafaci = models.Facility.objects.get(
             facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
-        comptype = models.ComponentType.objects.get(componenttypeid=comp.componenttype_id)
-
+        print("cuong5")
+        print(comp.componenttypeid_id)
+        comptype = models.ComponentType.objects.get(componenttypeid=comp.componenttypeid_id)
+        print("cuong6")
 
         if not rwcoat.externalcoating:
             dm_cal = DM_CAL.DM_CAL(ComponentNumber=str(comp.componentnumber),
@@ -120,7 +125,7 @@ def calculateNormal(proposalID):
                                    PIPE_CONDITION=rwcomponent.pipecondition, JOINT_TYPE=rwcomponent.branchjointtype,
                                    BRANCH_DIAMETER=rwcomponent.branchdiameter, TensileStrengthDesignTemp=rwmaterial.tensilestrength,
                                    StructuralThickness=rwcomponent.structuralthickness, MINIUM_STRUCTURAL_THICKNESS_GOVERS=rwcomponent.minstructuralthickness,
-                                   WeldJonintEfficiency=rwcomponent.weldjointefficiency, AllowableStress=rwmaterial.allowablestress,
+                                   WeldJonintEfficiency=rwcomponent.weldjointefficiency, AllowableStress=rwcomponent.allowablestress,
                                    YeildStrengthDesignTemp=rwmaterial.yieldstrength,Pressure=rwmaterial.designpressure,
                                    ShapeFactor=comptype.shapefactor,CR_Confidents_Level=rwcomponent.confidencecorrosionrate)
         else:
@@ -208,7 +213,7 @@ def calculateNormal(proposalID):
                                    PIPE_CONDITION=rwcomponent.pipecondition, JOINT_TYPE=rwcomponent.branchjointtype,
                                    BRANCH_DIAMETER=rwcomponent.branchdiameter, TensileStrengthDesignTemp=rwmaterial.tensilestrength,
                                    StructuralThickness=rwcomponent.structuralthickness, MINIUM_STRUCTURAL_THICKNESS_GOVERS=rwcomponent.minstructuralthickness,
-                                   WeldJonintEfficiency=rwcomponent.weldjointefficiency, AllowableStress=rwmaterial.allowablestress,
+                                   WeldJonintEfficiency=rwcomponent.weldjointefficiency, AllowableStress=rwcomponent.allowablestress,
                                    YeildStrengthDesignTemp=rwmaterial.yieldstrength,Pressure=rwmaterial.designpressure,
                                    ShapeFactor=comptype.shapefactor,CR_Confidents_Level=rwcomponent.confidencecorrosionrate)
         ca_cal = CA_CAL.CA_NORMAL(NominalDiametter=rwcomponent.nominaldiameter,
@@ -969,11 +974,15 @@ def calculateTank(proposalID):
 def ReCalculate(proposalID):
     try:
         rwAss = models.RwAssessment.objects.get(id=proposalID)
+        print(rwAss.componentid_id)
         component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        print("cuong1")
+        print(component.componenttypeid_id)
         if component.componenttypeid_id == 8 or component.componenttypeid_id == 12 or component.componenttypeid_id == 14 or component.componenttypeid_id == 15:
             isTank = 1
         else:
             isTank = 0
+            print(component.componenttypeid_id)
         if isTank:
             calculateTank(proposalID)
         else:

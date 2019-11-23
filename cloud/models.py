@@ -332,57 +332,8 @@ class RwCaLevel1(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'rw_ca_level1'
+        db_table = 'ca_level1'
         ordering = ('id',)
-
-
-class RwCaTank(models.Model):
-    id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
-    hydraulic_water = models.FloatField(db_column='Hydraulic_Water', blank=True, null=True)  # Field name made lowercase.
-    hydraulic_fluid = models.FloatField(db_column='Hydraulic_Fluid', blank=True, null=True)  # Field name made lowercase.
-    seepage_velocity = models.FloatField(db_column='Seepage_Velocity', blank=True, null=True)  # Field name made lowercase.
-    flow_rate_d1 = models.FloatField(db_column='Flow_Rate_D1', blank=True, null=True)  # Field name made lowercase.
-    flow_rate_d2 = models.FloatField(db_column='Flow_Rate_D2', blank=True, null=True)  # Field name made lowercase.
-    flow_rate_d3 = models.FloatField(db_column='Flow_Rate_D3', blank=True, null=True)  # Field name made lowercase.
-    flow_rate_d4 = models.FloatField(db_column='Flow_Rate_D4', blank=True, null=True)  # Field name made lowercase.
-    leak_duration_d1 = models.FloatField(db_column='Leak_Duration_D1', blank=True, null=True)  # Field name made lowercase.
-    leak_duration_d2 = models.FloatField(db_column='Leak_Duration_D2', blank=True, null=True)  # Field name made lowercase.
-    leak_duration_d3 = models.FloatField(db_column='Leak_Duration_D3', blank=True, null=True)  # Field name made lowercase.
-    leak_duration_d4 = models.FloatField(db_column='Leak_Duration_D4', blank=True, null=True)  # Field name made lowercase.
-    release_volume_leak_d1 = models.FloatField(db_column='Release_Volume_Leak_D1', blank=True, null=True)  # Field name made lowercase.
-    release_volume_leak_d2 = models.FloatField(db_column='Release_Volume_Leak_D2', blank=True, null=True)  # Field name made lowercase.
-    release_volume_leak_d3 = models.FloatField(db_column='Release_Volume_Leak_D3', blank=True, null=True)  # Field name made lowercase.
-    release_volume_leak_d4 = models.FloatField(db_column='Release_Volume_Leak_D4', blank=True, null=True)  # Field name made lowercase.
-    release_volume_rupture = models.FloatField(db_column='Release_Volume_Rupture', blank=True, null=True)  # Field name made lowercase.
-    liquid_height = models.FloatField(db_column='Liquid_Height', blank=True, null=True)  # Field name made lowercase.
-    volume_fluid = models.FloatField(db_column='Volume_Fluid', blank=True, null=True)  # Field name made lowercase.
-    time_leak_ground = models.FloatField(db_column='Time_Leak_Ground', blank=True, null=True)  # Field name made lowercase.
-    volume_subsoil_leak_d1 = models.FloatField(db_column='Volume_SubSoil_Leak_D1', blank=True, null=True)  # Field name made lowercase.
-    volume_subsoil_leak_d4 = models.FloatField(db_column='Volume_SubSoil_Leak_D4', blank=True, null=True)  # Field name made lowercase.
-    volume_ground_water_leak_d1 = models.FloatField(db_column='Volume_Ground_Water_Leak_D1', blank=True, null=True)  # Field name made lowercase.
-    volume_ground_water_leak_d4 = models.FloatField(db_column='Volume_Ground_Water_Leak_D4', blank=True, null=True)  # Field name made lowercase.
-    barrel_dike_leak = models.FloatField(db_column='Barrel_Dike_Leak', blank=True, null=True)  # Field name made lowercase.
-    barrel_dike_rupture = models.FloatField(db_column='Barrel_Dike_Rupture', blank=True, null=True)  # Field name made lowercase.
-    barrel_onsite_leak = models.FloatField(db_column='Barrel_Onsite_Leak', blank=True, null=True)  # Field name made lowercase.
-    barrel_onsite_rupture = models.FloatField(db_column='Barrel_Onsite_Rupture', blank=True, null=True)  # Field name made lowercase.
-    barrel_offsite_leak = models.FloatField(db_column='Barrel_Offsite_Leak', blank=True, null=True)  # Field name made lowercase.
-    barrel_offsite_rupture = models.FloatField(db_column='Barrel_Offsite_Rupture', blank=True, null=True)  # Field name made lowercase.
-    barrel_water_leak = models.FloatField(db_column='Barrel_Water_Leak', blank=True, null=True)  # Field name made lowercase.
-    barrel_water_rupture = models.FloatField(db_column='Barrel_Water_Rupture', blank=True, null=True)  # Field name made lowercase.
-    fc_environ_leak = models.FloatField(db_column='FC_Environ_Leak', blank=True, null=True)  # Field name made lowercase.
-    fc_environ_rupture = models.FloatField(db_column='FC_Environ_Rupture', blank=True, null=True)  # Field name made lowercase.
-    fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True)  # Field name made lowercase.
-    material_factor = models.FloatField(db_column='Material_Factor', blank=True, null=True)  # Field name made lowercase.
-    component_damage_cost = models.FloatField(db_column='Component_Damage_Cost', blank=True, null=True)  # Field name made lowercase.
-    business_cost = models.FloatField(db_column='Business_Cost', blank=True, null=True)  # Field name made lowercase.
-    consequence = models.FloatField(db_column='Consequence', blank=True, null=True)  # Field name made lowercase.
-    consequencecategory = models.CharField(db_column='ConsequenceCategory', max_length=50, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'rw_ca_tank'
-        ordering = ('id',)
-
 
 class RwCoating(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
@@ -406,6 +357,63 @@ class RwCoating(models.Model):
         managed = False
         db_table = 'rw_coating'
         ordering = ('id',)
+
+
+class CofFluid(models.Model):
+    cofluidid = models.AutoField(db_column='COFFluidID',primary_key=True)
+    coffluid = models.CharField(db_column='COFFluid' , max_length=250, null=True)
+    alisaname = models.CharField(db_column='AliasName' , max_length=250, null=True)
+    examplesofapplicable = models.CharField(db_column='ExamplesOfApplicable' , max_length=250, null=True)
+    fluidtype = models.IntegerField(db_column='FluidType', null=True)
+    mw = models.FloatField(db_column='MW', null=True)
+    nbp = models.FloatField(db_column='NBP', null=True)
+    density = models.FloatField(db_column='Density', null=True)
+    heatequation = models.IntegerField(db_column='HeatEquation', null=True)
+    idealconstana = models.FloatField(db_column='IdealConstantA', null=True)
+    idealconstantb = models.FloatField(db_column='IdealConstantB', null=True)
+    idealconstantc = models.FloatField(db_column='IdealConstantC', null=True)
+    idealconstand = models.FloatField(db_column='IdealConstantD', null=True)
+    idealconstane = models.FloatField(db_column='IdealConstantE', null=True)
+    ambienstate = models.IntegerField(db_column='AmbientState', null=False)
+    autoignitiontemperature = models.IntegerField(db_column='AutoIgnitionTemperature', null=True)
+    k = models.FloatField(db_column='K', null=True)
+    flammable = models.BooleanField(db_column='Flammable', default=1,null=False)
+    toxic = models.BooleanField(db_column='Toxic', default=1,null=False)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+
+    class Meta:
+        managed = False
+        db_table = 'cof_fluid'
+        ordering = ('cofluidid',)
+
+
+class CorrosionRateTank(models.Model):
+    id = models.ForeignKey('RwAssessment', on_delete=models.CASCADE, db_column='ID')
+    corrosionid = models.AutoField(db_column='CorrosionID', primary_key=True)
+    soilsidecorrosionrate = models.FloatField(db_column='SoilSideCorrosionRate', null=True)
+    productsidecorrosionrate = models.FloatField(db_column='ProductSideCorrosionRate', null=True)
+    potentialcorrosion = models.CharField(db_column='PotentialCorrosion' , max_length=250, null=True)
+    tankpadmaterial = models.CharField(db_column='TankPadMaterial', max_length=250, null=True)
+    tankdrainagetype = models.CharField(db_column='TankDrainageType', max_length=250, null=True)
+    cathodicprotectiontype = models.CharField(db_column='CathodicProtectionType', max_length=250, null=True)
+    tankbottomtype = models.CharField(db_column='TankBottomType', max_length=250, null=True)
+    soilsidetemperature = models.CharField(db_column='SoilSideTemperature', max_length=250,null=True)
+    productcondition = models.CharField(db_column='ProductCondition', max_length=250, null=True)
+    productsidetemp = models.CharField(db_column='ProductSideTemp', max_length=250, null=True)
+    steamcoil = models.CharField(db_column='SteamCoil', max_length=250, null=True)
+    waterdrawoff = models.CharField(db_column='WaterDrawOff', max_length=250, null=True)
+    productsidebottom = models.CharField(db_column='ProductSideBottom', max_length=250, null=True)
+    modifiedsoilsidecorrosionrate = models.FloatField(db_column='ModifiedSoilSideCorrosionRate', null=True)
+    modifiedproductsidecorrosionrate = models.FloatField(db_column='ModifiedProductSideCorrosionRate', null=True)
+    finalestimatedcorrosionrate = models.FloatField(db_column='FinalEstimatedCorrosionRate', null=True)
+    create = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+
+    class Meta:
+        managed = False
+        db_table = 'rw_corrosion_rate_tank'
+        ordering = ('corrosionid',)
 
 
 class RwComponent(models.Model):
@@ -437,7 +445,7 @@ class RwComponent(models.Model):
     concretefoundation = models.IntegerField(db_column='ConcreteFoundation',default=0, blank=True, null=True)  # Field name made lowercase.
     severityofvibration = models.CharField(db_column='SeverityOfVibration', max_length=50, blank=True, null=True)  # Field name made lowercase.
     weldjointefficiency = models.FloatField(db_column='WeldJointEfficiency', blank=True,null=True)
-    alowablestress = models.FloatField(db_column='AllowableStress', blank=True,null=True)
+    allowablestress = models.FloatField(db_column='AllowableStress', blank=True,null=True)
     structuralthickness = models.FloatField(db_column='StructuralThickness', blank=True,null=True)
     crackscurrentcondition = models.CharField(db_column='CracksCurrentCondition', blank=True,null=True, max_length=100)
     componentvolume = models.FloatField(db_column='ComponentVolume', blank=True,null=True)
@@ -531,46 +539,68 @@ class RwFullFcof(models.Model):
 
 
 class RwFullPof(models.Model):
-    id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
-    thinningap1 = models.FloatField(db_column='ThinningAP1', blank=True, null=True)  # Field name made lowercase.
-    thinningap2 = models.FloatField(db_column='ThinningAP2', blank=True, null=True)  # Field name made lowercase.
-    thinningap3 = models.FloatField(db_column='ThinningAP3', blank=True, null=True)  # Field name made lowercase.
-    sccap1 = models.FloatField(db_column='SCCAP1', blank=True, null=True)  # Field name made lowercase.
-    sccap2 = models.FloatField(db_column='SCCAP2', blank=True, null=True)  # Field name made lowercase.
-    sccap3 = models.FloatField(db_column='SCCAP3', blank=True, null=True)  # Field name made lowercase.
-    externalap1 = models.FloatField(db_column='ExternalAP1', blank=True, null=True)  # Field name made lowercase.
-    externalap2 = models.FloatField(db_column='ExternalAP2', blank=True, null=True)  # Field name made lowercase.
-    externalap3 = models.FloatField(db_column='ExternalAP3', blank=True, null=True)  # Field name made lowercase.
-    brittleap1 = models.FloatField(db_column='BrittleAP1', blank=True, null=True)  # Field name made lowercase.
-    brittleap2 = models.FloatField(db_column='BrittleAP2', blank=True, null=True)  # Field name made lowercase.
-    brittleap3 = models.FloatField(db_column='BrittleAP3', blank=True, null=True)  # Field name made lowercase.
-    htha_ap1 = models.FloatField(db_column='HTHA_AP1', blank=True, null=True)  # Field name made lowercase.
-    htha_ap2 = models.FloatField(db_column='HTHA_AP2', blank=True, null=True)  # Field name made lowercase.
-    htha_ap3 = models.FloatField(db_column='HTHA_AP3', blank=True, null=True)  # Field name made lowercase.
-    fatigueap1 = models.FloatField(db_column='FatigueAP1', blank=True, null=True)  # Field name made lowercase.
-    fatigueap2 = models.FloatField(db_column='FatigueAP2', blank=True, null=True)  # Field name made lowercase.
-    fatigueap3 = models.FloatField(db_column='FatigueAP3', blank=True, null=True)  # Field name made lowercase.
-    fms = models.FloatField(db_column='FMS', blank=True, null=True)  # Field name made lowercase.
-    thinningtype = models.CharField(db_column='ThinningType', max_length=7, blank=True, null=True)  # Field name made lowercase.
-    gfftotal = models.FloatField(db_column='GFFTotal', blank=True, null=True)  # Field name made lowercase.
-    thinninglocalap1 = models.FloatField(db_column='ThinningLocalAP1', blank=True, null=True)  # Field name made lowercase.
-    thinninglocalap2 = models.FloatField(db_column='ThinningLocalAP2', blank=True, null=True)  # Field name made lowercase.
-    thinninglocalap3 = models.FloatField(db_column='ThinningLocalAP3', blank=True, null=True)  # Field name made lowercase.
-    thinninggeneralap1 = models.FloatField(db_column='ThinningGeneralAP1', blank=True, null=True)  # Field name made lowercase.
-    thinninggeneralap2 = models.FloatField(db_column='ThinningGeneralAP2', blank=True, null=True)  # Field name made lowercase.
-    thinninggeneralap3 = models.FloatField(db_column='ThinningGeneralAP3', blank=True, null=True)  # Field name made lowercase.
-    totaldfap1 = models.FloatField(db_column='TotalDFAP1', blank=True, null=True)  # Field name made lowercase.
-    totaldfap2 = models.FloatField(db_column='TotalDFAP2', blank=True, null=True)  # Field name made lowercase.
-    totaldfap3 = models.FloatField(db_column='TotalDFAP3', blank=True, null=True)  # Field name made lowercase.
-    pofap1 = models.FloatField(db_column='PoFAP1', blank=True, null=True)  # Field name made lowercase.
-    pofap2 = models.FloatField(db_column='PoFAP2', blank=True, null=True)  # Field name made lowercase.
-    pofap3 = models.FloatField(db_column='PoFAP3', blank=True, null=True)  # Field name made lowercase.
-    pofap1category = models.CharField(db_column='PoFAP1Category', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    pofap2category = models.CharField(db_column='PoFAP2Category', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    pofap3category = models.CharField(db_column='PoFAP3Category', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    semiap1 = models.FloatField(db_column='SemiAP1', blank=True, null=True)
-    semiap2 = models.FloatField(db_column='SemiAP2', blank=True, null=True)
-    semiap3 = models.FloatField(db_column='SemiAP3', blank=True, null=True)
+    try:
+        id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID',
+                               primary_key=True)  # Field name made lowercase.
+        thinningap1 = models.FloatField(db_column='ThinningAP1', blank=True, null=True)  # Field name made lowercase.
+        thinningap2 = models.FloatField(db_column='ThinningAP2', blank=True, null=True)  # Field name made lowercase.
+        thinningap3 = models.FloatField(db_column='ThinningAP3', blank=True, null=True)  # Field name made lowercase.
+        sccap1 = models.FloatField(db_column='SCCAP1', blank=True, null=True)  # Field name made lowercase.
+        sccap2 = models.FloatField(db_column='SCCAP2', blank=True, null=True)  # Field name made lowercase.
+        sccap3 = models.FloatField(db_column='SCCAP3', blank=True, null=True)  # Field name made lowercase.
+        externalap1 = models.FloatField(db_column='ExternalAP1', blank=True, null=True)  # Field name made lowercase.
+        externalap2 = models.FloatField(db_column='ExternalAP2', blank=True, null=True)  # Field name made lowercase.
+        externalap3 = models.FloatField(db_column='ExternalAP3', blank=True, null=True)  # Field name made lowercase.
+        brittleap1 = models.FloatField(db_column='BrittleAP1', blank=True, null=True)  # Field name made lowercase.
+        brittleap2 = models.FloatField(db_column='BrittleAP2', blank=True, null=True)  # Field name made lowercase.
+        brittleap3 = models.FloatField(db_column='BrittleAP3', blank=True, null=True)  # Field name made lowercase.
+        htha_ap1 = models.FloatField(db_column='HTHA_AP1', blank=True, null=True)  # Field name made lowercase.
+        htha_ap2 = models.FloatField(db_column='HTHA_AP2', blank=True, null=True)  # Field name made lowercase.
+        htha_ap3 = models.FloatField(db_column='HTHA_AP3', blank=True, null=True)  # Field name made lowercase.
+        fatigueap1 = models.FloatField(db_column='FatigueAP1', blank=True, null=True)  # Field name made lowercase.
+        fatigueap2 = models.FloatField(db_column='FatigueAP2', blank=True, null=True)  # Field name made lowercase.
+        fatigueap3 = models.FloatField(db_column='FatigueAP3', blank=True, null=True)  # Field name made lowercase.
+        fms = models.FloatField(db_column='FMS', blank=True, null=True)  # Field name made lowercase.
+        thinningtype = models.CharField(db_column='ThinningType', max_length=7, blank=True,
+                                        null=True)  # Field name made lowercase.
+        gfftotal = models.FloatField(db_column='GFFTotal', blank=True, null=True)  # Field name made lowercase.
+        thinninglocalap1 = models.FloatField(db_column='ThinningLocalAP1', blank=True,
+                                             null=True)  # Field name made lowercase.
+        thinninglocalap2 = models.FloatField(db_column='ThinningLocalAP2', blank=True,
+                                             null=True)  # Field name made lowercase.
+        thinninglocalap3 = models.FloatField(db_column='ThinningLocalAP3', blank=True,
+                                             null=True)  # Field name made lowercase.
+        thinninggeneralap1 = models.FloatField(db_column='ThinningGeneralAP1', blank=True,
+                                               null=True)  # Field name made lowercase.
+        thinninggeneralap2 = models.FloatField(db_column='ThinningGeneralAP2', blank=True,
+                                               null=True)  # Field name made lowercase.
+        thinninggeneralap3 = models.FloatField(db_column='ThinningGeneralAP3', blank=True,
+                                               null=True)  # Field name made lowercase.
+        totaldfap1 = models.FloatField(db_column='TotalDFAP1', blank=True, null=True)  # Field name made lowercase.
+        totaldfap2 = models.FloatField(db_column='TotalDFAP2', blank=True, null=True)  # Field name made lowercase.
+        totaldfap3 = models.FloatField(db_column='TotalDFAP3', blank=True, null=True)  # Field name made lowercase.
+        pofap1 = models.FloatField(db_column='PoFAP1', blank=True, null=True)  # Field name made lowercase.
+        pofap2 = models.FloatField(db_column='PoFAP2', blank=True, null=True)  # Field name made lowercase.
+        pofap3 = models.FloatField(db_column='PoFAP3', blank=True, null=True)  # Field name made lowercase.
+        pofap1category = models.CharField(db_column='PoFAP1Category', max_length=50, blank=True,
+                                          null=True)  # Field name made lowercase.
+        pofap2category = models.CharField(db_column='PoFAP2Category', max_length=50, blank=True,
+                                          null=True)  # Field name made lowercase.
+        pofap3category = models.CharField(db_column='PoFAP3Category', max_length=50, blank=True,
+                                          null=True)  # Field name made lowercase.
+        semiap1 = models.FloatField(db_column='SemiAP1', blank=True, null=True)
+        semiap2 = models.FloatField(db_column='SemiAP2', blank=True, null=True)
+        semiap3 = models.FloatField(db_column='SemiAP3', blank=True, null=True)
+        cofvalue = models.FloatField(db_column='CoFValue', blank=True, null=True)
+        cofcategory = models.CharField(db_column='CoFCategory', max_length=50, blank=True,
+                                       null=True)  # Field name made lowercase.
+        coffmatrixvalue = models.FloatField(db_column='CoFMatrixValue', blank=True, null=True)
+        rli = models.FloatField(db_column='RLI', blank=True, null=True)
+        maxtrixpofapi1 = models.FloatField(db_column='MatrixPoFAP1', blank=True, null=True)
+        maxtrixpofapi2 = models.FloatField(db_column='MatrixPoFAP2', blank=True, null=True)
+        maxtrixpofapi3 = models.FloatField(db_column='MatrixPoFAP3', blank=True, null=True)
+    except Exception as e:
+        print(e)
 
     class Meta:
         managed = False

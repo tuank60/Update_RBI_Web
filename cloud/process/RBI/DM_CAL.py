@@ -372,13 +372,13 @@ class DM_CAL:
         a = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EFFA(self.ComponentNumber, self.DM_Name[0])
         return a
     def NB_Thin(self):
-        b = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EFFB(self.ComponentNumber, self.DM_Name[0])
+        b = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFB(self.ComponentNumber, self.DM_Name[0])
         return b
     def NC_Thin(self):
-        c = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EFFC(self.ComponentNumber, self.DM_Name[0])
+        c = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFC(self.ComponentNumber, self.DM_Name[0])
         return c
     def ND_Thin(self):
-        d = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EFFD(self.ComponentNumber, self.DM_Name[0])
+        d = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFD(self.ComponentNumber, self.DM_Name[0])
         return d
     def I1_Thin(self):
         return self.Pr_P1_Thin() * pow(0.9,self.NA_Thin()) * pow(0.7,self.NB_Thin()) * pow(0.5,self.NC_Thin()) * pow(0.4,self.ND_Thin())
@@ -526,7 +526,11 @@ class DM_CAL:
             Fom = 20
         else:
             Fom = 1
-        a =  (self.DFB_THIN() * Fip * Fdl * Fwd * Fam * Fsm)/Fom
+        a =  (self.DFB_THIN(age) * Fip * Fdl * Fwd * Fam * Fsm)/Fom
+        print("OnlineMonitoring")
+        print(self.OnlineMonitoring)
+        print("HighlyEffectDeadleg")
+        print(self.HighlyEffectDeadleg)
 
         return max(a,0.1)
 
@@ -1227,10 +1231,13 @@ class DM_CAL:
         else:
             FIP = 1
         CR = self.API_EXTERNAL_CORROSION_RATE() * max(FPS, FIP)
+        print(CR)
         try:
             ART_EXT = max(1 - (self.CurrentThick - CR * self.AGE_CUI(age)) / (self.getTmin() + self.CA), 0)
+            print(ART_EXT)
         except:
             ART_EXT = 1
+        print(self.API_ART(ART_EXT))
         return self.API_ART(ART_EXT)
 
     def DF_EXTERNAL_CORROSION(self, age):
@@ -1238,6 +1245,7 @@ class DM_CAL:
             self.CARBON_ALLOY and not (self.MAX_OP_TEMP < -23 or self.MIN_OP_TEMP > 121))):
             self.EXTERNAL_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[11])
             self.EXTERNAL_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
+
             if (self.EXTERNAL_INSP_EFF == "" or self.EXTERNAL_INSP_NUM == 0):
                 self.EXTERNAL_INSP_EFF = "E"
             if (self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT"):
@@ -1249,8 +1257,12 @@ class DM_CAL:
                 if (self.NomalThick == 0 or self.CurrentThick == 0):
                     return 1900
                 else:
+                    print(self.API_ART_EXTERNAL(age))
+                    print(self.EXTERNAL_INSP_NUM)
+                    print(self.EXTERNAL_INSP_EFF)
                     return DAL_CAL.POSTGRESQL.GET_TBL_511(self.API_ART_EXTERNAL(age), self.EXTERNAL_INSP_NUM,
                                                          self.EXTERNAL_INSP_EFF)
+            print(self.EXTERNAL_INSP_EFF)
         else:
             return 0
 
@@ -1982,6 +1994,7 @@ class DM_CAL:
         return self.DF_HIC_SOHIC_HF(self.GET_AGE()[10] + i)
 
     def DF_EXTERNAL_CORROSION_API(self, i):
+        print(self.DF_EXTERNAL_CORROSION(self.GET_AGE()[11] + i))
         return self.DF_EXTERNAL_CORROSION(self.GET_AGE()[11] + i)
 
     def DF_CUI_API(self, i):
@@ -2018,6 +2031,10 @@ class DM_CAL:
         return DF_SCC
 
     def DF_EXT_TOTAL_API(self, i):
+        print(self.DF_EXTERNAL_CORROSION_API(i))
+        print(self.DF_CUI_API(i))
+        print(self.DF_EXTERN_CLSCC_API(i))
+        print(self.DF_CUI_CLSCC_API(i))
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(), self.DF_CUI_CLSCC_API())
         return DF_EXT
 

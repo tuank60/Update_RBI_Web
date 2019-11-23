@@ -102,11 +102,15 @@ def ListFacilities(request, siteID):
             for a in data:
                 if(request.POST.get('%d' %a.facilityid)):
                     return redirect('facilitiesEdit', a.facilityid)
-        if '_delete' in request.POST:
-            for a in data:
-                if(request.POST.get('%d' %a.facilityid)):
-                    a.delete()
-            return redirect('facilitiesDisplay', siteID)
+        try:
+            if '_delete' in request.POST:
+                for a in data:
+                    if (request.POST.get('%d' % a.facilityid)):
+                        a.delete()
+                return redirect('facilitiesDisplay', siteID)
+        except Exception as e:
+            print(e)
+            raise Http404
         if '_new' in request.POST:
             return redirect('facilitiesNew', siteID=siteID)
     except:
@@ -614,7 +618,12 @@ def ListProposal(request, componentID):
                         else:
                             return redirect('prosalEdit', proposalID= a.id)
             elif '_new' in request.POST:
-                return redirect('proposalNew', componentID=componentID)
+                try:
+                    return redirect('proposalNew', componentID=componentID)
+                except Exception as e:
+                    print(e)
+                    raise Http404
+
             else:
                 for a in rwass:
                     if request.POST.get('%d' %a.id):
@@ -1018,10 +1027,12 @@ def NewProposal(request, componentID):
             data['PersonDensity'] = request.POST.get('PersonDensity')
             data['DetectionType'] = request.POST.get('DetectionType')
             data['IsulationType'] = request.POST.get('IsulationType')
+            print("1")
             rwassessment = models.RwAssessment(equipmentid_id=comp.equipmentid_id, componentid_id=comp.componentid, assessmentdate=data['assessmentdate'],
                                         riskanalysisperiod=data['riskperiod'], isequipmentlinked= comp.isequipmentlinked,assessmentmethod = data['assessmentmethod'],
                                         proposalname=data['assessmentname'])
             rwassessment.save()
+            print("2")
             rwequipment = models.RwEquipment(id=rwassessment, commissiondate=models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id).commissiondate,
                                       adminupsetmanagement=adminControlUpset, containsdeadlegs=containsDeadlegs,
                                       cyclicoperation=cylicOp, highlydeadleginsp=HighlyEffe,
@@ -1035,6 +1046,7 @@ def NewProposal(request, componentID):
                                       managementfactor= datafaci.managementfactor, thermalhistory=data['ThermalHistory'],
                                       yearlowestexptemp=lowestTemp, volume=data['EquipmentVolumn'])
             rwequipment.save()
+            print("3")
             rwcomponent = models.RwComponent(id=rwassessment, nominaldiameter=data['normaldiameter'],
                                       nominalthickness=data['normalthick'], currentthickness=data['currentthick'],
                                       minreqthickness=data['tmin'], currentcorrosionrate=data['currentrate'],
@@ -1049,12 +1061,13 @@ def NewProposal(request, componentID):
                                       previousfailures=data['prevFailure'], shakingamount=data['shakingPipe'],
                                       shakingdetected=visibleSharkingProtect, shakingtime=data['timeShakingPipe'],
                                       weldjointefficiency=data['weldjointeff'],
-                                      alowablestress = data['allowablestresss'],structuralthickness=data['structuralthickness'],
+                                      allowablestress = data['allowablestresss'],structuralthickness=data['structuralthickness'],
                                       componentvolume= data['compvolume'], hthadamage=hthadamage, minstructuralthickness= minstruc,
                                       fabricatedsteel = p1andp3,equipmentsatisfied=equipmentrequire, nominaloperatingconditions=operatingcondition,
                                       cetgreaterorequal = cet,cyclicservice=cyclicservice,equipmentcircuitshock=equipmentorCircuit,
                                       confidencecorrosionrate = data['confidencecr'])
             rwcomponent.save()
+            print("4")
             rwstream = models.RwStream(id=rwassessment, aminesolution=data['AminSolution'], aqueousoperation=aquaDuringOP,
                                        aqueousshutdown=aquaDuringShutdown, toxicconstituent=ToxicConstituents,
                                        caustic=environCaustic,
@@ -1070,7 +1083,9 @@ def NewProposal(request, componentID):
                                        releasefluidpercenttoxic=float(data['ReleasePercentToxic']),
                                        waterph=float(data['PHWater']), h2spartialpressure=float(data['OpHydroPressure']),
                                        flowrate=float(data['flowrate']))
+            print("5")
             rwstream.save()
+            print("5")
             rwexcor = models.RwExtcorTemperature(id=rwassessment, minus12tominus8=data['OP1'], minus8toplus6=data['OP2'],
                                           plus6toplus32=data['OP3'], plus32toplus71=data['OP4'],
                                           plus71toplus107=data['OP5'],
@@ -1078,6 +1093,7 @@ def NewProposal(request, componentID):
                                           plus135toplus162=data['OP8'], plus162toplus176=data['OP9'],
                                           morethanplus176=data['OP10'])
             rwexcor.save()
+            print("6")
             rwcoat = models.RwCoating(id=rwassessment, externalcoating=ExternalCoating, externalinsulation=ExternalInsulation,
                                internalcladding=InternalCladding, internalcoating=InternalCoating,
                                internallining=InternalLining,
@@ -1092,6 +1108,7 @@ def NewProposal(request, componentID):
                                supportconfignotallowcoatingmaint=supportMaterial,
                                 claddingthickness=data['claddingthickness'])
             rwcoat.save()
+            print("7")
             rwmaterial = models.RwMaterial(id=rwassessment, corrosionallowance=data['CA'], materialname=data['material'],
                                     designpressure=data['designPressure'], designtemperature=data['maxDesignTemp'],
                                     mindesigntemperature=data['minDesignTemp'],
@@ -1105,6 +1122,7 @@ def NewProposal(request, componentID):
                                     costfactor=data['materialCostFactor'],
                                     yieldstrength=data['yieldstrength'],tensilestrength= data['tensilestrength'])
             rwmaterial.save()
+            print("8")
             rwinputca = models.RwInputCaLevel1(id=rwassessment, api_fluid=data['APIFluid'], system=data['Systerm'],
                                         release_duration=data['ReleaseDuration'], detection_type=data['DetectionType'],
                                         isulation_type=data['IsulationType'],
@@ -1117,6 +1135,7 @@ def NewProposal(request, componentID):
                                         mass_component=data['MassComponent'],
                                         stored_pressure=float(data['minOP']) * 6.895, stored_temp=data['minOT'])
             rwinputca.save()
+            print("9")
             ReCalculate.ReCalculate(rwassessment.id)
             return redirect('damgeFactor', proposalID= rwassessment.id)
     except Exception as e:
