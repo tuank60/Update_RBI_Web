@@ -338,13 +338,32 @@ class DM_CAL:
         except:
             return 1
     def FS_Thin(self):
+        a=((self.YieldStrengthDesignTemp + self.TensileStrengthDesignTemp)/2) * self.WeldJointEffciency * 1.1
+        print("FS_thin")
+        print(a)
         return ((self.YieldStrengthDesignTemp + self.TensileStrengthDesignTemp)/2) * self.WeldJointEffciency * 1.1
     def getalpha(self):
         return self.ShapeFactor
     def SRp_Thin(self):
         if self.MINIUM_STRUCTURAL_THICKNESS_GOVERS == False:
+            a = (self.Pressure * self.Diametter)/(self.getalpha() * self.FS_Thin() * self.trdi())
+            print("SRp_Thin1")
+            print(a)
             return (self.Pressure * self.Diametter)/(self.getalpha() * self.FS_Thin() * self.trdi())
         else:
+            a =  (self.WeldJointEffciency * self.AllowableStress * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.trdi())
+            print("WeldJointEffciency")
+            print(self.WeldJointEffciency)
+            print("AllowableStress")
+            print(self.AllowableStress)
+            print("getTmin")
+            print(self.getTmin())
+            print("StructuralThickness")
+            print(self.StructuralThickness)
+            print("trdi")
+            print(self.trdi())
+            print("SRp_Thin2")
+            print(a)
             return (self.WeldJointEffciency * self.TensileStrengthDesignTemp * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.trdi())
     def Pr_P1_Thin(self):
         if self.CR_Confidents_Level == "Low":
@@ -482,9 +501,12 @@ class DM_CAL:
         Fam = 1
         Fsm = 1
         if (self.HighlyEffectDeadleg):
+            print("deadlead Fip=3")
             Fip = 3
         else:
+            print("deadlead Fip=1")
             Fip = 1
+
 
         if (self.ContainsDeadlegs):
             Fdl = 3
@@ -525,6 +547,7 @@ class DM_CAL:
                             self.OnlineMonitoring == "Amine low velocity corrosion - Key process variable" or self.OnlineMonitoring == "HCL corrosion - Key process variable & Electrical resistance probes" or self.OnlineMonitoring == "Sour water low velocity corrosion - Key process variable" or self.OnlineMonitoring == "Sulfuric acid (H2S/H2) corrosion high velocity - Key process parameters & electrical resistance probes" or self.OnlineMonitoring == "Sulfuric acid(H2S / H2) corrosion low velocity - Key process parameters"):
             Fom = 20
         else:
+            print("OnlineMonitoring: Fom = 1")
             Fom = 1
         a =  (self.DFB_THIN(age) * Fip * Fdl * Fwd * Fam * Fsm)/Fom
         print("OnlineMonitoring")
@@ -1231,13 +1254,10 @@ class DM_CAL:
         else:
             FIP = 1
         CR = self.API_EXTERNAL_CORROSION_RATE() * max(FPS, FIP)
-        print(CR)
         try:
             ART_EXT = max(1 - (self.CurrentThick - CR * self.AGE_CUI(age)) / (self.getTmin() + self.CA), 0)
-            print(ART_EXT)
         except:
             ART_EXT = 1
-        print(self.API_ART(ART_EXT))
         return self.API_ART(ART_EXT)
 
     def DF_EXTERNAL_CORROSION(self, age):
@@ -1257,9 +1277,6 @@ class DM_CAL:
                 if (self.NomalThick == 0 or self.CurrentThick == 0):
                     return 1900
                 else:
-                    print(self.API_ART_EXTERNAL(age))
-                    print(self.EXTERNAL_INSP_NUM)
-                    print(self.EXTERNAL_INSP_EFF)
                     return DAL_CAL.POSTGRESQL.GET_TBL_511(self.API_ART_EXTERNAL(age), self.EXTERNAL_INSP_NUM,
                                                          self.EXTERNAL_INSP_EFF)
             print(self.EXTERNAL_INSP_EFF)
@@ -1994,7 +2011,6 @@ class DM_CAL:
         return self.DF_HIC_SOHIC_HF(self.GET_AGE()[10] + i)
 
     def DF_EXTERNAL_CORROSION_API(self, i):
-        print(self.DF_EXTERNAL_CORROSION(self.GET_AGE()[11] + i))
         return self.DF_EXTERNAL_CORROSION(self.GET_AGE()[11] + i)
 
     def DF_CUI_API(self, i):
@@ -2031,10 +2047,6 @@ class DM_CAL:
         return DF_SCC
 
     def DF_EXT_TOTAL_API(self, i):
-        print(self.DF_EXTERNAL_CORROSION_API(i))
-        print(self.DF_CUI_API(i))
-        print(self.DF_EXTERN_CLSCC_API(i))
-        print(self.DF_CUI_CLSCC_API(i))
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(), self.DF_CUI_CLSCC_API())
         return DF_EXT
 

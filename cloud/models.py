@@ -525,7 +525,7 @@ class RwFullFcof(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
     fcofvalue = models.FloatField(db_column='FCoFValue', blank=True, null=True)  # Field name made lowercase.
     fcofcategory = models.CharField(db_column='FCoFCategory', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    ail = models.IntegerField(db_column='AIL', blank=True, null=True)  # Field name made lowercase.
+    ail = models.IntegerField(db_column='AIL', blank=True, null=False)  # Field name made lowercase.
     envcost = models.FloatField(blank=True, null=True)
     equipcost = models.FloatField(blank=True, null=True)
     prodcost = models.FloatField(blank=True, null=True)

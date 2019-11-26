@@ -25,19 +25,13 @@ def calculateNormal(proposalID):
         damageMachinsm = models.RwDamageMechanism.objects.filter(id_dm=proposalID)
         countRefullfc = models.RwFullFcof.objects.filter(id=proposalID)
         chart = models.RwDataChart.objects.filter(id=proposalID)
-        print("cuong2")
 
         comp = models.ComponentMaster.objects.get(componentid=rwassessment.componentid_id)
-        print("cuong3")
         target = models.FacilityRiskTarget.objects.get(
             facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
-        print("cuong4")
         datafaci = models.Facility.objects.get(
             facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
-        print("cuong5")
-        print(comp.componenttypeid_id)
         comptype = models.ComponentType.objects.get(componenttypeid=comp.componenttypeid_id)
-        print("cuong6")
 
         if not rwcoat.externalcoating:
             dm_cal = DM_CAL.DM_CAL(ComponentNumber=str(comp.componentnumber),
@@ -382,6 +376,7 @@ def calculateNormal(proposalID):
         for dm in damageMachinsm:
             dm.delete()
         for damage in damageList:
+            print(rwassessment)
             dm = models.RwDamageMechanism(id_dm=rwassessment, dmitemid_id=damage['DM_ITEM_ID'],
                                                           isactive=damage['isActive'],
                                                           df1=damage['DF1'], df2=damage['DF2'], df3=damage['DF3'],
@@ -393,8 +388,10 @@ def calculateNormal(proposalID):
                                                                                            datafaci.managementfactor,
                                                                                            target.risktarget_fc).date().strftime(
                                                               '%Y-%m-%d'))
+            print("truyền dữ liệu")
             dm.save()
         #full FC
+        print("test fcof")
         if countRefullfc.count() != 0:
             refullfc = models.RwFullFcof.objects.get(id= proposalID)
             refullfc.fcofvalue=calv1.fc_total
@@ -974,15 +971,11 @@ def calculateTank(proposalID):
 def ReCalculate(proposalID):
     try:
         rwAss = models.RwAssessment.objects.get(id=proposalID)
-        print(rwAss.componentid_id)
         component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
-        print("cuong1")
-        print(component.componenttypeid_id)
         if component.componenttypeid_id == 8 or component.componenttypeid_id == 12 or component.componenttypeid_id == 14 or component.componenttypeid_id == 15:
             isTank = 1
         else:
             isTank = 0
-            print(component.componenttypeid_id)
         if isTank:
             calculateTank(proposalID)
         else:
