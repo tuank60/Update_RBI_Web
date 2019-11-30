@@ -376,7 +376,6 @@ def calculateNormal(proposalID):
         for dm in damageMachinsm:
             dm.delete()
         for damage in damageList:
-            print(rwassessment)
             dm = models.RwDamageMechanism(id_dm=rwassessment, dmitemid_id=damage['DM_ITEM_ID'],
                                                           isactive=damage['isActive'],
                                                           df1=damage['DF1'], df2=damage['DF2'], df3=damage['DF3'],
@@ -388,10 +387,8 @@ def calculateNormal(proposalID):
                                                                                            datafaci.managementfactor,
                                                                                            target.risktarget_fc).date().strftime(
                                                               '%Y-%m-%d'))
-            print("truyền dữ liệu")
             dm.save()
         #full FC
-        print("test fcof")
         if countRefullfc.count() != 0:
             refullfc = models.RwFullFcof.objects.get(id= proposalID)
             refullfc.fcofvalue=calv1.fc_total
@@ -745,6 +742,8 @@ def calculateTank(proposalID):
                 rwcatank.release_volume_leak_d1 = cacal.Bbl_leak_n_bottom(1)
                 rwcatank.release_volume_leak_d4 = cacal.Bbl_leak_n_bottom(4)
                 rwcatank.release_volume_rupture = cacal.Bbl_rupture_release_bottom()
+                rwcatank.liquid_height = cacal.FLUID_HEIGHT
+                rwcatank.volume_fluid = cacal.BBL_TOTAL_TANKBOTTOM()
                 rwcatank.time_leak_ground = cacal.t_gl_bottom()
                 rwcatank.volume_subsoil_leak_d1 = cacal.Bbl_leak_subsoil(1)
                 rwcatank.volume_subsoil_leak_d4 = cacal.Bbl_leak_subsoil(4)
@@ -762,8 +761,6 @@ def calculateTank(proposalID):
                 rwcatank.business_cost = cacal.FC_PROD_BOTTOM()
                 rwcatank.consequence = cacal.FC_total_bottom()
                 rwcatank.consequencecategory = cacal.FC_Category(cacal.FC_total_bottom())
-                rwcatank.liquid_height = cacal.FLUID_HEIGHT
-                rwcatank.volume_fluid = cacal.BBL_TOTAL_TANKBOTTOM()
                 rwcatank.save()
             else:
                 rwcatank = models.RwCaTank(id=rwassessment, hydraulic_water=cacal.k_h_water(),
@@ -966,6 +963,7 @@ def calculateTank(proposalID):
             chartData.save()
     except Exception as e:
         print("Exception at tank fast calculate")
+        print(e)
         print('Error on line {}'.format(sys.exc_info()[-1].tb_lineno), type(e).__name__, e)
 
 def ReCalculate(proposalID):

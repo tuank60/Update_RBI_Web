@@ -308,9 +308,11 @@ class DM_CAL:
     def getTmin(self):
         if self.APIComponentType == "TANKBOTTOM" or self.APIComponentType =="TANKROOFFLOAT":
             if (self.ProtectedBarrier):
-                t = 2.54
+                #t = 2.54
+                t=0.05
             else:
-                t = 1.27
+                #t = 1.27
+                t=0.1
         else:
             t = self.MinThickReq
         return t
@@ -324,46 +326,31 @@ class DM_CAL:
             return max(((self.trdi() - self.NomalThick) / self.CorrosionRate), 0)
         except:
             return 0
-    def Art(self):
+    def Art(self,age):
         try:
             if self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT":
-                return max((1-(self.trdi() - self.CorrosionRate * self.agetk()) / (self.getTmin() + self.CA)), 0.0)
+                return max((1-(self.trdi() - self.CorrosionRate * self.agetk(age)) / (self.getTmin() + self.CA)), 0.0)
             elif (self.InternalCladding):
-                if (self.agetk() < self.agerc()):
-                    return (self.CladdingCorrosionRate * self.agetk()/ self.trdi())
+                if (self.agetk(age) < self.agerc()):
+                    return (self.CladdingCorrosionRate * self.agetk(age)/ self.trdi())
                 else:
-                    return (self.CladdingCorrosionRate * self.agerc() + self.CorrosionRate * (self.agetk() - self.agerc())) / self.trdi()
+                    a =(self.CladdingCorrosionRate * self.agerc() + self.CorrosionRate * (self.agetk(age) - self.agerc())) / self.trdi()
+                    return (self.CladdingCorrosionRate * self.agerc() + self.CorrosionRate * (self.agetk(age) - self.agerc())) / self.trdi()
             else:
-                return (self.CorrosionRate * self.agetk() / self.trdi())
-        except:
+                return (self.CorrosionRate * self.agetk(age) / self.trdi())
+        except Exception as e:
+            print(e)
             return 1
     def FS_Thin(self):
-        a=((self.YieldStrengthDesignTemp + self.TensileStrengthDesignTemp)/2) * self.WeldJointEffciency * 1.1
-        print("FS_thin")
-        print(a)
         return ((self.YieldStrengthDesignTemp + self.TensileStrengthDesignTemp)/2) * self.WeldJointEffciency * 1.1
     def getalpha(self):
         return self.ShapeFactor
     def SRp_Thin(self):
         if self.MINIUM_STRUCTURAL_THICKNESS_GOVERS == False:
             a = (self.Pressure * self.Diametter)/(self.getalpha() * self.FS_Thin() * self.trdi())
-            print("SRp_Thin1")
-            print(a)
             return (self.Pressure * self.Diametter)/(self.getalpha() * self.FS_Thin() * self.trdi())
         else:
             a =  (self.WeldJointEffciency * self.AllowableStress * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.trdi())
-            print("WeldJointEffciency")
-            print(self.WeldJointEffciency)
-            print("AllowableStress")
-            print(self.AllowableStress)
-            print("getTmin")
-            print(self.getTmin())
-            print("StructuralThickness")
-            print(self.StructuralThickness)
-            print("trdi")
-            print(self.trdi())
-            print("SRp_Thin2")
-            print(a)
             return (self.WeldJointEffciency * self.TensileStrengthDesignTemp * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.trdi())
     def Pr_P1_Thin(self):
         if self.CR_Confidents_Level == "Low":
@@ -400,23 +387,32 @@ class DM_CAL:
         d = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFD(self.ComponentNumber, self.DM_Name[0])
         return d
     def I1_Thin(self):
+        a=self.Pr_P1_Thin() * pow(0.9,self.NA_Thin()) * pow(0.7,self.NB_Thin()) * pow(0.5,self.NC_Thin()) * pow(0.4,self.ND_Thin())
         return self.Pr_P1_Thin() * pow(0.9,self.NA_Thin()) * pow(0.7,self.NB_Thin()) * pow(0.5,self.NC_Thin()) * pow(0.4,self.ND_Thin())
     def I2_Thin(self):
+        a=self.Pr_P2_Thin() * pow(0.09,self.NA_Thin()) * pow(0.2,self.NB_Thin()) * pow(0.3,self.NC_Thin()) * pow(0.33,self.ND_Thin())
         return self.Pr_P2_Thin() * pow(0.09,self.NA_Thin()) * pow(0.2,self.NB_Thin()) * pow(0.3,self.NC_Thin()) * pow(0.33,self.ND_Thin())
     def I3_Thin(self):
+        a=self.Pr_P3_Thin() * pow(0.01,self.NA_Thin()) * pow(0.1,self.NB_Thin()) * pow(0.2,self.NC_Thin()) * pow(0.27,self.ND_Thin())
         return self.Pr_P3_Thin() * pow(0.01,self.NA_Thin()) * pow(0.1,self.NB_Thin()) * pow(0.2,self.NC_Thin()) * pow(0.27,self.ND_Thin())
     def Po_P1_Thin(self):
+        a=self.I1_Thin()/(self.I1_Thin() + self.I2_Thin() + self.I3_Thin())
         return self.I1_Thin()/(self.I1_Thin() + self.I2_Thin() + self.I3_Thin())
     def Po_P2_Thin(self):
+        a = self.I2_Thin()/(self.I1_Thin() + self.I2_Thin() + self.I3_Thin())
         return self.I2_Thin()/(self.I1_Thin() + self.I2_Thin() + self.I3_Thin())
     def Po_P3_Thin(self):
+        a=self.I3_Thin()/(self.I1_Thin() + self.I2_Thin() + self.I3_Thin())
         return self.I3_Thin()/(self.I1_Thin() + self.I2_Thin() + self.I3_Thin())
-    def B1_Thin(self):
-        return (1 - self.Art()- self.SRp_Thin())/math.sqrt(pow(self.Art(), 2) * 0.04 + pow((1 - self.Art()), 2) * 0.04 + pow(self.SRp_Thin(), 2) * pow(0.05, 2))
-    def B2_Thin(self):
-        return (1- 2*self.Art()-self.SRp_Thin())/math.sqrt(pow(self.Art(),2)*4*0.04 + pow(1-4*self.Art(),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
-    def B3_Thin(self):
-        return (1- 4*self.Art()-self.SRp_Thin())/math.sqrt(pow(self.Art(),2)*16*0.04 + pow(1-16*self.Art(),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
+    def B1_Thin(self,age):
+        a =(1 - self.Art(age)- self.SRp_Thin())/math.sqrt(pow(self.Art(age), 2) * 0.04 + pow((1 - self.Art(age)), 2) * 0.04 + pow(self.SRp_Thin(), 2) * pow(0.05, 2))
+        return (1 - self.Art(age)- self.SRp_Thin())/math.sqrt(pow(self.Art(age), 2) * 0.04 + pow((1 - self.Art(age)), 2) * 0.04 + pow(self.SRp_Thin(), 2) * pow(0.05, 2))
+    def B2_Thin(self,age):
+        a = (1- 2*self.Art(age)-self.SRp_Thin())/math.sqrt(pow(self.Art(age),2)*4*0.04 + pow(1-2*self.Art(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
+        return (1- 2*self.Art(age)-self.SRp_Thin())/math.sqrt(pow(self.Art(age),2)*4*0.04 + pow(1-2*self.Art(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
+    def B3_Thin(self,age):
+        a = (1- 4*self.Art(age)-self.SRp_Thin())/math.sqrt(pow(self.Art(age),2)*16*0.04 + pow(1-4*self.Art(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
+        return (1- 4*self.Art(age)-self.SRp_Thin())/math.sqrt(pow(self.Art(age),2)*16*0.04 + pow(1-4*self.Art(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
 
     def API_ART(self, a):
         if self.APIComponentType == 'TANKBOTTOM' or self.APIComponentType == 'TANKROOFFLOAT':
@@ -489,11 +485,12 @@ class DM_CAL:
             if (self.NomalThick == 0 or self.CurrentThick == 0):
                 return 1390
             else:
-                return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.Art(age)), self.NoINSP_THINNING, self.EFF_THIN)
+                #return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.Art(age)), self.NoINSP_THINNING, self.EFF_THIN)
+                return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.Art(age)), self.EFF_THIN)
         else:
-            a = self.Po_P1_Thin() * self.ncdf(- self.B1_Thin())
-            b = self.Po_P2_Thin() * self.ncdf(- self.B2_Thin())
-            c = self.Pr_P3_Thin() * self.ncdf(- self.B3_Thin())
+            a = self.Po_P1_Thin() * self.ncdf(- self.B1_Thin(age))
+            b = self.Po_P2_Thin() * self.ncdf(- self.B2_Thin(age))
+            c = self.Pr_P3_Thin() * self.ncdf(- self.B3_Thin(age))
             return (a + b + c) / (1.56 * pow(10, -4))
 
     def DF_THIN(self, age):
@@ -501,15 +498,12 @@ class DM_CAL:
         Fam = 1
         Fsm = 1
         if (self.HighlyEffectDeadleg):
-            print("deadlead Fip=3")
             Fip = 3
         else:
-            print("deadlead Fip=1")
             Fip = 1
-
-
         if (self.ContainsDeadlegs):
             Fdl = 3
+
         else:
             Fdl = 1
 
@@ -547,14 +541,8 @@ class DM_CAL:
                             self.OnlineMonitoring == "Amine low velocity corrosion - Key process variable" or self.OnlineMonitoring == "HCL corrosion - Key process variable & Electrical resistance probes" or self.OnlineMonitoring == "Sour water low velocity corrosion - Key process variable" or self.OnlineMonitoring == "Sulfuric acid (H2S/H2) corrosion high velocity - Key process parameters & electrical resistance probes" or self.OnlineMonitoring == "Sulfuric acid(H2S / H2) corrosion low velocity - Key process parameters"):
             Fom = 20
         else:
-            print("OnlineMonitoring: Fom = 1")
             Fom = 1
         a =  (self.DFB_THIN(age) * Fip * Fdl * Fwd * Fam * Fsm)/Fom
-        print("OnlineMonitoring")
-        print(self.OnlineMonitoring)
-        print("HighlyEffectDeadleg")
-        print(self.HighlyEffectDeadleg)
-
         return max(a,0.1)
 
     #Calculate Linning:
@@ -1279,7 +1267,6 @@ class DM_CAL:
                 else:
                     return DAL_CAL.POSTGRESQL.GET_TBL_511(self.API_ART_EXTERNAL(age), self.EXTERNAL_INSP_NUM,
                                                          self.EXTERNAL_INSP_EFF)
-            print(self.EXTERNAL_INSP_EFF)
         else:
             return 0
 
@@ -2079,6 +2066,7 @@ class DM_CAL:
     def DF_LIST_16(self, FC_Total, GFF, FSM, Risk_Target):
         data = []
         data.append(Risk_Target)
+        #for a in range(1, 16):
         for a in range(1, 16):
             risk=self.convertRisk( self.DF_TOTAL_API(a) * GFF * FSM) * FC_Total
             data.append(risk)

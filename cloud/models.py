@@ -99,6 +99,54 @@ class AuthUserUserPermissions(models.Model):
         managed = False
         db_table = 'auth_user_user_permissions'
         unique_together = (('user', 'permission'),)
+#bo sung bang rwcatank 30/11/2019
+class RwCaTank(models.Model):
+    id= models.ForeignKey('RwAssessment', on_delete=models.CASCADE, db_column='ID',primary_key=True)
+    hydraulic_water =  models.FloatField(db_column='Hydraulic_Water', blank=True,null=True)
+    hydraulic_fluid = models.FloatField(db_column='Hydraulic_Fluid', blank=True,null=True)
+    seepage_velocity = models.FloatField(db_column='Seepage_Velocity', blank=True,null=True)
+    flow_rate_d1 = models.FloatField(db_column='Flow_Rate_D1', blank=True,null=True)
+    flow_rate_d2 = models.FloatField(db_column='Flow_Rate_D2', blank=True, null=True)
+    flow_rate_d3 = models.FloatField(db_column='Flow_Rate_D3', blank=True, null=True)
+    flow_rate_d4 = models.FloatField(db_column='Flow_Rate_D4', blank=True, null=True)
+    leak_duration_d1 = models.FloatField(db_column='Leak_Duration_D1', blank=True, null=True)
+    leak_duration_d2 = models.FloatField(db_column='Leak_Duration_D2', blank=True, null=True)
+    leak_duration_d3 = models.FloatField(db_column='Leak_Duration_D3', blank=True, null=True)
+    leak_duration_d4 = models.FloatField(db_column='Leak_Duration_D4', blank=True, null=True)
+    release_volume_leak_d1 = models.FloatField(db_column='Release_Volume_Leak_D1', blank=True, null=True)
+    release_volume_leak_d2 = models.FloatField(db_column='Release_Volume_Leak_D2', blank=True, null=True)
+    release_volume_leak_d3 = models.FloatField(db_column='Release_Volume_Leak_D3', blank=True, null=True)
+    release_volume_leak_d4 = models.FloatField(db_column='Release_Volume_Leak_D4', blank=True, null=True)
+    release_volume_rupture = models.FloatField(db_column='Release_Volume_Rupture', blank=True, null=True)
+    liquid_height = models.FloatField(db_column='Liquid_Height', blank=True, null=True)
+    volume_fluid = models.FloatField(db_column='Volume_Fluid', blank=True, null=True)
+    time_leak_ground = models.FloatField(db_column='Time_Leak_Ground', blank=True, null=True)
+    volume_subsoil_leak_d1 = models.FloatField(db_column='Volume_SubSoil_Leak_D1', blank=True, null=True)
+    volume_subsoil_leak_d4 = models.FloatField(db_column='Volume_SubSoil_Leak_D4', blank=True, null=True)
+    volume_ground_water_leak_d1 = models.FloatField(db_column='Volume_Ground_Water_Leak_D1', blank=True, null=True)
+    volume_ground_water_leak_d4 = models.FloatField(db_column='Volume_Ground_Water_Leak_D4', blank=True, null=True)
+    barrel_dike_rupture = models.FloatField(db_column='Barrel_Dike_Rupture', blank=True, null=True)
+    barrel_dike_leak = models.FloatField(db_column='Barrel_Dike_Leak', blank=True, null=True)
+    barrel_onsite_leak = models.FloatField(db_column='Barrel_Onsite_Leak', blank=True, null=True)
+    barrel_onsite_rupture = models.FloatField(db_column='Barrel_Onsite_Rupture', blank=True, null=True)
+    barrel_offsite_leak = models.FloatField(db_column='Barrel_Offsite_Leak', blank=True, null=True)
+    barrel_dike_leak = models.FloatField(db_column='Barrel_Dike_Leak', blank=True, null=True)
+    barrel_offsite_rupture = models.FloatField(db_column='Barrel_Offsite_Rupture', blank=True, null=True)
+    barrel_water_leak = models.FloatField(db_column='Barrel_Water_Leak', blank=True, null=True)
+    barrel_water_rupture = models.FloatField(db_column='Barrel_Water_Rupture', blank=True, null=True)
+    fc_environ_leak = models.FloatField(db_column='FC_Environ_Leak', blank=True, null=True)
+    fc_environ_rupture = models.FloatField(db_column='FC_Environ_Rupture', blank=True, null=True)
+    fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True)
+    material_factor = models.FloatField(db_column='Material_Factor', blank=True, null=True)
+    fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True)
+    component_damage_cost = models.FloatField(db_column='Component_Damage_Cost', blank=True, null=True)
+    business_cost = models.FloatField(db_column='Business_Cost', blank=True, null=True)
+    consequence = models.FloatField(db_column='Consequence', blank=True, null=True)
+    consequencecategory = models.CharField(db_column='ConsequenceCategory', max_length=150, blank=True, null=True)
+    class Meta:
+        managed = False
+        db_table = 'rw_ca_tank'
+        ordering = ('id',)
 
 
 class ComponentMaster(models.Model):
@@ -525,7 +573,7 @@ class RwFullFcof(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
     fcofvalue = models.FloatField(db_column='FCoFValue', blank=True, null=True)  # Field name made lowercase.
     fcofcategory = models.CharField(db_column='FCoFCategory', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    ail = models.IntegerField(db_column='AIL', blank=True, null=False)  # Field name made lowercase.
+    ail = models.IntegerField(db_column='AIL', blank=True, null=True)  # Field name made lowercase.
     envcost = models.FloatField(blank=True, null=True)
     equipcost = models.FloatField(blank=True, null=True)
     prodcost = models.FloatField(blank=True, null=True)
@@ -1012,9 +1060,8 @@ class Tbl74SccDmPwht(models.Model):
         verbose_name = "Table 7.4 – SCC Damage Factors – All SCC Mechanism"
 
 class RwDamageMechanism(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)
-    id_dm = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID_DM')
     dmitemid = models.ForeignKey(DmItems, on_delete=models.CASCADE, db_column='DMItemID')
+    id_dm = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID_DM',primary_key=True)
     isactive = models.IntegerField(default=1, db_column='IsActive')
     notes = models.TextField(db_column='Notes', null=True)
     expectedtypeid = models.IntegerField(default=0, db_column='ExpectedTypeID')

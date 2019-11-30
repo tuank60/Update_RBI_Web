@@ -554,6 +554,11 @@ def ListProposal(request, componentID):
         rwass = models.RwAssessment.objects.filter(componentid= componentID)
         data = []
         comp = models.ComponentMaster.objects.get(componentid= componentID)
+        print("apicomponenttype id:")
+        print(comp.apicomponenttypeid)
+        print("api")
+        api = models.ApiComponentType.objects.get(apicomponenttypeid=comp.apicomponenttypeid)
+        print(api.apicomponenttypename)
         equip = models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id)
         faci = models.Facility.objects.get(facilityid=equip.facilityid_id)
         tank = [8,12,14,15]
@@ -619,11 +624,13 @@ def ListProposal(request, componentID):
                             return redirect('prosalEdit', proposalID= a.id)
             elif '_new' in request.POST:
                 try:
-                    return redirect('proposalNew', componentID=componentID)
+                    if api.apicomponenttypename=='TANKBOTTOM':
+                        return redirect('tankNew' , componentID=componentID)
+                    else:
+                        return redirect('proposalNew', componentID=componentID)
                 except Exception as e:
                     print(e)
                     raise Http404
-
             else:
                 for a in rwass:
                     if request.POST.get('%d' %a.id):
@@ -640,10 +647,12 @@ def NewProposal(request, componentID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
+    print("NewProposal")
     try:
         Fluid = ["Acid", "AlCl3", "C1-C2", "C13-C16", "C17-C25", "C25+", "C3-C4", "C5", "C6-C8", "C9-C12", "CO", "DEE",
              "EE", "EEA", "EG", "EO", "H2", "H2S", "HCl", "HF", "Methanol", "Nitric Acid", "NO2", "Phosgene", "PO",
              "Pyrophoric", "Steam", "Styrene", "TDI", "Water"]
+        print("newproposal not tank")
         comp = models.ComponentMaster.objects.get(componentid= componentID)
         target = models.FacilityRiskTarget.objects.get(facilityid= models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id).facilityid_id)
         datafaci = models.Facility.objects.get(facilityid= models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id).facilityid_id)
@@ -919,6 +928,7 @@ def NewProposal(request, componentID):
                 supportMaterial = 0
 
             if request.POST.get('InternalCladding'):
+                print("InternalCladding:1")
                 InternalCladding = 1
             else:
                 InternalCladding = 0
@@ -1133,21 +1143,25 @@ def NewProposal(request, componentID):
         raise Http404
     return render(request, 'FacilityUI/proposal/proposalNormalNew.html',{'page':'newProposal','api':Fluid, 'componentID':componentID, 'equipmentID':comp.equipmentid_id,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
 def NewTank(request, componentID):
+    print("newtank1")
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
+    print("newtank2")
     try:
         comp = models.ComponentMaster.objects.get(componentid= componentID)
         eq = models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id)
         target = models.FacilityRiskTarget.objects.get(facilityid= eq.facilityid_id)
         datafaci = models.Facility.objects.get(facilityid= eq.facilityid_id)
         data={}
+        print("newtank3")
         isshell = False
         if comp.componenttypeid_id == 8 or comp.componenttypeid_id == 14:
             isshell = True
         if request.method =='POST':
             # Data Assessment
+            data['confidencecr'] = request.POST.get('ConfidenceCR')#bo sung level of confident for tankbottom
             data['assessmentName'] = request.POST.get('AssessmentName')
             data['assessmentdate'] = request.POST.get('assessmentdate')
             data['riskperiod'] = request.POST.get('RiskAnalysisPeriod')
@@ -1173,7 +1187,7 @@ def NewTank(request, componentID):
                 steamOutWater = 1
             else:
                 steamOutWater = 0
-
+            print("newtank4")
             if request.POST.get('Downtime'):
                 downtimeProtect = 1
             else:
@@ -1247,6 +1261,7 @@ def NewTank(request, componentID):
             data['onlineMonitor'] = request.POST.get('OnlineMonitoring')
             data['equipmentVolumn'] = request.POST.get('EquipmentVolume')
             # Component Properties
+            data['structuralthickness'] = request.POST.get('StructuralThickness')
             data['tankDiameter'] = request.POST.get('TankDiameter')
             data['NominalThickness'] = request.POST.get('NominalThickness')
             data['currentThick'] = request.POST.get('CurrentThickness')
@@ -1254,6 +1269,10 @@ def NewTank(request, componentID):
             data['currentCorrosion'] = request.POST.get('CurrentCorrosionRate')
             data['shellHieght'] = request.POST.get('shellHeight')
 
+            if request.POST.get('MinStructural'):
+                minstruc = 1
+            else:
+                minstruc = 0
             if request.POST.get('DFDI'):
                 damageFound = 1
             else:
@@ -1490,16 +1509,24 @@ def NewTank(request, componentID):
                                       volume=data['equipmentVolumn'])
             rwequipment.save()
             rwcomponent = models.RwComponent(id=rwassessment, nominaldiameter=data['tankDiameter'],
-                                      nominalthickness=data['NominalThickness'], currentthickness=data['currentThick'],
-                                      minreqthickness=data['minRequireThick'],
-                                      currentcorrosionrate=data['currentCorrosion'],
-                                      shellheight=data['shellHieght'], damagefoundinspection=damageFound,
-                                      crackspresent=crackPresence, trampelements=trampElements,
-                                      releasepreventionbarrier=preventBarrier, concretefoundation=concreteFoundation,
-                                      brinnelhardness=data['maxBrinnelHardness'],
-                                      complexityprotrusion=data['complexProtrusion'],
-                                      severityofvibration=data['severityVibration'])
+                                allowablestress=data['allowStress'],
+                                nominalthickness=data['NominalThickness'], currentthickness=data['currentThick'],
+                                minreqthickness=data['minRequireThick'],
+                                currentcorrosionrate=data['currentCorrosion'],
+                                shellheight=data['shellHieght'], damagefoundinspection=damageFound,
+                                crackspresent=crackPresence,
+                                #trampelements=trampElements,
+                                releasepreventionbarrier=preventBarrier, concretefoundation=concreteFoundation,
+                                brinnelhardness=data['maxBrinnelHardness'],structuralthickness=data['structuralthickness'],
+                                complexityprotrusion=data['complexProtrusion'],minstructuralthickness= minstruc,
+                                severityofvibration=data['severityVibration'],confidencecorrosionrate = data['confidencecr'])
             rwcomponent.save()
+            print("test confident")
+            print(rwcomponent.confidencecorrosionrate)
+            print(rwcomponent.minstructuralthickness)
+            print(rwcomponent.confidencecorrosionrate)
+            print("structural thickness")
+            print(rwcomponent.structuralthickness)
             rwstream = models.RwStream(id=rwassessment, maxoperatingtemperature=data['maxOT'], maxoperatingpressure=data['maxOP'],
                                 minoperatingtemperature=data['minOT'], minoperatingpressure=data['minOP'],
                                 h2spartialpressure=data['H2Spressure'], criticalexposuretemperature=data['criticalTemp'],
@@ -1541,7 +1568,8 @@ def NewTank(request, componentID):
                                     designtemperature=data['maxDesignTemp'],
                                     mindesigntemperature=data['minDesignTemp'], designpressure=data['designPressure'],
                                     referencetemperature=data['refTemp'],
-                                    allowablestress=data['allowStress'], brittlefracturethickness=data['brittleThick'],
+                                    #allowablestress=data['allowStress'],
+                                    brittlefracturethickness=data['brittleThick'],
                                     corrosionallowance=data['corrosionAllow'],
                                     carbonlowalloy=carbonLowAlloySteel, austenitic=austeniticSteel, nickelbased=nickelAlloy,
                                     chromemoreequal12=chromium,
@@ -1549,6 +1577,7 @@ def NewTank(request, componentID):
                                     ispta=materialPTA, ptamaterialcode=data['PTAMaterialGrade'],
                                     costfactor=data['materialCostFactor'])
             rwmaterial.save()
+            print("RwInputCaTank-view")
             rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=data['fluidHeight'],
                                       shell_course_height=data['shellHieght'],
                                       tank_diametter=data['tankDiameter'], prevention_barrier=preventBarrier,
@@ -1558,12 +1587,11 @@ def NewTank(request, componentID):
                                       tank_fluid=data['fluid'], api_fluid=apiFluid, sw=data['distance'],
                                       productioncost=data['productionCost'])
             rwinputca.save()
-
             # Customize Caculate Here
             ReCalculate.ReCalculate(rwassessment.id)
             return redirect('damgeFactor', proposalID=rwassessment.id)
     except Exception as e:
-        # print(e)
+        print(e)
         raise Http404
     return render(request, 'FacilityUI/proposal/proposalTankNew.html', {'page':'newProposal','isshell':isshell, 'componentID':componentID, 'equipmentID':comp.equipmentid_id,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
 def EditProposal(request, proposalID):
@@ -1979,7 +2007,7 @@ def EditProposal(request, proposalID):
             rwcomponent.shakingamount=data['shakingPipe']
             rwcomponent.shakingdetected=visibleSharkingProtect
             rwcomponent.shakingtime=data['timeShakingPipe']
-            rwcomponent.trampelements=TrampElement
+            #rwcomponent.trampelements=TrampElement
             rwcomponent.save()
 
             rwstream.aminesolution=data['AminSolution']
@@ -2478,7 +2506,7 @@ def EditTank(request, proposalID):
             rwcomponent.shellheight=data['shellHieght']
             rwcomponent.damagefoundinspection=damageFound
             rwcomponent.crackspresent=crackPresence
-            rwcomponent.trampelements=trampElements
+            #rwcomponent.trampelements=trampElements
             rwcomponent.releasepreventionbarrier=preventBarrier
             rwcomponent.concretefoundation=concreteFoundation
             rwcomponent.brinnelhardness=data['maxBrinnelHardness']
@@ -2797,16 +2825,11 @@ def RiskChart(request, proposalID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
-    print("test risk chart")
     try:
         rwAssessment = models.RwAssessment.objects.get(id= proposalID)
-        print("test risk chart 1")
         rwFullpof = models.RwFullPof.objects.get(id= proposalID)
-        print("test risk chart 2")
         rwFullcof = models.RwFullFcof.objects.get(id= proposalID)
-        print("test risk chart 3")
         risk = rwFullpof.pofap1 * rwFullcof.fcofvalue
-        print("test risk chart 4")
         chart = models.RwDataChart.objects.get(id= proposalID)
         assessmentDate = rwAssessment.assessmentdate
         dataChart = [risk, chart.riskage1, chart.riskage2, chart.riskage3, chart.riskage4, chart.riskage5, chart.riskage6,
@@ -3014,8 +3037,6 @@ def MessagesInbox(request):
         if 'post' in request.POST:
             data={}
             data['emailto']=request.POST.get('sentto')
-            print(data['emailto'])
-            print(request.session['id'])
             data['subject']=request.POST.get('subject')
             data['emailsent']=models.ZUser.objects.filter(id=request.session['id'])[0].email
             data['content']=request.POST.get('content')
@@ -3026,7 +3047,6 @@ def MessagesInbox(request):
         if request.method=='POST':
             for data1 in datacontent:
                 if request.POST.get('%d' %data1.id):
-                    print(data1.id)
                     email1=models.Emailto.objects.get(id=data1.id)
                     email1.delete()
                     return redirect('messagesInbox')
@@ -3053,8 +3073,6 @@ def Email_Message_sent(request):
         if 'post' in request.POST:
             data = {}
             data['emailto'] = request.POST.get('sentto')
-            print(data['emailto'])
-            print(request.session['id'])
             data['subject'] = request.POST.get('subject')
             data['emailsent'] = models.ZUser.objects.filter(id=request.session['id'])[0].email
             data['content'] = request.POST.get('content')
@@ -3065,7 +3083,6 @@ def Email_Message_sent(request):
         if request.method == 'POST':
             for data1 in datacontent:
                 if request.POST.get('%d' % data1.id):
-                    print(data1.id)
                     email1 = models.Emailsent.objects.get(id=data1.id)
                     email1.delete()
                     return redirect('messagesSent')
@@ -3168,7 +3185,6 @@ def AccountCitizen(request):
             # print(companyName + " " + user + " " + email)
             if password == repassword:
                 authUser = models.ZUser.objects.filter(Q(username=user) | Q(email=email))
-                print("ok")
                 if authUser.count() > 0:
                     infor['exist'] = "This User Name or E-mail was taken"
                     print(infor['exist'])
@@ -4019,6 +4035,7 @@ def Inputdata(request, proposalID):
 
             if request.POST.get('InternalCladding'):
                 InternalCladding = 1
+                print("InternalCladding = 1")
             else:
                 InternalCladding = 0
 
@@ -4173,7 +4190,7 @@ def Inputdata(request, proposalID):
             rwcomponent.shakingamount=data['shakingPipe']
             rwcomponent.shakingdetected=visibleSharkingProtect
             rwcomponent.shakingtime=data['timeShakingPipe']
-            rwcomponent.trampelements=TrampElement
+            #rwcomponent.trampelements=TrampElement
             rwcomponent.save()
 
             rwstream.aminesolution=data['AminSolution']

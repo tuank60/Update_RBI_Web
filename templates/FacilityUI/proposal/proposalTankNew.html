@@ -208,6 +208,21 @@
                 <fieldset class="scheduler-border">
                     <legend class="scheduler-border"><b>Component Properties</b></legend>
                     <div class="row">
+                        <div class="col-md-6">Level Of Confidence In Corrosion Rate</div>
+                        <div class="col-md-6"><select class="form-control" name="ConfidenceCR">
+                            <option value="" selected disabled>Please select level of confidence..</option>
+                            <option>Low</option>
+                            <option>Medium</option>
+                            <option>High</option>
+                        </select> </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Structural Thickness, mm:</div>
+                        <div class="col-md-3"><input type="number" class="form-control" step="0.01" min="0" value="0" max="1000" placeholder="StructuralThickness" name="StructuralThickness" required/></div>
+                        <div class="col-md-5">Minimum Structural Thickness Governs</div>
+                        <div class="col-md-1"><input type="checkbox" name="MinStructural"></div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-3">Tank Diameter, in:<span style="color: red">*</span></div>
                         <div class="col-md-3"><input type="number" max="100000" step="0.01" class="form-control" min="0" value="0" name="TankDiameter" placeholder="Tank diameter" required/></div>
                         <div class="col-md-3">Nominal Thickness, mm:<span style="color: red">*</span></div>
