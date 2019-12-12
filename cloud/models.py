@@ -512,6 +512,32 @@ class RwComponent(models.Model):
         db_table = 'rw_component'
         ordering = ('id',)
 
+class CorrosionRateTank(models.Model):
+    id = models.ForeignKey('RwAssessment', on_delete=models.CASCADE, db_column='ID')
+    corrosionid = models.AutoField(db_column='CorrosionID', primary_key=True)
+    soilsidecorrosionrate = models.FloatField(db_column='SoilSideCorrosionRate', null=True)
+    productsidecorrosionrate = models.FloatField(db_column='ProductSideCorrosionRate', null=True)
+    potentialcorrosion = models.CharField(db_column='PotentialCorrosion' , max_length=250, null=True)
+    tankpadmaterial = models.CharField(db_column='TankPadMaterial', max_length=250, null=True)
+    tankdrainagetype = models.CharField(db_column='TankDrainageType', max_length=250, null=True)
+    cathodicprotectiontype = models.CharField(db_column='CathodicProtectionType', max_length=250, null=True)
+    tankbottomtype = models.CharField(db_column='TankBottomType', max_length=250, null=True)
+    soilsidetemperature = models.CharField(db_column='SoilSideTemperature', max_length=250,null=True)
+    productcondition = models.CharField(db_column='ProductCondition', max_length=250, null=True)
+    productsidetemp = models.CharField(db_column='ProductSideTemp', max_length=250, null=True)
+    steamcoil = models.CharField(db_column='SteamCoil', max_length=250, null=True)
+    waterdrawoff = models.CharField(db_column='WaterDrawOff', max_length=250, null=True)
+    productsidebottom = models.CharField(db_column='ProductSideBottom', max_length=250, null=True)
+    modifiedsoilsidecorrosionrate = models.FloatField(db_column='ModifiedSoilSideCorrosionRate', null=True)
+    modifiedproductsidecorrosionrate = models.FloatField(db_column='ModifiedProductSideCorrosionRate', null=True)
+    finalestimatedcorrosionrate = models.FloatField(db_column='FinalEstimatedCorrosionRate', null=True)
+    create = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+
+    class Meta:
+        managed = False
+        db_table = 'rw_corrosion_rate_tank'
+        ordering = ('corrosionid',)
 
 class RwEquipment(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
@@ -992,7 +1018,7 @@ class Tbl64DmLinningInorganic(models.Model):
     castable_refractory = models.FloatField(db_column='Castable refractory', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     castable_refractory_severe_condition = models.IntegerField(db_column='Castable refractory severe condition', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     glass_lined = models.IntegerField(db_column='Glass lined', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
-    acid_brick = models.IntegerField(db_column='Acid Brick', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+    acid_brick = models.FloatField(db_column='Acid Brick', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     fiberglass = models.IntegerField(db_column='Fibreglass', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:

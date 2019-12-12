@@ -141,8 +141,11 @@ class POSTGRESQL:
         else:
             return tbl_511.e
 
-    def GET_TBL_512(ART, Effective):
-        tbl_512 = models.Tbl512DfbThinTankBottom.objects.get(art= ART)
+    def GET_TBL_512(ART, INSP,Effective):
+        if Effective == "E" or INSP == 0:
+            tbl_512 = models.Tbl512DfbThinTankBottom.objects.get(art=ART, insp= 1)
+        else:
+            tbl_512 = models.Tbl512DfbThinTankBottom.objects.get(art=ART, insp= INSP)
         if Effective == "A":
             return tbl_512.a
         elif Effective == "D":
@@ -308,5 +311,6 @@ class POSTGRESQL:
             date = CommissionDate
         else:
             date = insp_his[0].inspectiondate
+        #age_insp = int((AssessmentDate.date() - date.date()).days/365)
         age_insp = (AssessmentDate.date() - date.date()).days/365
         return round(age_insp,2)

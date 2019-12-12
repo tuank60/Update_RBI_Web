@@ -100,6 +100,9 @@ urlpatterns = [
     path('proposalMana/<int:proposalID>/chart/', views.RiskChartMana, name='riskChartMana'),
     path('proposalMana/<int:proposalID>/risk-matrix/', views.RiskMatrixMana, name='riskMatrixMana'),
     path('proposalMana/<int:proposalID>/fully-consequence/',views.FullyConsequenceMana, name='fullyConsequenceMana'),
+#testCuong
+    path('proposal/<int:proposalID>/corrisionRate/', views.CorrisionRate, name='corrision'),
+    path('proposal/<int:proposalID>/caculated/', views.CaculateCorrision, name='Caculate'),
     ############# Verification #############
     path('proposalManaVeri/<int:proposalID>/damage-factor/', views.VeriFullyDamageFactorMana, name='veridamgeFactorMana'),
     path('proposalManaVeri/<int:proposalID>/fully-consequence/',views.VeriFullyConsequenceMana, name='verifullyConsequenceMana'),
