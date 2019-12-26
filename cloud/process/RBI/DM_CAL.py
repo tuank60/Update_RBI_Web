@@ -354,7 +354,8 @@ class DM_CAL:
             return (self.Pressure * self.Diametter)/(self.getalpha() * self.FS_Thin() * self.trdi())
         else:
             # return (self.WeldJointEffciency * self.TensileStrengthDesignTemp * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.trdi())
-            return (self.WeldJointEffciency * self.TensileStrengthDesignTemp * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.YieldStrengthDesignTemp)
+            #return (self.WeldJointEffciency * self.TensileStrengthDesignTemp * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.YieldStrengthDesignTemp)
+            return (self.WeldJointEffciency * self.AllowableStress * max(self.getTmin(),self.StructuralThickness)) / (self.FS_Thin() * self.trdi())
     def Pr_P1_Thin(self):
         if self.CR_Confidents_Level == "Low":
             return 0.5
@@ -497,7 +498,7 @@ class DM_CAL:
                 print(e)
                 return 0
 
-    def DF_THIN(self, age):
+    def     DF_THIN(self, age):
         Fwd = 1
         Fam = 1
         Fsm = 1
@@ -553,13 +554,13 @@ class DM_CAL:
         if (self.INTERNAL_LINNING):
             if (self.LinningType == "Organic Low Quality"):
                 SUSCEP_LINNING ="MoreThan6Years"
-                return DAL_CAL.POSTGRESQL.GET_TBL_65(int(age), SUSCEP_LINNING)
+                return DAL_CAL.POSTGRESQL.GET_TBL_65(math.ceil(age), SUSCEP_LINNING)
             elif(self.LinningType == "Organic Medium Quality"):
                 SUSCEP_LINNING ="WithinLast6Years"
-                return DAL_CAL.POSTGRESQL.GET_TBL_65(int(age), SUSCEP_LINNING)
+                return DAL_CAL.POSTGRESQL.GET_TBL_65(math.ceil(age), SUSCEP_LINNING)
             elif(self.LinningType == "Organic High Quality"):
                 SUSCEP_LINNING ="WithinLast3Years"
-                return DAL_CAL.POSTGRESQL.GET_TBL_65(int(age), SUSCEP_LINNING)
+                return DAL_CAL.POSTGRESQL.GET_TBL_65(math.ceil(age), SUSCEP_LINNING)
             else:
                 return DAL_CAL.POSTGRESQL.GET_TBL_64(int(round(age)), self.LinningType)
         # if (self.LinningType == "Organic"):
@@ -587,7 +588,6 @@ class DM_CAL:
                 Fom = 0.1
             else:
                 Fom = 1
-            #print(self.DFB_LINNING(age) * Fdl * Fom)
             return self.DFB_LINNING(age) * Fdl * Fom
         else:
             return 0
@@ -1199,6 +1199,11 @@ class DM_CAL:
 
     # Calculate EXTERNAL CORROSION
     def AGE_CLSCC(self):
+        try:
+            TICK_SPAN = abs((self.AssesmentDate.date() - self.COMPONENT_INSTALL_DATE.date()).days)
+            return TICK_SPAN / 365
+        except Exception as e:
+            print(e)
         # if (self.EXTERN_COAT_QUALITY == "High coating quality"):
         #     AGE_COAT = self.COMPONENT_INSTALL_DATE + relativedelta(years=+15)  # Age + 15
         # elif (self.EXTERN_COAT_QUALITY == "Medium coating quality"):
@@ -1206,28 +1211,30 @@ class DM_CAL:
         # else:
         #     AGE_COAT = self.COMPONENT_INSTALL_DATE
         # TICK_SPAN = abs((self.AssesmentDate.date() - AGE_COAT.date()).days)
-        TICK_SPAN = abs((self.AssesmentDate.date()-self.COMPONENT_INSTALL_DATE.date()).days)
-        return TICK_SPAN / 365
+        #TICK_SPAN = abs((self.AssesmentDate.date()-self.COMPONENT_INSTALL_DATE.date()).days)
+        #return TICK_SPAN / 365
 
     def AGE_CUI(self, age):#section 15.6.3: Step 5-6-7
-        print("so sanh")
-        print(self.agetk(age))
-        print(self.AGE_CLSCC())
-        if ( self.agetk(age) >= self.AGE_CLSCC()):
-            if (self.EXTERN_COAT_QUALITY == "High coating quality"):
-                COAT=min(15,self.self.AGE_CLSCC())
-            elif (self.EXTERN_COAT_QUALITY == "Medium coating quality"):
-                COAT=min(5,self.AGE_CLSCC())
+        try:
+            a=float(self.AGE_CLSCC())
+            if (self.agetk(age) >= a):
+                if (self.EXTERN_COAT_QUALITY == "High coating quality"):
+                    COAT = min(15, a)
+                elif (self.EXTERN_COAT_QUALITY == "Medium coating quality"):
+                    COAT = min(5, a)
+                else:
+                    COAT = 0
             else:
-                COAT=0
-        else:
-            if (self.EXTERN_COAT_QUALITY == "High coating quality"):
-                COAT=min(15,self.self.AGE_CLSCC())-min(15,self.AGE_CLSCC()-self.agetk(age))
-            elif (self.EXTERN_COAT_QUALITY == "Medium coating quality"):
-                COAT=min(5,self.AGE_CLSCC())-min(5,self.AGE_CLSCC()-self.agetk(age))
-            else:
-                COAT=0
-        return self.agetk(age)-COAT
+                if (self.EXTERN_COAT_QUALITY == "High coating quality"):
+                    COAT = min(15, a) - min(15, a - self.agetk(age))
+                elif (self.EXTERN_COAT_QUALITY == "Medium coating quality"):
+                    COAT = min(5, a) - min(5, a - self.agetk(age))
+                else:
+                    COAT = 0
+            a=self.agetk(age) - COAT
+            return a
+        except Exception as e:
+            print(e)
 
     # def API_EXTERNAL_CORROSION_TEMP(self):#this function is not neccessary
     #     data = [-12, -8, 6, 32, 71, 107, 121, 121, 121, 121]
@@ -1239,14 +1246,12 @@ class DM_CAL:
         if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
             CR_EXTERN = (self.CUI_PERCENT_3+self.CUI_PERCENT_4+self.CUI_PERCENT_5)*0.025/100
         elif(self.EXTERNAL_EVIRONMENT=="Marine"):
-            CR_EXTERN =(self.CUI_PERCENT_2*0.25+self.CUI_PERCENT_3*0.127+self.CUI_PERCENT_4*0.127+self.CUI_PERCENT_5*0.127+self.CUI_PERCENT_6*0.025)/100
+            CR_EXTERN =(self.CUI_PERCENT_2*0.025+self.CUI_PERCENT_3*0.127+self.CUI_PERCENT_4*0.127+self.CUI_PERCENT_5*0.127+self.CUI_PERCENT_6*0.025)/100
         elif (self.EXTERNAL_EVIRONMENT == "Severe"):
             CR_EXTERN = (self.CUI_PERCENT_3*0.254+self.CUI_PERCENT_4*0.254+self.CUI_PERCENT_5*0.254+self.CUI_PERCENT_6*0.051)/100
         else:
             CR_EXTERN = (self.CUI_PERCENT_3*0.076+self.CUI_PERCENT_4*0.076+self.CUI_PERCENT_5*0.051)/100
         # EXTERNAL_TEMP = self.API_EXTERNAL_CORROSION_TEMP()
-        # print("EXTERNAL_TEMP")
-        # print(EXTERNAL_TEMP)
         # if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
         #     if (EXTERNAL_TEMP == -12 or EXTERNAL_TEMP == -8 or EXTERNAL_TEMP == 107 or EXTERNAL_TEMP == 121):
         #         CR_EXTERN = 0
@@ -1289,10 +1294,6 @@ class DM_CAL:
         CR = self.API_EXTERNAL_CORROSION_RATE() * max(FPS, FIP)
         try:
             ART_EXT = (CR*self.AGE_CUI(age))/self.trdi()
-            # ART_EXT = max(1 - (self.CurrentThick - CR * self.AGE_CUI(age)) / (self.getTmin() + self.CA), 0)
-            print("age+ART_EXT")
-            print(age)
-            print(ART_EXT)
         except Exception as e:
             print(e)
             ART_EXT = 1
@@ -1304,7 +1305,6 @@ class DM_CAL:
             self.EXTERNAL_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[11])
             self.EXTERNAL_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
             #self.NoINSP_EXTERNAL = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
-            print("vao function")
             if (self.EXTERNAL_INSP_EFF == "" or self.EXTERNAL_INSP_NUM == 0):
                 self.EXTERNAL_INSP_EFF = "E"
             if (self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT"):
@@ -1318,7 +1318,6 @@ class DM_CAL:
                     return 1900
                 else:
                     try:
-                        print("tinh toan po")
                         a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))
                         b = self.Po_P2_EXTERNAL() * self.ncdf(- self.B2_EXTERNAL(age))
                         c = self.Pr_P3_EXTERNAL() * self.ncdf(- self.B3_EXTERNAL(age))
@@ -1380,74 +1379,85 @@ class DM_CAL:
     def Po_P3_EXTERNAL(self):
         return self.I3_EXTERNAL()/(self.I1_EXTERNAL() + self.I2_EXTERNAL() + self.I3_EXTERNAL())
     def B1_EXTERNAL(self,age):
-        print("B1_EXTERNAL")
-        print(1 - self.API_ART_EXTERNAL(age)- self.SRp_Thin())/math.sqrt(pow(self.API_ART_EXTERNAL(age), 2) * 0.04 + pow((1 - self.API_ART_EXTERNAL(age)), 2) * 0.04 + pow(self.SRp_Thin(), 2) * pow(0.05, 2))
         return (1 - self.API_ART_EXTERNAL(age)- self.SRp_Thin())/math.sqrt(pow(self.API_ART_EXTERNAL(age), 2) * 0.04 + pow((1 - self.API_ART_EXTERNAL(age)), 2) * 0.04 + pow(self.SRp_Thin(), 2) * pow(0.05, 2))
     def B2_EXTERNAL(self,age):
-        print("B2_EXTERNAL")
-        print(1- 2*self.API_ART_EXTERNAL(age)-self.SRp_Thin())/math.sqrt(pow(self.API_ART_EXTERNAL(age),2)*4*0.04 + pow(1-2*self.API_ART_EXTERNAL(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
         return (1- 2*self.API_ART_EXTERNAL(age)-self.SRp_Thin())/math.sqrt(pow(self.API_ART_EXTERNAL(age),2)*4*0.04 + pow(1-2*self.API_ART_EXTERNAL(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
     def B3_EXTERNAL(self,age):
-        print("B3_EXTERNAL")
-        print((1- 4*self.API_ART_EXTERNAL(age)-self.SRp_Thin())/math.sqrt(pow(self.API_ART_EXTERNAL(age),2)*16*0.04 + pow(1-4*self.API_ART_EXTERNAL(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2)))
         return (1- 4*self.API_ART_EXTERNAL(age)-self.SRp_Thin())/math.sqrt(pow(self.API_ART_EXTERNAL(age),2)*16*0.04 + pow(1-4*self.API_ART_EXTERNAL(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
 
 
 
     # Calculate CUI
-    def API_CUI_TEMP(self):
-        data = [-12, -8, 6, 32, 71, 107, 107, 135, 162, 176]
-        list = [self.CUI_PERCENT_1, self.CUI_PERCENT_2, self.CUI_PERCENT_3, self.CUI_PERCENT_4, self.CUI_PERCENT_5,
-                self.CUI_PERCENT_6, self.CUI_PERCENT_7, self.CUI_PERCENT_8, self.CUI_PERCENT_9, self.CUI_PERCENT_10]
-        return data[list.index(max(list))]
+    # def API_CUI_TEMP(self):
+    #     if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
+    #         CR_CUI = (self.CUI_PERCENT_3*0.025+self.CUI_PERCENT_4*0.025+self.CUI_PERCENT_5*0.051+self.CUI_PERCENT_6*0.025)/100
+    #     elif(self.EXTERNAL_EVIRONMENT=="Marine"):
+    #         CR_CUI = (self.CUI_PERCENT_2 * 0.025 + self.CUI_PERCENT_3 * 0.127 + self.CUI_PERCENT_4 * 0.127 + self.CUI_PERCENT_5 * 0.254 + self.CUI_PERCENT_6 * 0.127 + self.CUI_PERCENT_7 * 0.051 + self.CUI_PERCENT_8 * 0.025) / 100
+    #     elif (self.EXTERNAL_EVIRONMENT == "Severe"):
+    #         CR_CUI =(self.CUI_PERCENT_2*0.076+self.CUI_PERCENT_3*0.254+self.CUI_PERCENT_4*0.254+self.CUI_PERCENT_5*0.508+self.CUI_PERCENT_6*0.254+self.CUI_PERCENT_7*0.254+self.CUI_PERCENT_8*0.127)/100
+    #     else:
+    #         CR_CUI = (self.CUI_PERCENT_3*0.076+self.CUI_PERCENT_4*0.076+self.CUI_PERCENT_5*0.127+self.CUI_PERCENT_6*0.025+self.CUI_PERCENT_7*0.025)/100
+    #     return CR_CUI
+        # data = [-12, -8, 6, 32, 71, 107, 107, 135, 162, 176]
+        # list = [self.CUI_PERCENT_1, self.CUI_PERCENT_2, self.CUI_PERCENT_3, self.CUI_PERCENT_4, self.CUI_PERCENT_5,
+        #         self.CUI_PERCENT_6, self.CUI_PERCENT_7, self.CUI_PERCENT_8, self.CUI_PERCENT_9, self.CUI_PERCENT_10]
+        # return data[list.index(max(list))]
 
     def API_CORROSION_RATE(self):
-        CUI_TEMP = self.API_CUI_TEMP()
         if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
-            if (CUI_TEMP == -12 or CUI_TEMP == -8 or CUI_TEMP == 135 or CUI_TEMP == 162 or CUI_TEMP == 176):
-                CR_CUI = 0
-            elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107):
-                CR_CUI = 0.025
-            else:
-                CR_CUI = 0.051
-        elif (self.EXTERNAL_EVIRONMENT == "Marine"):
-            if (CUI_TEMP == -12 or CUI_TEMP == 176):
-                CR_CUI = 0
-            elif (CUI_TEMP == -8 or CUI_TEMP == 162):
-                CR_CUI = 0.025
-            elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107):
-                CR_CUI = 0.127
-            elif (CUI_TEMP == 135):
-                CR_CUI = 0.051
-            else:
-                CR_CUI = 0.254
+            CR_CUI = (self.CUI_PERCENT_3*0.025+self.CUI_PERCENT_4*0.025+self.CUI_PERCENT_5*0.051+self.CUI_PERCENT_6*0.025)/100
+        elif(self.EXTERNAL_EVIRONMENT=="Marine"):
+            CR_CUI = (self.CUI_PERCENT_2 * 0.025 + self.CUI_PERCENT_3 * 0.127 + self.CUI_PERCENT_4 * 0.127 + self.CUI_PERCENT_5 * 0.254 + self.CUI_PERCENT_6 * 0.127 + self.CUI_PERCENT_7 * 0.051 + self.CUI_PERCENT_8 * 0.051+self.CUI_PERCENT_9 * 0.025) / 100
         elif (self.EXTERNAL_EVIRONMENT == "Severe"):
-            if (CUI_TEMP == -12 or CUI_TEMP == 176):
-                CR_CUI = 0
-            elif (CUI_TEMP == -8):
-                CR_CUI = 0.076
-            elif (CUI_TEMP == 162):
-                CR_CUI = 0.127
-            elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107 or CUI_TEMP == 135):
-                CR_CUI = 0.254
-            else:
-                CR_CUI = 0.508
-        elif (self.EXTERNAL_EVIRONMENT == "Temperate"):
-            if (CUI_TEMP == -12 or CUI_TEMP == -8 or CUI_TEMP == 162 or CUI_TEMP == 176):
-                CR_CUI = 0
-            elif (CUI_TEMP == 107 or CUI_TEMP == 135):
-                CR_CUI = 0.025
-            elif (CUI_TEMP == 6 or CUI_TEMP == 32):
-                CR_CUI = 0.076
-            else:
-                CR_CUI = 0.127
+            CR_CUI =(self.CUI_PERCENT_2*0.076+self.CUI_PERCENT_3*0.254+self.CUI_PERCENT_4*0.254+self.CUI_PERCENT_5*0.508+self.CUI_PERCENT_6*0.254+self.CUI_PERCENT_7*0.254+self.CUI_PERCENT_8*0.254+self.CUI_PERCENT_9 * 0.127)/100
         else:
-            CR_CUI = 0
+            CR_CUI = (self.CUI_PERCENT_3*0.076+self.CUI_PERCENT_4*0.076+self.CUI_PERCENT_5*0.127+self.CUI_PERCENT_6*0.025+self.CUI_PERCENT_7*0.025)/100
         return CR_CUI
+        # CUI_TEMP = self.API_CUI_TEMP()
+        # if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
+        #     if (CUI_TEMP == -12 or CUI_TEMP == -8 or CUI_TEMP == 135 or CUI_TEMP == 162 or CUI_TEMP == 176):
+        #         CR_CUI = 0
+        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107):
+        #         CR_CUI = 0.025
+        #     else:
+        #         CR_CUI = 0.051
+        # elif (self.EXTERNAL_EVIRONMENT == "Marine"):
+        #     if (CUI_TEMP == -12 or CUI_TEMP == 176):
+        #         CR_CUI = 0
+        #     elif (CUI_TEMP == -8 or CUI_TEMP == 162):
+        #         CR_CUI = 0.025
+        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107):
+        #         CR_CUI = 0.127
+        #     elif (CUI_TEMP == 135):
+        #         CR_CUI = 0.051
+        #     else:
+        #         CR_CUI = 0.254
+        # elif (self.EXTERNAL_EVIRONMENT == "Severe"):
+        #     if (CUI_TEMP == -12 or CUI_TEMP == 176):
+        #         CR_CUI = 0
+        #     elif (CUI_TEMP == -8):
+        #         CR_CUI = 0.076
+        #     elif (CUI_TEMP == 162):
+        #         CR_CUI = 0.127
+        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107 or CUI_TEMP == 135):
+        #         CR_CUI = 0.254
+        #     else:
+        #         CR_CUI = 0.508
+        # elif (self.EXTERNAL_EVIRONMENT == "Temperate"):
+        #     if (CUI_TEMP == -12 or CUI_TEMP == -8 or CUI_TEMP == 162 or CUI_TEMP == 176):
+        #         CR_CUI = 0
+        #     elif (CUI_TEMP == 107 or CUI_TEMP == 135):
+        #         CR_CUI = 0.025
+        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32):
+        #         CR_CUI = 0.076
+        #     else:
+        #         CR_CUI = 0.127
+        # else:
+        #     CR_CUI = 0
+        # return CR_CUI
 
     def API_ART_CUI(self, age):
-        if (
-                        self.INSULATION_TYPE == "Asbestos" or self.INSULATION_TYPE == "Calcium Silicate" or self.INSULATION_TYPE == "Mineral Wool" or self.INSULATION_TYPE == "Fibreglass"):
+        if (self.INSULATION_TYPE == "Asbestos" or self.INSULATION_TYPE == "Calcium Silicate" or self.INSULATION_TYPE == "Mineral Wool" or self.INSULATION_TYPE == "Fibreglass"or self.INSULATION_TYPE == "Unknown/Unspecified"):
             FIN = 1.25
         elif (self.INSULATION_TYPE == "Foam Glass"):
             FIN = 0.75
@@ -1480,7 +1490,9 @@ class DM_CAL:
 
         CR = self.API_CORROSION_RATE() * FIN * FCM * FIC * max(FPS, FIP)
         try:
-            ART_CUI = max(1 - (self.CurrentThick - CR * self.AGE_CUI(age)) / (self.getTmin() + self.CA), 0)
+            #ART_CUI = max(1 - (self.CurrentThick - CR * self.AGE_CUI(age)) / (self.getTmin() + self.CA), 0)
+            ART_CUI = (CR * self.AGE_CUI(age)) / self.trdi()
+            print(ART_CUI)
         except:
             ART_CUI = 1
         return self.API_ART(ART_CUI)
@@ -1496,12 +1508,19 @@ class DM_CAL:
                 if (self.NomalThick == 0 or self.CurrentThick == 0):
                     return 1390
                 else:
-                    return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART_CUI(age), self.CUI_INSP_EFF)
+                    return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_CUI(age)),self.CUI_INSP_NUM,self.CUI_INSP_EFF)
             else:
                 if (self.NomalThick == 0 or self.CurrentThick == 0):
                     return 1900
                 else:
-                    return DAL_CAL.POSTGRESQL.GET_TBL_511(self.API_ART_CUI(age), self.CUI_INSP_NUM, self.CUI_INSP_EFF)
+                    try:
+                        a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))#chưa test
+                        b = self.Po_P2_EXTERNAL() * self.ncdf(- self.B2_EXTERNAL(age))#chưa test
+                        c = self.Pr_P3_EXTERNAL() * self.ncdf(- self.B3_EXTERNAL(age))#chưa test
+                        return (a + b + c) / (1.56 * pow(10, -4))
+                    except Exception as e:
+                        print(e)
+                        return 0
         else:
             return 0
 
@@ -2080,7 +2099,7 @@ class DM_CAL:
 
     ##################################################################################
     def GET_AGE_INSERVICE(self):
-        return int((self.AssesmentDate.date() - self.CommissionDate.date()).days/365)
+        return float((self.AssesmentDate.date() - self.CommissionDate.date()).days/365)
 
     def GET_AGE(self):
         age = np.zeros(14)
@@ -2122,7 +2141,6 @@ class DM_CAL:
         return self.DF_HIC_SOHIC_HF(self.GET_AGE()[10] + i)
 
     def DF_EXTERNAL_CORROSION_API(self, i):
-        print("DF_EXTERNAL_CORROSION_API")
         return self.DF_EXTERNAL_CORROSION(self.GET_AGE()[11] + i)
 
     def DF_CUI_API(self, i):
@@ -2159,7 +2177,6 @@ class DM_CAL:
         return DF_SCC
 
     def DF_EXT_TOTAL_API(self, i):
-        print("DF_EXT_TOTAL_API")
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(), self.DF_CUI_CLSCC_API())
         return DF_EXT
 

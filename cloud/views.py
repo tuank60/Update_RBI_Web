@@ -633,11 +633,10 @@ def ListProposal(request, componentID):
         data = []
         comp = models.ComponentMaster.objects.get(componentid= componentID)
         api = models.ApiComponentType.objects.get(apicomponenttypeid=comp.apicomponenttypeid)
-        print(api.apicomponenttypename)
         equip = models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id)
         faci = models.Facility.objects.get(facilityid=equip.facilityid_id)
-        #tank = [8,12,14,15]
-        tank = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 36, 38, 39]
+        tank = [8,12,14,15]
+        #tank = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 36, 38, 39]
         for a in rwass:
             df = models.RwFullPof.objects.filter(id= a.id)
             fc = models.RwFullFcof.objects.filter(id= a.id)
@@ -675,8 +674,10 @@ def ListProposal(request, componentID):
             obj = pagedata.page(pagidata.num_pages)
 
         if comp.componenttypeid_id in tank:
+            print(comp.componenttypeid_id)
             istank = 1
         else:
+            print("0")
             istank = 0
         if comp.componenttypeid_id == 8 or comp.componenttypeid_id == 14:
             isshell = 1
@@ -695,8 +696,10 @@ def ListProposal(request, componentID):
                 for a in rwass:
                     if request.POST.get('%d' %a.id):
                         if istank:
+                            print("tank")
                             return redirect('tankEdit', proposalID= a.id)
                         else:
+                            print("nottank")
                             return redirect('prosalEdit', proposalID= a.id)
             elif '_new' in request.POST:
                 try:

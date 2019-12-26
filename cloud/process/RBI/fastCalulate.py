@@ -496,13 +496,10 @@ def calculateTank(proposalID):
         eq = models.EquipmentMaster.objects.get(equipmentid=rwassessment.equipmentid_id)
         target = models.FacilityRiskTarget.objects.get(facilityid=eq.facilityid_id)
         datafaci = models.Facility.objects.get(facilityid=eq.facilityid_id)
-        print("dong 469")
         isshell = False
         if comp.componenttypeid_id == 8 or comp.componenttypeid_id == 14:
-            print("dong 472")
             isshell = True
         if not rwcoat.externalcoating:
-            print("dong 475")
             dm_cal = DM_CAL.DM_CAL(APIComponentType=models.ApiComponentType.objects.get(apicomponenttypeid= comp.apicomponenttypeid).apicomponenttypename,
                                    Diametter=rwcomponent.nominaldiameter, NomalThick=rwcomponent.nominalthickness,
                                    CurrentThick=rwcomponent.currentthickness,
@@ -579,7 +576,6 @@ def calculateTank(proposalID):
                                    PIPE_CONDITION="", JOINT_TYPE="",
                                    BRANCH_DIAMETER="")
         else:
-            print("dong 552")
             dm_cal = DM_CAL.DM_CAL(APIComponentType=models.ApiComponentType.objects.get(
                 apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
                                    Diametter=rwcomponent.nominaldiameter, NomalThick=rwcomponent.nominalthickness,
@@ -665,7 +661,6 @@ def calculateTank(proposalID):
                                    PIPE_CONDITION="", JOINT_TYPE="",
                                    BRANCH_DIAMETER="")
         if isshell:
-            print("dong 638")
             cacal = CA_CAL.CA_SHELL(FLUID=rwinputca.api_fluid, FLUID_HEIGHT=rwstream.fluidheight,
                                     SHELL_COURSE_HEIGHT=rwinputca.shell_course_height,
                                     TANK_DIAMETER=rwcomponent.nominaldiameter,
@@ -677,7 +672,6 @@ def calculateTank(proposalID):
                                     API_COMPONENT_TYPE_NAME=models.ApiComponentType.objects.get(apicomponenttypeid= comp.apicomponenttypeid).apicomponenttypename,
                                     PRODUCTION_COST=rwinputca.productioncost)
             if countRwcatank.count() != 0:
-                print("dong 650")
                 rwcatank = models.RwCaTank.objects.get(id=proposalID)
                 rwcatank.flow_rate_d1 = cacal.W_n_Tank(1)
                 rwcatank.flow_rate_d2 = cacal.W_n_Tank(2)
@@ -717,7 +711,6 @@ def calculateTank(proposalID):
                 rwcatank.consequencecategory = cacal.FC_Category(cacal.FC_total_shell())
                 rwcatank.save()
             else:
-                print("dong 690")
                 rwcatank = models.RwCaTank(id=rwassessment, flow_rate_d1=cacal.W_n_Tank(1),
                                            flow_rate_d2=cacal.W_n_Tank(2),
                                            flow_rate_d3=cacal.W_n_Tank(3),
@@ -756,7 +749,6 @@ def calculateTank(proposalID):
             FC_TOTAL = cacal.FC_total_shell()
             FC_CATEGORY = cacal.FC_Category(cacal.FC_total_shell())
         else:
-            print("dong 729")
             cacal = CA_CAL.CA_TANK_BOTTOM(Soil_type=rwequipment.typeofsoil, TANK_FLUID=rwstream.tankfluidname,
                                           Swg=rwequipment.distancetogroundwater,
                                           TANK_DIAMETER=rwcomponent.nominaldiameter,
@@ -769,7 +761,6 @@ def calculateTank(proposalID):
                                           P_lvdike=rwstream.fluidleavedikepercent, P_onsite=rwstream.fluidleavedikeremainonsitepercent,
                                           P_offsite=rwstream.fluidgooffsitepercent)
             if countRwcatank.count() != 0:
-                print("dong 742")
                 rwcatank = models.RwCaTank.objects.get(id=proposalID)
                 rwcatank.hydraulic_water = cacal.k_h_water()
                 rwcatank.hydraulic_fluid = cacal.k_h_prod()
@@ -802,7 +793,6 @@ def calculateTank(proposalID):
                 rwcatank.consequencecategory = cacal.FC_Category(cacal.FC_total_bottom())
                 rwcatank.save()
             else:
-                print("dong 775")
                 rwcatank = models.RwCaTank(id=rwassessment, hydraulic_water=cacal.k_h_water(),
                                            hydraulic_fluid=cacal.k_h_prod(),
                                            seepage_velocity=cacal.vel_s_prod(),
@@ -836,14 +826,8 @@ def calculateTank(proposalID):
             FC_TOTAL = cacal.FC_total_bottom()
             FC_CATEGORY = cacal.FC_Category(cacal.FC_total_bottom())
         TOTAL_DF_API1 = dm_cal.DF_TOTAL_API(0)
-        print("api1")
-        print(dm_cal.DF_TOTAL_API(0))
         TOTAL_DF_API2 = dm_cal.DF_TOTAL_API(3)
-        print("api2")
-        print(dm_cal.DF_TOTAL_API(3))
         TOTAL_DF_API3 = dm_cal.DF_TOTAL_API(6)
-        print("api3")
-        print(dm_cal.DF_TOTAL_API(6))
 
         TOTAL_DF_GENERAL_1 = dm_cal.DF_TOTAL_GENERAL(0)
         TOTAL_DF_GENERAL_2 = dm_cal.DF_TOTAL_GENERAL(3)
@@ -857,10 +841,8 @@ def calculateTank(proposalID):
         pof_general_ap1 = pofConvert.convert(TOTAL_DF_GENERAL_1 * datafaci.managementfactor * gffTotal)
         pof_general_ap2 = pofConvert.convert(TOTAL_DF_GENERAL_2 * datafaci.managementfactor * gffTotal)
         pof_general_ap3 = pofConvert.convert(TOTAL_DF_GENERAL_3 * datafaci.managementfactor * gffTotal)
-        print("dong 824")
         # thinningtype = General or Local
         if countRefullPOF.count() != 0:
-            print("dong827")
             refullPOF = models.RwFullPof.objects.get(id=proposalID)
             refullPOF.thinningap1 = dm_cal.DF_THINNING_TOTAL_API(0)
             refullPOF.thinningap2 = dm_cal.DF_THINNING_TOTAL_API(3)
@@ -888,7 +870,7 @@ def calculateTank(proposalID):
             refullPOF.thinninggeneralap2 = dm_cal.DF_THINNING_TOTAL_API(3) + dm_cal.DF_EXT_TOTAL_API(3)
             refullPOF.thinninggeneralap3 = dm_cal.DF_THINNING_TOTAL_API(6) + dm_cal.DF_EXT_TOTAL_API(6)
             if refullPOF.thinningtype == "General":
-                print("dong 855")
+
                 refullPOF.totaldfap1 = TOTAL_DF_GENERAL_1
                 refullPOF.totaldfap2 = TOTAL_DF_GENERAL_2
                 refullPOF.totaldfap3 = TOTAL_DF_GENERAL_3
@@ -899,7 +881,6 @@ def calculateTank(proposalID):
                 refullPOF.pofap2category = dm_cal.PoFCategory(TOTAL_DF_GENERAL_2)
                 refullPOF.pofap3category = dm_cal.PoFCategory(TOTAL_DF_GENERAL_3)
             else:
-                print("dong 866")
                 refullPOF.thinningtype = "Local"
                 refullPOF.totaldfap1 = TOTAL_DF_API1
                 refullPOF.totaldfap2 = TOTAL_DF_API2
@@ -913,7 +894,6 @@ def calculateTank(proposalID):
             refullPOF.gfftotal = gffTotal
             refullPOF.save()
         else:
-            print("dong 880")
             refullPOF = models.RwFullPof(id=rwassessment, thinningap1=dm_cal.DF_THINNING_TOTAL_API(0),
                                          thinningap2=dm_cal.DF_THINNING_TOTAL_API(3),
                                          thinningap3=dm_cal.DF_THINNING_TOTAL_API(6),
