@@ -460,7 +460,7 @@ class DM_CAL:
             else:
                 return data[19]
         else:
-            return 0
+            return a
 
     def erfcc(self,x):
         z = abs(x)
@@ -633,11 +633,11 @@ class DM_CAL:
 
     def SVI_CAUSTIC(self):
         if (self.getSusceptibility_Caustic() == "High"):
-            sev = 5000
-        elif (self.getSusceptibility_Caustic() == "Medium"):
-            sev = 500
-        elif (self.getSusceptibility_Caustic() == "Low"):
             sev = 50
+        elif (self.getSusceptibility_Caustic() == "Medium"):
+            sev = 10
+        elif (self.getSusceptibility_Caustic() == "Low"):
+            sev = 1
         else:
             sev = 0
         return sev
@@ -1351,9 +1351,11 @@ class DM_CAL:
 
     def NA_EXTERNAL(self):
         a = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EFFA(self.ComponentNumber, self.DM_Name[11])
+
         return a
     def NB_EXTERNAL(self):
         b = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFB(self.ComponentNumber, self.DM_Name[11])
+
         return b
     def NC_EXTERNAL(self):
         c = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFC(self.ComponentNumber, self.DM_Name[11])
@@ -1362,14 +1364,14 @@ class DM_CAL:
         d = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFD(self.ComponentNumber, self.DM_Name[11])
         return d
     def I1_EXTERNAL(self):
-        a=self.Pr_P1_EXTERNAL() * pow(0.9,self.NA_EXTERNAL()) * pow(0.7,self.NB_EXTERNAL()) * pow(0.5,self.NC_EXTERNAL()) * pow(0.4,self.ND_Thin())
-        return self.Pr_P1_EXTERNAL() * pow(0.9,self.NA_EXTERNAL()) * pow(0.7,self.NB_EXTERNAL()) * pow(0.5,self.NC_EXTERNAL()) * pow(0.4,self.ND_Thin())
+        a=self.Pr_P1_EXTERNAL() * pow(0.9,self.NA_EXTERNAL()) * pow(0.7,self.NB_EXTERNAL()) * pow(0.5,self.NC_EXTERNAL()) * pow(0.4,self.ND_EXTERNAL())
+        return self.Pr_P1_EXTERNAL() * pow(0.9,self.NA_EXTERNAL()) * pow(0.7,self.NB_EXTERNAL()) * pow(0.5,self.NC_EXTERNAL()) * pow(0.4,self.ND_EXTERNAL())
     def I2_EXTERNAL(self):
-        a=self.Pr_P2_EXTERNAL() * pow(0.09,self.NA_EXTERNAL()) * pow(0.2,self.NB_EXTERNAL()) * pow(0.3,self.NC_EXTERNAL()) * pow(0.33,self.ND_Thin())
-        return self.Pr_P2_EXTERNAL() * pow(0.09,self.NA_EXTERNAL()) * pow(0.2,self.NB_EXTERNAL()) * pow(0.3,self.NC_EXTERNAL()) * pow(0.33,self.ND_Thin())
+        a=self.Pr_P2_EXTERNAL() * pow(0.09,self.NA_EXTERNAL()) * pow(0.2,self.NB_EXTERNAL()) * pow(0.3,self.NC_EXTERNAL()) * pow(0.33,self.ND_EXTERNAL())
+        return self.Pr_P2_EXTERNAL() * pow(0.09,self.NA_EXTERNAL()) * pow(0.2,self.NB_EXTERNAL()) * pow(0.3,self.NC_EXTERNAL()) * pow(0.33,self.ND_EXTERNAL())
     def I3_EXTERNAL(self):
-        a=self.Pr_P3_EXTERNAL() * pow(0.01,self.NA_EXTERNAL()) * pow(0.1,self.NB_EXTERNAL()) * pow(0.2,self.NC_Thin()) * pow(0.27,self.ND_Thin())
-        return self.Pr_P3_EXTERNAL() * pow(0.01,self.NA_EXTERNAL()) * pow(0.1,self.NB_EXTERNAL()) * pow(0.2,self.NC_EXTERNAL()) * pow(0.27,self.ND_Thin())
+        a=self.Pr_P3_EXTERNAL() * pow(0.01,self.NA_EXTERNAL()) * pow(0.1,self.NB_EXTERNAL()) * pow(0.2,self.NC_Thin()) * pow(0.27,self.ND_EXTERNAL())
+        return self.Pr_P3_EXTERNAL() * pow(0.01,self.NA_EXTERNAL()) * pow(0.1,self.NB_EXTERNAL()) * pow(0.2,self.NC_EXTERNAL()) * pow(0.27,self.ND_EXTERNAL())
     def Po_P1_EXTERNAL(self):
         a=self.I1_EXTERNAL()/(self.I1_EXTERNAL() + self.I2_EXTERNAL() + self.I3_EXTERNAL())
         return self.I1_EXTERNAL()/(self.I1_EXTERNAL() + self.I2_EXTERNAL() + self.I3_EXTERNAL())
@@ -1377,6 +1379,7 @@ class DM_CAL:
         a = self.I2_EXTERNAL()/(self.I1_EXTERNAL() + self.I2_EXTERNAL() + self.I3_EXTERNAL())
         return self.I2_EXTERNAL()/(self.I1_EXTERNAL() + self.I2_EXTERNAL() + self.I3_EXTERNAL())
     def Po_P3_EXTERNAL(self):
+        a=self.I3_EXTERNAL()/(self.I1_EXTERNAL() + self.I2_EXTERNAL() + self.I3_EXTERNAL())
         return self.I3_EXTERNAL()/(self.I1_EXTERNAL() + self.I2_EXTERNAL() + self.I3_EXTERNAL())
     def B1_EXTERNAL(self,age):
         return (1 - self.API_ART_EXTERNAL(age)- self.SRp_Thin())/math.sqrt(pow(self.API_ART_EXTERNAL(age), 2) * 0.04 + pow((1 - self.API_ART_EXTERNAL(age)), 2) * 0.04 + pow(self.SRp_Thin(), 2) * pow(0.05, 2))
@@ -1413,48 +1416,6 @@ class DM_CAL:
         else:
             CR_CUI = (self.CUI_PERCENT_3*0.076+self.CUI_PERCENT_4*0.076+self.CUI_PERCENT_5*0.127+self.CUI_PERCENT_6*0.025+self.CUI_PERCENT_7*0.025)/100
         return CR_CUI
-        # CUI_TEMP = self.API_CUI_TEMP()
-        # if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
-        #     if (CUI_TEMP == -12 or CUI_TEMP == -8 or CUI_TEMP == 135 or CUI_TEMP == 162 or CUI_TEMP == 176):
-        #         CR_CUI = 0
-        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107):
-        #         CR_CUI = 0.025
-        #     else:
-        #         CR_CUI = 0.051
-        # elif (self.EXTERNAL_EVIRONMENT == "Marine"):
-        #     if (CUI_TEMP == -12 or CUI_TEMP == 176):
-        #         CR_CUI = 0
-        #     elif (CUI_TEMP == -8 or CUI_TEMP == 162):
-        #         CR_CUI = 0.025
-        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107):
-        #         CR_CUI = 0.127
-        #     elif (CUI_TEMP == 135):
-        #         CR_CUI = 0.051
-        #     else:
-        #         CR_CUI = 0.254
-        # elif (self.EXTERNAL_EVIRONMENT == "Severe"):
-        #     if (CUI_TEMP == -12 or CUI_TEMP == 176):
-        #         CR_CUI = 0
-        #     elif (CUI_TEMP == -8):
-        #         CR_CUI = 0.076
-        #     elif (CUI_TEMP == 162):
-        #         CR_CUI = 0.127
-        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32 or CUI_TEMP == 107 or CUI_TEMP == 135):
-        #         CR_CUI = 0.254
-        #     else:
-        #         CR_CUI = 0.508
-        # elif (self.EXTERNAL_EVIRONMENT == "Temperate"):
-        #     if (CUI_TEMP == -12 or CUI_TEMP == -8 or CUI_TEMP == 162 or CUI_TEMP == 176):
-        #         CR_CUI = 0
-        #     elif (CUI_TEMP == 107 or CUI_TEMP == 135):
-        #         CR_CUI = 0.025
-        #     elif (CUI_TEMP == 6 or CUI_TEMP == 32):
-        #         CR_CUI = 0.076
-        #     else:
-        #         CR_CUI = 0.127
-        # else:
-        #     CR_CUI = 0
-        # return CR_CUI
 
     def API_ART_CUI(self, age):
         if (self.INSULATION_TYPE == "Asbestos" or self.INSULATION_TYPE == "Calcium Silicate" or self.INSULATION_TYPE == "Mineral Wool" or self.INSULATION_TYPE == "Fibreglass"or self.INSULATION_TYPE == "Unknown/Unspecified"):
@@ -1492,10 +1453,70 @@ class DM_CAL:
         try:
             #ART_CUI = max(1 - (self.CurrentThick - CR * self.AGE_CUI(age)) / (self.getTmin() + self.CA), 0)
             ART_CUI = (CR * self.AGE_CUI(age)) / self.trdi()
-            print(ART_CUI)
         except:
             ART_CUI = 1
         return self.API_ART(ART_CUI)
+
+    def NA_FERRITIC(self):
+        a = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EFFA(self.ComponentNumber, self.DM_Name[12])
+        return a
+
+    def NB_FERRITIC(self):
+        b = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFB(self.ComponentNumber, self.DM_Name[12])
+        return b
+
+    def NC_FERRITIC(self):
+        c = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFC(self.ComponentNumber, self.DM_Name[12])
+        return c
+
+    def ND_FERRITIC(self):
+        d = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP_FOR_THIN_EEFD(self.ComponentNumber, self.DM_Name[12])
+        return d
+
+    def I1_FERRITIC(self):
+        a = self.Pr_P1_EXTERNAL() * pow(0.9, self.NA_FERRITIC()) * pow(0.7, self.NB_FERRITIC()) * pow(0.5,self.NC_FERRITIC()) * pow(0.4, self.ND_FERRITIC())
+        return self.Pr_P1_EXTERNAL() * pow(0.9, self.NA_FERRITIC()) * pow(0.7, self.NB_FERRITIC()) * pow(0.5,self.NC_FERRITIC()) * pow(0.4, self.ND_FERRITIC())
+
+    def I2_FERRITIC(self):
+        a = self.Pr_P2_EXTERNAL() * pow(0.09, self.NA_FERRITIC()) * pow(0.2, self.NB_FERRITIC()) * pow(0.3,self.NC_FERRITIC()) * pow(0.33, self.ND_FERRITIC())
+        return self.Pr_P2_EXTERNAL() * pow(0.09, self.NA_FERRITIC()) * pow(0.2, self.NB_FERRITIC()) * pow(0.3,self.NC_FERRITIC()) * pow(0.33, self.ND_FERRITIC())
+
+    def I3_FERRITIC(self):
+        a = self.Pr_P3_EXTERNAL() * pow(0.01, self.NA_FERRITIC()) * pow(0.1, self.NB_FERRITIC()) * pow(0.2,self.NC_FERRITIC()) * pow(0.27, self.ND_FERRITIC())
+        return self.Pr_P3_EXTERNAL() * pow(0.01, self.NA_FERRITIC()) * pow(0.1, self.NB_FERRITIC()) * pow(0.2,self.NC_FERRITIC()) * pow(0.27, self.ND_FERRITIC())
+
+    def Po_P1_FERRITIC(self):
+        return self.I1_FERRITIC() / (self.I1_FERRITIC() + self.I2_FERRITIC() + self.I3_FERRITIC())
+
+    def Po_P2_FERRITIC(self):
+        return self.I2_FERRITIC() / (self.I1_FERRITIC() + self.I2_FERRITIC() + self.I3_FERRITIC())
+
+    def Po_P3_FERRITIC(self):
+        return self.I3_FERRITIC() / (self.I1_FERRITIC() + self.I2_FERRITIC() + self.I3_FERRITIC())
+
+    def B1_FERRITIC(self, age):
+        a=(1 - self.API_ART_CUI(age) - self.SRp_Thin()) / math.sqrt(
+            pow(self.API_ART_CUI(age), 2) * 0.04 + pow((1 - self.API_ART_CUI(age)), 2) * 0.04 + pow(self.SRp_Thin(),
+                                                                                                    2) * pow(0.05, 2))
+        return (1 - self.API_ART_CUI(age) - self.SRp_Thin()) / math.sqrt(
+            pow(self.API_ART_CUI(age), 2) * 0.04 + pow((1 - self.API_ART_CUI(age)), 2) * 0.04 + pow(self.SRp_Thin(),
+                                                                                                    2) * pow(0.05, 2))
+
+    def B2_FERRITIC(self, age):
+        b=(1 - 2 * self.API_ART_CUI(age) - self.SRp_Thin()) / math.sqrt(
+            pow(self.API_ART_CUI(age), 2) * 4 * 0.04 + pow(1 - 2 * self.API_ART_CUI(age), 2) * 0.04 + pow(
+                self.SRp_Thin(), 2) * pow(0.05, 2))
+        return (1 - 2 * self.API_ART_CUI(age) - self.SRp_Thin()) / math.sqrt(
+            pow(self.API_ART_CUI(age), 2) * 4 * 0.04 + pow(1 - 2 * self.API_ART_CUI(age), 2) * 0.04 + pow(
+                self.SRp_Thin(), 2) * pow(0.05, 2))
+
+    def B3_FERRITIC(self, age):
+        c=(1 - 4 * self.API_ART_CUI(age) - self.SRp_Thin()) / math.sqrt(
+            pow(self.API_ART_CUI(age), 2) * 16 * 0.04 + pow(1 - 4 * self.API_ART_CUI(age), 2) * 0.04 + pow(
+                self.SRp_Thin(), 2) * pow(0.05, 2))
+        return (1 - 4 * self.API_ART_CUI(age) - self.SRp_Thin()) / math.sqrt(
+            pow(self.API_ART_CUI(age), 2) * 16 * 0.04 + pow(1 - 4 * self.API_ART_CUI(age), 2) * 0.04 + pow(
+                self.SRp_Thin(), 2) * pow(0.05, 2))
 
     def DF_CUI(self, age):
         if (self.EXTERNAL_EXPOSED_FLUID_MIST or (
@@ -1514,9 +1535,10 @@ class DM_CAL:
                     return 1900
                 else:
                     try:
-                        a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))#chưa test
-                        b = self.Po_P2_EXTERNAL() * self.ncdf(- self.B2_EXTERNAL(age))#chưa test
-                        c = self.Pr_P3_EXTERNAL() * self.ncdf(- self.B3_EXTERNAL(age))#chưa test
+                        a = self.Po_P1_FERRITIC() * self.ncdf(- self.B1_FERRITIC(age))
+                        b = self.Po_P2_FERRITIC() * self.ncdf(- self.B2_FERRITIC(age))
+                        c = self.Po_P3_FERRITIC() * self.ncdf(- self.B3_FERRITIC(age))
+                        s=(a + b + c) / (1.56 * pow(10, -4))
                         return (a + b + c) / (1.56 * pow(10, -4))
                     except Exception as e:
                         print(e)
@@ -1560,20 +1582,25 @@ class DM_CAL:
             SVI = 50
         elif (sus == "Medium"):
             SVI = 10
-        else:
+        elif(sus == "Low"):
             SVI = 1
+        else:
+            SVI=0
         self.EXTERN_CLSCC_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[13])
-        self.EXTERN_CLSCC_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[14])
+        self.EXTERN_CLSCC_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[13])
         if (self.EXTERN_CLSCC_INSP_EFF == "E" or self.EXTERN_CLSCC_INSP_NUM == 0):
             FIELD = "E"
         else:
             FIELD = str(self.EXTERN_CLSCC_INSP_NUM) + self.EXTERN_CLSCC_INSP_EFF
         return DAL_CAL.POSTGRESQL.GET_TBL_74(SVI, FIELD)
 
-    def DF_EXTERN_CLSCC(self):
+    def DF_EXTERN_CLSCC(self, age):
         if (self.AUSTENITIC_STEEL and self.EXTERNAL_EXPOSED_FLUID_MIST and not (
                 self.MAX_OP_TEMP < 49 or self.MIN_DESIGN_TEMP > 149)):
-            return self.DFB_EXTERN_CLSCC() * pow(self.AGE_CLSCC(), 1.1)
+            if(age<1):
+                return self.DFB_EXTERN_CLSCC()
+            else:
+                return self.DFB_EXTERN_CLSCC() * pow(self.AGE_CUI(age), 1.1)
         else:
             return 0
 
@@ -1671,8 +1698,10 @@ class DM_CAL:
             SVI = 50
         elif (SCP == "Medium"):
             SVI = 10
-        else:
+        elif(SCP == "Low"):
             SVI = 1
+        else:
+            SVI = 0
         self.EXTERN_CLSCC_CUI_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[14])
         self.EXTERN_CLSCC_CUI_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[14])
 
@@ -1682,12 +1711,19 @@ class DM_CAL:
             FIELD = str(self.EXTERN_CLSCC_CUI_INSP_NUM) + self.EXTERN_CLSCC_CUI_INSP_EFF
         return DAL_CAL.POSTGRESQL.GET_TBL_74(SVI, FIELD)
 
-    def DF_CUI_CLSCC(self):
+    def DF_CUI_CLSCC(self,age):
         if not self.EXTERN_COATING:
             return 0
         if (self.AUSTENITIC_STEEL and self.EXTERNAL_INSULATION and self.EXTERNAL_EXPOSED_FLUID_MIST and not (
                 self.MIN_OP_TEMP > 150 or self.MAX_OP_TEMP < 50)):
-            return self.DFB_CUI_CLSCC() * pow(self.AGE_CLSCC(), 1.1)
+            if(age<1):
+                print("DFB_CUI_CLSCC with age <1")
+                print(self.DFB_CUI_CLSCC())
+                return self.DFB_CUI_CLSCC()
+            else:
+                print("self.DFB_CUI_CLSCC()")
+                print(self.DFB_CUI_CLSCC() * pow(self.AGE_CUI(age), 1.1))
+                return self.DFB_CUI_CLSCC() * pow(self.AGE_CUI(age), 1.1)
         else:
             return 0
 
@@ -2146,11 +2182,11 @@ class DM_CAL:
     def DF_CUI_API(self, i):
         return self.DF_CUI(self.GET_AGE()[12] + i)
 
-    def DF_EXTERN_CLSCC_API(self):
-        return self.DF_EXTERN_CLSCC()
+    def DF_EXTERN_CLSCC_API(self, i):
+        return self.DF_EXTERN_CLSCC(self.GET_AGE()[13] + i)
 
-    def DF_CUI_CLSCC_API(self):
-        return self.DF_CUI_CLSCC()
+    def DF_CUI_CLSCC_API(self,i):
+        return self.DF_CUI_CLSCC(self.GET_AGE()[14] + i)
 
     def DF_HTHA_API(self, i):
         return self.DF_HTHA(self.GET_AGE()[13] + i)
@@ -2177,7 +2213,7 @@ class DM_CAL:
         return DF_SCC
 
     def DF_EXT_TOTAL_API(self, i):
-        DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(), self.DF_CUI_CLSCC_API())
+        DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(i), self.DF_CUI_CLSCC_API(i))
         return DF_EXT
 
     def DF_BRIT_TOTAL_API(self):
@@ -2260,8 +2296,8 @@ class DM_CAL:
         DF_ITEM[10] = self.DF_HIC_SOHIC_HF_API(0)
         DF_ITEM[11] = self.DF_EXTERNAL_CORROSION_API(0)
         DF_ITEM[12] = self.DF_CUI_API(0)
-        DF_ITEM[13] = self.DF_EXTERN_CLSCC_API()
-        DF_ITEM[14] = self.DF_CUI_CLSCC_API()
+        DF_ITEM[13] = self.DF_EXTERN_CLSCC_API(0)
+        DF_ITEM[14] = self.DF_CUI_CLSCC_API(0)
         DF_ITEM[15] = self.DF_HTHA_API(0)
         DF_ITEM[16] = self.DF_BRITTLE_API()
         DF_ITEM[17] = self.DF_TEMP_EMBRITTLE_API()

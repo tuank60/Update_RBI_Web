@@ -44,8 +44,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
-              <caret line="1029" column="6" selection-start-line="1029" selection-start-column="6" selection-end-line="1029" selection-end-column="6" />
+            <state relative-caret-position="17884">
+              <caret line="1054" column="6" selection-start-line="1054" selection-start-column="6" selection-end-line="1054" selection-end-column="6" />
               <folding>
                 <element signature="e#468#496#0" expanded="true" />
               </folding>
@@ -56,8 +56,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="1387" column="54" selection-start-line="1387" selection-start-column="44" selection-end-line="1387" selection-end-column="54" />
+            <state relative-caret-position="39508">
+              <caret line="2326" column="74" selection-start-line="2326" selection-start-column="55" selection-end-line="2326" selection-end-column="74" />
             </state>
           </provider>
         </entry>
@@ -65,7 +65,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/proposalCorrisionRate.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
+            <state relative-caret-position="1581">
               <caret line="93" column="64" selection-start-line="93" selection-start-column="64" selection-end-line="93" selection-end-column="64" />
             </state>
           </provider>
@@ -74,8 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/FacilityUI/component/componentEdit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="96" selection-start-line="17" selection-start-column="92" selection-end-line="17" selection-end-column="96" />
+            <state relative-caret-position="34">
+              <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -83,31 +83,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="1507" column="68" lean-forward="true" selection-start-line="1507" selection-start-column="68" selection-end-line="1507" selection-end-column="68" />
+            <state relative-caret-position="204">
+              <caret line="302" column="16" selection-start-line="302" selection-start-column="16" selection-end-line="302" selection-end-column="67" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <element signature="e#53438#54369#0" />
-                <element signature="e#54434#55404#0" />
-                <element signature="e#55880#57994#0" />
-                <element signature="e#60380#60551#0" />
-                <element signature="e#60590#60762#0" />
-                <element signature="e#60801#60974#0" />
-                <element signature="e#61011#61120#0" />
-                <element signature="e#61156#61265#0" />
-                <element signature="e#61301#61410#0" />
-                <element signature="e#61446#61555#0" />
-                <element signature="e#61591#61883#0" />
-                <element signature="e#61919#62215#0" />
-                <element signature="e#62251#62543#0" />
-                <element signature="e#62582#62762#0" />
-                <element signature="e#62801#62983#0" />
-                <element signature="e#63022#63110#0" />
-                <element signature="e#63150#63588#0" />
-                <element signature="e#62810#62998#0" />
-                <element signature="e#63039#63228#0" />
-                <element signature="e#64569#67247#0" />
-                <element signature="e#67363#68654#0" />
               </folding>
             </state>
           </provider>
@@ -116,8 +95,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="811" column="57" lean-forward="true" selection-start-line="811" selection-start-column="57" selection-end-line="811" selection-end-column="57" />
+            <state relative-caret-position="1785">
+              <caret line="105" column="24" selection-start-line="105" selection-start-column="24" selection-end-line="105" selection-end-column="24" />
               <folding>
                 <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#fieldset#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#fieldset#0;n#div#2;n#div#0;n#form#0;n#!!top" expanded="true" />
@@ -133,7 +112,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/dfFull.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
+            <state relative-caret-position="1173">
               <caret line="69" column="60" selection-start-line="69" selection-start-column="49" selection-end-line="69" selection-end-column="60" />
             </state>
           </provider>
@@ -142,8 +121,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="283" column="59" selection-start-line="283" selection-start-column="43" selection-end-line="283" selection-end-column="59" />
+            <state relative-caret-position="4369">
+              <caret line="258" column="46" selection-start-line="258" selection-start-column="46" selection-end-line="258" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -151,8 +130,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud/process/RBI/Postgresql.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="144" column="41" lean-forward="true" selection-start-line="144" selection-start-column="41" selection-end-line="144" selection-end-column="41" />
+            <state relative-caret-position="3315">
+              <caret line="196" column="29" selection-start-line="196" selection-start-column="29" selection-end-line="196" selection-end-column="29" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -164,21 +143,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>allow</find>
-      <find>ASAT</find>
-      <find>allowStress</find>
-      <find>allowablestress</find>
-      <find>AllowableStress</find>
-      <find>CurrentThick</find>
-      <find>DM_CAL</find>
-      <find>currentthickness</find>
-      <find>currentThick</find>
-      <find>minus8toplus6</find>
-      <find>OP2</find>
-      <find>Operating2</find>
-      <find>EXTERN_COAT_QUALITY</find>
-      <find>thinning</find>
-      <find>DF_EXTERNAL_CORROSION_API</find>
       <find>total</find>
       <find>externalap1</find>
       <find>ex</find>
@@ -186,7 +150,6 @@
       <find>so sanh</find>
       <find>B3_EXTERNAL</find>
       <find>DF_THINNING_API</find>
-      <find>print</find>
       <find>ins</find>
       <find>df_total</find>
       <find>Asbestos</find>
@@ -194,6 +157,22 @@
       <find>ART_CUI</find>
       <find>GET_TBL_511</find>
       <find>GET_TBL_512</find>
+      <find>Pr_P3_EXTERNAL</find>
+      <find>AGE_CUI</find>
+      <find>print</find>
+      <find>total_api</find>
+      <find>CRACK_PRESENT</find>
+      <find>crackspresent</find>
+      <find>crackpresent</find>
+      <find>PresenceCracks</find>
+      <find>MAX_OP_TEMP</find>
+      <find>maxoperatingtemperature</find>
+      <find>maxOT</find>
+      <find>extEnvironment</find>
+      <find>externalenvironment</find>
+      <find>ExternalEnvironment</find>
+      <find>DF_EXTERN_CLSCC_API</find>
+      <find>DF_CUI_CLSCC_API</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -236,9 +215,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="676" />
-    <option name="width" value="697" />
-    <option name="height" value="735" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="699" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -265,6 +245,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -389,7 +370,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -511,8 +491,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.81453633" weight="0.071428575" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.81453633" weight="0.18968134" />
       <window_info id="Structure" order="1" weight="0.24973147" />
       <window_info id="Favorites" order="2" sideWeight="0.18546365" weight="0.18080357" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -522,9 +503,9 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.18601191" side_tool="true" weight="0.119476266" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.18675596" side_tool="true" weight="0.31914893" />
       <window_info anchor="bottom" id="Python Console" order="8" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.8139881" visible="true" weight="0.3289689" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.81324404" visible="true" weight="0.28641573" />
       <window_info anchor="bottom" id="Version Control" order="10" sideWeight="0.49925596" weight="0.3289689" />
       <window_info anchor="bottom" id="Docker" order="11" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -568,21 +549,6 @@
           <url>file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py</url>
           <line>1010</line>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py</url>
-          <line>1354</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py</url>
-          <line>1405</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py</url>
-          <line>1284</line>
-          <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -802,41 +768,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/dfFull.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="69" column="60" selection-start-line="69" selection-start-column="49" selection-end-line="69" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cloud/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="1029" column="6" selection-start-line="1029" selection-start-column="6" selection-end-line="1029" selection-end-column="6" />
+        <state relative-caret-position="17884">
+          <caret line="1054" column="6" selection-start-line="1054" selection-start-column="6" selection-end-line="1054" selection-end-column="6" />
           <folding>
             <element signature="e#468#496#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/component/componentEdit.html">
+    <entry file="file://$PROJECT_DIR$/cloud/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="96" selection-start-line="17" selection-start-column="92" selection-end-line="17" selection-end-column="96" />
+        <state relative-caret-position="39508">
+          <caret line="2326" column="74" selection-start-line="2326" selection-start-column="55" selection-end-line="2326" selection-end-column="74" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/views.py">
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/proposalCorrisionRate.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="1387" column="54" selection-start-line="1387" selection-start-column="44" selection-end-line="1387" selection-end-column="54" />
+        <state relative-caret-position="1581">
+          <caret line="93" column="64" selection-start-line="93" selection-start-column="64" selection-end-line="93" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/component/componentEdit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="811" column="57" lean-forward="true" selection-start-line="811" selection-start-column="57" selection-end-line="811" selection-end-column="57" />
+        <state relative-caret-position="1785">
+          <caret line="105" column="24" selection-start-line="105" selection-start-column="24" selection-end-line="105" selection-end-column="24" />
           <folding>
             <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#fieldset#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#fieldset#0;n#div#2;n#div#0;n#form#0;n#!!top" expanded="true" />
@@ -848,24 +814,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/proposalCorrisionRate.html">
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/dfFull.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="93" column="64" selection-start-line="93" selection-start-column="64" selection-end-line="93" selection-end-column="64" />
+        <state relative-caret-position="1173">
+          <caret line="69" column="60" selection-start-line="69" selection-start-column="49" selection-end-line="69" selection-end-column="60" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="283" column="59" selection-start-line="283" selection-start-column="43" selection-end-line="283" selection-end-column="59" />
+        <state relative-caret-position="4369">
+          <caret line="258" column="46" selection-start-line="258" selection-start-column="46" selection-end-line="258" selection-end-column="46" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cloud/process/RBI/Postgresql.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="144" column="41" lean-forward="true" selection-start-line="144" selection-start-column="41" selection-end-line="144" selection-end-column="41" />
+        <state relative-caret-position="3315">
+          <caret line="196" column="29" selection-start-line="196" selection-start-column="29" selection-end-line="196" selection-end-column="29" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -874,31 +840,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="1507" column="68" lean-forward="true" selection-start-line="1507" selection-start-column="68" selection-end-line="1507" selection-end-column="68" />
+        <state relative-caret-position="204">
+          <caret line="302" column="16" selection-start-line="302" selection-start-column="16" selection-end-line="302" selection-end-column="67" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <element signature="e#53438#54369#0" />
-            <element signature="e#54434#55404#0" />
-            <element signature="e#55880#57994#0" />
-            <element signature="e#60380#60551#0" />
-            <element signature="e#60590#60762#0" />
-            <element signature="e#60801#60974#0" />
-            <element signature="e#61011#61120#0" />
-            <element signature="e#61156#61265#0" />
-            <element signature="e#61301#61410#0" />
-            <element signature="e#61446#61555#0" />
-            <element signature="e#61591#61883#0" />
-            <element signature="e#61919#62215#0" />
-            <element signature="e#62251#62543#0" />
-            <element signature="e#62582#62762#0" />
-            <element signature="e#62801#62983#0" />
-            <element signature="e#63022#63110#0" />
-            <element signature="e#63150#63588#0" />
-            <element signature="e#62810#62998#0" />
-            <element signature="e#63039#63228#0" />
-            <element signature="e#64569#67247#0" />
-            <element signature="e#67363#68654#0" />
           </folding>
         </state>
       </provider>
