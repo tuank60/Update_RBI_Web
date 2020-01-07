@@ -1,6 +1,8 @@
 import time
 import time
 import math
+import traceback#dung cho tinh toan noi suy
+import sys#dung cho tinh toan noi suy
 from builtins import property
 from datetime import datetime
 import  numpy as np
@@ -15,7 +17,7 @@ from cloud.process.RBI import Postgresql as DAL_CAL
 # nhung gia tri Num_inspec, EFF khong can truyen khi su dung ham
 class DM_CAL:
     # ham khoi tao
-    def __init__(self, ComponentNumber = "", Commissiondate = datetime.now(), AssessmentDate = datetime.now(), APIComponentType="",
+    def __init__(self,ComponentNumber = "", Commissiondate = datetime.now(), AssessmentDate = datetime.now(), APIComponentType="",
                  Diametter=0, NomalThick=0, CurrentThick=0, MinThickReq=0, CorrosionRate=0, CA=0,
                  ProtectedBarrier=False, CladdingCorrosionRate=0, InternalCladding=False, NoINSP_THINNING=0,
                  EFF_THIN="E", OnlineMonitoring="", HighlyEffectDeadleg=False, ContainsDeadlegs=False,
@@ -593,15 +595,6 @@ class DM_CAL:
             return 0
 
     # Calculate Caustic:
-
-    def plotinArea(self):
-        TempBase = -0.6*self.NaOHConcentration + 80
-        if (self.MIN_OP_TEMP < TempBase):
-            k = 'A'
-        else:
-            k = 'B'
-        return k
-
     def getSusceptibility_Caustic(self):
         if (self.CRACK_PRESENT):
             sus = "High"
@@ -630,14 +623,45 @@ class DM_CAL:
                 else:
                     sus = "High"
         return sus
+    def plotinArea(self):
+        TempBase = self.interpolation(self.NaOHConcentration)
+        if (self.MAX_OP_TEMP < TempBase):
+            k = 'A'
+        else:
+            k = 'B'
+        return k
+
+    def interpolation(self, t):
+        X = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+        Y = [81.25,80, 78.125, 74.219, 69.375, 65.625, 58.75, 55, 51.25, 48.75, 48.125]
+        n = len(X)
+        try:
+            c = [0 for _ in range(n)]
+            w = [0 for _ in range(n)]
+            for i in range (0, n):
+                #print(i)
+                w[i]=Y[i]
+                for j in reversed(range(i)):
+                    #print(j)
+                    w[j] = (w[j + 1] - w[j]) / (X[i] - X[j])
+                c[i]=w[0]
+            s = c[n-1]
+            for i in reversed(range(n-1)):
+                #print(X[i])
+                s = s * (t -X[i])+c[i]
+            #print(c)
+            return s
+        except Exception as e:
+            print(e)
+            raise
 
     def SVI_CAUSTIC(self):
         if (self.getSusceptibility_Caustic() == "High"):
-            sev = 50
+            sev = 5000
         elif (self.getSusceptibility_Caustic() == "Medium"):
-            sev = 10
+            sev = 500
         elif (self.getSusceptibility_Caustic() == "Low"):
-            sev = 1
+            sev = 50
         else:
             sev = 0
         return sev
@@ -646,7 +670,9 @@ class DM_CAL:
         if (self.CARBON_ALLOY and self.NaOHConcentration != 0):
             self.CAUSTIC_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[2])
             self.CACBONATE_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[2])
-            if (self.CAUSTIC_INSP_EFF == "E" or self.CAUSTIC_INSP_NUM == 0):
+            if(age<1):
+                return self.SVI_CAUSTIC()
+            elif(self.CAUSTIC_INSP_EFF == "E" or self.CAUSTIC_INSP_NUM == 0):
                 FIELD = "E"
             else:
                 FIELD = str(self.CAUSTIC_INSP_NUM) + self.CAUSTIC_INSP_EFF
@@ -656,36 +682,37 @@ class DM_CAL:
             return 0
 
     # Calculate SCC AMINE:
+    #co van de ve thuat toan. Can xem lai
     def getSusceptibility_Amine(self):
-        if (self.CRACK_PRESENT):
-            sus = "High"
-            # if self.CRACK_PRESENT == "Cracks Removed":
+        if(self.AMINE_EXPOSED and self.CARBON_ALLOY):
+            if (self.CRACK_PRESENT):
+                sus = "High"
+                # if self.CRACK_PRESENT == "Cracks Removed":
+                #     sus = "None"
+            # elif (self.HEAT_TREATMENT == "Stress Relieved"):
             #     sus = "None"
-        elif (self.HEAT_TREATMENT == "Stress Relieved"):
-            sus = "None"
-        elif (not self.AMINE_EXPOSED):
-            sus = "None"
-        else:
-            if (self.AMINE_SOLUTION == "Methyldiethanolamine MDEA" or self.AMINE_SOLUTION == "Disopropanolamine DIPA"):
-                if (self.MAX_OP_TEMP > 82.22):
-                    sus = "High"
-                elif ((self.MAX_OP_TEMP > 37.78 and self.MAX_OP_TEMP < 82.22) or self.HEAT_TRACE or self.STEAM_OUT):
-                    sus = "Medium"
-                else:
-                    sus = "Low"
-            elif (self.AMINE_SOLUTION == "Diethanolamine DEA"):
-                if (self.MAX_OP_TEMP > 82.22):
-                    sus = "Medium"
-                elif ((self.MAX_OP_TEMP > 60 and self.MAX_OP_TEMP < 82.22) or self.HEAT_TRACE or self.STEAM_OUT):
-                    sus = "Low"
-                else:
-                    sus = "None"
             else:
-                if (self.MAX_OP_TEMP > 82.22 or self.HEAT_TRACE or self.STEAM_OUT):
-                    sus = "Low"
+                if (
+                        self.AMINE_SOLUTION == "Methyldiethanolamine MDEA" or self.AMINE_SOLUTION == "Disopropanolamine DIPA"):
+                    if (self.MAX_OP_TEMP > 82.22):
+                        sus = "High"
+                    elif ((self.MAX_OP_TEMP > 37.78 and self.MAX_OP_TEMP < 82.22) or self.HEAT_TRACE or self.STEAM_OUT):
+                        sus = "Medium"
+                    else:
+                        sus = "Low"
+                elif (self.AMINE_SOLUTION == "Diethanolamine DEA"):
+                    if (self.MAX_OP_TEMP > 82.22):
+                        sus = "Medium"
+                    elif ((self.MAX_OP_TEMP > 60 and self.MAX_OP_TEMP < 82.22) or self.HEAT_TRACE or self.STEAM_OUT):
+                        sus = "Low"
+                    else:
+                        sus = "None"
                 else:
-                    sus = "None"
-        return sus
+                    if (self.MAX_OP_TEMP > 82.22 or self.HEAT_TRACE or self.STEAM_OUT):
+                        sus = "Low"
+                    else:
+                        sus = "None"
+            return sus
 
     def SVI_AMINE(self):
         if (self.getSusceptibility_Amine() == "High"):
@@ -695,7 +722,7 @@ class DM_CAL:
         elif (self.getSusceptibility_Amine() == "Low"):
             return 10
         else:
-            return 1
+            return 0
 
     def DF_AMINE(self, age):
         if (self.CARBON_ALLOY):
@@ -703,9 +730,12 @@ class DM_CAL:
             self.AMINE_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[3])
             if (self.AMINE_INSP_EFF == "E" or self.AMINE_INSP_NUM == 0):
                 FIELD = "E"
+            elif(age>1):
+                return self.SVI_AMINE()
             else:
                 FIELD = str(self.AMINE_INSP_NUM) + self.AMINE_INSP_EFF
             DFB_AMIN = DAL_CAL.POSTGRESQL.GET_TBL_74(self.SVI_AMINE(), FIELD)
+            #print(DFB_AMIN * pow(max(age,1.0),1.1))
             return DFB_AMIN * pow(max(age,1.0),1.1)
         else:
             return 0
@@ -797,7 +827,10 @@ class DM_CAL:
         if (self.CARBON_ALLOY and self.AQUEOUS_OPERATOR and self.ENVIRONMENT_H2S_CONTENT):
             self.SULPHIDE_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[4])
             self.SULPHIDE_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber,self.DM_Name[4])
-            if (self.SULPHIDE_INSP_EFF == "E" or self.SULPHIDE_INSP_NUM == 0):
+            if(age<1):
+                print(self.SVI_SULPHIDE())
+                return self.SVI_SULPHIDE()
+            elif(self.SULPHIDE_INSP_EFF == "E" or self.SULPHIDE_INSP_NUM == 0):
                 FIELD = "E"
             else:
                 FIELD = str(self.SULPHIDE_INSP_NUM) + self.SULPHIDE_INSP_EFF
@@ -1702,27 +1735,27 @@ class DM_CAL:
             SVI = 1
         else:
             SVI = 0
-        self.EXTERN_CLSCC_CUI_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[14])
-        self.EXTERN_CLSCC_CUI_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[14])
+        try:
+            self.EXTERN_CLSCC_CUI_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[14])
+            self.EXTERN_CLSCC_CUI_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[14])
 
-        if (self.EXTERN_CLSCC_CUI_INSP_EFF == "E" or self.EXTERN_CLSCC_CUI_INSP_NUM == 0):
-            FIELD = "E"
-        else:
-            FIELD = str(self.EXTERN_CLSCC_CUI_INSP_NUM) + self.EXTERN_CLSCC_CUI_INSP_EFF
-        return DAL_CAL.POSTGRESQL.GET_TBL_74(SVI, FIELD)
+            if (self.EXTERN_CLSCC_CUI_INSP_EFF == "E" or self.EXTERN_CLSCC_CUI_INSP_NUM == 0):
+                FIELD = "E"
+            else:
+                FIELD = str(self.EXTERN_CLSCC_CUI_INSP_NUM) + self.EXTERN_CLSCC_CUI_INSP_EFF
+            return DAL_CAL.POSTGRESQL.GET_TBL_74(SVI, FIELD)
+        except Exception as e:
+            print(e)
+            return 0
 
     def DF_CUI_CLSCC(self,age):
-        if not self.EXTERN_COATING:
-            return 0
+        # if not self.EXTERN_COATING:
+        #     return 0
         if (self.AUSTENITIC_STEEL and self.EXTERNAL_INSULATION and self.EXTERNAL_EXPOSED_FLUID_MIST and not (
                 self.MIN_OP_TEMP > 150 or self.MAX_OP_TEMP < 50)):
             if(age<1):
-                print("DFB_CUI_CLSCC with age <1")
-                print(self.DFB_CUI_CLSCC())
                 return self.DFB_CUI_CLSCC()
             else:
-                print("self.DFB_CUI_CLSCC()")
-                print(self.DFB_CUI_CLSCC() * pow(self.AGE_CUI(age), 1.1))
                 return self.DFB_CUI_CLSCC() * pow(self.AGE_CUI(age), 1.1)
         else:
             return 0
@@ -2138,8 +2171,8 @@ class DM_CAL:
         return float((self.AssesmentDate.date() - self.CommissionDate.date()).days/365)
 
     def GET_AGE(self):
-        age = np.zeros(14)
-        for a in range(0,14):
+        age = np.zeros(21)#(0,14)
+        for a in range(0,21):#(0,14)
             age[a] = DAL_CAL.POSTGRESQL.GET_AGE_INSP(self.ComponentNumber,self.DM_Name[a],self.CommissionDate, self.AssesmentDate)
         return age
 
@@ -2207,12 +2240,12 @@ class DM_CAL:
         return self.DF_PIPE()
 
     # TOTAL ---------------------
-    def DF_SSC_TOTAL_API(self, i):
+    def DF_SSC_TOTAL_API(self, i):#dang test
         DF_SCC = max(self.DF_CAUTISC_API(i), self.DF_AMINE_API(i), self.DF_SULPHIDE_API(i), self.DF_HIC_SOHIC_HF_API(i), self.DF_HICSOHIC_H2S_API(i),
                      self.DF_CACBONATE_API(i), self.DF_PTA_API(i), self.DF_CLSCC_API(i), self.DF_HSCHF(i))
         return DF_SCC
 
-    def DF_EXT_TOTAL_API(self, i):
+    def DF_EXT_TOTAL_API(self, i):#done
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(i), self.DF_CUI_CLSCC_API(i))
         return DF_EXT
 
@@ -2220,7 +2253,7 @@ class DM_CAL:
         DF_BRIT = max(self.DF_BRITTLE_API() + self.DF_TEMP_EMBRITTLE_API(), self.DF_SIGMA_API(), self.DF_885_API())
         return DF_BRIT
 
-    def DF_THINNING_TOTAL_API(self, i):
+    def DF_THINNING_TOTAL_API(self, i):#done
         try:
             if self.INTERNAL_LINNING and (self.DF_LINNING_API(i) != 0):
                 DF_THINNING_TOTAL = min(self.DF_THINNING_API(i), self.DF_LINNING_API(i))
