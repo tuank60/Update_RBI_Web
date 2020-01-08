@@ -23,6 +23,8 @@ from django.conf import settings
 from cloud.process.File import import_data as ExcelImport
 from cloud.process.RBI import fastCalulate as ReCalculate
 from django.db.models import Q
+from cloud.regularverification.regular import REGULAR
+import threading
 
 
 from django.views.decorators.csrf import csrf_protect
@@ -2995,9 +2997,17 @@ def uploadInspPlan(request, siteID):
     return render(request, 'FacilityUI/facility/uploadData.html' ,{'siteID': siteID, 'showcontent': showcontent,'noti':noti,'countnoti':countnoti,'count':count,'info':request.session, 'page':'uploadHistory'})
 
 ############### Dang Nhap Dang Suat #################
+def RegularVerification():
+    print(1)
+    obj = REGULAR()
+    obj.regular_1()
+
 def signin(request):
     error = ''
     try:
+        t1 = threading.Thread(target=RegularVerification)
+        t1.setDaemon(True)
+        t1.start()
         if request.session.has_key('id'):
             if request.session['kind']=='citizen':
                 return redirect('citizenHome')
@@ -4984,4 +4994,38 @@ def RiskChartCitizen(request, proposalID):
                    'proposalID':rwAssessment.id, 'componentID':rwAssessment.componentid_id,'info':request.session,'component':component,'equip':equip,'faci':faci,'si':si,'noti':noti,'countnoti':countnoti,'count':count}
         return render(request, 'CitizenUI/risk_summary_Citizen/riskChart_Citizen.html', content)
     except:
+        raise Http404
+
+###########connect thingsboard _____ sensor, gateway #############
+def NewSensor(request,componentID):
+    try:
+        noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+        countnoti = noti.filter(state=0).count()
+        count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                              Q(Is_see=0)).count()
+        comp = models.ComponentMaster.objects.get(componentid=componentID)
+        equip = models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id)
+        faci = models.Facility.objects.get(facilityid=equip.facilityid_id)
+        site = models.Sites.objects.get(siteid=faci.siteid_id)
+        sensordata = models.ZSensor.objects.filter(Componentid=componentID)
+        data = {}
+        if(sensordata.count()==0):
+            if request.method == 'POST':
+                gateway = models.ZGateWay.objects.filter(siteid=site.siteid)[0].idgateway
+                print(gateway)
+                print("2")
+                data['sensorName'] = request.POST.get('sensorName')
+                data['accessToken'] = request.POST.get('accessToken')
+                a=models.ZSensor(Name= data['sensorName'], Token=data['accessToken'],Gatewayid_id= gateway,Equipmentid_id = equip.equipmentid, Componentid_id = comp.componentid, Facilityid_id = faci.facilityid)
+                a.save()
+            return render(request, 'FacilityUI/proposal/NewSensor.html',
+                          {'comp': comp, 'equip': equip, 'faci': faci, 'page': 'newsensor', 'componentID': componentID,
+                           'equipmentID': comp.equipmentid_id, 'info': request.session, 'noti': noti,
+                           'countnoti': countnoti, 'count': count})
+        else:
+            return render(request, 'FacilityUI/proposal/SensorConnect.html',{'sensorName':sensordata[0].Name,'comp': comp, 'equip': equip, 'faci': faci, 'page': 'newsensor', 'componentID': componentID,
+                           'equipmentID': comp.equipmentid_id, 'info': request.session, 'noti': noti,
+                           'countnoti': countnoti, 'count': count})
+    except Exception as e:
+        print(e)
         raise Http404

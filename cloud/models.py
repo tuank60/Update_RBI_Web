@@ -1268,3 +1268,27 @@ class PRDType(models.Model):
     class Meta:
         managed = False
         db_table = 'prd_type'
+
+class ZGateWay(models.Model):
+    idgateway = models.IntegerField(primary_key=True,blank=True,null=False,db_column='ID_gateway')
+    Name = models.CharField(db_column='Name',blank=True,max_length=45)
+    Create = models.DateTimeField(db_column='Create', default=datetime.datetime.now())
+    siteid = models.ForeignKey('Sites', on_delete=models.CASCADE, db_column='SiteID')
+
+    class Meta:
+        managed = False
+        db_table = 'z_gateway'
+
+class ZSensor(models.Model):
+    idsensor = models.IntegerField(primary_key=True,blank=True,null=False,db_column='ID_sensor')
+    Name = models.CharField(db_column='Name',blank=True,max_length=45)
+    Token = models.CharField(db_column='Token',blank=True,max_length=45)
+    Gatewayid = models.ForeignKey('ZGateWay', on_delete=models.CASCADE, db_column='GatewayID')
+    Equipmentid = models.ForeignKey('EquipmentMaster', on_delete=models.CASCADE, db_column='EquipmentID')
+    Componentid = models.ForeignKey(ComponentMaster, on_delete=models.CASCADE, db_column='ComponentID')
+    Create = models.DateTimeField(db_column='Create', default=datetime.datetime.now())
+    Facilityid = models.ForeignKey('Facility', on_delete=models.CASCADE, db_column='FacilityID')
+
+    class Meta:
+        managed = False
+        db_table = 'z_sensor'

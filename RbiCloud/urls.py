@@ -117,6 +117,8 @@ urlpatterns = [
     path('proposalCitizen/<int:proposalID>/damage-factor/', views.FullyDamageFactorCitizen, name='damgeFactorCitizen'),
     path('proposalCitizen/<int:proposalID>/chart/', views.RiskChartCitizen, name='riskChartCitizen'),
     path('proposalCitizen/<int:proposalID>/fully-consequence/',views.FullyConsequenceCitizen, name='fullyConsequenceCitizen'),
+    #############connect thingsboard _____ sensor, gateway #############
+    path('newsensor/<int:componentID>/', views.NewSensor, name='newsensor')
 ]
 handler404 = 'cloud.views.handler404'
 handler500 = 'cloud.views.handler404'
