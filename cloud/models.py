@@ -701,6 +701,11 @@ class RwInputCaLevel1(models.Model):
     mass_component = models.FloatField(db_column='Mass_Component', blank=True, null=True)  # Field name made lowercase.
     stored_pressure = models.FloatField(db_column='Stored_Pressure', blank=True, null=True)  # Field name made lowercase.
     stored_temp = models.FloatField(db_column='Stored_Temp', blank=True, null=True)  # Field name made lowercase.
+    model_fluid = models.CharField(db_column='Model_Fluid', max_length=50, blank=True, null=True)
+    toxic_fluid = models.CharField(db_column='Toxic_Fluid', max_length=50, blank=True, null=True)
+    toxic_percent = models.FloatField(db_column='Toxic_Percent', blank=True, null=True)
+    primary_fluid = models.FloatField(db_column='Primary_Fluid', blank=True, null=True)
+    volatile_fluid = models.FloatField(db_column='Volatile_Fluid', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -723,7 +728,8 @@ class RwInputCaTank(models.Model):
     api_fluid = models.CharField(db_column='API_FLUID', max_length=50, blank=True, null=True)  # Field name made lowercase.
     sw = models.FloatField(db_column='SW', blank=True, null=True)  # Field name made lowercase.
     productioncost = models.FloatField(db_column='ProductionCost', blank=True, null=True)  # Field name made lowercase.
-
+    primary_fluid = models.FloatField(db_column='Primary_Fluid', blank=True, null=True)
+    volatile_fluid = models.FloatField(db_column='Volatile_Fluid', blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'rw_input_ca_tank'
@@ -813,6 +819,7 @@ class RwStream(models.Model):
     fluidgooffsitepercent = models.FloatField(db_column='FluidGoOffSitePercent', blank=True, null=True)  # Field name made lowercase.
     flowrate = models.FloatField(db_column='FlowRate', blank=True,null=True)
     liquidlevel = models.FloatField(db_column='LiquidLevel',blank=True,null=True)
+    storagephase = models.CharField(db_column='StoragePhase', max_length=50, blank=True, null=True)
     class Meta:
         managed = False
         db_table = 'rw_stream'

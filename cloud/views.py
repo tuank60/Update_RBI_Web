@@ -679,7 +679,6 @@ def ListProposal(request, componentID):
             print(comp.componenttypeid_id)
             istank = 1
         else:
-            print("0")
             istank = 0
         if comp.componenttypeid_id == 8 or comp.componenttypeid_id == 14:
             isshell = 1
