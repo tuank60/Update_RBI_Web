@@ -189,7 +189,23 @@
                         <div class="col-md-3">Nominal Diameter, in:<span style="color: red">*</span></div>
                         <div class="col-md-3"><input type="number" class="form-control" step="0.01" min="0" max="100000" value="0" name="NominalDiameter" placeholder="Normal diameter!" required/></div>
                         <div class="col-md-3">Nominal Thickness, mm:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" class="form-control" step="0.01" min="0" max="100000" name="NominalThickness" value="0" placeholder="Normal thickness" required/></div>
+                        <div class="col-md-3"><input onkeyup="NominalThick()" type="number" class="form-control" step="0.01" min="0" max="100000" name="NominalThickness" id="NominalThickness" value="0" placeholder="Normal thickness" required/></div>
+                        <script>
+                            function Thickness(){
+                                var min = document.getElementById("CladdingThickness").value;
+                                var max= document.getElementById("NominalThickness").value;
+                                if(min>max) {
+                                    alert("Cladding thickness must be lesser than nominal thickness. " + min + " > " + max );
+                                }
+                            }
+                            function NominalThick(){
+                                var min = parseInt(document.getElementById("CladdingThickness").value);
+                                var max = parseInt(document.getElementById("NominalThickness").value);
+                                if(max<min) {
+                                    alert("Nominal Thickness must be greater than or equal to the cladding thickness."  + min + " > " + max );
+                                }
+                            }
+                        </script>
                     </div>
                     <div class="row">
                         <div class="col-md-3">Current Thickness, mm:<span style="color: red">*</span></div>
@@ -205,10 +221,18 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">Weld Joint Efficiency</div>
-                        <div class="col-md-3"><input type="number" class="form-control" step="0.01" min="0" value="0" max="1000" placeholder="WeldJointEff" name="WeldJointEff" required/></div>
+                        <div class="col-md-3"><input id="maxN" onkeyup="MaximumN()" type="number" maxlength="10" class="form-control" step="0.01" min="0" value="0" max="1" placeholder="WeldJointEff" name="WeldJointEff" required/></div>
                         <div class="col-md-3">Allowable Stress at Assessment Temperature, MPa:</div>
                         <div class="col-md-3"><input type="number" class="form-control" step="0.01" min="0" value="0" max="1000" placeholder="AllowableStress" name="AllowableStress" required/> </div>
                     </div>
+                    <script>
+                        function MaximumN(){
+                            var max = document.getElementById("maxN").value;
+                            if(max>1.00) {
+                                alert("the value must be equal or lesser than 1");
+                            }
+                        }
+                    </script>
                     <div class="row">
                         <div class="col-md-3">Structural Thickness, mm:</div>
                         <div class="col-md-3"><input type="number" class="form-control" step="0.01" min="0" value="0" max="1000" placeholder="StructuralThickness" name="StructuralThickness" required/></div>
@@ -399,15 +423,47 @@
                     <legend class="scheduler-border"><b>Operating Condition</b></legend>
                     <div class="row">
                         <div class="col-md-3" style="color: red">Maximum Operating Temperature, &deg;C:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" class="form-control" max="100000" step="0.01" value="0" name="MaxOT" id="MaxOT" placeholder="Maximum operator temp" required/></div>
-                        <div class="col-md-3">Maximum Operating Pressure, MPa:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" step="0.01" class="form-control" value="0" max="100000" name="MaxOP" id="MaxOP" placeholder="Maximum operator pressure" required/></div>
+                        <div class="col-md-3"><input onkeyup="MaximumOT()" type="number" class="form-control" step="0.01" value="0" max="100000" name="MaxOT" id="MaxOT" placeholder="Minimum operator temp" required/></div>
+                        <div class="col-md-3" style="color: red">Minimum Operating Temperature, &deg;C:<span style="color: red">*</span></div>
+                        <div class="col-md-3"><input onkeyup="MinimumOT()" type="number" step="0.01" class="form-control" value="0" max="100000" name="MinOT" id="MinOT" placeholder="Minimum operator pressure" required/></div>
+                        <script>
+                            function MaximumOT(){
+                                var min = parseInt(document.getElementById("MinOT").value);
+                                var max = parseInt(document.getElementById("MaxOT").value);
+                                if(min > max) {
+                                    alert("Minimum value must be lesser than maximum value. " + min + " > " + max );
+                                }
+                            }
+                            function MinimumOT(){
+                                var min = parseInt(document.getElementById("MinOT").value);
+                                var max = parseInt(document.getElementById("MaxOT").value);
+                                if(max<min) {
+                                    alert("Maximum value must be greater than minimum value."  + min + " > " + max );
+                                }
+                            }
+                        </script>
                     </div>
                     <div class="row">
-                        <div class="col-md-3" style="color: red">Minimum Operating Temperature, &deg;C:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" value="0" class="form-control" step="0.01" max="10000" name="MinOT" placeholder="Minimum operator temp" id="MinOT" required/></div>
+                        <div class="col-md-3">Maximum Operating Pressure, MPa:<span style="color: red">*</span></div>
+                        <div class="col-md-3"><input onkeyup="Maximum()" type="number" step="0.01" class="form-control" value="0" max="100000" name="MaxOP" id="MaxOP" placeholder="Maximum operator pressure" required/></div>
                         <div class="col-md-3">Minimum Operating Pressure, MPa:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" value="0" class="form-control" step="0.01" max="100000" name="MinOP" placeholder="Minimum operator pressure" id="MinOP" required/></div>
+                        <div class="col-md-3"><input onkeyup="Minimum()" type="number" value="0" class="form-control" step="0.01" max="100000" name="MinOP" id="MinOP" placeholder="Minimum operator pressure" required/></div>
+                        <script>
+                            function Maximum(){
+                                var min = parseInt(document.getElementById("MinOP").value);
+                                var max = parseInt(document.getElementById("MaxOP").value);
+                                if(min > max) {
+                                    alert("Minimum value must be lesser than maximum value. " + min + " > " + max );
+                                }
+                            }
+                            function Minimum(){
+                                var min = parseInt(document.getElementById("MinOP").value);
+                                var max = parseInt(document.getElementById("MaxOP").value);
+                                if(max<min) {
+                                    alert("Maximum value must be greater than minimum value."  + min + " > " + max );
+                                }
+                            }
+                        </script>
                     </div>
                     <div class="row">
                         <div class="col-md-3" style="color: red">Operating Hydrogen Partial Pressure, MPa:<span style="color: red">*</span></div>
@@ -422,7 +478,7 @@
                     <script>
                         $("#MaxOP").change(function () {
                             $maxOP = $("#MaxOP").val();
-]                           $("#MinOP").prop('max', $maxOP);
+                            $("#MinOP").prop('max', $maxOP);
                         })
                         $("#MinOP").change(function () {
                             $minOP = $("#MinOP").val();
@@ -437,7 +493,6 @@
                             $("#MaxOT").prop('min',$minOT)
                         })
                     </script>
-
                     <fieldset class="scheduler-border" >
                         <legend class="scheduler-border"><b>Operating Temperature in Different Temperature Ranger</b></legend>
                         <div class="row">
@@ -525,7 +580,15 @@
                         <div class="col-md-3">Corrosion Allowance, mm:<span style="color: red">*</span></div>
                         <div class="col-md-3"><input type="number" step="0.01" class="form-control" value="0" min="0" max="10000" name="CorrosionAllowance" placeholder="Corrosion allow" required/></div>
                         <div class="col-md-3">Sigma Phase, %:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" step="0.01" min="0" max="100" value="0" class="form-control" name="SigmaPhase" placeholder="Percent sigma" required/></div>
+                        <div class="col-md-3"><input onkeyup="Value()" type="number" step="0.01" min="0" max="100" value="0" class="form-control" name="SigmaPhase" id="SigmaPhase" placeholder="Percent sigma" required/></div>
+                        <script>
+                            function Value(){
+                                var max = document.getElementById("SigmaPhase").value;
+                                if(max>100) {
+                                    alert("the value must be equal or less than 100");
+                                }
+                            }
+                        </script>
                     </div>
                     <div class="row">
                         <div class="col-md-3">Yield Strength, MPa</div>
@@ -723,11 +786,27 @@
                         <legend class="scheduler-border"><b>Cladding</b></legend>
                         <div class="row">
                             <div class="col-md-6">Internal Cladding</div>
-                            <div class="col-md-6"><input type="checkbox" name="InternalCladding"/></div>
+                            <div class="col-md-6"><input type="checkbox" name="InternalCladding" id="InternalCladding"/></div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">Cladding Thickness, mm:</div>
-                            <div class="col-md-6"><input type="number" class="form-control" step="0.01" min="0" max="1000" name="CladdingThickness" value="0" placeholder="Cladding Thickness" required/></div>
+                            <div class="col-md-6"><input onkeyup="Thickness()" type="number" class="form-control" step="0.01" min="0" max="1000" name="CladdingThickness" id="CladdingThickness" value="0" placeholder="Cladding Thickness" required/></div>
+                            <script>
+                                function Thickness(){
+                                    var min = document.getElementById("CladdingThickness").value;
+                                    var max= document.getElementById("NominalThickness").value;
+                                    if(min>max) {
+                                        alert("Cladding thickness must be lesser than nominal thickness. " + min + " > " + max );
+                                    }
+                                }
+                                function NominalThick(){
+                                    var min = parseInt(document.getElementById("CladdingThickness").value);
+                                    var max = parseInt(document.getElementById("NominalThickness").value);
+                                    if(max<min) {
+                                        alert("Nominal Thickness must be greater than or equal to the cladding thickness."  + min + " > " + max );
+                                    }
+                                }
+                            </script>
                         </div>
                         <div class="row">
                             <div class="col-md-6">Cladding Corrosion Rate, mm/yr:<span style="color: red">*</span></div>
@@ -863,9 +942,23 @@
                     <legend class="scheduler-border"><b>Environment Condition</b></legend>
                     <div class="row">
                         <div class="col-md-3">NaOH Concentration, %:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" class="form-control" min="0" max="100" value="0" step="0.01" name="NaOHConcentration" placeholder="NaOH concent" required/></div>
+                        <div class="col-md-3"><input onkeyup="NaoH()" type="number" class="form-control" min="0" max="100" value="0" step="0.01" name="NaOHConcentration" id="NaOHConcentration" placeholder="NaOH concent" required/></div>
                         <div class="col-md-3">Release Fluid Percent Toxic, %:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" step="0.01"  min="0" max="100" value="0" class="form-control" placeholder="Fluid percent toxic" name="RFPT" required/></div>
+                        <div class="col-md-3"><input onkeyup="Toxic()" type="number" step="0.01"  min="0" max="100" value="0" class="form-control" name="RFPT" id="RFPT" placeholder="Fluid percent toxic" required/></div>
+                        <script>
+                            function NaoH(){
+                                var max = document.getElementById("NaOHConcentration").value;
+                                if(max>100) {
+                                    alert("the NaOH Concentration must be equal or lesser than 100");
+                                }
+                            }
+                            function Toxic(){
+                                var max = document.getElementById("RFPT").value;
+                                if(max>100) {
+                                    alert("the Release Fluid Percent Toxic must be equal or lesser than 100");
+                                }
+                            }
+                        </script>
                     </div>
                     <div class="row">
                         <div class="col-md-3">Chloride Ion, ppm:<span style="color: red">*</span></div>
@@ -877,7 +970,15 @@
                         <div class="col-md-3">H2S Content in Water, ppm:<span style="color: red">*</span></div>
                         <div class="col-md-3"><input type="number" step="0.01" class="form-control"  min="0" max="1000000" value="0" name="H2SContent" placeholder="H2S content" required/></div>
                         <div class="col-md-3" style="color: red">PH of Water:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" step="0.01" class="form-control" min="0" max="14" value="7" name="PHWater" placeholder="PH" required/></div>
+                        <div class="col-md-3"><input onkeyup="ValuePH()" type="number" step="0.01" class="form-control" min="0" max="14.9" value="7" name="PHWater" id="PHWater" placeholder="PH" required/></div>
+                        <script>
+                            function ValuePH(){
+                                var max = document.getElementById("PHWater").value;
+                                if(max>14.9) {
+                                    alert("the value must be equal or lesser than 14.9");
+                                }
+                            }
+                        </script>
                     </div>
                     <br>
                     <div class="row">
