@@ -828,7 +828,6 @@ class DM_CAL:
             self.SULPHIDE_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[4])
             self.SULPHIDE_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber,self.DM_Name[4])
             if(age<1):
-                print(self.SVI_SULPHIDE())
                 return self.SVI_SULPHIDE()
             elif(self.SULPHIDE_INSP_EFF == "E" or self.SULPHIDE_INSP_NUM == 0):
                 FIELD = "E"
@@ -925,16 +924,20 @@ class DM_CAL:
         else:
             return 0
     def FOM_HIC(self):
-        if self.OnlineMonitoring == "Key Process Variables and Hydrogen Probes":
+        if self.OnlineMonitoring == "Other corrosion - Key process variable and Hydrogen probes":
             return 4
-        else:
+        elif (self.OnlineMonitoring == "Other corrosion - Key process variable" or self.OnlineMonitoring=="Other corrosion - Hydrogen probes"):
             return 2
+        else:
+            return 1
 
     def DF_HICSOHIC_H2S(self, age):
         if (self.CARBON_ALLOY and self.AQUEOUS_OPERATOR and self.ENVIRONMENT_H2S_CONTENT):
             self.SULFUR_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[5])
             self.SULFUR_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[5])
-            if (self.SULFUR_INSP_EFF == "E" or self.SULFUR_INSP_NUM == 0):
+            if(age<1):
+                return self.SVI_HICSOHIC_H2S()/self.FOM_HIC()
+            elif (self.SULFUR_INSP_EFF == "E" or self.SULFUR_INSP_NUM == 0):
                 FIELD = "E"
             else:
                 FIELD = str(self.SULPHIDE_INSP_NUM) + self.SULFUR_INSP_NUM
@@ -980,7 +983,9 @@ class DM_CAL:
         if (self.CARBON_ALLOY and self.AQUEOUS_OPERATOR and self.PH >= 7.5):
             self.CACBONATE_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[6])
             self.CACBONATE_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[6])
-            if (self.CACBONATE_INSP_EFF == "E" or self.CACBONATE_INSP_NUM == 0):
+            if(age<1):
+                return self.SVI_CARBONATE()
+            elif (self.CACBONATE_INSP_EFF == "E" or self.CACBONATE_INSP_NUM == 0):
                 FIELD = "E"
             else:
                 FIELD = str(self.CACBONATE_INSP_NUM) + self.CACBONATE_INSP_EFF
@@ -1079,7 +1084,9 @@ class DM_CAL:
         if (self.PTA_SUSCEP or ((self.CARBON_ALLOY or self.NICKEL_ALLOY) and self.EXPOSED_SULFUR)):
             self.PTA_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[7])
             self.PTA_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[7])
-            if (self.PTA_INSP_EFF == "E" or self.PTA_INSP_NUM == 0):
+            if(age<1):
+                return self.SVI_PTA()
+            elif (self.PTA_INSP_EFF == "E" or self.PTA_INSP_NUM == 0):
                 FIELD = "E"
             else:
                 FIELD = str(self.PTA_INSP_NUM) + self.PTA_INSP_EFF
@@ -1093,31 +1100,46 @@ class DM_CAL:
         if (self.CRACK_PRESENT):
             sus = "High"
             return sus
-        if (self.PH > 10):
-            if (self.MAX_OP_TEMP >= 93 and self.MAX_OP_TEMP <= 149 and self.CHLORIDE_ION_CONTENT > 1000):
-                sus = "Medium"
-            else:
-                sus = "Low"
-        else:
-            if (self.MAX_OP_TEMP <= 66 and self.MAX_OP_TEMP > 38):
-                if (self.CHLORIDE_ION_CONTENT <= 10):
-                    sus = "Low"
-                elif (self.CHLORIDE_ION_CONTENT <= 1000):
+        if (self.PH <= 10):
+            if (self.MAX_OP_TEMP <=38):
+                if(self.CHLORIDE_ION_CONTENT > 1000):
                     sus = "Medium"
                 else:
                     sus = "High"
-            elif (self.MAX_OP_TEMP <= 93 and self.MAX_OP_TEMP > 66):
-                if (self.CHLORIDE_ION_CONTENT <= 100):
+            elif(self.MAX_OP_TEMP > 38 and self.MAX_OP_TEMP <= 66):
+                if(self.CHLORIDE_ION_CONTENT>=1 and self.CHLORIDE_ION_CONTENT<=10):
+                    sus = "Low"
+                elif(self.CHLORIDE_ION_CONTENT>1000):
+                    sus = "High"
+                else:
+                    sus = "Medium"
+            elif(self.MAX_OP_TEMP > 66 and self.MAX_OP_TEMP <= 93):
+                if (self.CHLORIDE_ION_CONTENT >= 1 and self.CHLORIDE_ION_CONTENT <= 100):
                     sus = "Medium"
                 else:
                     sus = "High"
             elif (self.MAX_OP_TEMP > 93 and self.MAX_OP_TEMP <= 149):
-                if (self.CHLORIDE_ION_CONTENT < 10):
+                if (self.CHLORIDE_ION_CONTENT >= 11 and self.CHLORIDE_ION_CONTENT <= 1000):
+                    sus = "High"
+                else:
+                    sus = "Medium"
+            else:
+                sus = "High"
+        else:
+            if (self.MAX_OP_TEMP <=38):
+                sus = "None"
+            elif(self.MAX_OP_TEMP > 38 and self.MAX_OP_TEMP <= 93):
+                sus = "Low"
+            elif(self.MAX_OP_TEMP > 93 and self.MAX_OP_TEMP <= 149):
+                if (self.CHLORIDE_ION_CONTENT >1000):
+                    sus = "Medium"
+                else:
+                    sus = "Low"
+            else:
+                if (self.CHLORIDE_ION_CONTENT >= 1 and self.CHLORIDE_ION_CONTENT <= 100):
                     sus = "Medium"
                 else:
                     sus = "High"
-            else:
-                sus = "None"
         return sus
 
     def SVI_CLSCC(self):
@@ -1128,12 +1150,14 @@ class DM_CAL:
         elif (self.GET_SUSCEPTIBILITY_CLSCC() == "Low"):
             return 50
         else:
-            return 1
+            return 0
 
     def DF_CLSCC(self, age):
         if (self.INTERNAL_EXPOSED_FLUID_MIST and self.AUSTENITIC_STEEL and self.MAX_OP_TEMP > 38):
             self.CLSCC_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[8])
             self.CLSCC_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[8])
+            if(age<1):
+                return self.SVI_CLSCC()
             if (self.CLSCC_INSP_EFF == "E" or self.CLSCC_INSP_NUM == 0):
                 FIELD = "E"
             else:
@@ -1173,12 +1197,14 @@ class DM_CAL:
         elif (self.GET_SUSCEPTIBILITY_HSCHF() == "Medium"):
             return 10
         else:
-            return 1
+            return 0
 
     def DF_HSCHF(self, age):
         if (self.CARBON_ALLOY and self.HF_PRESENT):
             self.HSC_HF_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[9])
             self.HSC_HF_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[9])
+            if(age<1):
+                return self.SVI_HSCHF()
             if (self.HSC_HF_INSP_EFF == "E" or self.HSC_HF_INSP_NUM == 0):
                 FIELD = "E"
             else:
@@ -1213,19 +1239,23 @@ class DM_CAL:
             return 100
         elif (self.GET_SUSCEPTIBILITY_HICSOHIC_HF() == "Medium"):
             return 10
-        else:
+        elif (self.GET_SUSCEPTIBILITY_HICSOHIC_HF() == "Low"):
             return 1
+        else:
+            return 0
 
     def DF_HIC_SOHIC_HF(self, age):
         if (self.CARBON_ALLOY and self.HF_PRESENT):
             self.HICSOHIC_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[10])
             self.HICSOHIC_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[10])
+            if(age<1):
+                return self.SVI_HICSOHIC_HF()/self.FOM_HIC()
             if (self.HICSOHIC_INSP_EFF == "E" or self.HICSOHIC_INSP_NUM == 0):
                 FIELD = "E"
             else:
                 FIELD = str(self.HICSOHIC_INSP_NUM) + self.HICSOHIC_INSP_EFF
             DFB_HICSOHIC_HF = DAL_CAL.POSTGRESQL.GET_TBL_74(self.SVI_HICSOHIC_HF(), FIELD)
-            return DFB_HICSOHIC_HF * pow(age, 1.1)
+            return DFB_HICSOHIC_HF * pow(age, 1.1)/self.FOM_HIC()
         else:
             return 0
 
@@ -1269,12 +1299,6 @@ class DM_CAL:
         except Exception as e:
             print(e)
 
-    # def API_EXTERNAL_CORROSION_TEMP(self):#this function is not neccessary
-    #     data = [-12, -8, 6, 32, 71, 107, 121, 121, 121, 121]
-    #     list = [self.CUI_PERCENT_1, self.CUI_PERCENT_2, self.CUI_PERCENT_3, self.CUI_PERCENT_4, self.CUI_PERCENT_5,
-    #             self.CUI_PERCENT_6, self.CUI_PERCENT_7, self.CUI_PERCENT_8, self.CUI_PERCENT_9, self.CUI_PERCENT_10]
-    #     return data[list.index(max(list))]
-
     def API_EXTERNAL_CORROSION_RATE(self):
         if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
             CR_EXTERN = (self.CUI_PERCENT_3+self.CUI_PERCENT_4+self.CUI_PERCENT_5)*0.025/100
@@ -1284,35 +1308,6 @@ class DM_CAL:
             CR_EXTERN = (self.CUI_PERCENT_3*0.254+self.CUI_PERCENT_4*0.254+self.CUI_PERCENT_5*0.254+self.CUI_PERCENT_6*0.051)/100
         else:
             CR_EXTERN = (self.CUI_PERCENT_3*0.076+self.CUI_PERCENT_4*0.076+self.CUI_PERCENT_5*0.051)/100
-        # EXTERNAL_TEMP = self.API_EXTERNAL_CORROSION_TEMP()
-        # if (self.EXTERNAL_EVIRONMENT == "Arid/dry"):
-        #     if (EXTERNAL_TEMP == -12 or EXTERNAL_TEMP == -8 or EXTERNAL_TEMP == 107 or EXTERNAL_TEMP == 121):
-        #         CR_EXTERN = 0
-        #     else:
-        #         CR_EXTERN = 0.025
-        # elif (self.EXTERNAL_EVIRONMENT == "Marine"):
-        #     if (EXTERNAL_TEMP == -12 or EXTERNAL_TEMP == 121):
-        #         CR_EXTERN = 0
-        #     elif (EXTERNAL_TEMP == -8 or EXTERNAL_TEMP == 107):
-        #         CR_EXTERN = 0.025
-        #     else:
-        #         CR_EXTERN = 0.127
-        # elif (self.EXTERNAL_EVIRONMENT == "Severe"):
-        #     if (EXTERNAL_TEMP == -12 or EXTERNAL_TEMP == -8 or EXTERNAL_TEMP == 121):
-        #         CR_EXTERN = 0
-        #     elif (EXTERNAL_TEMP == 6 or EXTERNAL_TEMP == 32 or EXTERNAL_TEMP == 71):
-        #         CR_EXTERN = 0.254
-        #     else:
-        #         CR_EXTERN = 0.051
-        # elif (self.EXTERNAL_EVIRONMENT == "Temperate"):
-        #     if (EXTERNAL_TEMP == -12 or EXTERNAL_TEMP == -8 or EXTERNAL_TEMP == 121 or EXTERNAL_TEMP == 107):
-        #         CR_EXTERN = 0
-        #     elif (EXTERNAL_TEMP == 6 or EXTERNAL_TEMP == 32):
-        #         CR_EXTERN = 0.076
-        #     else:
-        #         CR_EXTERN = 0.051
-        # else:
-        #     CR_EXTERN = 0
         return CR_EXTERN
 
     def API_ART_EXTERNAL(self, age):
@@ -1766,6 +1761,8 @@ class DM_CAL:
             HTHA_AGE = age * 24 * 365
             log1 = math.log10(self.HTHA_PRESSURE / 0.0979)
             log2 = 3.09 * pow(10, -4) * (self.CRITICAL_TEMP + 273) * (math.log10(HTHA_AGE) + 14)
+            print("HTHA_PV")
+            print(log1 + log2)
             return log1 + log2
         except:
             return 0
@@ -1830,6 +1827,7 @@ class DM_CAL:
                 SUSCEP = "Not"
         else:
             SUSCEP = "Not"
+        print(SUSCEP)
         return SUSCEP
 
     def API_DF_HTHA(self, age):
@@ -1862,6 +1860,7 @@ class DM_CAL:
             if (self.MAX_OP_TEMP <= 204 and self.HTHA_PRESSURE <= 0.552):
                 return 1
             else:
+                print(self.API_DF_HTHA(age))
                 return self.API_DF_HTHA(age)
         else:
             return 0
