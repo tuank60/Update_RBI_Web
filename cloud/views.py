@@ -36,7 +36,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from  django.contrib.auth import login
 import time
-
+from django.http import JsonResponse
 # Create your views here.
 
 ################ Base ####################
@@ -73,7 +73,82 @@ def base_manufacture(request):
 ################## 404 Error ###########################
 def handler404(request):
     return render(request, '404/404.html', locals())
-
+################ Inspection Plan #######################
+def InpsectionPlan(request, siteID,name='Plan Name',date='Plan Date'):
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),Q(Is_see=0)).count()
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    inspection = models.InspecPlan.objects.all()
+    try:
+        error = {}
+        if '_creat' in request.POST:
+            return redirect('createInspectionPlan', siteID=siteID)
+        if '_add' in request.POST:
+            if name =='Plan Name':
+                error['exist'] = "Please create/select an inspection plan before adding inspection coverage!"
+            else:
+                return redirect('addInspectionPlan', siteID=siteID,name=name,date=date)
+        try:
+            if '_delete' in request.POST:
+                for a in inspection:
+                    if (request.POST.get('%d' % a.id)):
+                        a.delete()
+                return redirect('inspectionPlan',siteID=siteID)
+            if '_select' in request.POST:
+                for a in inspection:
+                    if (request.POST.get('%d' % a.id)):
+                        return redirect('inspectionPlan',siteID=a.id,name=a.inspectionplanname,date=a.inspectiondate)
+        except Exception as e:
+            print(e)
+            raise Http404
+    except Exception as e:
+        print(e)
+        raise Http404
+    return render(request, 'FacilityUI/inspection_plan/inspectionPlanNew.html',
+                  {'page': 'inspectionPlan', 'siteID': siteID, 'count': count, 'info': request.session,
+                   'noti': noti, 'countnoti': countnoti,'name':name,'date':date,'error':error,'inspection':inspection})
+def AdddInssepctionPlan(request,siteID,name,date):
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    site = models.Sites.objects.all()
+    facility = models.Facility.objects.all()
+    euip = models.RwEquipment.objects.all()
+    try:
+        a=1
+    except Exception as e:
+        print(e)
+        raise Http404
+    return render(request,'FacilityUI/inspection_plan/addInspectionPlan.html',
+                  {'page':'addInspectionPlan','siteID':siteID, 'count': count, 'info': request.session,
+                   'noti': noti, 'countnoti': countnoti,'name':name,'date':date,'site':site})
+def CreateInspectionPlan(request, siteID):
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),Q(Is_see=0)).count()
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    try:
+        error = {}
+        data = {}
+        site = models.Sites.objects.filter(siteid=siteID)
+        if request.method == 'POST':
+            data['inspectionplanname'] = request.POST.get('InspectionPlan')
+            print(data['inspectionplanname'])
+            data['inspectiondate'] = request.POST.get('InspectionDate')
+            countIns = models.InspecPlan.objects.filter(inspectionplanname= data['inspectionplanname']).count()
+            print(countIns)
+            if countIns > 0:
+                error['exist'] = "This Inspection Plan Name already exists!"
+            else:
+                ins = models.InspecPlan(inspectionplanname= data['inspectionplanname'],inspectiondate= data['inspectiondate'])
+                ins.save()
+                return redirect('inspectionPlan',siteID=siteID,name=ins.inspectionplanname,date=ins.inspectiondate)
+    except Exception as e:
+        print(e)
+        raise Http404
+    return render(request, 'FacilityUI/inspection_plan/createInspectionPlan.html',
+                  {'page': 'createInspectionPlan','site':site ,'error':error, 'data':data, 'siteID':siteID, 'count': count, 'info': request.session,
+                   'noti': noti, 'countnoti': countnoti})
 ################ Business UI Control ###################
 def ListFacilities(request, siteID):
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email), Q(Is_see=0)).count()
@@ -1696,10 +1771,51 @@ def EditProposal(request, proposalID):
             data['equipmentType'] = models.EquipmentType.objects.get(equipmenttypeid=models.EquipmentMaster.objects.get(
                 equipmentid=comp.equipmentid_id).equipmenttypeid_id).equipmenttypename
             data['riskperiod'] = request.POST.get('RiskAnalysisPeriod')
+
+            if request.POST.get('P1AndP3'):
+                p1andp3 = 1
+            else:
+                p1andp3 = 0
+
+            if request.POST.get('EquipmentRequirements'):
+                equipmentrequire = 1
+            else:
+                equipmentrequire = 0
+
+            if request.POST.get('OperatingConditions'):
+                operatingcondition = 1
+            else:
+                operatingcondition = 0
+
+            if request.POST.get('CETtheMAWP'):
+                cet = 1
+            else:
+                cet =0
+
+            if request.POST.get('CyclicService'):
+                cyclicservice = 1
+            else:
+                cyclicservice = 0
+
+            if request.POST.get('EquipmentorCircuit'):
+                equipmentorCircuit = 1
+            else:
+                equipmentorCircuit = 0
+
+            if request.POST.get('EquipmentorCircuit'):
+                equipmentorCircuit = 1
+            else:
+                equipmentorCircuit = 0
+
             if request.POST.get('MinStructural'):
                 minstruc = 1
             else:
                 minstruc = 0
+
+            if request.POST.get('HTHADamage'):
+                hthadamage = 1
+            else:
+                hthadamage = 0
 
             if request.POST.get('adminControlUpset'):
                 adminControlUpset = 1
@@ -2081,6 +2197,7 @@ def EditProposal(request, proposalID):
             rwcomponent.cyclicloadingwitin15_25m=data['CylicLoad']
             rwcomponent.damagefoundinspection=damageDuringInsp
             rwcomponent.structuralthickness=data['structuralthickness']
+            rwcomponent.hthadamage=hthadamage
             rwcomponent.minstructuralthickness=minstruc
             rwcomponent.numberpipefittings=data['numberPipe']
             rwcomponent.pipecondition=data['pipeCondition']
@@ -2089,6 +2206,12 @@ def EditProposal(request, proposalID):
             rwcomponent.shakingdetected=visibleSharkingProtect
             rwcomponent.shakingtime=data['timeShakingPipe']
             rwcomponent.allowablestress = data['allowStress']
+            rwcomponent.fabricatedsteel = p1andp3
+            rwcomponent.equipmentsatisfied=equipmentrequire
+            rwcomponent.nominaloperatingconditions=operatingcondition
+            rwcomponent.cetgreaterorequal=cet
+            rwcomponent.cyclicservice=cyclicservice
+            rwcomponent.equipmentcircuitshock=equipmentorCircuit
             #rwcomponent.trampelements=TrampElement
             rwcomponent.save()
 

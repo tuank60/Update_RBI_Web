@@ -151,7 +151,12 @@ def calculateNormal(proposalID):
                                    StructuralThickness=rwcomponent.structuralthickness, MINIUM_STRUCTURAL_THICKNESS_GOVERS=rwcomponent.minstructuralthickness,
                                    WeldJonintEfficiency=rwcomponent.weldjointefficiency, AllowableStress=rwcomponent.allowablestress,
                                    YeildStrengthDesignTemp=rwmaterial.yieldstrength,Pressure=rwmaterial.designpressure,
-                                   ShapeFactor=comptype.shapefactor,CR_Confidents_Level=rwcomponent.confidencecorrosionrate)
+                                   ShapeFactor=comptype.shapefactor,CR_Confidents_Level=rwcomponent.confidencecorrosionrate,
+                                   PRESSSURE_CONTROL=bool(rwequipment.pressurisationcontrolled),
+                                   FABRICATED_STEEL=bool(rwcomponent.fabricatedsteel),EQUIPMENT_SATISFIED=bool(rwcomponent.equipmentsatisfied),
+                                   NOMINAL_OPERATING_CONDITIONS=bool(rwcomponent.nominaloperatingconditions),CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
+                                   CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
         else:
             dm_cal = DM_CAL.DM_CAL(ComponentNumber=str(comp.componentnumber),
                                    Commissiondate=models.EquipmentMaster.objects.get(
@@ -239,7 +244,12 @@ def calculateNormal(proposalID):
                                    StructuralThickness=rwcomponent.structuralthickness, MINIUM_STRUCTURAL_THICKNESS_GOVERS=rwcomponent.minstructuralthickness,
                                    WeldJonintEfficiency=rwcomponent.weldjointefficiency, AllowableStress=rwcomponent.allowablestress,
                                    YeildStrengthDesignTemp=rwmaterial.yieldstrength,Pressure=rwmaterial.designpressure,
-                                   ShapeFactor=comptype.shapefactor,CR_Confidents_Level=rwcomponent.confidencecorrosionrate)
+                                   ShapeFactor=comptype.shapefactor,CR_Confidents_Level=rwcomponent.confidencecorrosionrate,
+                                   PRESSSURE_CONTROL=bool(rwequipment.pressurisationcontrolled),
+                                   FABRICATED_STEEL=bool(rwcomponent.fabricatedsteel),EQUIPMENT_SATISFIED=bool(rwcomponent.equipmentsatisfied),
+                                   NOMINAL_OPERATING_CONDITIONS=bool(rwcomponent.nominaloperatingconditions),CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
+                                   CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
         ca_cal = CA_CAL.CA_NORMAL(NominalDiametter=rwcomponent.nominaldiameter,
                                   MATERIAL_COST=rwmaterial.costfactor, FLUID=rwinputca.api_fluid,
                                   FLUID_PHASE=rwinputca.system,
@@ -284,15 +294,15 @@ def calculateNormal(proposalID):
             refullPOF.externalap1 = dm_cal.DF_EXT_TOTAL_API(0)
             refullPOF.externalap2 = dm_cal.DF_EXT_TOTAL_API(3)
             refullPOF.externalap3 = dm_cal.DF_EXT_TOTAL_API(6)
-            refullPOF.brittleap1 = dm_cal.DF_BRIT_TOTAL_API()
-            refullPOF.brittleap2 = dm_cal.DF_BRIT_TOTAL_API()
-            refullPOF.brittleap3 = dm_cal.DF_BRIT_TOTAL_API()
+            refullPOF.brittleap1 = dm_cal.DF_BRIT_TOTAL_API(0)
+            refullPOF.brittleap2 = dm_cal.DF_BRIT_TOTAL_API(3)
+            refullPOF.brittleap3 = dm_cal.DF_BRIT_TOTAL_API(6)
             refullPOF.htha_ap1 = dm_cal.DF_HTHA_API(0)
             refullPOF.htha_ap2 = dm_cal.DF_HTHA_API(3)
             refullPOF.htha_ap3 = dm_cal.DF_HTHA_API(6)
-            refullPOF.fatigueap1 = dm_cal.DF_PIPE_API()
-            refullPOF.fatigueap2 = dm_cal.DF_PIPE_API()
-            refullPOF.fatigueap3 = dm_cal.DF_PIPE_API()
+            refullPOF.fatigueap1 = dm_cal.DF_PIPE_API(0)
+            refullPOF.fatigueap2 = dm_cal.DF_PIPE_API(3)
+            refullPOF.fatigueap3 = dm_cal.DF_PIPE_API(6)
             refullPOF.fms = datafaci.managementfactor
             refullPOF.thinninglocalap1 = max(dm_cal.DF_THINNING_TOTAL_API(0),
                                              dm_cal.DF_EXT_TOTAL_API(0))
@@ -335,13 +345,13 @@ def calculateNormal(proposalID):
                                          externalap1=dm_cal.DF_EXT_TOTAL_API(0),
                                          externalap2=dm_cal.DF_EXT_TOTAL_API(3),
                                          externalap3=dm_cal.DF_EXT_TOTAL_API(6),
-                                         brittleap1=dm_cal.DF_BRIT_TOTAL_API(),
-                                         brittleap2=dm_cal.DF_BRIT_TOTAL_API(),
-                                         brittleap3=dm_cal.DF_BRIT_TOTAL_API(),
+                                         brittleap1=dm_cal.DF_BRIT_TOTAL_API(0),
+                                         brittleap2=dm_cal.DF_BRIT_TOTAL_API(3),
+                                         brittleap3=dm_cal.DF_BRIT_TOTAL_API(6),
                                          htha_ap1=dm_cal.DF_HTHA_API(0), htha_ap2=dm_cal.DF_HTHA_API(3),
                                          htha_ap3=dm_cal.DF_HTHA_API(6),
-                                         fatigueap1=dm_cal.DF_PIPE_API(), fatigueap2=dm_cal.DF_PIPE_API(),
-                                         fatigueap3=dm_cal.DF_PIPE_API(),
+                                         fatigueap1=dm_cal.DF_PIPE_API(0), fatigueap2=dm_cal.DF_PIPE_API(3),
+                                         fatigueap3=dm_cal.DF_PIPE_API(6),
                                          fms=datafaci.managementfactor, thinningtype="Local",
                                          thinninglocalap1=max(dm_cal.DF_THINNING_TOTAL_API(0),
                                                               dm_cal.DF_EXT_TOTAL_API(0)),
@@ -574,7 +584,12 @@ def calculateTank(proposalID):
                                    CYLIC_LOAD="",
                                    CORRECT_ACTION="", NUM_PIPE="",
                                    PIPE_CONDITION="", JOINT_TYPE="",
-                                   BRANCH_DIAMETER="")
+                                   BRANCH_DIAMETER="",
+                                   PRESSSURE_CONTROL=bool(rwequipment.pressurisationcontrolled),
+                                   FABRICATED_STEEL=bool(rwcomponent.fabricatedsteel),EQUIPMENT_SATISFIED=bool(rwcomponent.equipmentsatisfied),
+                                   NOMINAL_OPERATING_CONDITIONS=bool(rwcomponent.nominaloperatingconditions),CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
+                                   CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
         else:
             dm_cal = DM_CAL.DM_CAL(APIComponentType=models.ApiComponentType.objects.get(
                 apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
@@ -659,7 +674,12 @@ def calculateTank(proposalID):
                                    CYLIC_LOAD="",
                                    CORRECT_ACTION="", NUM_PIPE="",
                                    PIPE_CONDITION="", JOINT_TYPE="",
-                                   BRANCH_DIAMETER="")
+                                   BRANCH_DIAMETER="",
+                                   PRESSSURE_CONTROL=bool(rwequipment.pressurisationcontrolled),
+                                   FABRICATED_STEEL=bool(rwcomponent.fabricatedsteel),EQUIPMENT_SATISFIED=bool(rwcomponent.equipmentsatisfied),
+                                   NOMINAL_OPERATING_CONDITIONS=bool(rwcomponent.nominaloperatingconditions),CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
+                                   CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
         if isshell:
             cacal = CA_CAL.CA_SHELL(FLUID=rwinputca.api_fluid, FLUID_HEIGHT=rwstream.fluidheight,
                                     SHELL_COURSE_HEIGHT=rwinputca.shell_course_height,
@@ -853,15 +873,15 @@ def calculateTank(proposalID):
             refullPOF.externalap1 = dm_cal.DF_EXT_TOTAL_API(0)
             refullPOF.externalap2 = dm_cal.DF_EXT_TOTAL_API(3)
             refullPOF.externalap3 = dm_cal.DF_EXT_TOTAL_API(6)
-            refullPOF.brittleap1 = dm_cal.DF_BRIT_TOTAL_API()
-            refullPOF.brittleap2 = dm_cal.DF_BRIT_TOTAL_API()
-            refullPOF.brittleap3 = dm_cal.DF_BRIT_TOTAL_API()
+            refullPOF.brittleap1 = dm_cal.DF_BRIT_TOTAL_API(0)
+            refullPOF.brittleap2 = dm_cal.DF_BRIT_TOTAL_API(3)
+            refullPOF.brittleap3 = dm_cal.DF_BRIT_TOTAL_API(6)
             refullPOF.htha_ap1 = dm_cal.DF_HTHA_API(0)
             refullPOF.htha_ap2 = dm_cal.DF_HTHA_API(3)
             refullPOF.htha_ap3 = dm_cal.DF_HTHA_API(6)
-            refullPOF.fatigueap1 = dm_cal.DF_PIPE_API()
-            refullPOF.fatigueap2 = dm_cal.DF_PIPE_API()
-            refullPOF.fatigueap3 = dm_cal.DF_PIPE_API()
+            refullPOF.fatigueap1 = dm_cal.DF_PIPE_API(0)
+            refullPOF.fatigueap2 = dm_cal.DF_PIPE_API(3)
+            refullPOF.fatigueap3 = dm_cal.DF_PIPE_API(6)
             refullPOF.fms = datafaci.managementfactor
             refullPOF.thinninglocalap1 = max(dm_cal.DF_THINNING_TOTAL_API(0), dm_cal.DF_EXT_TOTAL_API(0))
             refullPOF.thinninglocalap2 = max(dm_cal.DF_THINNING_TOTAL_API(3), dm_cal.DF_EXT_TOTAL_API(3))
@@ -902,13 +922,13 @@ def calculateTank(proposalID):
                                          externalap1=dm_cal.DF_EXT_TOTAL_API(0),
                                          externalap2=dm_cal.DF_EXT_TOTAL_API(3),
                                          externalap3=dm_cal.DF_EXT_TOTAL_API(6),
-                                         brittleap1=dm_cal.DF_BRIT_TOTAL_API(),
-                                         brittleap2=dm_cal.DF_BRIT_TOTAL_API(),
-                                         brittleap3=dm_cal.DF_BRIT_TOTAL_API(),
+                                         brittleap1=dm_cal.DF_BRIT_TOTAL_API(0),
+                                         brittleap2=dm_cal.DF_BRIT_TOTAL_API(3),
+                                         brittleap3=dm_cal.DF_BRIT_TOTAL_API(6),
                                          htha_ap1=dm_cal.DF_HTHA_API(0), htha_ap2=dm_cal.DF_HTHA_API(3),
                                          htha_ap3=dm_cal.DF_HTHA_API(6),
-                                         fatigueap1=dm_cal.DF_PIPE_API(), fatigueap2=dm_cal.DF_PIPE_API(),
-                                         fatigueap3=dm_cal.DF_PIPE_API(),
+                                         fatigueap1=dm_cal.DF_PIPE_API(0), fatigueap2=dm_cal.DF_PIPE_API(3),
+                                         fatigueap3=dm_cal.DF_PIPE_API(6),
                                          fms=datafaci.managementfactor, thinningtype="Local",
                                          thinninglocalap1=max(dm_cal.DF_THINNING_TOTAL_API(0),
                                                               dm_cal.DF_EXT_TOTAL_API(0)),

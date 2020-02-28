@@ -44,12 +44,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cloud/views.py">
+        <entry file="file://$PROJECT_DIR$/cloud/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="269">
-              <caret line="1797" column="50" selection-start-line="1797" selection-start-column="33" selection-end-line="1797" selection-end-column="50" />
+            <state relative-caret-position="14246">
+              <caret line="840" column="10" selection-start-line="840" selection-start-column="4" selection-end-line="840" selection-end-column="10" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#468#496#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -58,62 +58,38 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1581">
-              <caret line="99" column="60" selection-start-line="99" selection-start-column="60" selection-end-line="99" selection-end-column="60" />
+            <state relative-caret-position="578">
+              <caret line="40" column="137" selection-start-line="40" selection-start-column="137" selection-end-line="40" selection-end-column="137" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/inspectionPlanNew.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="510">
+              <caret line="30" column="11" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1411">
+              <caret line="85" column="34" selection-start-line="85" selection-start-column="34" selection-end-line="85" selection-end-column="34" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html">
+        <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="252" column="90" lean-forward="true" selection-start-line="252" selection-start-column="90" selection-end-line="252" selection-end-column="90" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#fieldset#0;n#div#3;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#fieldset#0;n#div#4;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#1;n#fieldset#0;n#div#4;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#div#2;n#div#1;n#fieldset#0;n#div#4;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#8;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#8;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#9;n#div#0;n#form#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="14">
-              <caret line="300" column="90" selection-start-line="300" selection-start-column="73" selection-end-line="300" selection-end-column="90" />
-              <folding>
-                <element signature="n#style#0;n#span#0;n#div#2;n#div#4;n#fieldset#0;n#div#4;n#div#0;n#form#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="103" column="99" selection-start-line="103" selection-start-column="77" selection-end-line="103" selection-end-column="99" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="1861" column="17" selection-start-line="1861" selection-start-column="17" selection-end-line="1861" selection-end-column="17" />
-              <folding>
-                <element signature="e#33018#34403#0" />
-                <element signature="e#34438#34703#0" />
-                <element signature="e#34742#35451#0" />
-                <element signature="e#48531#48793#0" />
-              </folding>
+            <state relative-caret-position="283">
+              <caret line="125" column="70" selection-start-line="125" selection-start-column="70" selection-end-line="125" selection-end-column="70" />
             </state>
           </provider>
         </entry>
@@ -129,36 +105,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Cladding</find>
-      <find>thickness</find>
-      <find>NominalThickness</find>
-      <find>Component Properties</find>
-      <find>CladdingThickness</find>
-      <find>NaOH Concentration</find>
-      <find>PH of Water</find>
-      <find>script</find>
-      <find>Operating Condition</find>
-      <find>chart</find>
-      <find>Model_Fluid</find>
-      <find>AQUEOUS_OPERATOR</find>
-      <find>Presence of Cracks</find>
-      <find>presence of crack</find>
-      <find>aquaDuringOP</find>
-      <find>Electrical resistance probes</find>
+      <find>MaxDesignTemp</find>
+      <find>mater</find>
+      <find>Min.Design Temperature</find>
       <find>print</find>
-      <find>damage factor</find>
-      <find>INTERNAL_EXPOSED_FLUID_MIST</find>
-      <find>materialexposedtoclint</find>
-      <find>MEFMSCC</find>
-      <find>DF_HIC_SOHIC_HF</find>
-      <find>materialExposedFluid</find>
-      <find>Highly Effective Inspection for Corrosion at Injection Mix Point</find>
-      <find>HTHADamage</find>
-      <find>HTHA</find>
-      <find>Damage Found During Inspection</find>
-      <find>edit</find>
-      <find>Presence of Injection Mix Point</find>
-      <find>ChemicalInjection</find>
+      <find>PERCENT_SIGMA</find>
+      <find>facilities/display/</find>
+      <find>inspection</find>
+      <find>InspectionPlanName</find>
+      <find>facilitiesNew</find>
+      <find>CommissionDate</find>
+      <find>inspection_plan</find>
+      <find>date</find>
+      <find>Component Properties</find>
+      <find>disabled</find>
+      <find>index.</find>
+      <find>formsignin</find>
+      <find>signin</find>
+      <find>for</find>
+      <find>rate</find>
+      <find>append</find>
+      <find>site</find>
+      <find>facility</find>
+      <find>equipment</find>
+      <find>listfac</find>
+      <find>sites</find>
+      <find>if</find>
+      <find>chkHeader</find>
+      <find>scr</find>
+      <find>search</find>
+      <find>searchPlan</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -174,7 +150,6 @@
         <option value="$PROJECT_DIR$/templates/FacilityUI/component/componentNew.html" />
         <option value="$PROJECT_DIR$/../RBInoENV/venv/Lib/site-packages/pymysql/__init__.py" />
         <option value="$PROJECT_DIR$/cloud/__init__.py" />
-        <option value="$PROJECT_DIR$/templates/FacilityUI/facility/facilityListDisplay.html" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/equipment/equipmentEdit.html" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalTankNew.html" />
         <option value="$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseRiskSummary.html" />
@@ -183,20 +158,28 @@
         <option value="$PROJECT_DIR$/templates/FacilityUI/risk_summary/riskMatrix.html" />
         <option value="$PROJECT_DIR$/cloud/process/RBI/Postgresql.py" />
         <option value="$PROJECT_DIR$/cloud/process/RBI/CO_CAL.py" />
-        <option value="$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalListDisplay.html" />
         <option value="$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseProposal.html" />
-        <option value="$PROJECT_DIR$/RbiCloud/urls.py" />
         <option value="$PROJECT_DIR$/cloud/regularverification/interpolation.py" />
         <option value="$PROJECT_DIR$/cloud/regularverification/regular.py" />
-        <option value="$PROJECT_DIR$/cloud/models.py" />
-        <option value="$PROJECT_DIR$/cloud/views.py" />
-        <option value="$PROJECT_DIR$/cloud/process/File/import_data.py" />
         <option value="$PROJECT_DIR$/RbiCloud/settings.py" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/test.html" />
+        <option value="$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py" />
+        <option value="$PROJECT_DIR$/cloud/process/File/import_data.py" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html" />
         <option value="$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py" />
+        <option value="$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseFacility.html" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/risk_summary/proposalCorrisionRate.html" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/facility/facilityListDisplay.html" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/facility/facilityNew.html" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/inspection_plan/createInspectionPlan.html" />
+        <option value="$PROJECT_DIR$/templates/Home/index.html" />
+        <option value="$PROJECT_DIR$/cloud/models.py" />
+        <option value="$PROJECT_DIR$/RbiCloud/urls.py" />
+        <option value="$PROJECT_DIR$/cloud/views.py" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/inspection_plan/inspectionPlanNew.html" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html" />
       </list>
     </option>
   </component>
@@ -206,10 +189,11 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-7" />
-    <option name="width" value="812" />
-    <option name="height" value="735" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -246,49 +230,6 @@
             <path>
               <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
               <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
-              <item name="cloud" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
-              <item name="cloud" type="462c0819:PsiDirectoryNode" />
-              <item name="process" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
-              <item name="cloud" type="462c0819:PsiDirectoryNode" />
-              <item name="process" type="462c0819:PsiDirectoryNode" />
-              <item name="File" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
-              <item name="cloud" type="462c0819:PsiDirectoryNode" />
-              <item name="process" type="462c0819:PsiDirectoryNode" />
-              <item name="RBI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
-              <item name="cloud" type="462c0819:PsiDirectoryNode" />
-              <item name="process" type="462c0819:PsiDirectoryNode" />
-              <item name="WebUI" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
-              <item name="cloud" type="462c0819:PsiDirectoryNode" />
-              <item name="regularverification" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
-              <item name="RbiCloud" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Update_RBI_Web-master" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -302,7 +243,7 @@
               <item name="Update_RBI_Web-master" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
-              <item name="proposal" type="462c0819:PsiDirectoryNode" />
+              <item name="inspection_plan" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -500,9 +441,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1875" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19345239" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -513,8 +455,8 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.6473214" visible="true" weight="0.049099836" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.35267857" side_tool="true" weight="0.43371522" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.6458333" visible="true" weight="0.2405892" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.35416666" side_tool="true" weight="0.2782324" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -548,139 +490,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/ReadMe">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="46" selection-start-line="10" selection-start-column="46" selection-end-line="10" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/facility/facilityListDisplay.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyNormalConsequence.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/1964358307/numpy/core/multiarray.py" />
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/equipment/equipmentEdit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="37" column="22" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/component/componentListDisplay.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="74" column="48" selection-start-line="74" selection-start-column="44" selection-end-line="74" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/process/WebUI/roundData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="4" selection-start-column="4" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseRiskSummary.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="14" lean-forward="true" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../untitled/venv/Lib/site-packages/dateutil/relativedelta.py" />
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalTankEdit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="309" column="76" selection-start-line="309" selection-start-column="46" selection-end-line="309" selection-end-column="76" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="156">
-          <caret line="14" column="38" selection-start-line="14" selection-start-column="38" selection-end-line="14" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/component/componentNew.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="34" column="71" selection-start-line="34" selection-start-column="54" selection-end-line="34" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.3/system/python_stubs/1964358307/builtins.py" />
-    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CO_CAL.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1921">
-          <caret line="122" column="55" selection-start-line="122" selection-start-column="55" selection-end-line="122" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/proposalCorrisionRate.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1581">
-          <caret line="93" column="64" selection-start-line="93" selection-start-column="64" selection-end-line="93" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/component/componentEdit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/dfFull.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="69" column="60" selection-start-line="69" selection-start-column="49" selection-end-line="69" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/riskMatrix.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/riskChart.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="49" column="56" selection-start-line="49" selection-start-column="50" selection-end-line="49" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/Postgresql.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3298">
-          <caret line="195" column="8" selection-start-line="195" selection-start-column="8" selection-end-line="195" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Downloads/interpolation.py" />
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalListDisplay.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="38" selection-start-column="38" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseBusiness.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseProposal.html">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -722,102 +531,228 @@
     <entry file="das://table:/64d64ccf/c4436137-29bd-432b-9f00-fc731f1bd050/cloudrbi.rw_coating" />
     <entry file="das://table:/64d64ccf/c4436137-29bd-432b-9f00-fc731f1bd050/cloudrbi.rw_assessment" />
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/test.html" />
-    <entry file="file://$PROJECT_DIR$/cloud/process/File/import_data.py">
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/Postgresql.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8840">
-          <caret line="521" column="15" selection-start-line="521" selection-start-column="15" selection-end-line="521" selection-end-column="15" />
+        <state relative-caret-position="1428">
+          <caret line="85" column="33" selection-start-line="85" selection-start-column="33" selection-end-line="85" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../untitled/venv/Lib/site-packages/xlrd/sheet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="830">
+          <caret line="332" column="8" lean-forward="true" selection-start-line="332" selection-start-column="8" selection-end-line="332" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RbiCloud/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="464">
+          <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/File/export_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RbiCloud/settings.py">
+    <entry file="file://$PROJECT_DIR$/cloud/process/File/import_data.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="73">
-          <caret line="85" column="25" selection-start-line="85" selection-start-column="25" selection-end-line="85" selection-end-column="25" />
+        <state relative-caret-position="174">
+          <caret line="20" column="8" lean-forward="true" selection-start-line="20" selection-start-column="8" selection-end-line="20" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2346">
+          <caret line="139" column="76" selection-start-line="139" selection-start-column="76" selection-end-line="139" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="1736" column="31" selection-start-line="1736" selection-start-column="31" selection-end-line="1736" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/NewSensor.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/equipment/equipmentNew.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="188">
+          <caret line="78" column="20" lean-forward="true" selection-start-line="78" selection-start-column="20" selection-end-line="83" selection-end-column="29" />
+          <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#5;n#fieldset#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/facility/facilityNew.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" selection-start-line="39" selection-end-line="39" />
+        <state relative-caret-position="680">
+          <caret line="40" column="12" selection-start-line="40" selection-start-column="12" selection-end-line="51" selection-end-column="23" />
           <folding>
+            <element signature="e#1444#1479#0" expanded="true" />
             <element signature="e#1931#1949#0" expanded="true" />
             <element signature="e#2521#2539#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/models.py">
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseFacility.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="811" column="54" selection-start-line="811" selection-start-column="54" selection-end-line="811" selection-end-column="54" />
-          <folding>
-            <element signature="e#468#496#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="289">
+          <caret line="17" column="145" selection-start-line="17" selection-start-column="145" selection-end-line="17" selection-end-column="145" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1581">
-          <caret line="99" column="60" selection-start-line="99" selection-start-column="60" selection-end-line="99" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="103" column="99" selection-start-line="103" selection-start-column="77" selection-end-line="103" selection-end-column="99" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/web-forms.rnc">
+    <entry file="file://C:/Program Files/Python36/Lib/datetime.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
-          <caret line="360" column="16" selection-start-line="360" selection-start-column="16" selection-end-line="360" selection-end-column="16" />
+          <caret line="1572" column="8" selection-start-line="1572" selection-start-column="8" selection-end-line="1572" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
+    <entry file="file://$PROJECT_DIR$/../untitled/venv/Lib/site-packages/django/urls/conf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="1861" column="17" selection-start-line="1861" selection-start-column="17" selection-end-line="1861" selection-end-column="17" />
-          <folding>
-            <element signature="e#33018#34403#0" />
-            <element signature="e#34438#34703#0" />
-            <element signature="e#34742#35451#0" />
-            <element signature="e#48531#48793#0" />
-          </folding>
+        <state relative-caret-position="-23">
+          <caret line="58" column="38" lean-forward="true" selection-start-line="58" selection-start-column="38" selection-end-line="58" selection-end-column="38" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/views.py">
+    <entry file="file://$PROJECT_DIR$/../untitled/venv/Lib/site-packages/django/urls/resolvers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="1797" column="50" selection-start-line="1797" selection-start-column="33" selection-end-line="1797" selection-end-column="50" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="18">
+          <caret line="199" column="7" lean-forward="true" selection-start-line="199" selection-start-column="7" selection-end-line="199" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14">
-          <caret line="300" column="90" selection-start-line="300" selection-start-column="73" selection-end-line="300" selection-end-column="90" />
+        <state relative-caret-position="319">
+          <caret line="736" column="30" selection-start-line="736" selection-start-column="30" selection-end-line="736" selection-end-column="30" />
           <folding>
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#fieldset#0;n#div#2;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#2;n#div#0;n#fieldset#0;n#div#2;n#div#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#div#2;n#div#4;n#fieldset#0;n#div#4;n#div#0;n#form#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/web-forms.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="19" column="18" selection-start-line="19" selection-start-column="18" selection-end-line="19" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="9" column="14" lean-forward="true" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/index.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/bootstrap.min.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="5" column="45" lean-forward="true" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/Home/Account/activateEmail.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/Home/Account/signup_business.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-102" />
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/lib/platform-impl.jar!/resources/html5-schema/html5/phrase.rnc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="63" column="14" selection-start-line="63" selection-start-column="14" selection-end-line="63" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../untitled/venv/Lib/site-packages/django/template/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="667" selection-start-line="667" selection-end-line="667" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/proposalCorrisionRate.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="120" column="20" selection-start-line="120" selection-start-column="20" selection-end-line="127" selection-end-column="71" />
+          <folding>
+            <element signature="e#1445#1472#0" expanded="true" />
+            <element signature="e#1485#1525#0" expanded="true" />
+            <element signature="e#3689#3708#0" expanded="true" />
+            <element signature="e#4235#4254#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/Home/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1105">
+          <caret line="65" column="8" selection-start-line="33" selection-start-column="2" selection-end-line="65" selection-end-column="8" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#div#0;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#div#2;n#div#0;n#div#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/createInspectionPlan.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+          <folding>
+            <element signature="e#1109#1127#0" expanded="true" />
+            <element signature="e#1500#1535#0" expanded="true" />
+            <element signature="e#1710#1728#0" expanded="true" />
+            <element signature="e#2433#2458#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="252" column="90" lean-forward="true" selection-start-line="252" selection-start-column="90" selection-end-line="252" selection-end-column="90" />
+        <state relative-caret-position="5286">
+          <caret line="1414" column="9" selection-start-line="1414" selection-start-column="6" selection-end-line="1414" selection-end-column="9" />
           <folding>
             <element signature="n#style#0;n#span#0;n#div#0;n#div#0;n#fieldset#0;n#div#3;n#div#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#div#0;n#div#1;n#fieldset#0;n#div#4;n#div#0;n#form#0;n#!!top" expanded="true" />
@@ -827,6 +762,68 @@
             <element signature="n#style#0;n#div#0;n#div#8;n#div#0;n#form#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#9;n#div#0;n#form#0;n#!!top" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/facility/facilityListDisplay.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="34" column="66" selection-start-line="34" selection-start-column="66" selection-end-line="34" selection-end-column="66" />
+          <folding>
+            <element signature="e#998#1024#0" expanded="true" />
+            <element signature="e#1111#1137#0" expanded="true" />
+            <element signature="e#1225#1251#0" expanded="true" />
+            <element signature="e#1361#1387#0" expanded="true" />
+            <element signature="e#1492#1518#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../untitled/venv/Lib/site-packages/django/http/response.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="498" column="8" selection-start-line="498" selection-start-column="8" selection-end-line="498" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14246">
+          <caret line="840" column="10" selection-start-line="840" selection-start-column="4" selection-end-line="840" selection-end-column="10" />
+          <folding>
+            <element signature="e#468#496#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="40" column="137" selection-start-line="40" selection-start-column="137" selection-end-line="40" selection-end-column="137" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/inspectionPlanNew.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="30" column="11" selection-start-line="30" selection-start-column="11" selection-end-line="30" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1411">
+          <caret line="85" column="34" selection-start-line="85" selection-start-column="34" selection-end-line="85" selection-end-column="34" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="125" column="70" selection-start-line="125" selection-start-column="70" selection-end-line="125" selection-end-column="70" />
         </state>
       </provider>
     </entry>

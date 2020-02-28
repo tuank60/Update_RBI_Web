@@ -54,7 +54,9 @@ class DM_CAL:
                  MAX_OP_TEMP=0, CHROMIUM_12=False, MIN_OP_TEMP=0, MIN_DESIGN_TEMP=0, REF_TEMP=0,
                  AUSTENITIC_STEEL=False, PERCENT_SIGMA=0,
                  EquipmentType="", PREVIOUS_FAIL="", AMOUNT_SHAKING="", TIME_SHAKING="", CYLIC_LOAD="",
-                 CORRECT_ACTION="", NUM_PIPE="", PIPE_CONDITION="", JOINT_TYPE="", BRANCH_DIAMETER="",
+                 CORRECT_ACTION="", NUM_PIPE="", PIPE_CONDITION="", JOINT_TYPE="", BRANCH_DIAMETER="",PRESSSURE_CONTROL=False,
+                 FABRICATED_STEEL=False, EQUIPMENT_SATISFIED=False, NOMINAL_OPERATING_CONDITIONS=False,CET_THE_MAWP=False,
+                 CYCLIC_SERVICE = False, EQUIPMENT_CIRCUIT_SHOCK=False,MIN_TEMP_PRESSURE=0
                  # PRIMARY_SOIL_TYPE="", PARTICAL_SIZE_UNIFORMITY="",
                  # MOSTURE_LEVEL="",EquipmentTemperature=0, CATHODIC_PROTECTION_EFF="", SoilResistivity_ConsideredforbaseCR=False,
                  # AST_PAD_TYPE_FACTOR="",AST_DRAINAGE_TYPE="",AST_PAD_TYPE_BOTTOM="",SoilSideTemperature=0,
@@ -217,6 +219,14 @@ class DM_CAL:
 
         # BRITTLE input
         self.LOWEST_TEMP = LOWEST_TEMP
+        self.PRESSSURE_CONTROL = PRESSSURE_CONTROL
+        self.FABRICATED_STEEL = FABRICATED_STEEL
+        self.EQUIPMENT_SATISFIED = EQUIPMENT_SATISFIED
+        self.NOMINAL_OPERATING_CONDITIONS = NOMINAL_OPERATING_CONDITIONS
+        self.CET_THE_MAWP = CET_THE_MAWP
+        self.CYCLIC_SERVICE = CYCLIC_SERVICE
+        self.EQUIPMENT_CIRCUIT_SHOCK = EQUIPMENT_CIRCUIT_SHOCK
+        self.MIN_TEMP_PRESSURE = MIN_TEMP_PRESSURE
 
         # TEMPER EMBRITTLE input
         self.TEMPER_SUSCEP = TEMPER_SUSCEP
@@ -1761,8 +1771,6 @@ class DM_CAL:
             HTHA_AGE = age * 24 * 365
             log1 = math.log10(self.HTHA_PRESSURE / 0.0979)
             log2 = 3.09 * pow(10, -4) * (self.CRITICAL_TEMP + 273) * (math.log10(HTHA_AGE) + 14)
-            print("HTHA_PV")
-            print(log1 + log2)
             return log1 + log2
         except:
             return 0
@@ -1827,7 +1835,6 @@ class DM_CAL:
                 SUSCEP = "Not"
         else:
             SUSCEP = "Not"
-        print(SUSCEP)
         return SUSCEP
 
     def API_DF_HTHA(self, age):
@@ -1860,14 +1867,17 @@ class DM_CAL:
             if (self.MAX_OP_TEMP <= 204 and self.HTHA_PRESSURE <= 0.552):
                 return 1
             else:
-                print(self.API_DF_HTHA(age))
                 return self.API_DF_HTHA(age)
         else:
             return 0
 
     # Calculate BRITTLE
     def DFB_BRIITLE(self):
-        TEMP_BRITTLE = min(self.MIN_DESIGN_TEMP, self.MIN_OP_TEMP)
+        TEMP_BRITTLE = 0
+        if(self.PRESSSURE_CONTROL):
+            TEMP_BRITTLE=self.MIN_TEMP_PRESSURE
+        else:
+            TEMP_BRITTLE=self.CRITICAL_TEMP
         if (self.PWHT):
             return DAL_CAL.POSTGRESQL.GET_TBL_215(self.API_TEMP(TEMP_BRITTLE - self.REF_TEMP),
                                                  self.API_SIZE_BRITTLE(self.BRITTLE_THICK))
@@ -1875,66 +1885,75 @@ class DM_CAL:
             return DAL_CAL.POSTGRESQL.GET_TBL_214(self.API_TEMP(TEMP_BRITTLE - self.REF_TEMP),
                                                  self.API_SIZE_BRITTLE(self.BRITTLE_THICK))
 
-    def DF_BRITTLE(self):
-        if (self.CARBON_ALLOY and (
-                self.CRITICAL_TEMP < self.MIN_DESIGN_TEMP or self.MAX_OP_TEMP < self.MIN_DESIGN_TEMP)):
-            if (self.LOWEST_TEMP):
-                return self.DFB_BRIITLE() * 0.01
-            else:
-                return self.DFB_BRIITLE()
+    def DF_BRITTLE(self,i):
+        Fse = 1
+        if(self.BRITTLE_THICK<=12.7 or (self.FABRICATED_STEEL and self.EQUIPMENT_SATISFIED and self.NOMINAL_OPERATING_CONDITIONS
+        and self.CET_THE_MAWP and self.CYCLIC_SERVICE and self.EQUIPMENT_CIRCUIT_SHOCK and (self.BRITTLE_THICK <=50.8))):
+            Fse = 0.01
+        if (self.CARBON_ALLOY and (self.CRITICAL_TEMP < self.MIN_DESIGN_TEMP or self.MAX_OP_TEMP < self.MIN_DESIGN_TEMP)):
+            # if (self.LOWEST_TEMP):
+            return self.DFB_BRIITLE() * Fse
+            # else:
+            #     return self.DFB_BRIITLE()
         else:
             return 0
 
     # Calculate TEMP EMBRITTLE
     def API_SIZE_BRITTLE(self, SIZE):
         data = [6.4, 12.7, 25.4, 38.1, 50.8, 63.5, 76.2, 88.9, 101.6]
-        if (SIZE < (data[0] + data[1]) / 2):
+        if (SIZE < data[0]):
             return data[0]
-        elif (SIZE < (data[1] + data[2]) / 2):
+        elif (SIZE < data[1]):
             return data[1]
-        elif (SIZE < (data[2] + data[3]) / 2):
+        elif (SIZE < data[2]):
             return data[2]
-        elif (SIZE < (data[3] + data[4]) / 2):
+        elif (SIZE < data[3]):
             return data[3]
-        elif (SIZE < (data[4] + data[5]) / 2):
+        elif (SIZE < data[4]):
             return data[4]
-        elif (SIZE < (data[5] + data[6]) / 2):
+        elif (SIZE < data[5]):
             return data[5]
-        elif (SIZE < (data[6] + data[7]) / 2):
+        elif (SIZE < data[6]):
             return data[6]
-        elif (SIZE < (data[7] + data[8]) / 2):
+        elif (SIZE < data[7]):
             return data[7]
         else:
             return data[8]
 
     def API_TEMP(self, TEMP):
-        data = [-73, -62, -51, -40, -29, -18, -7, 4, 16, 27, 38]
-        if (TEMP < (data[0] + data[1]) / 2):
+        data = [-56, -44, -33, -22, -11, 0, 11, 22, 33, 44, 56]
+        if (TEMP < data[0]):
             return data[0]
-        elif (TEMP < (data[1] + data[2]) / 2):
+        elif (TEMP < data[1]):
+            return data[0]
+        elif (TEMP < data[2]):
             return data[1]
-        elif (TEMP < (data[2] + data[3]) / 2):
+        elif (TEMP < data[3]):
             return data[2]
-        elif (TEMP < (data[3] + data[4]) / 2):
+        elif (TEMP < data[4]):
             return data[3]
-        elif (TEMP < (data[4] + data[5]) / 2):
+        elif (TEMP < data[5]):
             return data[4]
-        elif (TEMP < (data[5] + data[6]) / 2):
+        elif (TEMP < data[6]):
             return data[5]
-        elif (TEMP < (data[6] + data[7]) / 2):
+        elif (TEMP < data[7]):
             return data[6]
-        elif (TEMP < (data[7] + data[8]) / 2):
+        elif (TEMP < data[8]):
             return data[7]
-        elif (TEMP < (data[8] + data[9]) / 2):
+        elif (TEMP < data[9]):
             return data[8]
-        elif (TEMP < (data[9] + data[10]) / 2):
+        elif (TEMP < data[10]):
             return data[9]
         else:
             return data[10]
 
-    def DF_TEMP_EMBRITTLE(self):
+    def DF_TEMP_EMBRITTLE(self,i):
         if (self.TEMPER_SUSCEP or (self.CARBON_ALLOY and not (self.MAX_OP_TEMP < 343 or self.MIN_OP_TEMP > 577))):
-            TEMP_EMBRITTLE = min(self.MIN_DESIGN_TEMP, self.MIN_OP_TEMP) - (self.REF_TEMP + self.DELTA_FATT)
+            TEMP_EMBRITTLE = 0
+            if (self.PRESSSURE_CONTROL):
+                TEMP_EMBRITTLE = self.MIN_TEMP_PRESSURE - (self.REF_TEMP + self.DELTA_FATT)
+            else:
+                TEMP_EMBRITTLE = min(self.MIN_DESIGN_TEMP, self.CRITICAL_TEMP) - (self.REF_TEMP + self.DELTA_FATT)
             if (self.PWHT):
                 return DAL_CAL.POSTGRESQL.GET_TBL_215(self.API_TEMP(TEMP_EMBRITTLE),
                                                      self.API_SIZE_BRITTLE(self.BRITTLE_THICK))
@@ -1944,66 +1963,82 @@ class DM_CAL:
         else:
             return 0
 
-    # Calculate 885
-    def DF_885(self):
+    # Calculate 885w
+    def DF_885(self,i):
         if (self.CHROMIUM_12 and not (self.MIN_OP_TEMP > 566 or self.MAX_OP_TEMP < 371)):
-            TEMP_885 = min(self.MIN_DESIGN_TEMP, self.MIN_OP_TEMP) - self.REF_TEMP
-            data = [-73, -62, -51, -40, -29, -18, -7, 4, 16, 27, 38]
-            if (TEMP_885 < (data[0] + data[1]) / 2):
-                return 1381
-            elif (TEMP_885 < (data[1] + data[2]) / 2):
-                return 1216
-            elif (TEMP_885 < (data[2] + data[3]) / 2):
-                return 1022
-            elif (TEMP_885 < (data[3] + data[4]) / 2):
-                return 806
-            elif (TEMP_885 < (data[4] + data[5]) / 2):
-                return 581
-            elif (TEMP_885 < (data[5] + data[6]) / 2):
-                return 371
-            elif (TEMP_885 < (data[6] + data[7]) / 2):
-                return 200
-            elif (TEMP_885 < (data[7] + data[8]) / 2):
-                return 87
-            elif (TEMP_885 < (data[8] + data[9]) / 2):
-                return 30
-            elif (TEMP_885 < (data[9] + data[10]) / 2):
-                return 8
+            TEMP_885 = 0
+            if(self.PRESSSURE_CONTROL):
+                TEMP_885 = self.MIN_TEMP_PRESSURE - self.REF_TEMP
             else:
-                return 2
+                TEMP_885 = min(self.MIN_DESIGN_TEMP, self.CRITICAL_TEMP) - self.REF_TEMP
+            data = [-56, -44, -33, -22, -11, 0, 11, 22, 33, 44, 56]
+            if (TEMP_885 < data[0]):
+                return 1381
+            elif (TEMP_885 < data[1]):
+                return 1381
+            elif (TEMP_885 < data[2]):
+                return 1216
+            elif (TEMP_885 < data[3]):
+                return 1022
+            elif (TEMP_885 < data[4]):
+                return 806
+            elif (TEMP_885 < data[5]):
+                return 581
+            elif (TEMP_885 < data[6]):
+                return 371
+            elif (TEMP_885 < data[7]):
+                return 200
+            elif (TEMP_885 < data[8]):
+                return 87
+            elif (TEMP_885 < data[9]):
+                return 30
+            elif (TEMP_885 < data[10]):
+                return 8
+            elif (TEMP_885 == data[10]):
+                return 371
+            else:
+                return 0
         else:
             return 0
 
     # Calculate SIGMA
-    def API_TEMP_SIGMA(self):
+    def API_TEMP_SIGMA(self,MIN_TEM):
         DATA = [-46, -18, 10, 38, 66, 93, 204, 316, 427, 538, 649]
-        if (self.MIN_OP_TEMP < (DATA[0] + DATA[1]) / 2):
+        if (MIN_TEM < DATA[0]):
             TEMP = DATA[0]
-        elif (self.MIN_OP_TEMP < (DATA[1] + DATA[2]) / 2):
+        elif (MIN_TEM < DATA[1]):
+            TEMP = DATA[0]
+        elif (MIN_TEM < DATA[2]):
             TEMP = DATA[1]
-        elif (self.MIN_OP_TEMP < (DATA[2] + DATA[3]) / 2):
+        elif (MIN_TEM < DATA[3]):
             TEMP = DATA[2]
-        elif (self.MIN_OP_TEMP < (DATA[3] + DATA[4]) / 2):
+        elif (MIN_TEM < DATA[4]):
             TEMP = DATA[3]
-        elif (self.MIN_OP_TEMP < (DATA[4] + DATA[5]) / 2):
+        elif (MIN_TEM < DATA[5]):
             TEMP = DATA[4]
-        elif (self.MIN_OP_TEMP < (DATA[5] + DATA[6]) / 2):
+        elif (MIN_TEM < DATA[6]):
             TEMP = DATA[5]
-        elif (self.MIN_OP_TEMP < (DATA[6] + DATA[7]) / 2):
+        elif (MIN_TEM < DATA[7]):
             TEMP = DATA[6]
-        elif (self.MIN_OP_TEMP < (DATA[7] + DATA[8]) / 2):
+        elif (MIN_TEM < DATA[8]):
             TEMP = DATA[7]
-        elif (self.MIN_OP_TEMP < (DATA[8] + DATA[9]) / 2):
+        elif (MIN_TEM < DATA[9]):
             TEMP = DATA[8]
-        elif (self.MIN_OP_TEMP < (DATA[9] + DATA[10]) / 2):
+        elif (MIN_TEM < DATA[10]):
             TEMP = DATA[9]
         else:
             TEMP = DATA[10]
         return TEMP
 
-    def DF_SIGMA(self):
+    def DF_SIGMA(self,i):
         if (self.AUSTENITIC_STEEL and not (self.MIN_OP_TEMP > 927 or self.MAX_OP_TEMP < 593)):
-            TEMP = self.API_TEMP_SIGMA()
+            TEMP_SIGMA  = 0
+            if (self.PRESSSURE_CONTROL):
+                TEMP_SIGMA  = self.MIN_TEMP_PRESSURE
+            else:
+                TEMP_SIGMA  = min(self.MIN_DESIGN_TEMP, self.CRITICAL_TEMP)
+            TEMP = self.API_TEMP_SIGMA(TEMP_SIGMA)
+            DFB_SIGMA = 0
             if (TEMP == 649):
                 if (self.PERCENT_SIGMA < 10):
                     DFB_SIGMA = 0
@@ -2077,6 +2112,8 @@ class DM_CAL:
                     DFB_SIGMA = 34
                 else:
                     DFB_SIGMA = 4196
+            print("Damage Factor:")
+            print(DFB_SIGMA)
             return DFB_SIGMA
         else:
             return 0
@@ -2124,7 +2161,7 @@ class DM_CAL:
                 break
         return check
 
-    def DF_PIPE(self):
+    def DF_PIPE(self,i):
         if (self.checkPiping()):
             if (self.CORRECT_ACTION == "Engineering Analysis"):
                 FCA = 0.002
@@ -2220,26 +2257,26 @@ class DM_CAL:
     def DF_CUI_CLSCC_API(self,i):
         return self.DF_CUI_CLSCC(self.GET_AGE()[14] + i)
 
-    def DF_HTHA_API(self, i):
-        return self.DF_HTHA(self.GET_AGE()[13] + i)
+    def DF_HTHA_API(self, i):#chua test dc
+        return self.DF_HTHA(self.GET_AGE()[15] + i)
 
-    def DF_BRITTLE_API(self):
-        return  self.DF_BRITTLE()
+    def DF_BRITTLE_API(self, i):
+        return  self.DF_BRITTLE(self.GET_AGE()[16] + i)
 
-    def DF_TEMP_EMBRITTLE_API(self):
-        return self.DF_TEMP_EMBRITTLE()
+    def DF_TEMP_EMBRITTLE_API(self,i):
+        return self.DF_TEMP_EMBRITTLE(self.GET_AGE()[17] + i)
 
-    def DF_885_API(self):
-        return self.DF_885()
+    def DF_885_API(self,i):
+        return self.DF_885(self.GET_AGE()[18] + i)
 
-    def DF_SIGMA_API(self):
-        return self.DF_SIGMA()
+    def DF_SIGMA_API(self,i):
+        return self.DF_SIGMA(self.GET_AGE()[19] + i)
 
-    def DF_PIPE_API(self):
-        return self.DF_PIPE()
+    def DF_PIPE_API(self,i):
+        return self.DF_PIPE(self.GET_AGE()[20] + i)
 
     # TOTAL ---------------------
-    def DF_SSC_TOTAL_API(self, i):#dang test
+    def DF_SSC_TOTAL_API(self, i):#done - con anie
         DF_SCC = max(self.DF_CAUTISC_API(i), self.DF_AMINE_API(i), self.DF_SULPHIDE_API(i), self.DF_HIC_SOHIC_HF_API(i), self.DF_HICSOHIC_H2S_API(i),
                      self.DF_CACBONATE_API(i), self.DF_PTA_API(i), self.DF_CLSCC_API(i), self.DF_HSCHF(i))
         return DF_SCC
@@ -2248,8 +2285,8 @@ class DM_CAL:
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(i), self.DF_CUI_CLSCC_API(i))
         return DF_EXT
 
-    def DF_BRIT_TOTAL_API(self):
-        DF_BRIT = max(self.DF_BRITTLE_API() + self.DF_TEMP_EMBRITTLE_API(), self.DF_SIGMA_API(), self.DF_885_API())
+    def DF_BRIT_TOTAL_API(self,i):#done
+        DF_BRIT = max(self.DF_BRITTLE_API(i) + self.DF_TEMP_EMBRITTLE_API(i), self.DF_SIGMA_API(i), self.DF_885_API(i))
         return DF_BRIT
 
     def DF_THINNING_TOTAL_API(self, i):#done
@@ -2262,16 +2299,16 @@ class DM_CAL:
         except Exception as e:
             print(e)
 
-    def DF_TOTAL_API(self,i):
+    def DF_TOTAL_API(self,i):#testing df_htha
         try:
-            TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i),self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API() + self.DF_PIPE_API()
+            TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i),self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
         except Exception as e:
             print(e)
         return TOTAL_DF_API
 
-    def DF_TOTAL_GENERAL(self, i):
+    def DF_TOTAL_GENERAL(self, i):#testing df_htha
         TOTAL_DF_API = self.DF_THINNING_TOTAL_API(i) + self.DF_EXT_TOTAL_API(i) + self.DF_SSC_TOTAL_API(
-            i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API() + self.DF_PIPE_API()
+            i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
         return TOTAL_DF_API
 
     def convertRisk(self,risk):
@@ -2331,11 +2368,11 @@ class DM_CAL:
         DF_ITEM[13] = self.DF_EXTERN_CLSCC_API(0)
         DF_ITEM[14] = self.DF_CUI_CLSCC_API(0)
         DF_ITEM[15] = self.DF_HTHA_API(0)
-        DF_ITEM[16] = self.DF_BRITTLE_API()
-        DF_ITEM[17] = self.DF_TEMP_EMBRITTLE_API()
-        DF_ITEM[18] = self.DF_885_API()
-        DF_ITEM[19] = self.DF_SIGMA_API()
-        DF_ITEM[20] = self.DF_PIPE_API()
+        DF_ITEM[16] = self.DF_BRITTLE_API(0)
+        DF_ITEM[17] = self.DF_TEMP_EMBRITTLE_API(0)
+        DF_ITEM[18] = self.DF_885_API(0)
+        DF_ITEM[19] = self.DF_SIGMA_API(0)
+        DF_ITEM[20] = self.DF_PIPE_API(0)
         for i in range(0,21):
             if DF_ITEM[i] > 1:
                 data_return = {}

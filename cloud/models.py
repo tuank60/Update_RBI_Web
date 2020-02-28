@@ -753,6 +753,17 @@ class RwInspectionHistory(models.Model):
         ordering = ('id',)
 
 
+class InspecPlan(models.Model):
+    id = models.AutoField(db_column='PlanID', primary_key=True)  # Field name made lowercase.
+    inspectionplanname = models.CharField(db_column='InspPlanName', max_length=100, blank=True,null=True)  # Field name made lowercase.
+    inspectiondate = models.DateTimeField(db_column='InspPlanDate', blank=True,null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'inspection_plan'
+        ordering = ('id',)
+
+
 class RwMaterial(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
     materialname = models.CharField(db_column='MaterialName', max_length=100, blank=True, null=True)  # Field name made lowercase.
