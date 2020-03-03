@@ -1,4 +1,8 @@
 import os
+
+import xlrd
+import math
+
 from django.core.wsgi import get_wsgi_application
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'RbiCloud.settings'
@@ -9,109 +13,49 @@ from xlrd import open_workbook
 from django.shortcuts import Http404
 from cloud import models
 from datetime import datetime
+import datetime
 
-# def checkEquipmentComponentExist(equipmentNumber,componentNumber):
-#     try:
-#         eq = models.EquipmentMaster.objects.get(equipmentnumber= equipmentNumber)
-#         count = models.ComponentMaster.objects.filter(equipmentid= eq.equipmentid, componentnumber= componentNumber).exists()
-#         return count
-#     except:
-#         return False
 def checkEquipmentComponentExist(equipmentNumber,componentNumber):
     try:
-        print("checkEquipmentComponentExist")
-        print(equipmentNumber)
-        print(componentNumber)
-        eq = models.EquipmentMaster.objects.filter(equipmentnumber=equipmentNumber)
-        # print(eq)
-        com = models.ComponentMaster.objects.filter(componentnumber=componentNumber)
-        # print(count)
-        for x in eq:
-            print("bat dau")
-            print(x.equipmentid)
-            for y in com:
-                print("tiep theo")
-                print(y.equipmentid)
-                if(x.equipmentid==y.equipmentid):
-                    print("ton tai eq")
+        eq = models.EquipmentMaster.objects.get(equipmentnumber=equipmentNumber)
+        count = models.ComponentMaster.objects.filter(equipmentid = eq.equipmentid,componentnumber=componentNumber).exists()
+        return count
     except Exception as e:
         print(e)
-        # return False
+        print("bug")
+        return False
 
-def getInspSummary(coverage1, coverage2, coverage3, method1, method2, method3, intrusive):
-    if (method1 == "Crack Detection" or method1=="Leak Detection"):
-        method1a = "Aucoustic Emission"
-    elif (method1 == "ACFM" or method1 == "Low frequency" or method1 == "Pulsed" or method1 == "Remote field" or method1 == "Standard (flat coil)"):
-        method1a = "Eddy Current"
-    elif (method1 == "Magnetic Flourescent Inspection" or method1 == "Magnetic Flux Leakage" or method1 == "Magnetic Partide Inspection"):
-        method1a = "Magnetic"
-    elif (method1 == "Hardness Surveys" or method1 == "Microstructure Replication"):
-        method1a = "Metallurgical"
-    elif (method1 == "On-line Monitoring"):
-        method1a = "Monitoring"
-    elif (method1 == "Liquid Penetrant Inspection" or method1 == "Penetrant Leak Detection"):
-        method1a = "Penetrant"
-    elif (method1 == "Compton Scatter" or method1 == "Gamma Radiography" or method1 == "Real-time Radiography" or method1 == "X-Radiography"):
-        method1a = "Radiography"
-    elif (method1 == "Passive Thermography" or method1 == "Transient Thermography"):
-        method1a = "Thermography"
-    elif (method1 == "Advanced Ultrasonic Backscatter Technique" or method1 == "Angled Compression Wave" or method1 == "Angled Shear ware" or method1 == "A-scan Thickness Survey" or method1 == "B-scan" or method1 == "Chime" or
-              method1 == "C-scan" or method1 == "Digital Ultrasonic Thickness Gauge" or method1 == "Internal Rotational Inspection System" or method1 == "Lorus" or
-                method1 == "Surface Waves" or method1 == "Teletest" or method1 == "TOFD"):
-        method1a = "Ultrasonic"
-    elif (method1 == "Endoscopy" or method1 == "Holiday" or method1 == "Hydrotesting" or method1 == "Naked Eye" or method1 == "Video"):
-        method1a = "Visual"
-    method1sum = intrusive + " " + method1a + " " + method1 + "-"+str(coverage1) + "%"
+def convertInt(floatnumber):
+    try:
+        return int(floatnumber)
+    except:
+        return 0
 
-    if method2 == "Crack Detection" or method2 == "Leak Detection":
-        method2a = "Aucoustic Emission"
-    elif method2 == "ACFM" or method2 == "Low frequency" or method2 == "Pulsed" or method2 == "Remote field" or method2 == "Standard (flat coil)":
-        method2a = "Eddy Current"
-    elif method2 == "Magnetic Flourescent Inspection" or method2 == "Magnetic Flux Leakage" or method2 == "Magnetic Partide Inspection":
-        method2a = "Magnetic"
-    elif method2 == "Hardness Surveys" or method2 == "Microstructure Replication":
-        method2a = "Metallurgical"
-    elif method2 == "On-line Monitoring":
-        method2a = "Monitoring"
-    elif method2 == "Liquid Penetrant Inspection" or method2 == "Penetrant Leak Detection":
-        method2a = "Penetrant"
-    elif method2 == "Compton Scatter" or method2 == "Gamma Radiography" or method2 == "Real-time Radiography" or method2 == "X-Radiography":
-        method2a = "Radiography"
-    elif method2 == "Passive Thermography" or method2 == "Transient Thermography":
-        method2a = "Thermography"
-    elif (method2 == "Advanced Ultrasonic Backscatter Technique" or method2 == "Angled Compression Wave" or method2 == "Angled Shear ware" or method2 == "A-scan Thickness Survey" or method2 == "B-scan" or method2 == "Chime" or
-             method2 == "C-scan" or method2 == "Digital Ultrasonic Thickness Gauge" or method2 == "Internal Rotational Inspection System" or method2 == "Lorus" or
-                    method2 == "Surface Waves" or method2 == "Teletest" or method2 == "TOFD"):
-        method2a = "Ultrasonic"
-    elif method2 == "Endoscopy" or method2 == "Holiday" or method2 == "Hydrotesting" or method2 == "Naked Eye" or method2 == "Video":
-        method2a = "Visual"
-    method2sum = intrusive + " " + method2a + " " + method2 + "-" + str(coverage2) + "%"
+def getDMItemID(damagename):
+    try:
+        dmitem = models.DMItems.objects.get(dmdescription=damagename)
+        return dmitem.dmitemid
+    except Exception as e:
+        print(e)
+        print("exception at getDMItemID")
 
-    if method3 == "Crack Detection" or method3 == "Leak Detection":
-        method3a = "Aucoustic Emission"
-    elif method3 == "ACFM" or method3 == "Low frequency" or method3 == "Pulsed" or method3 == "Remote field" or method3 == "Standard (flat coil)":
-        method3a = "Eddy Current"
-    elif method3 == "Magnetic Flourescent Inspection" or method3 == "Magnetic Flux Leakage" or method3 == "Magnetic Partide Inspection":
-        method3a = "Magnetic"
-    elif method3 == "Hardness Surveys" or method3 == "Microstructure Replication":
-        method3a = "Metallurgical"
-    elif method3 == "On-line Monitoring":
-        method3a = "Monitoring"
-    elif method3 == "Liquid Penetrant Inspection" or method3 == "Penetrant Leak Detection":
-        method3a = "Penetrant"
-    elif method3 == "Compton Scatter" or method3 == "Gamma Radiography" or method3 == "Real-time Radiography" or method3 == "X-Radiography":
-        method3a = "Radiography"
-    elif method3 == "Passive Thermography" or method3 == "Transient Thermography":
-        method3a = "Thermography"
-    elif (
-                                                        method3 == "Advanced Ultrasonic Backscatter Technique" or method3 == "Angled Compression Wave" or method3 == "Angled Shear ware" or method3 == "A-scan Thickness Survey" or method3 == "B-scan" or method3 == "Chime" or
-                                    method3 == "C-scan" or method3 == "Digital Ultrasonic Thickness Gauge" or method3 == "Internal Rotational Inspection System" or method3 == "Lorus" or
-                    method3 == "Surface Waves" or method3 == "Teletest" or method3 == "TOFD"):
-        method3a = "Ultrasonic"
-    elif method3 == "Endoscopy" or method3 == "Holiday" or method3 == "Hydrotesting" or method3 == "Naked Eye" or method3 == "Video":
-        method3a = "Visual"
-    method3sum = intrusive + " " + method3a + " " + method3 + "-" + str(coverage3) + "%"
-    return method1sum + "\n" + "AND" + method2sum + "\n" + "AND" + method3sum
+def xldate_to_datetime(xldatetime):  # something like 43705.6158241088
+    try:
+        tempDate = datetime.datetime(1899, 12, 31)
+        (days, portion) = math.modf(xldatetime)
+
+        deltaDays = datetime.timedelta(days=days)
+        # changing the variable name in the edit
+        secs = int(24 * 60 * 60 * portion)
+        detlaSeconds = datetime.timedelta(seconds=secs)
+        TheTime = (tempDate + deltaDays + detlaSeconds)
+        timeinsp = TheTime.strftime("%Y-%m-%d %H:%M:%S")
+        inspdatetime = datetime.datetime.strptime(timeinsp, "%Y-%m-%d %H:%M:%S")
+        return inspdatetime
+    except Exception as e:
+        print("error in xldate")
+        print(e)
+
 
 def checkDate(datestring):
     try:
@@ -130,7 +74,9 @@ def convertDateInsp(dateString):
     try:
         seconds = (dateString - 25569) * 86400
         return datetime.utcfromtimestamp(seconds)
-    except:
+    except Exception as e:
+        print(e)
+        print("error here")
         return datetime.now().date()
 
 def convertTF(data):
@@ -145,25 +91,96 @@ def convertFloat(data):
     except:
         return 0
 
-# def importInspectionPlan(filename):
-#     try:
-#         excel = open_workbook(filename)
-#         ws = excel.sheet_by_name('Inspections')
-#         rowdata = ws.nrows
-#         coldata = ws.ncols
-#         if coldata == 8:
-#             for row in range(1,rowdata):
-#                 if ws.cell(row,2).value and ws.cell(row,3).value and ws.cell(row,4).value and ws.cell(row,6).value and ws.cell(row,7).value:
-#                     if checkEquipmentComponentExist(ws.cell_value(row,2), ws.cell_value(row,3)):
-#                         his = models.RwInspectionHistory(inspectionplanname=ws.cell(row,0).value, inspectioncoveragename=ws.cell(row,1).value,
-#                                                          equipmentnumber=ws.cell(row,2).value, componentnumber=ws.cell(row,3).value,
-#                                                          dm=ws.cell(row,4).value, inspectiontype=ws.cell(row,5).value,
-#                                                          inspectiondate=convertDateInsp(ws.cell(row,6).value),
-#                                                          inspectioneffective=ws.cell(row,7).value)
-#                         his.save()
+# def getCoverageID(planid):
+#     return models.InspectionCoverage.objects.get(planid=planid).id
 #
-#     except:
-#         raise Http404
+
+method1a = ''
+method2a = ''
+method3a = ''
+def getInspSummary(coverage1, coverage2, coverage3, method1, method2, method3, intrusive):
+    try:
+        global method1a, method2a, method3a
+        if (method1 == 'Crack Detection' or method1 == 'Leak Detection'):
+            method1a = 'Aucoustic Emission'
+        elif (method1 == 'ACFM' or method1 == 'Low frequency' or method1 == 'Pulsed' or method1 == 'Remote field' or method1 == 'Standard (flat coil)'):
+            method1a = 'Eddy Current'
+        elif (method1 == 'Magnetic Fluorescent Inspection' or method1 == 'Magnetic Flux Leakage' or method1 == 'Magnetic Particle Inspection'):
+            method1a = 'Magnetic'
+        elif (method1 == 'Hardness Surveys' or method1 == 'Microstructure Replication'):
+            method1a = 'Metallurgical'
+        elif (method1 == 'On-line Monitoring'):
+            method1a = 'Monitoring'
+        elif (method1 == 'Liquid Penetrant Inspection' or method1 == 'Penetrant Leak Detection'):
+            method1a = 'Penetrant'
+        elif (method1 == 'Compton Scatter' or method1 == 'Gamma Radiography' or method1 == 'Real-time Radiography' or method1 == 'X-Radiography'):
+             method1a = 'Radiography'
+        elif (method1 == 'Passive Thermography' or method1 == 'Transient Thermography'):
+            method1a = 'Thermography'
+        elif (method1 == 'Advanced Ultrasonic Backscatter Technique' or method1 == 'Angled Compression Wave' or method1 == 'Angled Shear Wave' or method1 == 'A-scan Thickness Survey' or method1 == 'B-scan' or method1 == 'Chime' or
+              method1 == 'C-scan' or method1 == 'Digital Ultrasonic Thickness Gauge' or method1 == 'Internal Rotational Inspection System' or method1 == 'Lorus' or
+                method1 == 'Surface Waves' or method1 == 'Teletest' or method1 == 'TOFD'):
+              method1a = 'Ultrasonic'
+        else:
+            method1a = 'Visual'
+
+        method1sum = intrusive + " " + method1a + " " + method1 + "-"+str(coverage1) + "%"
+
+        if (method2 == 'Crack Detection' or method2 == 'Leak Detection'):
+            method2a = 'Aucoustic Emission'
+        elif (method2 == 'ACFM' or method2 == 'Low frequency' or method2 == 'Pulsed' or method2 == 'Remote field' or method2 == 'Standard (flat coil)'):
+            method2a = 'Eddy Current'
+        elif (method2 == 'Magnetic Fluorescent Inspection' or method2 == 'Magnetic Flux Leakage' or method2 == 'Magnetic Particle Inspection'):
+            method2a = 'Magnetic'
+        elif (method2 == 'Hardness Surveys' or method2 == 'Microstructure Replication'):
+            method2a = 'Metallurgical'
+        elif (method2 == 'On-line Monitoring'):
+            method2a = 'Monitoring'
+        elif (method2 == 'Liquid Penetrant Inspection' or method2 == 'Penetrant Leak Detection'):
+            method2a = 'Penetrant'
+        elif (method2 == 'Compton Scatter' or method2 == 'Gamma Radiography' or method2 == 'Real-time Radiography' or method2 == 'X-Radiography'):
+             method2a = 'Radiography'
+        elif (method2 == 'Passive Thermography' or method2 == 'Transient Thermography'):
+            method2a = 'Thermography'
+        elif (method2 == 'Advanced Ultrasonic Backscatter Technique' or method2 == 'Angled Compression Wave' or method2 == 'Angled Shear Wave' or method2 == 'A-scan Thickness Survey' or method2 == 'B-scan' or method2 == 'Chime' or
+              method2 == 'C-scan' or method2 == 'Digital Ultrasonic Thickness Gauge' or method2 == 'Internal Rotational Inspection System' or method2 == 'Lorus' or
+                method2 == 'Surface Waves' or method2 == 'Teletest' or method2 == 'TOFD'):
+              method2a = 'Ultrasonic'
+        else:
+            method2a = 'Visual'
+        method2sum = intrusive + " " + method2a + " " + method2 + "-" + str(coverage2) + "%"
+
+        if (method3 == 'Crack Detection' or method3 == 'Leak Detection'):
+            method3a = 'Aucoustic Emission'
+        elif (
+                            method3 == 'ACFM' or method3 == 'Low frequency' or method3 == 'Pulsed' or method3 == 'Remote field' or method3 == 'Standard (flat coil)'):
+            method3a = 'Eddy Current'
+        elif (
+                    method3 == 'Magnetic Fluorescent Inspection' or method3 == 'Magnetic Flux Leakage' or method3 == 'Magnetic Particle Inspection'):
+            method3a = 'Magnetic'
+        elif (method3 == 'Hardness Surveys' or method3 == 'Microstructure Replication'):
+            method3a = 'Metallurgical'
+        elif (method3 == 'On-line Monitoring'):
+            method3a = 'Monitoring'
+        elif (method3 == 'Liquid Penetrant Inspection' or method3 == 'Penetrant Leak Detection'):
+            method3a = 'Penetrant'
+        elif (
+                        method3 == 'Compton Scatter' or method3 == 'Gamma Radiography' or method3 == 'Real-time Radiography' or method3 == 'X-Radiography'):
+            method3a = 'Radiography'
+        elif (method3 == 'Passive Thermography' or method3 == 'Transient Thermography'):
+            method3a = 'Thermography'
+        elif (
+                                                            method3 == 'Advanced Ultrasonic Backscatter Technique' or method3 == 'Angled Compression Wave' or method3 == 'Angled Shear Wave' or method3 == 'A-scan Thickness Survey' or method3 == 'B-scan' or method3 == 'Chime' or
+                                        method3 == 'C-scan' or method3 == 'Digital Ultrasonic Thickness Gauge' or method3 == 'Internal Rotational Inspection System' or method3 == 'Lorus' or
+                        method3 == 'Surface Waves' or method3 == 'Teletest' or method3 == 'TOFD'):
+            method3a = 'Ultrasonic'
+        else:
+            method3a = 'Visual'
+        method3sum = intrusive + " " + method3a + " " + method3 + "-" + str(coverage3) + "%"
+        return method1sum + "\n" + "AND" +" "+ method2sum + "\n" + "AND" +" "+ method3sum
+    except Exception as e:
+        print(e)
+        print("exception at getSum")
 
 def importInspectionPlan(filename):
     try:
@@ -173,22 +190,11 @@ def importInspectionPlan(filename):
         coldata = ws.ncols
         if coldata == 13:
             for row in range(1,rowdata):
-                print(ws.cell(row,1).value)
-                print(ws.cell(row,2).value)
                 if ws.cell(row,1).value and ws.cell(row,2).value and ws.cell(row,3).value and ws.cell(row,11).value and ws.cell(row,12).value:
-                    if checkEquipmentComponentExist(int(ws.cell(row,1).value),int(ws.cell(row,2).value)): ##error here
-
-
-                        # inspcoverage = models.InspectionCoverage.objects.get(planid= ws.cell(row,0).value, equipmentid=getEquipmentID(ws.cell(row,1).value),
-                        #                                                      componentid=getComponentID(ws.cell(row,2).value))
-                        # coverageid = getCoverageID(ws.cell(row, 0).value), dmitemid = getDMItemID(
-                        #     ws.cell(row, 3).value),
-                        his = models.InspectionCoverageDetail.objects.get(
-                                                                           inspectiondate=convertDateInsp(ws.cell(row,11).value), effcode=ws.cell(row,12).value,
-                                                                            inspsummary=getInspSummary(ws.cell(row,5).value,ws.cell(row,7).value,ws.cell(row,9).value,ws.cell(row,4).value,ws.cell(row,6).value,ws.cell(row,8).value,ws.cell(row,10).value)
-                                                                          )
-
-                        # inspcoverage.save()
+                    if checkEquipmentComponentExist(convertInt(ws.cell_value(row,1)),convertInt(ws.cell_value(row,2))):
+                        his = models.RwInspectionDetail(id = convertInt(ws.cell(row,0).value), inspectiondate = xldate_to_datetime(ws.cell(row,11).value), equipmentid = getEquipmentID(convertInt(ws.cell_value(row,1))),
+                                                             componentid = getComponentID(convertInt(ws.cell_value(row,2))), effcode = ws.cell(row,12).value, inspsum = getInspSummary(ws.cell(row,5).value,ws.cell(row,7).value,ws.cell(row,9).value,ws.cell(row,4).value,ws.cell(row,6).value,ws.cell(row,8).value,ws.cell(row,10).value),
+                                                             dmitemid=getDMItemID(ws.cell_value(row,3)))
                         his.save()
 
     except Exception as e:
@@ -207,6 +213,7 @@ def importInspectionPlan(filename):
 # ------------------------------------------
 
 # kiem tra dieu kien thoa man va dieu kien ton tai cua du lieu
+
 def checkFacilityAvaiable(site, facility):
     try:
         site = models.Sites.objects.get(sitename= site)

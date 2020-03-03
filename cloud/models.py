@@ -238,33 +238,6 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class DmCategory(models.Model):
-    dmcategoryid = models.IntegerField(db_column='DMCategoryID', primary_key=True)  # Field name made lowercase.
-    dmcategoryname = models.CharField(db_column='DMCategoryName', max_length=100, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'dm_category'
-        verbose_name = "Damage Category"
-        ordering = ('dmcategoryid',)
-
-
-class DmItems(models.Model):
-    dmitemid = models.IntegerField(db_column='DMItemID', primary_key=True)  # Field name made lowercase.
-    dmdescription = models.CharField(db_column='DMDescription', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    dmseq = models.IntegerField(db_column='DMSeq', blank=True, null=True)  # Field name made lowercase.
-    dmcategoryid = models.ForeignKey(DmCategory, on_delete=models.CASCADE, db_column='DMCategoryID', blank=True, null=True)  # Field name made lowercase.
-    dmcode = models.CharField(db_column='DMCode', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    hasdf = models.IntegerField(db_column='HasDF',default=0, blank=True, null=True)  # Field name made lowercase.
-    failuremode = models.CharField(db_column='FailureMode', max_length=50, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'dm_items'
-        verbose_name = "Damage Item"
-        ordering = ('dmitemid',)
-
-
 class EquipmentMaster(models.Model):
     equipmentid = models.AutoField(db_column='EquipmentID', primary_key=True)  # Field name made lowercase.
     equipmentnumber = models.CharField(db_column='EquipmentNumber', max_length=100)  # Field name made lowercase.
@@ -753,17 +726,6 @@ class RwInspectionHistory(models.Model):
         ordering = ('id',)
 
 
-class InspecPlan(models.Model):
-    id = models.AutoField(db_column='PlanID', primary_key=True)  # Field name made lowercase.
-    inspectionplanname = models.CharField(db_column='InspPlanName', max_length=100, blank=True,null=True)  # Field name made lowercase.
-    inspectiondate = models.DateTimeField(db_column='InspPlanDate', blank=True,null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'inspection_plan'
-        ordering = ('id',)
-
-
 class RwMaterial(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
     materialname = models.CharField(db_column='MaterialName', max_length=100, blank=True, null=True)  # Field name made lowercase.
@@ -1104,7 +1066,7 @@ class Tbl74SccDmPwht(models.Model):
         verbose_name = "Table 7.4 – SCC Damage Factors – All SCC Mechanism"
 
 class RwDamageMechanism(models.Model):
-    dmitemid = models.ForeignKey(DmItems, on_delete=models.CASCADE, db_column='DMItemID')
+    dmitemid = models.ForeignKey('DmItems', on_delete=models.CASCADE, db_column='DMItemID')
     id_dm = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID_DM',primary_key=True)
     isactive = models.IntegerField(default=1, db_column='IsActive')
     notes = models.TextField(db_column='Notes', null=True)
@@ -1310,3 +1272,86 @@ class ZSensor(models.Model):
     class Meta:
         managed = False
         db_table = 'z_sensor'
+
+## inspection plan
+
+class InspecPlan(models.Model):
+    id = models.AutoField(primary_key=True, blank=True, null=False, db_column='PlanID')
+    inspectionplanname = models.CharField(db_column='InspPlanName', blank=True, max_length=150)
+    inspectionplandate = models.DateTimeField(db_column='InspPlanDate', blank=True, null=True)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+    class Meta:
+        managed = False
+        db_table = 'inspection_plan'
+
+# class InspectionCoverage(models.Model):
+#     id = models.AutoField(primary_key=True, blank=True, null= False, db_column='ID')
+#     planid = models.ForeignKey('InspectionPlan',db_column='PlanID', on_delete=models.CASCADE, blank=True, null=True)
+#     equipmentid = models.ForeignKey('EquipmentMaster', db_column='EquipmentID', on_delete=models.CASCADE, blank=True, null=True)
+#     componentid = models.ForeignKey('ComponentMaster', db_column='ComponentID', on_delete=models.CASCADE, blank=True, null=True)
+#     remarks = models.CharField(db_column='Remarks', blank=True, max_length=250, null = True)
+#     findings = models.TextField(db_column='Findings',blank=True, null=True)
+#     findingrtf = models.TextField(db_column='FindingRTF', blank=True, null=True)
+#     created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'inspection_coverage'
+
+class DMCategory(models.Model):
+    dmcategoryid = models.IntegerField(db_column='DMCategoryID', blank=True, null=True)
+    dmcategoryname = models.CharField(db_column='DMCategoryName', blank=True, null=True, max_length=100)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+    class Meta:
+        managed = False
+        db_table = 'dm_category'
+
+class DMItems(models.Model):
+    dmitemid = models.IntegerField(primary_key=True, db_column='DMItemID')
+    dmdescription = models.CharField(db_column='DMDescription', max_length=250, blank=True)
+    dmseq = models.IntegerField(db_column='DMSeq', blank=True, null=True)
+    dmcategoryid = models.IntegerField(db_column='DMCategoryID', blank=True, null=True)
+    dmcode = models.CharField(db_column='DMCode', max_length=50)
+    hasdf = models.IntegerField(db_column='HasDF', blank=True, null=True)
+    hasrule = models.IntegerField(db_column='HasRule', blank=True, null=True)
+    failuremode = models.CharField(db_column='FailureMode', max_length=50)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+    class Meta:
+        managed = False
+        db_table = 'dm_items'
+
+class InspectionCoverageDetail(models.Model):
+    id = models.AutoField(primary_key=True, blank=True, null=False, db_column='ID')
+    coverageid = models.IntegerField(db_column="CoverageID", blank=True, null=True)
+    dmitemid = models.ForeignKey('DMItems', db_column='DMItemID', on_delete=models.CASCADE, blank=True, null=True )
+    inspectiondate = models.DateTimeField(db_column='InspectionDate', blank=True, null=True)
+    effcode = models.CharField(db_column='EffectivenessCode',max_length=50, blank=True, null=True)
+    inspsummary = models.CharField(db_column='InspectionSummary',max_length=500, blank=True, null=True)
+    iscarriedout = models.IntegerField(db_column='IsCarriedOut', blank=True, null=True)
+    carriedoutdate = models.DateTimeField(db_column='CarriedOutDate', blank=True, null=True)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+    class Meta:
+        managed = False
+        db_table = 'inspection_coverage_detail'
+class RwInspectionDetail(models.Model):
+    id = models.IntegerField(blank=True, null=True, db_column='ID')
+    detailid = models.AutoField(db_column='DetailID', blank=True, null=False, primary_key=True)
+    equipmentid = models.IntegerField(db_column='EquipmentID', blank=True, null=True)
+    componentid = models.IntegerField(db_column='ComponentID', blank=True, null=True)
+    coverageiddetail = models.IntegerField(db_column='Coverage_DetailID', blank=True, null=True)
+    inspplanname = models.CharField(db_column='InspPlanName', blank=True, null=True, max_length=150)
+    inspectiondate = models.DateTimeField(db_column='InspectionDate',blank=True, null=True )
+    dmitemid = models.IntegerField(db_column='DMItemID', blank=True, null=True)
+    effcode = models.CharField(db_column='EffectivenessCode', max_length=50, blank=True, null=True)
+    inspsum = models.CharField(db_column='InspectionSummary', blank=True, null=True, max_length=500)
+    iscarriedout = models.IntegerField(db_column='IsCarriedOut', blank=True, null=True)
+    carriedoutdate = models.DateTimeField(db_column='CarriedOutDate', blank=True, null=True)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
+
+    class Meta:
+        managed = False
+        db_table = 'rw_inspection_detail'
