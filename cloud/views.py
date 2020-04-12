@@ -1212,8 +1212,8 @@ def NewProposal(request, componentID):
                                       nominalthickness=data['normalthick'], currentthickness=data['currentthick'],
                                       minreqthickness=data['tmin'], currentcorrosionrate=data['currentrate'],
                                       branchdiameter=data['branchDiameter'], branchjointtype=data['joinTypeBranch'],
-                                      brinnelhardness=data['MaxBrinell']
-                                      , deltafatt=data['deltafatt'], chemicalinjection=chemicalInj,
+                                      brinnelhardness=data['MaxBrinell'],brittlefracturethickness=data['BrittleFacture'],
+                                      deltafatt=data['deltafatt'], chemicalinjection=chemicalInj,
                                       highlyinjectioninsp=HFICI, complexityprotrusion=data['complex'],
                                       correctiveaction=data['correctActionMitigate'], crackspresent=crackpresent,
                                       cyclicloadingwitin15_25m=data['CylicLoad'],
@@ -1269,7 +1269,7 @@ def NewProposal(request, componentID):
             rwmaterial = models.RwMaterial(id=rwassessment, corrosionallowance=data['CA'], materialname=data['material'],
                                     designpressure=data['designPressure'], designtemperature=data['maxDesignTemp'],
                                     mindesigntemperature=data['minDesignTemp'],
-                                    brittlefracturethickness=data['BrittleFacture'], sigmaphase=data['sigmaPhase'],
+                                    sigmaphase=data['sigmaPhase'],
                                     sulfurcontent=data['sulfurContent'], heattreatment=data['heatTreatment'],
                                     referencetemperature=data['tempRef'],
                                     ptamaterialcode=data['PTAMaterialGrade'],
@@ -1317,6 +1317,7 @@ def NewTank(request, componentID):
             data['assessmentName'] = request.POST.get('AssessmentName')
             data['assessmentdate'] = request.POST.get('assessmentdate')
             data['riskperiod'] = request.POST.get('RiskAnalysisPeriod')
+            data['assessmentmethod'] = request.POST.get('AssessmentMethod')
             data['apicomponenttypeid'] = models.ApiComponentType.objects.get(apicomponenttypeid= comp.apicomponenttypeid).apicomponenttypename
             data['equipmenttype'] = models.EquipmentType.objects.get(equipmenttypeid= eq.equipmenttypeid_id).equipmenttypename
             # Data Equipment Properties
@@ -1418,8 +1419,9 @@ def NewTank(request, componentID):
             data['currentThick'] = request.POST.get('CurrentThickness')
             data['minRequireThick'] = request.POST.get('MinReqThick')
             data['currentCorrosion'] = request.POST.get('CurrentCorrosionRate')
-            data['shellHieght'] = request.POST.get('shellHeight')
-
+            data['ComponentVolume'] = request.POST.get('CompVolume')
+            data['WeldJointEff'] = request.POST.get('WeldJointEff')
+            data['HeightEShellC'] = request.POST.get('HeightEShellC')
             if request.POST.get('MinStructural'):
                 minstruc = 1
             else:
@@ -1448,6 +1450,36 @@ def NewTank(request, componentID):
                 concreteFoundation = 1
             else:
                 concreteFoundation = 0
+
+            if request.POST.get('P1AndP3'):
+                p1andp3 = 1
+            else:
+                p1andp3 = 0
+
+            if request.POST.get('EquipmentRequirements'):
+                equipmentrequire = 1
+            else:
+                equipmentrequire = 0
+
+            if request.POST.get('OperatingConditions'):
+                operatingcondition = 1
+            else:
+                operatingcondition = 0
+
+            if request.POST.get('CETtheMAWP'):
+                cet = 1
+            else:
+                cet =0
+
+            if request.POST.get('CyclicService'):
+                cyclicservice = 1
+            else:
+                cyclicservice = 0
+
+            if request.POST.get('EquipmentorCircuit'):
+                equipmentorCircuit = 1
+            else:
+                equipmentorCircuit = 0
 
             data['maxBrinnelHardness'] = request.POST.get('MBHW')
             data['complexProtrusion'] = request.POST.get('ComplexityProtrusions')
@@ -1480,7 +1512,8 @@ def NewTank(request, componentID):
             data['allowStress'] = request.POST.get('ASAT')
             data['brittleThick'] = request.POST.get('BFGT')
             data['corrosionAllow'] = request.POST.get('CorrosionAllowance')
-
+            data['yieldstrength'] = request.POST.get('YieldStrength')
+            data['tensilestrength'] = request.POST.get('TensileStrength')
             if request.POST.get('CoLAS'):
                 carbonLowAlloySteel = 1
             else:
@@ -1536,7 +1569,7 @@ def NewTank(request, componentID):
                 internalCladding = 1
             else:
                 internalCladding = 0
-            data['claddingthickness'] = request.POST.get('CladdingThickness')
+            data['CladdingThinkness'] = request.POST.get('CladdingThinkness')
             data['cladCorrosion'] = request.POST.get('CladdingCorrosionRate')
 
             if request.POST.get('InternalLining'):
@@ -1559,7 +1592,6 @@ def NewTank(request, componentID):
 
             data['extInsulationType'] = request.POST.get('ExternalInsulationType')
             data['insulationCondition'] = request.POST.get('InsulationCondition')
-
             # Stream
             data['fluid'] = request.POST.get('Fluid')
             data['fluidHeight'] = request.POST.get('FluidHeight')
@@ -1638,7 +1670,7 @@ def NewTank(request, componentID):
                 apiFluid = "C25+"
             rwassessment = models.RwAssessment(equipmentid_id=comp.equipmentid_id, componentid_id=comp.componentid, assessmentdate=data['assessmentdate'],
                                         riskanalysisperiod=data['riskperiod'],
-                                        isequipmentlinked=comp.isequipmentlinked, proposalname=data['assessmentName'])
+                                        isequipmentlinked=comp.isequipmentlinked, proposalname=data['assessmentName'],assessmentmethod = data['assessmentmethod'])
             rwassessment.save()
             rwequipment = models.RwEquipment(id=rwassessment, commissiondate= eq.commissiondate,
                                       adminupsetmanagement=adminControlUpset,
@@ -1664,13 +1696,20 @@ def NewTank(request, componentID):
                                 nominalthickness=data['NominalThickness'], currentthickness=data['currentThick'],
                                 minreqthickness=data['minRequireThick'],
                                 currentcorrosionrate=data['currentCorrosion'],
-                                shellheight=data['shellHieght'], damagefoundinspection=damageFound,
-                                crackspresent=crackPresence,
+                                shellheight=data['HeightEShellC'], damagefoundinspection=damageFound,
+                                crackspresent=crackPresence, componentvolume=data['ComponentVolume'],
+                                weldjointefficiency=data['WeldJointEff'],
                                 #trampelements=trampElements,
+                                brittlefracturethickness=data['brittleThick'],
                                 releasepreventionbarrier=preventBarrier, concretefoundation=concreteFoundation,
                                 brinnelhardness=data['maxBrinnelHardness'],structuralthickness=data['structuralthickness'],
                                 complexityprotrusion=data['complexProtrusion'],minstructuralthickness= minstruc,
-                                severityofvibration=data['severityVibration'],confidencecorrosionrate = data['confidencecr'])
+                                severityofvibration=data['severityVibration'],
+                                fabricatedsteel=p1andp3, equipmentsatisfied=equipmentrequire,
+                                nominaloperatingconditions=operatingcondition,
+                                cetgreaterorequal=cet, cyclicservice=cyclicservice,
+                                equipmentcircuitshock=equipmentorCircuit,
+                                confidencecorrosionrate = data['confidencecr'])
             rwcomponent.save()
             rwstream = models.RwStream(id=rwassessment, maxoperatingtemperature=data['maxOT'], maxoperatingpressure=data['maxOP'],
                                 minoperatingtemperature=data['minOT'], minoperatingpressure=data['minOP'],
@@ -1706,7 +1745,7 @@ def NewTank(request, componentID):
                                insulationcontainschloride=InsulationContainChloride,
                                externalinsulationtype=data['extInsulationType'],
                                insulationcondition=data['insulationCondition'],
-                                claddingthickness = data['claddingthickness']
+                                claddingthickness = data['CladdingThinkness']
                                )
             rwcoat.save()
             rwmaterial = models.RwMaterial(id=rwassessment, materialname=data['materialName'],
@@ -1714,16 +1753,15 @@ def NewTank(request, componentID):
                                     mindesigntemperature=data['minDesignTemp'], designpressure=data['designPressure'],
                                     referencetemperature=data['refTemp'],
                                     #allowablestress=data['allowStress'],
-                                    brittlefracturethickness=data['brittleThick'],
                                     corrosionallowance=data['corrosionAllow'],
                                     carbonlowalloy=carbonLowAlloySteel, austenitic=austeniticSteel, nickelbased=nickelAlloy,
                                     chromemoreequal12=chromium,
                                     sulfurcontent=data['sulfurContent'], heattreatment=data['heatTreatment'],
                                     ispta=materialPTA, ptamaterialcode=data['PTAMaterialGrade'],
-                                    costfactor=data['materialCostFactor'])
+                                    costfactor=data['materialCostFactor'],yieldstrength=data['yieldstrength'],tensilestrength= data['tensilestrength'])
             rwmaterial.save()
             rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=data['fluidHeight'],
-                                      shell_course_height=data['shellHieght'],
+                                      shell_course_height=data['HeightEShellC'],
                                       tank_diametter=data['tankDiameter'], prevention_barrier=preventBarrier,
                                       environ_sensitivity=data['EnvSensitivity'],
                                       p_lvdike=data['fluidLeaveDike'], p_offsite=data['fluidOffsite'],
@@ -1731,6 +1769,7 @@ def NewTank(request, componentID):
                                       tank_fluid=data['fluid'], api_fluid=apiFluid, sw=data['distance'],
                                       productioncost=data['productionCost'])
             rwinputca.save()
+            print()
             # Customize Caculate Here
             ReCalculate.ReCalculate(rwassessment.id)
             return redirect('damgeFactor', proposalID=rwassessment.id)
@@ -2213,6 +2252,7 @@ def EditProposal(request, proposalID):
             rwcomponent.cyclicservice=cyclicservice
             rwcomponent.equipmentcircuitshock=equipmentorCircuit
             #rwcomponent.trampelements=TrampElement
+            rwcomponent.brittlefracturethickness = data['BrittleFacture']
             rwcomponent.save()
 
             rwstream.aminesolution=data['AminSolution']
@@ -2276,7 +2316,6 @@ def EditProposal(request, proposalID):
             rwmaterial.designpressure=data['designPressure']
             rwmaterial.designtemperature=data['maxDesignTemp']
             rwmaterial.mindesigntemperature=data['minDesignTemp']
-            rwmaterial.brittlefracturethickness=data['BrittleFacture']
             rwmaterial.sigmaphase=data['sigmaPhase']
             rwmaterial.sulfurcontent=data['sulfurContent']
             rwmaterial.heattreatment=data['heatTreatment']
@@ -2355,11 +2394,15 @@ def EditTank(request, proposalID):
             isshell = True
         if request.method =='POST':
             # Data Assessment
+            data['confidencecr'] = request.POST.get('ConfidenceCR')  # bo sung level of confident for tankbottom
             data['assessmentName'] = request.POST.get('AssessmentName')
             data['assessmentdate'] = request.POST.get('assessmentdate')
             data['riskperiod'] = request.POST.get('RiskAnalysisPeriod')
-            data['apicomponenttypeid'] = models.ApiComponentType.objects.get(apicomponenttypeid= comp.apicomponenttypeid).apicomponenttypename
-            data['equipmenttype'] = models.EquipmentType.objects.get(equipmenttypeid= eq.equipmenttypeid_id).equipmenttypename
+            data['assessmentmethod'] = request.POST.get('AssessmentMethod')
+            data['apicomponenttypeid'] = models.ApiComponentType.objects.get(
+                apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename
+            data['equipmenttype'] = models.EquipmentType.objects.get(
+                equipmenttypeid=eq.equipmenttypeid_id).equipmenttypename
             # Data Equipment Properties
             if request.POST.get('Admin'):
                 adminControlUpset = 1
@@ -2380,7 +2423,6 @@ def EditTank(request, proposalID):
                 steamOutWater = 1
             else:
                 steamOutWater = 0
-
             if request.POST.get('Downtime'):
                 downtimeProtect = 1
             else:
@@ -2454,13 +2496,19 @@ def EditTank(request, proposalID):
             data['onlineMonitor'] = request.POST.get('OnlineMonitoring')
             data['equipmentVolumn'] = request.POST.get('EquipmentVolume')
             # Component Properties
+            data['structuralthickness'] = request.POST.get('StructuralThickness')
             data['tankDiameter'] = request.POST.get('TankDiameter')
             data['NominalThickness'] = request.POST.get('NominalThickness')
             data['currentThick'] = request.POST.get('CurrentThickness')
             data['minRequireThick'] = request.POST.get('MinReqThick')
             data['currentCorrosion'] = request.POST.get('CurrentCorrosionRate')
-            data['shellHieght'] = request.POST.get('shellHeight')
-
+            data['HeightEShellC'] = request.POST.get('HeightEShellC')
+            data['ComponentVolume'] = request.POST.get('CompVolume')
+            data['WeldJointeff'] = request.POST.get('WeldJointEff')
+            if request.POST.get('MinStructural'):
+                minstruc = 1
+            else:
+                minstruc = 0
             if request.POST.get('DFDI'):
                 damageFound = 1
             else:
@@ -2485,6 +2533,36 @@ def EditTank(request, proposalID):
                 concreteFoundation = 1
             else:
                 concreteFoundation = 0
+
+            if request.POST.get('P1AndP3'):
+                p1andp3 = 1
+            else:
+                p1andp3 = 0
+
+            if request.POST.get('EquipmentRequirements'):
+                equipmentrequire = 1
+            else:
+                equipmentrequire = 0
+
+            if request.POST.get('OperatingConditions'):
+                operatingcondition = 1
+            else:
+                operatingcondition = 0
+
+            if request.POST.get('CETtheMAWP'):
+                cet = 1
+            else:
+                cet =0
+
+            if request.POST.get('CyclicService'):
+                cyclicservice = 1
+            else:
+                cyclicservice = 0
+
+            if request.POST.get('EquipmentorCircuit'):
+                equipmentorCircuit = 1
+            else:
+                equipmentorCircuit = 0
 
             data['maxBrinnelHardness'] = request.POST.get('MBHW')
             data['complexProtrusion'] = request.POST.get('ComplexityProtrusions')
@@ -2516,10 +2594,9 @@ def EditTank(request, proposalID):
             data['refTemp'] = request.POST.get('ReferenceTemperature')
             data['allowStress'] = request.POST.get('ASAT')
             data['brittleThick'] = request.POST.get('BFGT')
+            data['corrosionAllow'] = request.POST.get('CorrosionAllowance')
             data['yieldstrength'] = request.POST.get('YieldStrength')
             data['tensilestrength'] = request.POST.get('TensileStrength')
-            data['corrosionAllow'] = request.POST.get('CorrosionAllowance')
-
             if request.POST.get('CoLAS'):
                 carbonLowAlloySteel = 1
             else:
@@ -2575,9 +2652,8 @@ def EditTank(request, proposalID):
                 internalCladding = 1
             else:
                 internalCladding = 0
-
+            data['CladdingThinkness'] = request.POST.get('CladdingThinkness')
             data['cladCorrosion'] = request.POST.get('CladdingCorrosionRate')
-            data['claddingthickness'] = request.POST.get('CladdingThickness')
 
             if request.POST.get('InternalLining'):
                 internalLinning = 1
@@ -2599,7 +2675,6 @@ def EditTank(request, proposalID):
 
             data['extInsulationType'] = request.POST.get('ExternalInsulationType')
             data['insulationCondition'] = request.POST.get('InsulationCondition')
-
             # Stream
             data['fluid'] = request.POST.get('Fluid')
             data['fluidHeight'] = request.POST.get('FluidHeight')
@@ -2678,8 +2753,9 @@ def EditTank(request, proposalID):
                 apiFluid = "C25+"
             rwassessment.assessmentdate=data['assessmentdate']
             rwassessment.proposalname=data['assessmentName']
+            rwassessment.assessmentmethod = data['assessmentmethod']
             rwassessment.save()
-
+            # print("4")
             rwequipment.adminupsetmanagement=adminControlUpset
             rwequipment.cyclicoperation=cylicOp
             rwequipment.highlydeadleginsp=highlyDeadleg
@@ -2707,24 +2783,34 @@ def EditTank(request, proposalID):
             rwequipment.managementfactor=datafaci.managementfactor
             rwequipment.volume=data['equipmentVolumn']
             rwequipment.save()
-
+            # print("5")
             rwcomponent.nominaldiameter=data['tankDiameter']
             rwcomponent.nominalthickness=data['NominalThickness']
             rwcomponent.currentthickness=data['currentThick']
             rwcomponent.minreqthickness=data['minRequireThick']
             rwcomponent.currentcorrosionrate=data['currentCorrosion']
-            rwcomponent.shellheight=data['shellHieght']
+            rwcomponent.shellheight=data['HeightEShellC']
             rwcomponent.damagefoundinspection=damageFound
             rwcomponent.crackspresent=crackPresence
+            rwcomponent.componentvolume = data['ComponentVolume']
+            rwcomponent.weldjointefficiency = data['WeldJointeff']
             #rwcomponent.trampelements=trampElements
+            rwcomponent.structuralthickness=data['structuralthickness']
             rwcomponent.releasepreventionbarrier=preventBarrier
             rwcomponent.concretefoundation=concreteFoundation
             rwcomponent.brinnelhardness=data['maxBrinnelHardness']
             rwcomponent.complexityprotrusion=data['complexProtrusion']
             rwcomponent.severityofvibration=data['severityVibration']
             rwcomponent.allowablestress = data['allowStress']
+            rwcomponent.brittlefracturethickness = data['brittleThick']
+            rwcomponent.fabricatedsteel = p1andp3
+            rwcomponent.equipmentsatisfied = equipmentrequire
+            rwcomponent.nominaloperatingconditions = operatingcondition
+            rwcomponent.cetgreaterorequal = cet
+            rwcomponent.cyclicservice = cyclicservice
+            rwcomponent.equipmentcircuitshock = equipmentorCircuit
             rwcomponent.save()
-
+            # print("6")
             rwstream.maxoperatingtemperature=data['maxOT']
             rwstream.maxoperatingpressure=data['maxOP']
             rwstream.minoperatingtemperature=data['minOT']
@@ -2755,7 +2841,7 @@ def EditTank(request, proposalID):
             rwstream.materialexposedtoclint=materialChlorineIntern
             rwstream.exposedtosulphur=exposedSulfur
             rwstream.save()
-
+            # print("7")
             rwexcor.minus12tominus8=data['OP1']
             rwexcor.minus8toplus6=data['OP2']
             rwexcor.plus6toplus32=data['OP3']
@@ -2767,6 +2853,7 @@ def EditTank(request, proposalID):
             rwexcor.plus162toplus176=data['OP9']
             rwexcor.morethanplus176=data['OP10']
             rwexcor.save()
+            # print("8")
 
             rwcoat.internalcoating=internalCoating
             rwcoat.externalcoating=externalCoating
@@ -2775,7 +2862,7 @@ def EditTank(request, proposalID):
             rwcoat.supportconfignotallowcoatingmaint=supportCoatingMaintain
             rwcoat.internalcladding=internalCladding
             rwcoat.claddingcorrosionrate=data['cladCorrosion']
-            rwcoat.claddingthickness=data['CladdingThickness']
+            rwcoat.claddingthickness=data['CladdingThinkness']
             rwcoat.internallining=internalLinning
             rwcoat.internallinertype=data['internalLinnerType']
             rwcoat.internallinercondition=data['internalLinnerCondition']
@@ -2785,12 +2872,12 @@ def EditTank(request, proposalID):
             rwcoat.insulationcondition=data['insulationCondition']
             rwcoat.save()
 
+            # print("9")
             rwmaterial.materialname=data['materialName']
             rwmaterial.designtemperature=data['maxDesignTemp']
             rwmaterial.mindesigntemperature=data['minDesignTemp']
             rwmaterial.designpressure=data['designPressure']
             rwmaterial.referencetemperature=data['refTemp']
-            rwmaterial.brittlefracturethickness=data['brittleThick']
             rwmaterial.corrosionallowance=data['corrosionAllow']
             rwmaterial.carbonlowalloy=carbonLowAlloySteel
             rwmaterial.austenitic=austeniticSteel
@@ -2804,9 +2891,9 @@ def EditTank(request, proposalID):
             rwmaterial.yieldstrength = data['yieldstrength']
             rwmaterial.tensilestrength = data['tensilestrength']
             rwmaterial.save()
-
+            # print("10")
             rwinputca.fluid_height=data['fluidHeight']
-            rwinputca.shell_course_height=data['shellHieght']
+            rwinputca.shell_course_height=data['HeightEShellC']
             rwinputca.tank_diametter=data['tankDiameter']
             rwinputca.prevention_barrier=preventBarrier
             rwinputca.environ_sensitivity=data['EnvSensitivity']
@@ -2819,7 +2906,7 @@ def EditTank(request, proposalID):
             rwinputca.sw=data['distance']
             rwinputca.productioncost=data['productionCost']
             rwinputca.save()
-
+            # print("ok")
             ReCalculate.ReCalculate(proposalID)
             return redirect('damgeFactor', proposalID= proposalID)
     except:

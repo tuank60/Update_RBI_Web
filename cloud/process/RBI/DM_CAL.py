@@ -510,7 +510,7 @@ class DM_CAL:
                 print(e)
                 return 0
 
-    def     DF_THIN(self, age):
+    def DF_THIN(self, age):
         Fwd = 1
         Fam = 1
         Fsm = 1
