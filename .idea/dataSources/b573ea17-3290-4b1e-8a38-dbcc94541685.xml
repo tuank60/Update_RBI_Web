@@ -147,7 +147,7 @@
     <table id="141" parent="2" name="user_permissions"/>
     <table id="142" parent="2" name="users"/>
     <table id="143" parent="2" name="vericontent"/>
-    <table id="144" parent="2" name="verifacation"/>
+    <table id="144" parent="2" name="verification"/>
     <table id="145" parent="2" name="z_business"/>
     <table id="146" parent="2" name="z_comment"/>
     <table id="147" parent="2" name="z_gateway"/>

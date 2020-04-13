@@ -355,7 +355,6 @@ def CorrisionRate(request,proposalID):
     except Exception as e:
         print(e)
         raise Http404
-
     return render(request, 'FacilityUI/risk_summary/proposalCorrisionRate.html',
                   {'page': 'corrsionRate', 'proposalID': proposalID, 'componentID':rwAss.componentid_id, 'info': request.session, 'noti': noti,
                    'countnoti': countnoti, 'count': count,'list':list,'dataF':dataF})
@@ -3323,10 +3322,10 @@ def posts_forum(request,postID):
         cmt['name']=models.ZUser.objects.all().filter(id=data.id_user)[0].name
         cmt['content']=data.content
         datacmt.append(cmt)#mang chua Du lieu cac comment
-    if request.session.kind == 'factory':
-        siteid = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
-        faci = models.Facility.objects.get(siteid=siteid)
-        countveri = models.Verification.objects.filter(facility=faci.facilityid).filter(Is_active=0).count()
+    # if request.session.kind == 'factory':
+    #     siteid = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
+    #     faci = models.Facility.objects.get(siteid=siteid)
+    #     countveri = models.Verification.objects.filter(facility=faci.facilityid).filter(Is_active=0).count()
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
@@ -4819,22 +4818,26 @@ def VeriFullyConsequenceMana(request, proposalID):
     except:
         raise Http404
 def VerificationHome(request,faciid):
-    faci = models.Facility.objects.filter(facilityid=faciid)
-    array = []
-    for a in faci:
-        veri = models.Verification.objects.filter(facility=a.facilityid)
-        ct = models.VeriContent.objects.all()
-        for verifi in veri:
-            print(verifi.id)
-            cont = models.VeriContent.objects.filter(Verification=verifi.id)
-            array.append(cont)
-            for con in cont:
-                print(con.Verification.id)
-    if '_check' in request.POST:
-        veriCheck_ID = request.POST.get('_check')
-        return redirect('VerificationCheck', verifiID=veriCheck_ID)
-    return render(request, 'ManagerUI/verification_requirments/VerificationContent.html',
+    try:
+        faci = models.Facility.objects.filter(facilityid=faciid)
+        array = []
+        for a in faci:
+            veri = models.Verification.objects.filter(facility=a.facilityid)
+            ct = models.VeriContent.objects.all()
+            for verifi in veri:
+                print(verifi.id)
+                cont = models.VeriContent.objects.filter(Verification=verifi.id)
+                array.append(cont)
+                for con in cont:
+                    print(con.Verification.id)
+        if '_check' in request.POST:
+            veriCheck_ID = request.POST.get('_check')
+            return redirect('VerificationCheck', verifiID=veriCheck_ID)
+        return render(request, 'ManagerUI/verification_requirments/VerificationContent.html',
                   {'veri': veri, 'faci': faci, 'cont': cont, 'ct': ct, 'arr': array})
+    except Exception as e:
+        print(e)
+        return render(request,'ManagerUI/verification_requirments/VerificationHome.html')
 def VerificationNumberFacilities(request):
     siteid = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
     faci = models.Facility.objects.filter(siteid=siteid)
