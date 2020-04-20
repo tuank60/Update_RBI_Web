@@ -410,7 +410,7 @@ class Newton:
             return s
         except Exception as e:
             raise
-import math
+
 if __name__=="__main__":
         try:
             # obj = Newton(27, "DeltaFATT")
@@ -418,9 +418,14 @@ if __name__=="__main__":
             # print(obj.calculate())
             # obj = Newton(27,"SigmaPhase")
             # # obj.calculate()
+#<<<<<<< Updated upstream
             # print(obj.calculate())
             # print(math.log10(65))
             print(1/0.74)
+#=======
+#            print(obj.calculate())
+
+#>>>>>>> Stashed changes
         except Exception as e:
             traceback.print_exc()
             sys.exit(1)

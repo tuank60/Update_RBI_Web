@@ -1077,7 +1077,7 @@ class CA_SHELL:
             return self.fc_cmd() + self.FC_environ_shell() + self.FC_PROD_SHELL()
 
 class CA_TANK_BOTTOM:
-    def __init__(self, Soil_type, TANK_FLUID, Swg, TANK_DIAMETER, FLUID_HEIGHT, API_COMPONENT_TYPE_NAME, PREVENTION_BARRIER, EnvironSensitivity, MATERIAL_COST, PRODUCTION_COST, P_lvdike,P_onsite,P_offsite,Concrete_Asphalt):
+    def __init__(self, Soil_type, TANK_FLUID, Swg, TANK_DIAMETER, FLUID_HEIGHT, API_COMPONENT_TYPE_NAME, PREVENTION_BARRIER, EnvironSensitivity, MATERIAL_COST, PRODUCTION_COST, P_lvdike,P_onsite,P_offsite):
         self.Soil_type = Soil_type
         self.TANK_FLUID = TANK_FLUID
         self.Swg = Swg
@@ -1091,7 +1091,6 @@ class CA_TANK_BOTTOM:
         self.P_lvdike = P_lvdike
         self.P_onsite = P_onsite
         self.P_offsite = P_offsite
-        self.Concrete_Asphalt = Concrete_Asphalt
 
     def FC_Category(self, fc):
         if (fc <= 10000):
@@ -1135,14 +1134,10 @@ class CA_TANK_BOTTOM:
             k_h[0] = pow(10, -7)
             k_h[1] = pow(10, -8)
             k_h[2] = 0.5
-        elif(self.Soil_type == "Concrete-Asphalt"):
+        else:
             k_h[0] = pow(10, -10)
             k_h[1] = pow(10, -11)
-            k_h[2] = 0.3
-        else:
-            k_h[0] = 1
-            k_h[1] = 0.1
-            k_h[2] = 0.4
+            k_h[2] = 0.99
         return k_h
 
     def k_h_water(self):
@@ -1166,22 +1161,11 @@ class CA_TANK_BOTTOM:
             dn = 0
         return dn
 
-    # def rate_n_tank_bottom(self, i):
-    #     C33 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(33)
-    #     C34 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(34)
-    #     C35 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(35)
-    #     print("n_rh =" + str(self.n_rh()))
-    #     if (self.k_h_water() > C34 * pow(self.dn_bottom(i), 2)):
-    #         print("1")
-    #         print(C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * self.FLUID_HEIGHT) * self.n_rh())
-    #         return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * self.FLUID_HEIGHT) * self.n_rh()
-    #     else:
-    #         print(C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(self.FLUID_HEIGHT, 0.9) * pow(self.k_h_water(), 0.74) * self.n_rh())
-    #         return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(self.FLUID_HEIGHT, 0.9) * pow(self.k_h_water(), 0.74) * self.n_rh()
     def rate_n_tank_bottom(self, i):
         C33 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(33)
         C34 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(34)
         C35 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(35)
+#<<<<<<< Updated upstream
         C37 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(37)
         C38 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(38)
         C39 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(39)
@@ -1202,9 +1186,15 @@ class CA_TANK_BOTTOM:
             else:
                 m = C40-0.4324*math.log10(self.dn_bottom(i)) + 0.5405*math.log10(self.FLUID_HEIGHT)
                 return 3*C38*pow(10,2*math.log10(self.dn_bottom(i))+0.5*math.log10(self.FLUID_HEIGHT)-0.74*pow((C39+2*math.log10(self.dn_bottom(i))-math.log10(self.k_h_prod()))/m,m))
+#=======
+        if (self.k_h_water() > C34 * pow(self.dn_bottom(i), 2)):
+            return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * self.FLUID_HEIGHT) * self.n_rh()
+        else:
+            return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(self.FLUID_HEIGHT, 0.9) * pow(self.k_h_water(), 0.74) * self.n_rh()
+#>>>>>>> Stashed changes
 
     def t_ld_tank_bottom(self):
-        if (self.Concrete_Asphalt):
+        if (self.Soil_type == "Concrete-Asphalt"):
             return 7
         elif (self.PREVENTION_BARRIER):
             return 30
@@ -1217,7 +1207,7 @@ class CA_TANK_BOTTOM:
 
     def ld_n_tank_bottom(self, i):
         C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-        Bbl_total_tank_bottom = (math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT * C13) / (4)
+        Bbl_total_tank_bottom = (math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT) / (4 * C13)
         if self.rate_n_tank_bottom(i) == 0:
             return self.t_ld_tank_bottom()
         else:
@@ -1225,16 +1215,8 @@ class CA_TANK_BOTTOM:
 
     def Bbl_leak_n_bottom(self, i):
         C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-        #Bbl_total_tank_bottom = math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT / (4 * C13)
-        Bbl_total_tank_bottom = (math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT * C13) / (4)
+        Bbl_total_tank_bottom = math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT / (4 * C13)
         return min(self.rate_n_tank_bottom(i) * self.ld_n_tank_bottom(i), Bbl_total_tank_bottom)
-
-    def Bbl_rupture_bottom(self):
-        obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-        Bbl_total_tank_bottom = (math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT* C13) / (4)
-        #return (Bbl_total_tank_bottom * obj[3]) / obj[5]
-        return Bbl_total_tank_bottom
 
     def GET_PL_UL(self):
         data = [0, 0]
@@ -1260,8 +1242,7 @@ class CA_TANK_BOTTOM:
 
     def k_h_prod(self):
         pl_ul = self.GET_PL_UL()
-        return self.k_h_water() * (pl_ul[0] / 1000) * (1 / pl_ul[1])
-        #return self.k_h_water() * (pl_ul[0] / 1000) * (0.001 / pl_ul[1])
+        return self.k_h_water() * (pl_ul[0] / 1000) * (0.001 / pl_ul[1])
 
     def vel_s_prod(self):
         kh = self.k_h_bottom()
@@ -1275,8 +1256,8 @@ class CA_TANK_BOTTOM:
 
     def Bbl_leak_groundwater(self, i):
         try:
-            if (self.t_gl_bottom() < self.t_ld_tank_bottom()):
-                return self.Bbl_leak_n_bottom(i) * ((self.t_ld_tank_bottom() - self.t_gl_bottom()) / self.t_ld_tank_bottom())
+            if (self.t_gl_bottom() > self.t_ld_tank_bottom()):
+                return self.Bbl_leak_n_bottom(i) * ((self.t_gl_bottom() - self.t_ld_tank_bottom()) / self.t_gl_bottom())
             else:
                 return 0
         except:
@@ -1320,16 +1301,14 @@ class CA_TANK_BOTTOM:
     def FC_leak_environ_bottom(self):
         cost = self.getCost()
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        summa = 0
-        for i in range(1,4):
-            summa = summa +(self.Bbl_leak_groundwater(i) * cost[4] + self.Bbl_leak_subsoil(i) * cost[3])*obj[i-1]
-        return summa/obj[4]
+        summ = self.Bbl_leak_groundwater(1) * cost[4] + self.Bbl_leak_subsoil(1) * cost[3]
+        return summ * obj[0] / obj[5]
 
     def Bbl_rupture_release_bottom(self):
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
         C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-        Bbl_total_tank_bottom = (math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT* C13) / (4)
-        return (Bbl_total_tank_bottom * obj[3]) / obj[4]
+        Bbl_total_tank_bottom = (math.pi * pow(self.TANK_DIAMETER, 2) * self.FLUID_HEIGHT) / (4 * C13)
+        return (Bbl_total_tank_bottom * obj[3]) / obj[5]
 
     def Bbl_rupture_indike_bottom(self):
         indike = self.Bbl_rupture_release_bottom() * (1 - self.P_lvdike / 100)
@@ -1369,7 +1348,7 @@ class CA_TANK_BOTTOM:
     def FC_cmd_bottom(self):
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
         C36 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(36)
-        summ = obj[0] * obj[5] + obj[1] * obj[6] + obj[2] * obj[7] + obj[3] * obj[8] * pow(self.TANK_DIAMETER / C36, 2)
+        summ = obj[0] * obj[5] + obj[1] * obj[6] + obj[2] * obj[7] + obj[8] * pow(self.TANK_DIAMETER / C36, 2)
         return summ * self.MATERIAL_COST / obj[4]
 
     def FC_PROD_BOTTOM(self):

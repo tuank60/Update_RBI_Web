@@ -87,7 +87,7 @@ def InpsectionPlan(request, siteID,name='Plan Name',date='Plan Date'):
             if name =='Plan Name':
                 error['exist'] = "Please create/select an inspection plan before adding inspection coverage!"
             else:
-                return redirect('addInspectionPlan', siteID=siteID,name=name,date=date)
+                return redirect('addInspectionPlan', siteID=siteID,name=name,date=date,facilityID=0,equipID=0)
         try:
             if '_delete' in request.POST:
                 for a in inspection:
@@ -97,7 +97,7 @@ def InpsectionPlan(request, siteID,name='Plan Name',date='Plan Date'):
             if '_select' in request.POST:
                 for a in inspection:
                     if (request.POST.get('%d' % a.id)):
-                        return redirect('inspectionPlan',siteID=a.id,name=a.inspectionplanname,date=a.inspectiondate)
+                        return redirect('inspectionPlan',siteID=siteID,name=a.inspectionplanname,date=a.inspectiondate)
         except Exception as e:
             print(e)
             raise Http404
@@ -107,22 +107,107 @@ def InpsectionPlan(request, siteID,name='Plan Name',date='Plan Date'):
     return render(request, 'FacilityUI/inspection_plan/inspectionPlanNew.html',
                   {'page': 'inspectionPlan', 'siteID': siteID, 'count': count, 'info': request.session,
                    'noti': noti, 'countnoti': countnoti,'name':name,'date':date,'error':error,'inspection':inspection})
-def AdddInssepctionPlan(request,siteID,name,date):
+def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
+
     site = models.Sites.objects.all()
-    facility = models.Facility.objects.all()
-    euip = models.RwEquipment.objects.all()
+    faci = models.Facility.objects.all()
+    desi = models.DesignCode.objects.all()
+
+    equi = models.EquipmentMaster.objects.all()
+    equiptype = models.EquipmentType.objects.all()
+
+    comp = models.ComponentMaster.objects.all()
+    comptype = models.ComponentType.objects.all()
+    rwcomponent = models.RwComponent.objects.all()
+
+    rwstream = models.RwStream.objects.all()
+    rwmaterial = models.RwMaterial.objects.all()
+    rwcoat = models.RwCoating.objects.all()
+
+    rwfullpof = models.RwFullPof.objects.all()
+    rwfullfcof = models.RwFullFcof.objects.all()
+
+    pros =models.RwAssessment.objects.all()
+    rwdam = models.RwDamageMechanism.objects.all()
+    rwequip = models.RwEquipment.objects.all()
+
+    siteT = models.Sites.objects.get(siteid=siteID)
+    facility = models.Facility.objects.filter(siteid_id=siteID)
+    facilityT = models.Facility.objects.filter(facilityid=facilityID)
+
+    print(facilityID)
     try:
-        a=1
+        error = {}
+        data = {}
+        if request.POST.get('allSite'):
+            allSite = 1
+        else:
+            allSite = 0
+        if not facilityID and not equipID:
+            facilityID=1
+            equipID=3
+            fac = models.Facility.objects.get(facilityid=facilityID)
+            facName = fac.facilityname
+            equip = models.EquipmentMaster.objects.filter(facilityid_id=facilityID)
+            equipName = models.EquipmentMaster.objects.get(equipmentid=equipID)
+        else:
+            facilityID=facilityID
+            fac = models.Facility.objects.get(facilityid=facilityID)
+            facName=fac.facilityname
+            equip = models.EquipmentMaster.objects.filter(facilityid_id=facilityID)
+            equipName = models.EquipmentMaster.objects.get(equipmentid=equipID)
+        if '_delete' in request.POST:
+            for a in site:
+                if (request.POST.get('%d' % a.siteid)):
+                    a.delete()
+            return redirect('addInspectionPlan', siteID=a.siteid,name=name,date=date,facilityID=0,equipID=0)
+        if '_select' in request.POST:
+            for a in site:
+                if (request.POST.get('%d' % a.siteid)):
+                    return redirect('addInspectionPlan', siteID=a.siteid, name=name, date=date,facilityID=0,equipID=0)
+        if '_selectFac' in request.POST:
+            for a in facility:
+                if (request.POST.get('%d' % a.facilityid)):
+                    return redirect('addInspectionPlan', siteID=siteID, name=name, date=date, facilityID=a.facilityid,equipID=3)
+        if '_selectEquip' in request.POST:
+            for a in equip:
+                if (request.POST.get('%d' % a.equipmentid)):
+                    return redirect('addInspectionPlan', siteID=siteID, name=name, date=date, facilityID=facilityID,equipID=a.equipmentid)
     except Exception as e:
         print(e)
         raise Http404
     return render(request,'FacilityUI/inspection_plan/addInspectionPlan.html',
                   {'page':'addInspectionPlan','siteID':siteID, 'count': count, 'info': request.session,
-                   'noti': noti, 'countnoti': countnoti,'name':name,'date':date,'site':site})
+                   'noti': noti, 'countnoti': countnoti,'name':name,'date':date,'siteT':siteT,'desi':desi,
+                   'facility':facility,'facilityT':facilityT,'facName':facName,'equip':equip,'equipName':equipName,'allSite':allSite,
+                   'site':site,'faci':faci,'equi':equi,'equiptype':equiptype,'comp':comp,'comptype':comptype,'pros':pros,'rwdam':rwdam,
+                   'rwequip':rwequip,'rwcomponent':rwcomponent,'rwstream':rwstream,'rwmaterial':rwmaterial,'rwcoat':rwcoat,
+                   'rwfullpof':rwfullpof,'rwfullfcof':rwfullfcof})
+# def ajax_get_Site(request):
+#     data = []
+#     list = []
+#     try:
+#         if request.method == 'POST':
+#             print("get Site")
+#             sitename = request.POST.get('setSite')
+#             print(sitename)
+#             site = models.Sites.objects.get(sitename=sitename)
+#             data ={
+#                 'is_taken':models.Facility.objects.filter(siteid_id=site.siteid),
+#                 'es': models.Facility.objects.filter(siteid_id=site.siteid).exists()
+#             }
+#             for a in data['is_taken']:
+#                 list.append(a.facilityname)
+#             print(list)
+#             if data['es']:
+#                 data['error_message'] = 'A user with this username already exists.'
+#     except Exception as e:
+#         print(e)
+#     return JsonResponse(data)
 def CreateInspectionPlan(request, siteID):
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),Q(Is_see=0)).count()
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
@@ -157,7 +242,8 @@ def ListFacilities(request, siteID):
     try:
         risk = []
         
-        data= models.Facility.objects.filter(siteid= siteID)
+        # data= models.Facility.objects.filter(siteid= siteID)
+        data = models.Facility.objects.filter(siteid=3)
         for a in data:
             dataF = {}
             risTarget = models.FacilityRiskTarget.objects.get(facilityid= a.facilityid)
@@ -184,12 +270,14 @@ def ListFacilities(request, siteID):
                 for a in data:
                     if (request.POST.get('%d' % a.facilityid)):
                         a.delete()
-                return redirect('facilitiesDisplay', siteID)
+                return redirect('facilitiesNew', siteID=3)
+                # return redirect('facilitiesDisplay', siteID)
         except Exception as e:
             print(e)
             raise Http404
         if '_new' in request.POST:
-            return redirect('facilitiesNew', siteID=siteID)
+            return redirect('facilitiesNew', siteID=3)
+            # return redirect('facilitiesNew', siteID=siteID)
     except:
         raise Http404
     return render(request, 'FacilityUI/facility/facilityListDisplay.html', {'page':'listFacility','obj': users,'siteID':siteID,'count':count,'info':request.session,'noti':noti,'countnoti':countnoti})
@@ -355,6 +443,7 @@ def CorrisionRate(request,proposalID):
     except Exception as e:
         print(e)
         raise Http404
+
     return render(request, 'FacilityUI/risk_summary/proposalCorrisionRate.html',
                   {'page': 'corrsionRate', 'proposalID': proposalID, 'componentID':rwAss.componentid_id, 'info': request.session, 'noti': noti,
                    'countnoti': countnoti, 'count': count,'list':list,'dataF':dataF})
@@ -1211,8 +1300,8 @@ def NewProposal(request, componentID):
                                       nominalthickness=data['normalthick'], currentthickness=data['currentthick'],
                                       minreqthickness=data['tmin'], currentcorrosionrate=data['currentrate'],
                                       branchdiameter=data['branchDiameter'], branchjointtype=data['joinTypeBranch'],
-                                      brinnelhardness=data['MaxBrinell'],brittlefracturethickness=data['BrittleFacture'],
-                                      deltafatt=data['deltafatt'], chemicalinjection=chemicalInj,
+                                      brinnelhardness=data['MaxBrinell']
+                                      , deltafatt=data['deltafatt'], chemicalinjection=chemicalInj,
                                       highlyinjectioninsp=HFICI, complexityprotrusion=data['complex'],
                                       correctiveaction=data['correctActionMitigate'], crackspresent=crackpresent,
                                       cyclicloadingwitin15_25m=data['CylicLoad'],
@@ -1268,7 +1357,7 @@ def NewProposal(request, componentID):
             rwmaterial = models.RwMaterial(id=rwassessment, corrosionallowance=data['CA'], materialname=data['material'],
                                     designpressure=data['designPressure'], designtemperature=data['maxDesignTemp'],
                                     mindesigntemperature=data['minDesignTemp'],
-                                    sigmaphase=data['sigmaPhase'],
+                                    brittlefracturethickness=data['BrittleFacture'], sigmaphase=data['sigmaPhase'],
                                     sulfurcontent=data['sulfurContent'], heattreatment=data['heatTreatment'],
                                     referencetemperature=data['tempRef'],
                                     ptamaterialcode=data['PTAMaterialGrade'],
@@ -1316,7 +1405,6 @@ def NewTank(request, componentID):
             data['assessmentName'] = request.POST.get('AssessmentName')
             data['assessmentdate'] = request.POST.get('assessmentdate')
             data['riskperiod'] = request.POST.get('RiskAnalysisPeriod')
-            data['assessmentmethod'] = request.POST.get('AssessmentMethod')
             data['apicomponenttypeid'] = models.ApiComponentType.objects.get(apicomponenttypeid= comp.apicomponenttypeid).apicomponenttypename
             data['equipmenttype'] = models.EquipmentType.objects.get(equipmenttypeid= eq.equipmenttypeid_id).equipmenttypename
             # Data Equipment Properties
@@ -1418,9 +1506,8 @@ def NewTank(request, componentID):
             data['currentThick'] = request.POST.get('CurrentThickness')
             data['minRequireThick'] = request.POST.get('MinReqThick')
             data['currentCorrosion'] = request.POST.get('CurrentCorrosionRate')
-            data['ComponentVolume'] = request.POST.get('CompVolume')
-            data['WeldJointEff'] = request.POST.get('WeldJointEff')
-            data['HeightEShellC'] = request.POST.get('HeightEShellC')
+            data['shellHieght'] = request.POST.get('shellHeight')
+
             if request.POST.get('MinStructural'):
                 minstruc = 1
             else:
@@ -1449,36 +1536,6 @@ def NewTank(request, componentID):
                 concreteFoundation = 1
             else:
                 concreteFoundation = 0
-
-            if request.POST.get('P1AndP3'):
-                p1andp3 = 1
-            else:
-                p1andp3 = 0
-
-            if request.POST.get('EquipmentRequirements'):
-                equipmentrequire = 1
-            else:
-                equipmentrequire = 0
-
-            if request.POST.get('OperatingConditions'):
-                operatingcondition = 1
-            else:
-                operatingcondition = 0
-
-            if request.POST.get('CETtheMAWP'):
-                cet = 1
-            else:
-                cet =0
-
-            if request.POST.get('CyclicService'):
-                cyclicservice = 1
-            else:
-                cyclicservice = 0
-
-            if request.POST.get('EquipmentorCircuit'):
-                equipmentorCircuit = 1
-            else:
-                equipmentorCircuit = 0
 
             data['maxBrinnelHardness'] = request.POST.get('MBHW')
             data['complexProtrusion'] = request.POST.get('ComplexityProtrusions')
@@ -1511,8 +1568,7 @@ def NewTank(request, componentID):
             data['allowStress'] = request.POST.get('ASAT')
             data['brittleThick'] = request.POST.get('BFGT')
             data['corrosionAllow'] = request.POST.get('CorrosionAllowance')
-            data['yieldstrength'] = request.POST.get('YieldStrength')
-            data['tensilestrength'] = request.POST.get('TensileStrength')
+
             if request.POST.get('CoLAS'):
                 carbonLowAlloySteel = 1
             else:
@@ -1568,7 +1624,7 @@ def NewTank(request, componentID):
                 internalCladding = 1
             else:
                 internalCladding = 0
-            data['CladdingThinkness'] = request.POST.get('CladdingThinkness')
+            data['claddingthickness'] = request.POST.get('CladdingThickness')
             data['cladCorrosion'] = request.POST.get('CladdingCorrosionRate')
 
             if request.POST.get('InternalLining'):
@@ -1591,6 +1647,7 @@ def NewTank(request, componentID):
 
             data['extInsulationType'] = request.POST.get('ExternalInsulationType')
             data['insulationCondition'] = request.POST.get('InsulationCondition')
+
             # Stream
             data['fluid'] = request.POST.get('Fluid')
             data['fluidHeight'] = request.POST.get('FluidHeight')
@@ -1669,7 +1726,7 @@ def NewTank(request, componentID):
                 apiFluid = "C25+"
             rwassessment = models.RwAssessment(equipmentid_id=comp.equipmentid_id, componentid_id=comp.componentid, assessmentdate=data['assessmentdate'],
                                         riskanalysisperiod=data['riskperiod'],
-                                        isequipmentlinked=comp.isequipmentlinked, proposalname=data['assessmentName'],assessmentmethod = data['assessmentmethod'])
+                                        isequipmentlinked=comp.isequipmentlinked, proposalname=data['assessmentName'])
             rwassessment.save()
             rwequipment = models.RwEquipment(id=rwassessment, commissiondate= eq.commissiondate,
                                       adminupsetmanagement=adminControlUpset,
@@ -1695,20 +1752,13 @@ def NewTank(request, componentID):
                                 nominalthickness=data['NominalThickness'], currentthickness=data['currentThick'],
                                 minreqthickness=data['minRequireThick'],
                                 currentcorrosionrate=data['currentCorrosion'],
-                                shellheight=data['HeightEShellC'], damagefoundinspection=damageFound,
-                                crackspresent=crackPresence, componentvolume=data['ComponentVolume'],
-                                weldjointefficiency=data['WeldJointEff'],
+                                shellheight=data['shellHieght'], damagefoundinspection=damageFound,
+                                crackspresent=crackPresence,
                                 #trampelements=trampElements,
-                                brittlefracturethickness=data['brittleThick'],
                                 releasepreventionbarrier=preventBarrier, concretefoundation=concreteFoundation,
                                 brinnelhardness=data['maxBrinnelHardness'],structuralthickness=data['structuralthickness'],
                                 complexityprotrusion=data['complexProtrusion'],minstructuralthickness= minstruc,
-                                severityofvibration=data['severityVibration'],
-                                fabricatedsteel=p1andp3, equipmentsatisfied=equipmentrequire,
-                                nominaloperatingconditions=operatingcondition,
-                                cetgreaterorequal=cet, cyclicservice=cyclicservice,
-                                equipmentcircuitshock=equipmentorCircuit,
-                                confidencecorrosionrate = data['confidencecr'])
+                                severityofvibration=data['severityVibration'],confidencecorrosionrate = data['confidencecr'])
             rwcomponent.save()
             rwstream = models.RwStream(id=rwassessment, maxoperatingtemperature=data['maxOT'], maxoperatingpressure=data['maxOP'],
                                 minoperatingtemperature=data['minOT'], minoperatingpressure=data['minOP'],
@@ -1744,7 +1794,7 @@ def NewTank(request, componentID):
                                insulationcontainschloride=InsulationContainChloride,
                                externalinsulationtype=data['extInsulationType'],
                                insulationcondition=data['insulationCondition'],
-                                claddingthickness = data['CladdingThinkness']
+                                claddingthickness = data['claddingthickness']
                                )
             rwcoat.save()
             rwmaterial = models.RwMaterial(id=rwassessment, materialname=data['materialName'],
@@ -1752,15 +1802,16 @@ def NewTank(request, componentID):
                                     mindesigntemperature=data['minDesignTemp'], designpressure=data['designPressure'],
                                     referencetemperature=data['refTemp'],
                                     #allowablestress=data['allowStress'],
+                                    brittlefracturethickness=data['brittleThick'],
                                     corrosionallowance=data['corrosionAllow'],
                                     carbonlowalloy=carbonLowAlloySteel, austenitic=austeniticSteel, nickelbased=nickelAlloy,
                                     chromemoreequal12=chromium,
                                     sulfurcontent=data['sulfurContent'], heattreatment=data['heatTreatment'],
                                     ispta=materialPTA, ptamaterialcode=data['PTAMaterialGrade'],
-                                    costfactor=data['materialCostFactor'],yieldstrength=data['yieldstrength'],tensilestrength= data['tensilestrength'])
+                                    costfactor=data['materialCostFactor'])
             rwmaterial.save()
             rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=data['fluidHeight'],
-                                      shell_course_height=data['HeightEShellC'],
+                                      shell_course_height=data['shellHieght'],
                                       tank_diametter=data['tankDiameter'], prevention_barrier=preventBarrier,
                                       environ_sensitivity=data['EnvSensitivity'],
                                       p_lvdike=data['fluidLeaveDike'], p_offsite=data['fluidOffsite'],
@@ -1768,7 +1819,6 @@ def NewTank(request, componentID):
                                       tank_fluid=data['fluid'], api_fluid=apiFluid, sw=data['distance'],
                                       productioncost=data['productionCost'])
             rwinputca.save()
-            print()
             # Customize Caculate Here
             ReCalculate.ReCalculate(rwassessment.id)
             return redirect('damgeFactor', proposalID=rwassessment.id)
@@ -2251,7 +2301,6 @@ def EditProposal(request, proposalID):
             rwcomponent.cyclicservice=cyclicservice
             rwcomponent.equipmentcircuitshock=equipmentorCircuit
             #rwcomponent.trampelements=TrampElement
-            rwcomponent.brittlefracturethickness = data['BrittleFacture']
             rwcomponent.save()
 
             rwstream.aminesolution=data['AminSolution']
@@ -2315,6 +2364,7 @@ def EditProposal(request, proposalID):
             rwmaterial.designpressure=data['designPressure']
             rwmaterial.designtemperature=data['maxDesignTemp']
             rwmaterial.mindesigntemperature=data['minDesignTemp']
+            rwmaterial.brittlefracturethickness=data['BrittleFacture']
             rwmaterial.sigmaphase=data['sigmaPhase']
             rwmaterial.sulfurcontent=data['sulfurContent']
             rwmaterial.heattreatment=data['heatTreatment']
@@ -2393,15 +2443,11 @@ def EditTank(request, proposalID):
             isshell = True
         if request.method =='POST':
             # Data Assessment
-            data['confidencecr'] = request.POST.get('ConfidenceCR')  # bo sung level of confident for tankbottom
             data['assessmentName'] = request.POST.get('AssessmentName')
             data['assessmentdate'] = request.POST.get('assessmentdate')
             data['riskperiod'] = request.POST.get('RiskAnalysisPeriod')
-            data['assessmentmethod'] = request.POST.get('AssessmentMethod')
-            data['apicomponenttypeid'] = models.ApiComponentType.objects.get(
-                apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename
-            data['equipmenttype'] = models.EquipmentType.objects.get(
-                equipmenttypeid=eq.equipmenttypeid_id).equipmenttypename
+            data['apicomponenttypeid'] = models.ApiComponentType.objects.get(apicomponenttypeid= comp.apicomponenttypeid).apicomponenttypename
+            data['equipmenttype'] = models.EquipmentType.objects.get(equipmenttypeid= eq.equipmenttypeid_id).equipmenttypename
             # Data Equipment Properties
             if request.POST.get('Admin'):
                 adminControlUpset = 1
@@ -2422,6 +2468,7 @@ def EditTank(request, proposalID):
                 steamOutWater = 1
             else:
                 steamOutWater = 0
+
             if request.POST.get('Downtime'):
                 downtimeProtect = 1
             else:
@@ -2495,19 +2542,13 @@ def EditTank(request, proposalID):
             data['onlineMonitor'] = request.POST.get('OnlineMonitoring')
             data['equipmentVolumn'] = request.POST.get('EquipmentVolume')
             # Component Properties
-            data['structuralthickness'] = request.POST.get('StructuralThickness')
             data['tankDiameter'] = request.POST.get('TankDiameter')
             data['NominalThickness'] = request.POST.get('NominalThickness')
             data['currentThick'] = request.POST.get('CurrentThickness')
             data['minRequireThick'] = request.POST.get('MinReqThick')
             data['currentCorrosion'] = request.POST.get('CurrentCorrosionRate')
-            data['HeightEShellC'] = request.POST.get('HeightEShellC')
-            data['ComponentVolume'] = request.POST.get('CompVolume')
-            data['WeldJointeff'] = request.POST.get('WeldJointEff')
-            if request.POST.get('MinStructural'):
-                minstruc = 1
-            else:
-                minstruc = 0
+            data['shellHieght'] = request.POST.get('shellHeight')
+
             if request.POST.get('DFDI'):
                 damageFound = 1
             else:
@@ -2532,36 +2573,6 @@ def EditTank(request, proposalID):
                 concreteFoundation = 1
             else:
                 concreteFoundation = 0
-
-            if request.POST.get('P1AndP3'):
-                p1andp3 = 1
-            else:
-                p1andp3 = 0
-
-            if request.POST.get('EquipmentRequirements'):
-                equipmentrequire = 1
-            else:
-                equipmentrequire = 0
-
-            if request.POST.get('OperatingConditions'):
-                operatingcondition = 1
-            else:
-                operatingcondition = 0
-
-            if request.POST.get('CETtheMAWP'):
-                cet = 1
-            else:
-                cet =0
-
-            if request.POST.get('CyclicService'):
-                cyclicservice = 1
-            else:
-                cyclicservice = 0
-
-            if request.POST.get('EquipmentorCircuit'):
-                equipmentorCircuit = 1
-            else:
-                equipmentorCircuit = 0
 
             data['maxBrinnelHardness'] = request.POST.get('MBHW')
             data['complexProtrusion'] = request.POST.get('ComplexityProtrusions')
@@ -2593,9 +2604,10 @@ def EditTank(request, proposalID):
             data['refTemp'] = request.POST.get('ReferenceTemperature')
             data['allowStress'] = request.POST.get('ASAT')
             data['brittleThick'] = request.POST.get('BFGT')
-            data['corrosionAllow'] = request.POST.get('CorrosionAllowance')
             data['yieldstrength'] = request.POST.get('YieldStrength')
             data['tensilestrength'] = request.POST.get('TensileStrength')
+            data['corrosionAllow'] = request.POST.get('CorrosionAllowance')
+
             if request.POST.get('CoLAS'):
                 carbonLowAlloySteel = 1
             else:
@@ -2651,8 +2663,9 @@ def EditTank(request, proposalID):
                 internalCladding = 1
             else:
                 internalCladding = 0
-            data['CladdingThinkness'] = request.POST.get('CladdingThinkness')
+
             data['cladCorrosion'] = request.POST.get('CladdingCorrosionRate')
+            data['claddingthickness'] = request.POST.get('CladdingThickness')
 
             if request.POST.get('InternalLining'):
                 internalLinning = 1
@@ -2674,6 +2687,7 @@ def EditTank(request, proposalID):
 
             data['extInsulationType'] = request.POST.get('ExternalInsulationType')
             data['insulationCondition'] = request.POST.get('InsulationCondition')
+
             # Stream
             data['fluid'] = request.POST.get('Fluid')
             data['fluidHeight'] = request.POST.get('FluidHeight')
@@ -2752,9 +2766,8 @@ def EditTank(request, proposalID):
                 apiFluid = "C25+"
             rwassessment.assessmentdate=data['assessmentdate']
             rwassessment.proposalname=data['assessmentName']
-            rwassessment.assessmentmethod = data['assessmentmethod']
             rwassessment.save()
-            # print("4")
+
             rwequipment.adminupsetmanagement=adminControlUpset
             rwequipment.cyclicoperation=cylicOp
             rwequipment.highlydeadleginsp=highlyDeadleg
@@ -2782,34 +2795,24 @@ def EditTank(request, proposalID):
             rwequipment.managementfactor=datafaci.managementfactor
             rwequipment.volume=data['equipmentVolumn']
             rwequipment.save()
-            # print("5")
+
             rwcomponent.nominaldiameter=data['tankDiameter']
             rwcomponent.nominalthickness=data['NominalThickness']
             rwcomponent.currentthickness=data['currentThick']
             rwcomponent.minreqthickness=data['minRequireThick']
             rwcomponent.currentcorrosionrate=data['currentCorrosion']
-            rwcomponent.shellheight=data['HeightEShellC']
+            rwcomponent.shellheight=data['shellHieght']
             rwcomponent.damagefoundinspection=damageFound
             rwcomponent.crackspresent=crackPresence
-            rwcomponent.componentvolume = data['ComponentVolume']
-            rwcomponent.weldjointefficiency = data['WeldJointeff']
             #rwcomponent.trampelements=trampElements
-            rwcomponent.structuralthickness=data['structuralthickness']
             rwcomponent.releasepreventionbarrier=preventBarrier
             rwcomponent.concretefoundation=concreteFoundation
             rwcomponent.brinnelhardness=data['maxBrinnelHardness']
             rwcomponent.complexityprotrusion=data['complexProtrusion']
             rwcomponent.severityofvibration=data['severityVibration']
             rwcomponent.allowablestress = data['allowStress']
-            rwcomponent.brittlefracturethickness = data['brittleThick']
-            rwcomponent.fabricatedsteel = p1andp3
-            rwcomponent.equipmentsatisfied = equipmentrequire
-            rwcomponent.nominaloperatingconditions = operatingcondition
-            rwcomponent.cetgreaterorequal = cet
-            rwcomponent.cyclicservice = cyclicservice
-            rwcomponent.equipmentcircuitshock = equipmentorCircuit
             rwcomponent.save()
-            # print("6")
+
             rwstream.maxoperatingtemperature=data['maxOT']
             rwstream.maxoperatingpressure=data['maxOP']
             rwstream.minoperatingtemperature=data['minOT']
@@ -2840,7 +2843,7 @@ def EditTank(request, proposalID):
             rwstream.materialexposedtoclint=materialChlorineIntern
             rwstream.exposedtosulphur=exposedSulfur
             rwstream.save()
-            # print("7")
+
             rwexcor.minus12tominus8=data['OP1']
             rwexcor.minus8toplus6=data['OP2']
             rwexcor.plus6toplus32=data['OP3']
@@ -2852,7 +2855,6 @@ def EditTank(request, proposalID):
             rwexcor.plus162toplus176=data['OP9']
             rwexcor.morethanplus176=data['OP10']
             rwexcor.save()
-            # print("8")
 
             rwcoat.internalcoating=internalCoating
             rwcoat.externalcoating=externalCoating
@@ -2861,7 +2863,7 @@ def EditTank(request, proposalID):
             rwcoat.supportconfignotallowcoatingmaint=supportCoatingMaintain
             rwcoat.internalcladding=internalCladding
             rwcoat.claddingcorrosionrate=data['cladCorrosion']
-            rwcoat.claddingthickness=data['CladdingThinkness']
+            rwcoat.claddingthickness=data['CladdingThickness']
             rwcoat.internallining=internalLinning
             rwcoat.internallinertype=data['internalLinnerType']
             rwcoat.internallinercondition=data['internalLinnerCondition']
@@ -2871,12 +2873,12 @@ def EditTank(request, proposalID):
             rwcoat.insulationcondition=data['insulationCondition']
             rwcoat.save()
 
-            # print("9")
             rwmaterial.materialname=data['materialName']
             rwmaterial.designtemperature=data['maxDesignTemp']
             rwmaterial.mindesigntemperature=data['minDesignTemp']
             rwmaterial.designpressure=data['designPressure']
             rwmaterial.referencetemperature=data['refTemp']
+            rwmaterial.brittlefracturethickness=data['brittleThick']
             rwmaterial.corrosionallowance=data['corrosionAllow']
             rwmaterial.carbonlowalloy=carbonLowAlloySteel
             rwmaterial.austenitic=austeniticSteel
@@ -2890,9 +2892,9 @@ def EditTank(request, proposalID):
             rwmaterial.yieldstrength = data['yieldstrength']
             rwmaterial.tensilestrength = data['tensilestrength']
             rwmaterial.save()
-            # print("10")
+
             rwinputca.fluid_height=data['fluidHeight']
-            rwinputca.shell_course_height=data['HeightEShellC']
+            rwinputca.shell_course_height=data['shellHieght']
             rwinputca.tank_diametter=data['tankDiameter']
             rwinputca.prevention_barrier=preventBarrier
             rwinputca.environ_sensitivity=data['EnvSensitivity']
@@ -2905,7 +2907,7 @@ def EditTank(request, proposalID):
             rwinputca.sw=data['distance']
             rwinputca.productioncost=data['productionCost']
             rwinputca.save()
-            # print("ok")
+
             ReCalculate.ReCalculate(proposalID)
             return redirect('damgeFactor', proposalID= proposalID)
     except:
@@ -3322,10 +3324,10 @@ def posts_forum(request,postID):
         cmt['name']=models.ZUser.objects.all().filter(id=data.id_user)[0].name
         cmt['content']=data.content
         datacmt.append(cmt)#mang chua Du lieu cac comment
-    # if request.session.kind == 'factory':
-    #     siteid = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
-    #     faci = models.Facility.objects.get(siteid=siteid)
-    #     countveri = models.Verification.objects.filter(facility=faci.facilityid).filter(Is_active=0).count()
+    if request.session.kind == 'factory':
+        siteid = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
+        faci = models.Facility.objects.get(siteid=siteid)
+        countveri = models.Verification.objects.filter(facility=faci.facilityid).filter(Is_active=0).count()
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
@@ -4817,27 +4819,24 @@ def VeriFullyConsequenceMana(request, proposalID):
             return render(request, 'ManagerUI/verification_requirments/fullyNormalConsequenceVericification.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
     except:
         raise Http404
-def VerificationHome(request,faciid):
-    try:
-        faci = models.Facility.objects.filter(facilityid=faciid)
-        array = []
-        for a in faci:
-            veri = models.Verification.objects.filter(facility=a.facilityid)
-            ct = models.VeriContent.objects.all()
-            for verifi in veri:
-                print(verifi.id)
-                cont = models.VeriContent.objects.filter(Verification=verifi.id)
-                array.append(cont)
-                for con in cont:
-                    print(con.Verification.id)
-        if '_check' in request.POST:
-            veriCheck_ID = request.POST.get('_check')
-            return redirect('VerificationCheck', verifiID=veriCheck_ID)
-        return render(request, 'ManagerUI/verification_requirments/VerificationContent.html',
+def VerificationHome(request):
+    siteid = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
+    faci = models.Facility.objects.filter(siteid=siteid)
+    array = []
+    for a in faci:
+        veri = models.Verification.objects.filter(facility=a.facilityid)
+        ct = models.VeriContent.objects.all()
+        for verifi in veri:
+            print(verifi.id)
+            cont = models.VeriContent.objects.filter(Verification=verifi.id)
+            array.append(cont)
+            for con in cont:
+                print(con.Verification.id)
+    if '_check' in request.POST:
+        veriCheck_ID = request.POST.get('_check')
+        return redirect('VerificationCheck', verifiID=veriCheck_ID)
+    return render(request, 'ManagerUI/verification_requirments/VerificationContent.html',
                   {'veri': veri, 'faci': faci, 'cont': cont, 'ct': ct, 'arr': array})
-    except Exception as e:
-        print(e)
-        return render(request,'ManagerUI/verification_requirments/VerificationHome.html')
 def VerificationNumberFacilities(request):
     siteid = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
     faci = models.Facility.objects.filter(siteid=siteid)
