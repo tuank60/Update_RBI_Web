@@ -1165,33 +1165,10 @@ class CA_TANK_BOTTOM:
         C33 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(33)
         C34 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(34)
         C35 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(35)
-#<<<<<<< Updated upstream
-        C37 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(37)
-        C38 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(38)
-        C39 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(39)
-        C40 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(40)
-        if self.PREVENTION_BARRIER:
-            if (self.k_h_prod() > C34 * pow(self.dn_bottom(i), 2)):
-                return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * 0.0762) * self.n_rh()
-            elif (self.k_h_prod() <= C37 * pow(pow(self.dn_bottom(i), 1.8) / (0.21 * pow(0.0762, 0.4)),1 / 0.74)):
-                return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(0.0762, 0.9) * pow(self.k_h_prod(),0.74) * self.n_rh()
-            else:
-                m = C40 - 0.4324 * math.log10(self.dn_bottom(i)) + 0.5405 * math.log10(0.0762)
-                return 3*C38 * pow(10,(2 * math.log10(self.dn_bottom(i)) + 0.5 * math.log10(0.0762) - 0.74 * pow((C39 + 2 * math.log10(self.dn_bottom(i)) - math.log10(self.k_h_prod()))/m, m)))
-        else:
-            if (self.k_h_prod() > C34 * pow(self.dn_bottom(i), 2)):
-                return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * self.FLUID_HEIGHT) * self.n_rh()
-            elif (self.k_h_prod() <= C37*pow(pow(self.dn_bottom(i),1.8)/(0.21*pow(self.FLUID_HEIGHT,0.4)),1/0.74)):
-                return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(self.FLUID_HEIGHT, 0.9) * pow(self.k_h_prod(), 0.74) * self.n_rh()
-            else:
-                m = C40-0.4324*math.log10(self.dn_bottom(i)) + 0.5405*math.log10(self.FLUID_HEIGHT)
-                return 3*C38*pow(10,2*math.log10(self.dn_bottom(i))+0.5*math.log10(self.FLUID_HEIGHT)-0.74*pow((C39+2*math.log10(self.dn_bottom(i))-math.log10(self.k_h_prod()))/m,m))
-#=======
         if (self.k_h_water() > C34 * pow(self.dn_bottom(i), 2)):
             return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * self.FLUID_HEIGHT) * self.n_rh()
         else:
             return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(self.FLUID_HEIGHT, 0.9) * pow(self.k_h_water(), 0.74) * self.n_rh()
-#>>>>>>> Stashed changes
 
     def t_ld_tank_bottom(self):
         if (self.Soil_type == "Concrete-Asphalt"):

@@ -953,7 +953,6 @@ def calculateTank(proposalID):
         damageList = dm_cal.ISDF()
         for dm in damageMachinsm:
             dm.delete()
-        ErrDammage = []
         for damage in damageList:
             dm = models.RwDamageMechanism(id_dm=rwassessment, dmitemid_id=damage['DM_ITEM_ID'],
                                           isactive=damage['isActive'],
@@ -964,15 +963,9 @@ def calculateTank(proposalID):
                                           lastinspdate=damage['lastINSP'].date().strftime('%Y-%m-%d'),
                                           inspduedate=dm_cal.INSP_DUE_DATE(FC_TOTAL, gffTotal,
                                                                            datafaci.managementfactor,
-                                                                           target.risktarget_fc).date().strftime('%Y-%m-%d'))
+                                                                           target.risktarget_fc).date().strftime(
+                                              '%Y-%m-%d'))
             dm.save()
-            ErrDammage.append(damage['DM_ITEM_ID'])
-        # for da in ErrDammage:
-        #     print(da)
-        dm_cal.SEND_EMAIL(FC_TOTAL, gffTotal,
-                          datafaci.managementfactor,
-                          target.risktarget_fc,ErrDammage,datafaci.facilityname)
-
         if countRefullfc.count() != 0:
             refullfc = models.RwFullFcof.objects.get(id=proposalID)
             refullfc.fcofvalue = FC_TOTAL
