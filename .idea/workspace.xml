@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4de0988f-1cef-4697-a525-98edbeaf5d77" name="Default Changelist" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py" afterPath="$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -50,8 +49,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1241">
-              <caret line="3518" column="77" lean-forward="false" selection-start-line="3518" selection-start-column="69" selection-end-line="3518" selection-end-column="77" />
+            <state relative-caret-position="50150">
+              <caret line="2952" column="37" lean-forward="false" selection-start-line="2952" selection-start-column="37" selection-end-line="2952" selection-end-column="37" />
               <folding>
                 <marker date="1586749497071" expanded="true" signature="112846:118277" ph="..." />
               </folding>
@@ -62,8 +61,18 @@
       <file leaf-file-name="fastCalulate.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="820" column="54" lean-forward="true" selection-start-line="820" selection-start-column="54" selection-end-line="820" selection-end-column="54" />
+            <state relative-caret-position="14348">
+              <caret line="845" column="60" lean-forward="false" selection-start-line="845" selection-start-column="60" selection-end-line="845" selection-end-column="60" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fullyBottomConsequence.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyBottomConsequence.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="27" column="76" lean-forward="false" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="76" />
               <folding />
             </state>
           </provider>
@@ -82,20 +91,11 @@
       <file leaf-file-name="DM_CAL.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3995">
-              <caret line="2356" column="29" lean-forward="false" selection-start-line="2356" selection-start-column="29" selection-end-line="2356" selection-end-column="36" />
+            <state relative-caret-position="39236">
+              <caret line="2308" column="27" lean-forward="false" selection-start-line="2308" selection-start-column="27" selection-end-line="2308" selection-end-column="27" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dm_items" pinned="false" current-in-tab="false">
-        <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.dm_items">
-          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-            <state>
-              <filtering enabled="true" />
             </state>
           </provider>
         </entry>
@@ -123,8 +123,8 @@
       <file leaf-file-name="CA_CAL.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="1197" column="67" lean-forward="true" selection-start-line="1197" selection-start-column="67" selection-end-line="1197" selection-end-column="67" />
+            <state relative-caret-position="187">
+              <caret line="1093" column="48" lean-forward="false" selection-start-line="1093" selection-start-column="48" selection-end-line="1093" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -133,8 +133,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1003">
-              <caret line="65" column="55" lean-forward="false" selection-start-line="65" selection-start-column="55" selection-end-line="65" selection-end-column="55" />
+            <state relative-caret-position="969">
+              <caret line="63" column="62" lean-forward="false" selection-start-line="63" selection-start-column="62" selection-end-line="63" selection-end-column="62" />
               <folding />
             </state>
           </provider>
@@ -151,7 +151,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>componentnumber</find>
       <find>structuralthickness</find>
       <find>StructuralThickness</find>
       <find>Britt</find>
@@ -181,6 +180,7 @@
       <find>EmailMessage</find>
       <find>INSP_DUE_DATE</find>
       <find>DmItems</find>
+      <find>consequencecategory</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -243,7 +243,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="685" />
     <option name="y" value="336" />
     <option name="width" value="699" />
@@ -268,7 +268,9 @@
       </profile-state>
     </entry>
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
@@ -302,6 +304,43 @@
               <item name="cloud" type="462c0819:PsiDirectoryNode" />
               <item name="process" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="cloud" type="462c0819:PsiDirectoryNode" />
+              <item name="process" type="462c0819:PsiDirectoryNode" />
+              <item name="RBI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="RbiCloud" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="proposal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="risk_summary" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -314,7 +353,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../RBI_Backup/Update_RBI_Web_5_4_2020" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -488,16 +527,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23298033" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.35679215" sideWeight="0.32223904" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15658094" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2913257" sideWeight="0.67776096" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23895253" sideWeight="0.67776096" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -574,48 +612,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.tbl_3b21_si_conversion">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_material">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_ca_tank">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_input_ca_tank">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.api_component_type">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyBottomConsequence.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="130" column="84" lean-forward="true" selection-start-line="130" selection-start-column="84" selection-end-line="130" selection-end-column="84" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.tbl_3b21_si_conversion" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_material" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_ca_tank" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_input_ca_tank" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.api_component_type" />
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyShellConsequence.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-255">
@@ -623,27 +624,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_assessment">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_component">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.verifacation">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_assessment" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_component" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.verifacation" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/b573ea17-3290-4b1e-8a38-dbcc94541685/console_1.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -651,13 +634,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.vericontent">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.vericontent" />
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalTankEdit.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="14382">
@@ -714,13 +691,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.verification">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.verification" />
     <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseBusiness.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1122">
@@ -735,13 +706,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.django_session">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.django_session" />
     <entry file="file://$PROJECT_DIR$/templates/Messages/Messages_Inbox.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -770,20 +735,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.auth_user">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.users">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.auth_user" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.users" />
     <entry file="file://D:/python/Lib/site-packages/django/core/mail/message.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -812,21 +765,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.z_user">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="65" column="55" lean-forward="false" selection-start-line="65" selection-start-column="55" selection-end-line="65" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.z_user" />
     <entry file="file://$USER_HOME$/.PyCharm2017.2/system/python_stubs/-287100998/numpy/core/multiarray.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
@@ -834,13 +773,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.ca_level1">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.ca_level1" />
     <entry file="file://$PROJECT_DIR$/cloud/process/RBI/Postgresql.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4964">
@@ -849,20 +782,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_damage_mechanism">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.dm_items">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.rw_damage_mechanism" />
+    <entry file="das://table:/1c37ae7f/b573ea17-3290-4b1e-8a38-dbcc94541685/rbi3_3.dm_items" />
     <entry file="file://$PROJECT_DIR$/cloud/regularverification/interpolation.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7327">
@@ -879,38 +800,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="969">
+          <caret line="63" column="62" lean-forward="false" selection-start-line="63" selection-start-column="62" selection-end-line="63" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cloud/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1241">
-          <caret line="3518" column="77" lean-forward="false" selection-start-line="3518" selection-start-column="69" selection-end-line="3518" selection-end-column="77" />
+        <state relative-caret-position="50150">
+          <caret line="2952" column="37" lean-forward="false" selection-start-line="2952" selection-start-column="37" selection-end-line="2952" selection-end-column="37" />
           <folding>
             <marker date="1586749497071" expanded="true" signature="112846:118277" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14348">
+          <caret line="845" column="60" lean-forward="false" selection-start-line="845" selection-start-column="60" selection-end-line="845" selection-end-column="60" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyBottomConsequence.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="27" column="76" lean-forward="false" selection-start-line="27" selection-start-column="57" selection-end-line="27" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3995">
-          <caret line="2356" column="29" lean-forward="false" selection-start-line="2356" selection-start-column="29" selection-end-line="2356" selection-end-column="36" />
+        <state relative-caret-position="39236">
+          <caret line="2308" column="27" lean-forward="false" selection-start-line="2308" selection-start-column="27" selection-end-line="2308" selection-end-column="27" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="820" column="54" lean-forward="true" selection-start-line="820" selection-start-column="54" selection-end-line="820" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="1197" column="67" lean-forward="true" selection-start-line="1197" selection-start-column="67" selection-end-line="1197" selection-end-column="67" />
+        <state relative-caret-position="187">
+          <caret line="1093" column="48" lean-forward="false" selection-start-line="1093" selection-start-column="48" selection-end-line="1093" selection-end-column="48" />
           <folding />
         </state>
       </provider>
