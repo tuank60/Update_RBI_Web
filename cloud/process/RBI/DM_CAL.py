@@ -12,6 +12,8 @@ from pathlib import _Selector
 # from pyglet.input.carbon_hid import Self
 
 from cloud.process.RBI import Postgresql as DAL_CAL
+from django.core.mail import EmailMessage
+from cloud import models
 
 
 # nhung gia tri Num_inspec, EFF khong can truyen khi su dung ham
@@ -510,7 +512,7 @@ class DM_CAL:
                 print(e)
                 return 0
 
-    def     DF_THIN(self, age):
+    def DF_THIN(self, age):
         Fwd = 1
         Fam = 1
         Fsm = 1
@@ -2339,7 +2341,7 @@ class DM_CAL:
         for a in range(1,16):
             if self.DF_TOTAL_API(a) >= DF_TARGET:
                 break
-        return self.AssesmentDate + relativedelta(years= a)
+        return self.AssesmentDate + relativedelta(years=a)
 
     def INSP_DUE_DATE_General(self, FC_total, GFF, FSM, Risk_Target):
         DF_TARGET = Risk_Target/(FC_total*GFF*FSM)
@@ -2347,6 +2349,20 @@ class DM_CAL:
             if self.DF_TOTAL_GENERAL(a) >= DF_TARGET:
                 break
         return self.AssesmentDate + relativedelta(year=a)
+
+    def SEND_EMAIL(self, FC_Total, GFF, FSM, Risk_Target,ErrDammage,facilityname):
+        DF_TARGET = Risk_Target/(FC_Total * GFF * FSM)
+        if self.DF_TOTAL_API(0) >= DF_TARGET or self.DF_TOTAL_API(1) >= DF_TARGET:
+            print("Send Email to Manage !!!!")
+            email_subject = "Warning notice from " + str(facilityname) + " Facility .......!"
+            message = "The following damage factors are very high and they need maintenance:\n"
+            for da in ErrDammage:
+                DFm =models.DMItems.objects.get(dmitemid=da)
+                message += "  + "+str(DFm.dmdescription) + ".\n"
+            message += "\n Email from Facility"
+            to_email = "doanhtuan14111997@gmail.com"
+            Email = EmailMessage(email_subject, message, to=[to_email])
+            Email.send()
 
     def ISDF(self):
         DM_ID = [8, 9, 61, 57, 73, 69, 60, 72, 62, 70, 67, 34, 32, 66, 63, 68, 2, 18, 1, 14, 10]
@@ -2379,6 +2395,7 @@ class DM_CAL:
                 data_return['DF1'] = DF_ITEM[i]
                 data_return['DM_ITEM_ID'] = DM_ID[i]
                 data_return['isActive'] = 1
+                data_return['i'] = i
                 data_return['highestEFF'] = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[i])
                 data_return['secondEFF'] = data_return['highestEFF']
                 data_return['numberINSP'] = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[i])

@@ -410,20 +410,27 @@ class Newton:
             return s
         except Exception as e:
             raise
-
+import math
 if __name__=="__main__":
         try:
             # obj = Newton(27, "DeltaFATT")
             # obj.calculate()
             # print(obj.calculate())
-            obj = Newton(27,"SigmaPhase")
+            # obj = Newton(27,"SigmaPhase")
             # # obj.calculate()
-            print(obj.calculate())
-
+            # print(obj.calculate())
+            # print(math.log10(65))
+            print(1/0.74)
         except Exception as e:
             traceback.print_exc()
             sys.exit(1)
 
+# from django.core.mail import EmailMessage
+# Email = EmailMessage("aa", "aa", to=["doanhtuan14111997@gmail.com"])
+# Email.send()
+
+# DFm =models.DMItems.objects.get(dmitemid=1)
+# print(DFm.dmdescription)
 
 
 
