@@ -1,6 +1,4 @@
 import os
-from distutils.command.install import install
-
 from django.core.wsgi import get_wsgi_application
 from numpy.lib.function_base import vectorize
 
@@ -323,7 +321,6 @@ def ListFacilities(request, siteID):
         if '_edit' in request.POST:
             for a in data:
                 if(request.POST.get('%d' %a.facilityid)):
-                    print(a.facilityid)
                     return redirect('facilitiesEdit', a.facilityid)
         try:
             if '_delete' in request.POST:
@@ -1927,7 +1924,6 @@ def EditProposal(request, proposalID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
-    print("go edit")
     try:
         Fluid = ["Acid", "AlCl3", "C1-C2", "C13-C16", "C17-C25", "C25+", "C3-C4", "C5", "C6-C8", "C9-C12", "CO", "DEE",
                  "EE", "EEA", "EG", "EO", "H2", "H2S", "HCl", "HF", "Methanol", "Nitric Acid", "NO2", "Phosgene", "PO",
@@ -3324,7 +3320,7 @@ def upload(request, siteID):
                 os.remove(url_file)
             except OSError:
                 pass
-    except Exception as e:
+    except:
         raise Http404
 
     return render(request, 'FacilityUI/facility/uploadData.html', {'siteID': siteID, 'showcontent': showcontent,'noti':noti,'countnoti':countnoti,'count':count,'info':request.session, 'page':'uploadPlan'})
@@ -3377,24 +3373,21 @@ def signin(request):
                 xpass=request.POST.get('txtpass')
                 data=models.ZUser.objects.filter(Q(username=xuser),Q(password=xpass),Q(active=1))
                 if data.count():
-                    try:
-                        request.session['id']=data[0].id
-                        request.session['name']=data[0].name
-                        request.session['kind']=data[0].kind
-                        request.session['phone']=data[0].phone
-                        request.session['address'] = data[0].adress
-                        request.session['email'] = data[0].email
-                        request.session['other_info'] = data[0].other_info
-                        request.session.set_expiry(0)
-                        if request.session['kind']=='citizen':
-                            return redirect('citizenHome')
-                        elif request.session['kind']=='factory':
-                            facilityID = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
-                            return redirect('facilitiesDisplay',facilityID)
-                        else:
-                            return redirect('manager',3)
-                    except Exception as e:
-                        print(e)
+                    request.session['id']=data[0].id
+                    request.session['name']=data[0].name
+                    request.session['kind']=data[0].kind
+                    request.session['phone']=data[0].phone
+                    request.session['address'] = data[0].adress
+                    request.session['email'] = data[0].email
+                    request.session['other_info'] = data[0].other_info
+                    request.session.set_expiry(0)
+                    if request.session['kind']=='citizen':
+                        return redirect('citizenHome')
+                    elif request.session['kind']=='factory':
+                        facilityID = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
+                        return redirect('facilitiesDisplay',facilityID)
+                    else:
+                        return redirect('manager',3)
                 else:
                     error="Tài khoản hoặc mật khẩu không đúng"
             return render(request,'Home/index.html',{'error':error})

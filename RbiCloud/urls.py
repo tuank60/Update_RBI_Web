@@ -124,5 +124,8 @@ urlpatterns = [
     #############connect thingsboard _____ sensor, gateway #############
     path('newsensor/<int:componentID>/', views.NewSensor, name='newsensor')
 ]
-handler404 = 'cloud.views.handler404'
+'''
+Dkm cuong luong
+'''
 handler500 = 'cloud.views.handler404'
+handler404 = 'cloud.views.handler404'

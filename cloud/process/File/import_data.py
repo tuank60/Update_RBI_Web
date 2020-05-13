@@ -13,6 +13,7 @@ from xlrd import open_workbook
 from django.shortcuts import Http404
 from cloud import models
 from datetime import datetime
+import datetime
 
 def checkEquipmentComponentExist(equipmentNumber,componentNumber):
     try:
