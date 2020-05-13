@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'RbiCloud.wsgi.application'
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'rbi-web',
+         'NAME': 'rbi-web2',
          'USER': 'root',
          'PASSWORD': '1',
          'HOST': 'localhost',
@@ -135,7 +135,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-# STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'),)
 
@@ -152,7 +152,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "doanhtuan14111997@gmail.com"
+EMAIL_HOST_USER = "tuank60lab411@gmail.com"
 EMAIL_HOST_PASSWORD = "anhtuan1997"
 EMAIL_PORT = 587
 # Allow host

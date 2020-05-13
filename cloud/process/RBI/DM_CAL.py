@@ -12,6 +12,8 @@ from pathlib import _Selector
 # from pyglet.input.carbon_hid import Self
 
 from cloud.process.RBI import Postgresql as DAL_CAL
+from django.core.mail import EmailMessage
+from cloud import models
 
 
 # nhung gia tri Num_inspec, EFF khong can truyen khi su dung ham
@@ -56,7 +58,8 @@ class DM_CAL:
                  EquipmentType="", PREVIOUS_FAIL="", AMOUNT_SHAKING="", TIME_SHAKING="", CYLIC_LOAD="",
                  CORRECT_ACTION="", NUM_PIPE="", PIPE_CONDITION="", JOINT_TYPE="", BRANCH_DIAMETER="",PRESSSURE_CONTROL=False,
                  FABRICATED_STEEL=False, EQUIPMENT_SATISFIED=False, NOMINAL_OPERATING_CONDITIONS=False,CET_THE_MAWP=False,
-                 CYCLIC_SERVICE = False, EQUIPMENT_CIRCUIT_SHOCK=False,MIN_TEMP_PRESSURE=0
+                 CYCLIC_SERVICE = False, EQUIPMENT_CIRCUIT_SHOCK=False,MIN_TEMP_PRESSURE=0,
+                 HYDROGEN = 0, HTHADAMAGEOBSERVER =0
                  # PRIMARY_SOIL_TYPE="", PARTICAL_SIZE_UNIFORMITY="",
                  # MOSTURE_LEVEL="",EquipmentTemperature=0, CATHODIC_PROTECTION_EFF="", SoilResistivity_ConsideredforbaseCR=False,
                  # AST_PAD_TYPE_FACTOR="",AST_DRAINAGE_TYPE="",AST_PAD_TYPE_BOTTOM="",SoilSideTemperature=0,
@@ -495,7 +498,10 @@ class DM_CAL:
         self.EFF_THIN = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[0])
         self.NoINSP_THINNING = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber,self.DM_Name[0])
         if (self.APIComponentType == 'TANKBOTTOM' or self.APIComponentType == 'TANKROOFFLOAT'):
-            if (self.NomalThick == 0 or self.CurrentThick == 0):
+            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency == 0 or (
+            self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0)
+            or self.EXTERNAL_EXPOSED_FLUID_MIST or (
+            (self.CARBON_ALLOY and not (self.MAX_OP_TEMP < 12 or self.MIN_OP_TEMP > 177)))):
                 return 1390
             else:
                 return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.Art(age)), self.NoINSP_THINNING, self.EFF_THIN)
@@ -510,7 +516,7 @@ class DM_CAL:
                 print(e)
                 return 0
 
-    def     DF_THIN(self, age):
+    def DF_THIN(self, age):
         Fwd = 1
         Fam = 1
         Fsm = 1
@@ -1346,14 +1352,19 @@ class DM_CAL:
             if (self.EXTERNAL_INSP_EFF == "" or self.EXTERNAL_INSP_NUM == 0):
                 self.EXTERNAL_INSP_EFF = "E"
             if (self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT"):
-                if (self.NomalThick == 0 or self.CurrentThick == 0):
+                if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency == 0 or (
+                self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0)
+                or self.EXTERNAL_EXPOSED_FLUID_MIST or (
+                (self.CARBON_ALLOY and not (self.MAX_OP_TEMP < 12 or self.MIN_OP_TEMP > 177)))):
                     return 1390
                 else:
                     return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
                                                          self.EXTERNAL_INSP_EFF)
-            else:
-                if (self.NomalThick == 0 or self.CurrentThick == 0):
-                    return 1900
+            else:#sua lai
+                if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency ==0 or (self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp==0)
+                or self.EXTERNAL_EXPOSED_FLUID_MIST or ((self.CARBON_ALLOY and not (self.MAX_OP_TEMP<12 or self.MIN_OP_TEMP >177)))):
+                    #return 1900
+                    return 6500
                 else:
                     try:
                         a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))
@@ -1564,12 +1575,18 @@ class DM_CAL:
             if (self.CUI_INSP_EFF == "" or self.CUI_INSP_NUM == 0):
                 self.CUI_INSP_EFF = "E"
             if (self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT"):
-                if (self.NomalThick == 0 or self.CurrentThick == 0):
+                if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency == 0 or (
+                self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0)
+                or self.EXTERNAL_EXPOSED_FLUID_MIST or (
+                (self.CARBON_ALLOY and not (self.MAX_OP_TEMP < 12 or self.MIN_OP_TEMP > 177)))):
                     return 1390
                 else:
                     return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_CUI(age)),self.CUI_INSP_NUM,self.CUI_INSP_EFF)
             else:
-                if (self.NomalThick == 0 or self.CurrentThick == 0):
+                if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency == 0 or (
+                self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0)
+                or self.EXTERNAL_EXPOSED_FLUID_MIST or (
+                (self.CARBON_ALLOY and not (self.MAX_OP_TEMP < 12 or self.MIN_OP_TEMP > 177)))):
                     return 1900
                 else:
                     try:
@@ -1886,17 +1903,21 @@ class DM_CAL:
                                                  self.API_SIZE_BRITTLE(self.BRITTLE_THICK))
 
     def DF_BRITTLE(self,i):
+        print("------function")
         Fse = 1
-        if(self.BRITTLE_THICK<=12.7 or (self.FABRICATED_STEEL and self.EQUIPMENT_SATISFIED and self.NOMINAL_OPERATING_CONDITIONS
+        if((self.BRITTLE_THICK<=12.7) or (self.FABRICATED_STEEL and self.EQUIPMENT_SATISFIED and self.NOMINAL_OPERATING_CONDITIONS
         and self.CET_THE_MAWP and self.CYCLIC_SERVICE and self.EQUIPMENT_CIRCUIT_SHOCK and (self.BRITTLE_THICK <=50.8))):
+
             Fse = 0.01
+            print("-------go if")
         if (self.CARBON_ALLOY and (self.CRITICAL_TEMP < self.MIN_DESIGN_TEMP or self.MAX_OP_TEMP < self.MIN_DESIGN_TEMP)):
             # if (self.LOWEST_TEMP):
+            print("------------go else")
             return self.DFB_BRIITLE() * Fse
             # else:
             #     return self.DFB_BRIITLE()
         else:
-            return 0
+            return 1
 
     # Calculate TEMP EMBRITTLE
     def API_SIZE_BRITTLE(self, SIZE):
@@ -1955,6 +1976,9 @@ class DM_CAL:
             else:
                 TEMP_EMBRITTLE = min(self.MIN_DESIGN_TEMP, self.CRITICAL_TEMP) - (self.REF_TEMP + self.DELTA_FATT)
             if (self.PWHT):
+                print(self.API_TEMP(TEMP_EMBRITTLE))
+                print("-------apitem")
+                print(self.API_SIZE_BRITTLE(self.BRITTLE_THICK))
                 return DAL_CAL.POSTGRESQL.GET_TBL_215(self.API_TEMP(TEMP_EMBRITTLE),
                                                      self.API_SIZE_BRITTLE(self.BRITTLE_THICK))
             else:
@@ -2282,10 +2306,27 @@ class DM_CAL:
         return DF_SCC
 
     def DF_EXT_TOTAL_API(self, i):#done
+        print("----vào DF_EXT_TOTAL_API")
+        print(self.DF_EXTERNAL_CORROSION_API(i))
+        print("---------1")
+        print(self.DF_CUI_API(i))
+        print("---------2")
+        print(self.DF_EXTERN_CLSCC_API(i))
+        print("--------3")
+        print(self.DF_CUI_CLSCC_API(i))
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(i), self.DF_CUI_CLSCC_API(i))
         return DF_EXT
 
     def DF_BRIT_TOTAL_API(self,i):#done
+        print("-----------test brit")
+        print(self.DF_TEMP_EMBRITTLE_API(i))
+        print("----------1")
+        print(self.DF_SIGMA_API(i))
+        print('--------2')
+        print(self.DF_885_API(i))
+        print("-----------3")
+        print(self.DF_BRITTLE_API(i))
+
         DF_BRIT = max(self.DF_BRITTLE_API(i) + self.DF_TEMP_EMBRITTLE_API(i), self.DF_SIGMA_API(i), self.DF_885_API(i))
         return DF_BRIT
 
@@ -2301,6 +2342,17 @@ class DM_CAL:
 
     def DF_TOTAL_API(self,i):#testing df_htha
         try:
+            print(self.DF_THINNING_TOTAL_API(i))
+            print("------1")
+            print(self.DF_EXT_TOTAL_API(i))
+            print("------2")
+            print(self.DF_SSC_TOTAL_API(i))
+            print("------3")
+            print(self.DF_PIPE_API(i))
+            print("------4")
+            print(self.DF_HTHA_API(i))
+            print("-------5")
+            print(self.DF_BRIT_TOTAL_API(i))
             TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i),self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
         except Exception as e:
             print(e)
@@ -2339,7 +2391,7 @@ class DM_CAL:
         for a in range(1,16):
             if self.DF_TOTAL_API(a) >= DF_TARGET:
                 break
-        return self.AssesmentDate + relativedelta(years= a)
+        return self.AssesmentDate + relativedelta(years=a)
 
     def INSP_DUE_DATE_General(self, FC_total, GFF, FSM, Risk_Target):
         DF_TARGET = Risk_Target/(FC_total*GFF*FSM)
@@ -2347,6 +2399,20 @@ class DM_CAL:
             if self.DF_TOTAL_GENERAL(a) >= DF_TARGET:
                 break
         return self.AssesmentDate + relativedelta(year=a)
+
+    def SEND_EMAIL(self, FC_Total, GFF, FSM, Risk_Target,ErrDammage,facilityname):
+        DF_TARGET = Risk_Target/(FC_Total * GFF * FSM)
+        if self.DF_TOTAL_API(0) >= DF_TARGET or self.DF_TOTAL_API(1) >= DF_TARGET:
+            print("Send Email to Manage !!!!")
+            email_subject = "Warning notice from " + str(facilityname) + " Facility .......!"
+            message = "The following damage factors are very high and they need maintenance:\n"
+            for da in ErrDammage:
+                DFm =models.DMItems.objects.get(dmitemid=da)
+                message += "  + "+str(DFm.dmdescription) + ".\n"
+            message += "\n Email from Facility"
+            to_email = "doanhtuan14111997@gmail.com"
+            Email = EmailMessage(email_subject, message, to=[to_email])
+            Email.send()
 
     def ISDF(self):
         DM_ID = [8, 9, 61, 57, 73, 69, 60, 72, 62, 70, 67, 34, 32, 66, 63, 68, 2, 18, 1, 14, 10]
@@ -2379,6 +2445,7 @@ class DM_CAL:
                 data_return['DF1'] = DF_ITEM[i]
                 data_return['DM_ITEM_ID'] = DM_ID[i]
                 data_return['isActive'] = 1
+                data_return['i'] = i
                 data_return['highestEFF'] = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[i])
                 data_return['secondEFF'] = data_return['highestEFF']
                 data_return['numberINSP'] = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[i])

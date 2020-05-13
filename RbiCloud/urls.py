@@ -37,10 +37,9 @@ urlpatterns = [
     path('designcode/', views.base_designcode, name='designcode'),
     path('manufacture/', views.base_manufacture, name= 'manufacture'),
     ########################## Facility UI################################
-    # path("ajax/", views.ajax_get_Site, name = "ajax_site"),
     path('inspection/plan/<int:siteID>/', views.InpsectionPlan, name='inspectionPlan'),
-    path('inspection/plan/<int:siteID>/InpsectionPlan<str:name>/InpsectionPlan<str:date>/', views.InpsectionPlan, name='inspectionPlan'),
-    path('add/<int:siteID>/<int:facilityID>/<int:equipID>/<str:name>/<str:date>/plan/', views.AdddInssepctionPlan, name='addInspectionPlan'),
+    path('inspection/plan/<int:siteID>/InpsectionPlan<str:name>/InpsectionPlan<str:date>/', views.InpsectionPlan,name='inspectionPlan'),
+    path('add/<int:siteID>/<int:facilityID>/<int:equipID>/<str:name>/<str:date>/plan/', views.AdddInssepctionPlan,name='addInspectionPlan'),
     path('create/<int:siteID>/plan/', views.CreateInspectionPlan, name='createInspectionPlan'),
     path('facilities/display/<int:siteID>/', views.ListFacilities, name='facilitiesDisplay'),
     path('facilities/<int:siteID>/new/', views.NewFacilities, name='facilitiesNew'),
@@ -111,7 +110,7 @@ urlpatterns = [
     ############# Verification #############
     path('proposalManaVeri/<int:proposalID>/damage-factor/', views.VeriFullyDamageFactorMana, name='veridamgeFactorMana'),
     path('proposalManaVeri/<int:proposalID>/fully-consequence/',views.VeriFullyConsequenceMana, name='verifullyConsequenceMana'),
-    path('verification/',views.VerificationHome,name='VerificationHome'),
+    path('verification/<int:faciid>',views.VerificationHome,name='VerificationHome'),
     path('verification/<int:verifiID>/Check',views.VerificationCheck,name='VerificationCheck'),
     path('verificationFaci',views.VerificationNumberFacilities,name='VerificationFaci'),
     ######################### Citizen UI ##############################
