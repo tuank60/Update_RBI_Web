@@ -14,7 +14,6 @@ from django.shortcuts import Http404
 from cloud import models
 from datetime import datetime
 
-
 def checkEquipmentComponentExist(equipmentNumber,componentNumber):
     try:
         eq = models.EquipmentMaster.objects.get(equipmentnumber=equipmentNumber)
