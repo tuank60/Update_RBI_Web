@@ -897,7 +897,7 @@ def ListProposal(request, componentID):
             istank = 1
         else:
             istank = 0
-        if comp.componenttypeid_id == 8 or comp.componenttypeid_id == 14:
+        if comp.componenttypeid_id == 9 or comp.componenttypeid_id == 13:
             isshell = 1
         else:
             isshell = 0
@@ -913,9 +913,12 @@ def ListProposal(request, componentID):
             elif '_edit' in request.POST:
                 for a in rwass:
                     if request.POST.get('%d' %a.id):
-                        if istank:
+                        if istank: #tuansua
                             print("tank")
                             return redirect('tankEdit', proposalID= a.id)
+                        elif isshell:
+                            print("tank")
+                            return redirect('tankEdit', proposalID=a.id)
                         else:
                             print("nottank")
                             return redirect('prosalEdit', proposalID= a.id)
@@ -923,6 +926,8 @@ def ListProposal(request, componentID):
                 try:
                     if api.apicomponenttypename=='TANKBOTTOM':
                         return redirect('tankNew' , componentID=componentID)
+                    elif isshell:
+                        return redirect('tankNew', componentID=componentID)
                     else:
                         return redirect('proposalNew', componentID=componentID)
                 except Exception as e:
@@ -2532,7 +2537,7 @@ def EditTank(request, proposalID):
         datafaci = models.Facility.objects.get(facilityid= eq.facilityid_id)
         data={}
         isshell = False
-        if comp.componenttypeid_id == 8 or comp.componenttypeid_id == 14:
+        if comp.componenttypeid_id == 9 or comp.componenttypeid_id == 13:#tuansua
             isshell = True
         if request.method =='POST':
             # Data Assessment
@@ -3177,7 +3182,7 @@ def FullyConsequence(request, proposalID):
             isBottom = 1
         else:
             isBottom = 0
-        if component.componenttypeid_id == 8 or component.componenttypeid_id == 14:
+        if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
             isShell = 1
         else:
             isShell = 0
@@ -3213,6 +3218,9 @@ def FullyConsequence(request, proposalID):
             return render(request, 'FacilityUI/risk_summary/fullyBottomConsequence.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
         elif isShell:
             shellConsequences = models.RwCaTank.objects.get(id=proposalID)
+            data['hydraulic_water'] = roundData.roundFC(shellConsequences.hydraulic_water)  # tuansua
+            data['hydraulic_fluid'] = roundData.roundFC(shellConsequences.hydraulic_fluid)  # tuansua
+            data['seepage_velocity'] = roundData.roundFC(shellConsequences.seepage_velocity)  # tuansua
             data['flow_rate_d1'] = roundData.roundFC(shellConsequences.flow_rate_d1)
             data['flow_rate_d2'] = roundData.roundFC(shellConsequences.flow_rate_d2)
             data['flow_rate_d3'] = roundData.roundFC(shellConsequences.flow_rate_d3)
@@ -3226,6 +3234,8 @@ def FullyConsequence(request, proposalID):
             data['release_volume_leak_d3'] = roundData.roundFC(shellConsequences.release_volume_leak_d3)
             data['release_volume_leak_d4'] = roundData.roundFC(shellConsequences.release_volume_leak_d4)
             data['release_volume_rupture'] = roundData.roundFC(shellConsequences.release_volume_rupture)
+            data['liquid_height'] = roundData.roundFC(shellConsequences.liquid_height)
+            data['volume_fluid'] = roundData.roundFC(shellConsequences.volume_fluid)
             data['time_leak_ground'] = roundData.roundFC(shellConsequences.time_leak_ground)
             data['volume_subsoil_leak_d1'] = roundData.roundFC(shellConsequences.volume_subsoil_leak_d1)
             data['volume_subsoil_leak_d4'] = roundData.roundFC(shellConsequences.volume_subsoil_leak_d4)
@@ -3242,6 +3252,13 @@ def FullyConsequence(request, proposalID):
             data['business_cost'] = roundData.roundMoney(shellConsequences.business_cost)
             data['consequence'] = roundData.roundMoney(shellConsequences.consequence)
             data['consequencecategory'] = shellConsequences.consequencecategory
+            # tuansua
+            data['material_factor'] = shellConsequences.material_factor
+            data['barrel_dike_leak'] = roundData.roundFC(shellConsequences.barrel_dike_leak)
+            data['barrel_onsite_leak'] = roundData.roundFC(shellConsequences.barrel_onsite_leak)
+            data['barrel_offsite_leak'] = roundData.roundFC(shellConsequences.barrel_offsite_leak)
+            data['barrel_water_leak'] = roundData.roundFC(shellConsequences.barrel_water_leak)
+            data['fc_environ_leak'] = roundData.roundFC(shellConsequences.fc_environ_leak)
             return render(request, 'FacilityUI/risk_summary/fullyShellConsequence.html', {'page':'fullyConse' , 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
         else:
             ca = models.RwCaLevel1.objects.get(id= proposalID)
@@ -3260,7 +3277,8 @@ def FullyConsequence(request, proposalID):
             data['fc_total'] = roundData.roundMoney(ca.fc_total)
             data['fcof_category'] = ca.fcof_category
             return render(request, 'FacilityUI/risk_summary/fullyNormalConsequence.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
-    except:
+    except Exception as e:
+        print(e)
         raise Http404
 def RiskChart(request, proposalID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])

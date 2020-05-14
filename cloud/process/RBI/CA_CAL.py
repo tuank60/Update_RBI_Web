@@ -917,7 +917,8 @@ class CA_NORMAL:
 # // Storage tank.
 class CA_SHELL:
     def __init__(self, FLUID, FLUID_HEIGHT, SHELL_COURSE_HEIGHT, TANK_DIAMETER, EnvironSensitivity,
-                 P_lvdike, P_onsite, P_offsite, MATERIAL_COST, API_COMPONENT_TYPE_NAME, PRODUCTION_COST):
+                 P_lvdike, P_onsite, P_offsite, MATERIAL_COST, API_COMPONENT_TYPE_NAME, PRODUCTION_COST,Soil_type,
+                 TANK_FLUID,CHT):
         self.FLUID = FLUID
         self.FLUID_HEIGHT = FLUID_HEIGHT
         self.SHELL_COURSE_HEIGHT = SHELL_COURSE_HEIGHT
@@ -929,6 +930,10 @@ class CA_SHELL:
         self.MATERIAL_COST = MATERIAL_COST
         self.API_COMPONENT_TYPE_NAME = API_COMPONENT_TYPE_NAME
         self.PRODUCTION_COST = PRODUCTION_COST
+        self.Soil_type = Soil_type
+        self.TANK_FLUID=TANK_FLUID
+        self.CHT=CHT
+        # self.EQUIPMENT_COST = EQUIPMENT_COST
 
     def FC_Category(self, fc):
         if (fc <= 10000):
@@ -941,6 +946,77 @@ class CA_SHELL:
             return "D"
         else:
             return "E"
+
+    def k_h_bottom(self):
+        k_h = [0, 0, 0]
+        if (self.Soil_type == "Coarse Sand"):
+            k_h[0] = 0.1
+            k_h[1] = 0.01
+            k_h[2] = 0.33
+        elif(self.Soil_type == "Fine Sand"):
+            k_h[0] = 0.01
+            k_h[1] = 0.001
+            k_h[2] = 0.33
+        elif(self.Soil_type == "Very Fine Sand"):
+            k_h[0] = pow(10, -3)
+            k_h[1] = pow(10, -5)
+            k_h[2] = 0.33
+        elif(self.Soil_type == "Silt"):
+            k_h[0] = pow(10, -5)
+            k_h[1] = pow(10, -6)
+            k_h[2] = 0.41
+        elif(self.Soil_type == "Sandy Clay"):
+            k_h[0] = pow(10, -6)
+            k_h[1] = pow(10, -7)
+            k_h[2] = 0.45
+        elif(self.Soil_type == "Clay"):
+            k_h[0] = pow(10, -7)
+            k_h[1] = pow(10, -8)
+            k_h[2] = 0.5
+        elif(self.Soil_type == "Concrete-Asphalt"):
+            k_h[0] = pow(10, -10)
+            k_h[1] = pow(10, -11)
+            k_h[2] = 0.3
+        else:
+            k_h[0] = 1
+            k_h[1] = 0.1
+            k_h[2] = 0.4
+        return k_h
+
+    def k_h_water(self):
+        C31 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(31)
+        k_h = self.k_h_bottom()
+        return C31 * (k_h[0] + k_h[1]) / 2
+
+    def GET_PL_UL(self):
+        data = [0, 0]
+        if (self.TANK_FLUID == "Gasoline"):
+            data[0] = 684.018
+            data[1] = 4.01 * pow(10, -3)
+        elif(self.TANK_FLUID == "Light Diesel Oil"):
+            data[0] = 734.011
+            data[1] = 1.04 * pow(10, -3)
+        elif(self.TANK_FLUID == "Heavy Diesel Oil"):
+            data[0] = 764.527
+            data[1] = 2.46 * pow(10, -3)
+        elif(self.TANK_FLUID == "Fuel Oil"):
+            data[0] = 775.019
+            data[1] = 3.69 * pow(10, -2)
+        elif(self.TANK_FLUID == "Crude Oil"):
+            data[0] = 775.019
+            data[1] = 3.69 * pow(10, -2)
+        else:
+            data[0] = 900.026
+            data[1] = 4.6 * pow(10, -2)
+        return data
+
+    def k_h_prod(self):
+        pl_ul = self.GET_PL_UL()
+        return self.k_h_water() * (pl_ul[0] / 1000) * (1 / pl_ul[1])
+
+    def vel_s_prod(self):
+        kh = self.k_h_bottom()
+        return self.k_h_prod() / kh[2]
 
     def d_n_shell(self, i):
         if (i == 1):
@@ -956,23 +1032,36 @@ class CA_SHELL:
     def a_n_shell(self, i):
         return math.pi * pow(self.d_n_shell(i),2) / 4
 
+    def LHT_above(self,i):
+        LHTab = self.FLUID_HEIGHT-(i-1)*self.CHT
+        if LHTab>=0:
+            return LHTab
+        else:
+            return 0
+
+    def Lvol_abouve(self,i):
+        return math.pi * pow(self.TANK_DIAMETER,2) * self.LHT_above(i) / 4
+
     def W_n_Tank(self, i):
         C32 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(32)
-        return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * self.FLUID_HEIGHT)
+        return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.LHT_above(i))
+        # return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * self.FLUID_HEIGHT)
 
     def Bbl_total_shell(self):
         return math.pi * pow(self.TANK_DIAMETER,2) * self.FLUID_HEIGHT / (4* DAL_CAL.POSTGRESQL.GET_TBL_3B21(13))
 
     def Bbl_avail(self, i):
         C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-        return math.pi * pow(self.TANK_DIAMETER, 2) * (self.FLUID_HEIGHT - (i - 1) * self.SHELL_COURSE_HEIGHT) / (4 * C13)
+        return self.Lvol_abouve(i)*C13
+        # return math.pi * pow(self.TANK_DIAMETER, 2) * (self.FLUID_HEIGHT - (i - 1) * self.SHELL_COURSE_HEIGHT) / (4 * C13)
 
     def ld_tank(self, i):
         try:
-            if(self.d_n_shell(i) <= 3.17):
+            if(self.d_n_shell(i) <= 3.175):
                 return min(self.Bbl_avail(i) / self.W_n_Tank(i), 7)
             else:
-                return 1
+                # return 1
+                return min(self.Bbl_avail(i) / self.W_n_Tank(i), 1)
         except:
             return 1
 
@@ -1032,11 +1121,18 @@ class CA_SHELL:
         cost = self.getCost()
         return self.Bbl_leak_indike() * cost[0] + self.Bbl_leak_ssonsite() * cost[1] + self.Bbl_leak_ssoffsite() * cost[2] + self.Bbl_leak_water() * cost[5]
 
+    def Bbl_rupture_n(self):
+        return self.Bbl_avail(4)
+
     def Bbl_rupture_release(self):
+        # print(self.API_COMPONENT_TYPE_NAME)
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        return self.Bbl_leak_n(4) * obj[3] / obj[4]
+        # print(obj[3])
+        return self.Bbl_rupture_n() * obj[3] / obj[4]
 
     def Bbl_rupture_indike(self):
+        # print(self.Bbl_rupture_n())
+        # print(self.Bbl_rupture_release())
         return self.Bbl_rupture_release() * (1 - self.P_lvdike / 100)
 
     def Bbl_rupture_ssonsite(self):
@@ -1068,6 +1164,12 @@ class CA_SHELL:
         t = obj[0] * obj[5] + obj[1] * obj[6] + obj[2] * obj[7] + obj[3] * obj[8]
         fc_cmd = t * self.MATERIAL_COST / obj[4]
         return fc_cmd
+
+    # def CA_cmd(self):
+    #     return 0
+    #
+    # def FC_affa(self):
+    #     return self.CA_cmd()*self.EQUIPMENT_COST
 
     def FC_total_shell(self):
         FC_TOTAL_SHELL = self.fc_cmd() + self.FC_environ_shell() + self.FC_PROD_SHELL()

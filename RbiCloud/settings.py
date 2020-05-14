@@ -84,10 +84,10 @@ LOGOUT_REDIRECT_URL = '/'
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'rbi-web2',
+         'NAME': 'rbi3_3',
          'USER': 'root',
-         'PASSWORD': '1',
-         'HOST': '127.0.0.1',
+         'PASSWORD': 'root',
+         'HOST': 'localhost',
          'PORT': '3306',
      }
   }
