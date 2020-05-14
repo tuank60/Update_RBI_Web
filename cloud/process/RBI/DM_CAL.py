@@ -1351,14 +1351,16 @@ class DM_CAL:
         if (self.EXTERNAL_INSP_EFF == "" or self.EXTERNAL_INSP_NUM == 0):
             self.EXTERNAL_INSP_EFF = "E"
         if (self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT"):
-            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency or self.TensileStrengthDesignTemp):
+            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency or(
+             self.YieldStrengthDesignTemp and self.TensileStrengthDesignTemp) or self.EXTERN_COAT_QUALITY == "" or bool(self.COMPONENT_INSTALL_DATE) == False):
                 return 6500;
                 # return 1390
             else:
                 return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
                                                      self.EXTERNAL_INSP_EFF)
         else:
-            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency or self.TensileStrengthDesignTemp):
+            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency or
+            (self.YieldStrengthDesignTemp and self.TensileStrengthDesignTemp) or self.EXTERN_COAT_QUALITY == "" or bool(self.COMPONENT_INSTALL_DATE) == False):
                 return 6500;
             else:
                 try:

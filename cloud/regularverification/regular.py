@@ -11,7 +11,7 @@ from cloud import models
 import datetime
 import time
 import json
-import paho.mqtt.client as mqtt
+# import paho.mqtt.client as mqtt
 from cloud.process.RBI import fastCalulate as ReCalculate
 from django.shortcuts import render, redirect, render_to_response
 from cloud.regularverification.interpolation import Newton
