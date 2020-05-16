@@ -50,7 +50,7 @@ body {margin:0;}
     font-size: 22px !important;
 }
 .activeLink {
-    background-color: #FFFFFF !important;
+    /*background-color: #FFFFFF !important;*/
     color: #3bbfde !important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     font-size: 22px !important;

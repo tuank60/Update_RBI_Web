@@ -1639,6 +1639,7 @@ def NewTank(request, componentID):
             data['minOP'] = request.POST.get('MinOP')
             data['H2Spressure'] = request.POST.get('OHPP')
             data['criticalTemp'] = request.POST.get('CET')
+            data['flowrate'] = request.POST.get('FlowRate')
             data['OP1'] = request.POST.get('Operating1')
             data['OP2'] = request.POST.get('Operating2')
             data['OP3'] = request.POST.get('Operating3')
@@ -1873,7 +1874,7 @@ def NewTank(request, componentID):
                                 aqueousshutdown=aqueosShut, cyanide=cyanidesPresence, hydrofluoric=presentHF,
                                 caustic=environtCaustic, hydrogen=processContainHydro,
                                 materialexposedtoclint=materialChlorineIntern,
-                                exposedtosulphur=exposedSulfur)
+                                exposedtosulphur=exposedSulfur,flowrate=float(data['flowrate']))
             rwstream.save()
             rwexcor = models.RwExtcorTemperature(id=rwassessment, minus12tominus8=data['OP1'], minus8toplus6=data['OP2'],
                                           plus6toplus32=data['OP3'], plus32toplus71=data['OP4'],
@@ -2722,6 +2723,7 @@ def EditTank(request, proposalID):
             data['minOP'] = request.POST.get('MinOP')
             data['H2Spressure'] = request.POST.get('OHPP')
             data['criticalTemp'] = request.POST.get('CET')
+            data['flowrate'] = request.POST.get('FlowRate')
             data['OP1'] = request.POST.get('Operating1')
             data['OP2'] = request.POST.get('Operating2')
             data['OP3'] = request.POST.get('Operating3')
@@ -2964,6 +2966,7 @@ def EditTank(request, proposalID):
             rwstream.minoperatingpressure=data['minOP']
             rwstream.h2spartialpressure=data['H2Spressure']
             rwstream.criticalexposuretemperature=data['criticalTemp']
+            rwstream.flowrate = data['flowrate']
             rwstream.tankfluidname=data['fluid']
             rwstream.fluidheight=data['fluidHeight']
             rwstream.fluidleavedikepercent=data['fluidLeaveDike']
@@ -3333,6 +3336,7 @@ def upload(request, siteID):
             filename = fs.save(myfile.name, myfile)
             uploaded_file_url = fs.url(filename)
             url_file = settings.BASE_DIR.replace('\\', '//') + str(uploaded_file_url).replace('/', '//').replace('%20', ' ')
+            # time.sleep(7)
             ExcelImport.importPlanProcess(url_file)
             try:
                 os.remove(url_file)

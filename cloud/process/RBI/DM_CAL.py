@@ -324,7 +324,7 @@ class DM_CAL:
     #step 1
 
     def getTmin(self):
-        if self.APIComponentType == "TANKBOTTOM" or self.APIComponentType =="TANKROOFFLOAT":
+        if self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType =="0TANKROOFFLOAT":
             if (self.ProtectedBarrier):
                 #t = 2.54
                 t=0.05
@@ -346,7 +346,7 @@ class DM_CAL:
             return 0
     def Art(self,age):
         try:
-            if self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT":
+            if self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType == "0TANKROOFFLOAT":
                 return max((1-(self.trdi() - self.CorrosionRate * self.agetk(age)) / (self.getTmin() + self.CA)), 0.0)
             elif (self.InternalCladding):
                 if (self.agetk(age) < self.agerc()):
@@ -432,7 +432,7 @@ class DM_CAL:
         return (1- 4*self.Art(age)-self.SRp_Thin())/math.sqrt(pow(self.Art(age),2)*16*0.04 + pow(1-4*self.Art(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
 
     def API_ART(self, a):
-        if self.APIComponentType == 'TANKBOTTOM' or self.APIComponentType == 'TANKROOFFLOAT':
+        if self.APIComponentType == '0TANKBOTTOM' or self.APIComponentType == '0TANKROOFFLOAT':
             data = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9,
                     0.95, 1]
             if a < (data[0] + data[1]) / 2:
@@ -499,7 +499,7 @@ class DM_CAL:
     def DFB_THIN(self, age):
         self.EFF_THIN = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[0])
         self.NoINSP_THINNING = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber,self.DM_Name[0])
-        if (self.APIComponentType == 'TANKBOTTOM' or self.APIComponentType == 'TANKROOFFLOAT'):
+        if (self.APIComponentType == '0TANKBOTTOM' or self.APIComponentType == '0TANKROOFFLOAT'):
             if (self.NomalThick == 0 or self.CurrentThick == 0):
                 return 1390
             else:
@@ -507,10 +507,13 @@ class DM_CAL:
                 #return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.Art(age)), self.EFF_THIN)
         else:
             try:
-                a = self.Po_P1_Thin() * self.ncdf(- self.B1_Thin(age))
-                b = self.Po_P2_Thin() * self.ncdf(- self.B2_Thin(age))
-                c = self.Po_P3_Thin() * self.ncdf(- self.B3_Thin(age))
-                return (a + b + c) / (1.56 * pow(10, -4))
+                if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency == 0 or (self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0)):
+                    return 6500;
+                else:
+                    a = self.Po_P1_Thin() * self.ncdf(- self.B1_Thin(age))
+                    b = self.Po_P2_Thin() * self.ncdf(- self.B2_Thin(age))
+                    c = self.Po_P3_Thin() * self.ncdf(- self.B3_Thin(age))
+                    return (a + b + c) / (1.56 * pow(10, -4))
             except Exception as e:
                 print(e)
                 return 0
@@ -1343,27 +1346,31 @@ class DM_CAL:
         return ART_EXT
 
     def DF_EXTERNAL_CORROSION(self, age):
-        # if (self.EXTERNAL_EXPOSED_FLUID_MIST or (
-        #     self.CARBON_ALLOY and not (self.MAX_OP_TEMP < -23 or self.MIN_OP_TEMP > 121))):
-        self.EXTERNAL_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[11])
-        self.EXTERNAL_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
-        #self.NoINSP_EXTERNAL = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
+        if (self.EXTERNAL_EXPOSED_FLUID_MIST or (
+        self.CARBON_ALLOY and not (self.MAX_OP_TEMP < -23 or self.MIN_OP_TEMP > 121))):
+            self.EXTERNAL_INSP_EFF = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[11])
+            self.EXTERNAL_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
+            self.NoINSP_EXTERNAL = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
         if (self.EXTERNAL_INSP_EFF == "" or self.EXTERNAL_INSP_NUM == 0):
             self.EXTERNAL_INSP_EFF = "E"
-        if (self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT"):
-            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency or(
-             self.YieldStrengthDesignTemp and self.TensileStrengthDesignTemp) or self.EXTERN_COAT_QUALITY == "" or bool(self.COMPONENT_INSTALL_DATE) == False):
+        if (self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType == "0TANKROOFFLOAT"):
+            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency == 0 or(
+             self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0) or self.EXTERN_COAT_QUALITY == "" or (bool(self.COMPONENT_INSTALL_DATE) == False)):
                 return 6500;
                 # return 1390
             else:
+                print("--------go table")
+                print(DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
+                                                     self.EXTERNAL_INSP_EFF))
                 return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
                                                      self.EXTERNAL_INSP_EFF)
         else:
-            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency or
-            (self.YieldStrengthDesignTemp and self.TensileStrengthDesignTemp) or self.EXTERN_COAT_QUALITY == "" or bool(self.COMPONENT_INSTALL_DATE) == False):
+            if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency== 0 or
+            (self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0) or self.EXTERN_COAT_QUALITY == "" or (bool(self.COMPONENT_INSTALL_DATE) == False)):
                 return 6500;
             else:
                 try:
+                    print("---------go abc")
                     a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))
                     b = self.Po_P2_EXTERNAL() * self.ncdf(- self.B2_EXTERNAL(age))
                     c = self.Pr_P3_EXTERNAL() * self.ncdf(- self.B3_EXTERNAL(age))
@@ -1571,7 +1578,7 @@ class DM_CAL:
             self.CUI_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[12])
             if (self.CUI_INSP_EFF == "" or self.CUI_INSP_NUM == 0):
                 self.CUI_INSP_EFF = "E"
-            if (self.APIComponentType == "TANKBOTTOM" or self.APIComponentType == "TANKROOFFLOAT"):
+            if (self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType == "0TANKROOFFLOAT"):
                 if (self.NomalThick == 0 or self.CurrentThick == 0):
                     return 1390
                 else:

@@ -390,7 +390,7 @@
 {#                            <div class="col-md-5">Tramp Elements</div>#}
 {#                            <div class="col-md-1"><input type="checkbox" name="TrampElements" id="TrampElements"/></div>#}
                             <div class="col-md-3">Weld Joint Efficiency</div>
-                            <div class="col-md-3"><input id="maxN" onkeyup="MaximumN()" type="number" maxlength="10" class="form-control" step="0.01" min="0" value="0" max="1" placeholder="WeldJointEff" name="WeldJointEff" id="WeldJointEff" required/></div>
+                            <div class="col-md-3"><input id="maxN" onkeyup="MaximumN()" type="number" maxlength="10" class="form-control" step="0.01" min="0" value="{{ rwComp.weldjointefficiency }}" max="1" placeholder="WeldJointEff" name="WeldJointEff" id="WeldJointEff" required/></div>
                             <script>
                                 function MaximumN(){
                                     var max = document.getElementById("maxN").value;
@@ -563,7 +563,11 @@
                         <div class="col-md-3" style="color: red">Operating Hydrogen Partial Pressure, psi:<span style="color: red">*</span></div>
                         <div class="col-md-3"><input type="number" class="form-control" max="1000000000" step="0.01" min="0" value="{{ rwStream.h2spartialpressure }}" name="OHPP" placeholder="Operator hydrogen pressure" required/></div>
                         <div class="col-md-3" style="color: red">Critical Exposure Temperature, &deg;C:<span style="color: red">*</span></div>
-                        <div class="col-md-3"><input type="number" class="form-control" max="100000" step="0.01" value="{{ rwStream.criticalexposuretemperature }}" name="CET" placeholder="Critical temp" required/></div>
+                        <div class="col-md-3"><input type="number" class="form-control" max="100000" step="0.01" value="{{ rwStream.criticalexposuretemperature }}" name="FlowRate" placeholder="Critical temp" required/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">Flow rate, m<sup>3</sup>/hr:</div>
+                        <div class="col-md-3"><input type="number" class="form-control" step="0.01" value={{rwStream.flowrate}}" max="100000" name="CET" placeholder="Flow rate" required/></div>
                     </div>
                     <fieldset class="scheduler-border">
                         <legend class="scheduler-border"><b>Operating Temperature in Different Temperature Ranger</b></legend>
