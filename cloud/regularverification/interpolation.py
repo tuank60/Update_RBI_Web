@@ -218,21 +218,14 @@ class Newton:
                 Thresholdmin = 0
                 output = self.AddListInter("distance")
             else:
-                print("a")
-            # print(output)
-            # print(self.X)
-            # print(self.Y)
+                print("Value fail")
             if (output>Thresholdmax or output<Thresholdmin):
                 output = (max(self.Y)+min(self.Y))/2
             self.X.clear()
             self.Y.clear()
-            # print(self.X)
-            # print(self.Y)
-            # print("1")
             return output
         except Exception as e:
-            print(e)
-            raise
+            return self.Y[0]
 
     def AddListInter(self,value1):
         assm = models.RwAssessment.objects.filter(componentid=self.componontID)

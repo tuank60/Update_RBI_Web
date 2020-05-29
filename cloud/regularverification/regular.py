@@ -2,6 +2,7 @@ import os,sys
 
 
 from django.core.wsgi import get_wsgi_application
+import paho.mqtt.client as mqtt
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'RbiCloud.settings'
 application = get_wsgi_application()
@@ -51,11 +52,12 @@ class REGULAR:
             print("tuan")
             print(componentID)
             THINGSBOARD_HOST = "demo.thingsboard.io"
-            ACCESS_TOKEN = models.ZSensor.objects.filter(Componentid=componentID)[0].Token
-            print(ACCESS_TOKEN)
+            # ACCESS_TOKEN = models.ZSensor.objects.filter(Componentid=componentID)[0].Token
+            # print(ACCESS_TOKEN)
             client = mqtt.Client()
-            client.username_pw_set("xv3Cb1rLYSwqLq0qakUJ")
-            client.connect(THINGSBOARD_HOST, 1883)
+            # client.username_pw_set("K6BEkJp2NbDSNjq87VVe")
+            # client.connect(THINGSBOARD_HOST, 1883)
+            print("11111")
             client.on_connect = self.on_connect
             client.on_message = self.on_message
             client.loop_forever()
@@ -181,7 +183,7 @@ class REGULAR:
         except:
             obj = Newton(ComponentID,"NorminalDiameter")
             NorminalDiameter = obj.calculate()
-        print(NorminalDiameter)
+        # print(NorminalDiameter)
         try:
             NorminalThickness = data['NorminalThickness']
         except:
@@ -204,17 +206,17 @@ class REGULAR:
         except:
             obj = Newton(ComponentID,"CurrentCorrosionRate")
             CurrentCorrosionRate= obj.calculate()
-        print("aa1.3")
+        # print("aa1.3")
         try:
             BranchDiameter = data['BranchDiameter']
         except:
             BranchDiameter= 'Any branch less than or equal to 2" Nominal OD'
-        print(BranchDiameter)
+        # print(BranchDiameter)
         try:
             BranchJointType = data['BranchDiameter']
         except:
             BranchJointType= 'None'
-        print("tt1.4")
+        # print("tt1.4")
         try:
             MaxBrinell = data['MaxBrinell']
         except:
@@ -236,7 +238,7 @@ class REGULAR:
             complex = data['complex']
         except:
             complex = "Above average"
-        print("tt1.44")
+        # print("tt1.44")
         try:
             CorrectiveAction = data['CorrectiveAction']
         except:
@@ -253,7 +255,7 @@ class REGULAR:
             DFDI = data['DFDI']
         except:
             DFDI = False
-        print("tt.124")
+        # print("tt.124")
         try:
             NumberPipeFittings = data['NumberPipeFittings']
         except:
@@ -278,24 +280,25 @@ class REGULAR:
             timeShakingPipe = data['timeShakingPipe']
         except:
             timeShakingPipe = "13 to 52 weeks"
-        print("aa99")
+        # print("aa99")
         try:
             weldjointeff = data['weldjointeff']
         except:
             obj = Newton(ComponentID,"weldjointeff")
             weldjointeff= obj.calculate()
-        print("mm1")
+        # print("mm1")
         try:
             allowablestresss = data['allowablestresss']
         except:
             obj = Newton(ComponentID,"allowablestresss")
             allowablestresss= obj.calculate()
-        print("tt1,5")
+        # print("tt1,5")
         try:
             structuralthickness = data['structuralthickness']
         except:
             obj = Newton(ComponentID,"structuralthickness")
             structuralthickness= obj.calculate()
+        # print("11010")
         try:
             compvolume = data['compvolume']
         except:
@@ -337,7 +340,7 @@ class REGULAR:
             confidencecr = data['confidencecr']
         except:
             confidencecr = "Low"
-
+        # print("10t")
         ##
         try:
             AminSolution = data['AminSolution']
@@ -671,7 +674,7 @@ class REGULAR:
         except:
             obj = Newton(ComponentID,"tensilestrength")
             tensilestrength = obj.calculate()
-
+        # print("ooooo")
         ## input CA
         try:
             APIFluid = data['APIFluid']
@@ -807,7 +810,7 @@ class REGULAR:
             severityVibration = ""
 
 
-        print("1m6")
+        print("Get data ok")
 
         checktank = 0
         comp = models.ComponentMaster.objects.get(componentid=ComponentID)
@@ -824,7 +827,8 @@ class REGULAR:
                                                isequipmentlinked=comp.isequipmentlinked,
                                                assessmentmethod="",
                                                proposalname=Proposalname)
-            rwassessment.save()
+
+            # rwassessment.save()
             eq=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id)
             faci = models.Facility.objects.get(facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
             rwequipment = models.RwEquipment(id=rwassessment, commissiondate=eq.commissiondate,
@@ -849,8 +853,7 @@ class REGULAR:
                                              thermalhistory=ThermalHistory,
                                              yearlowestexptemp=EquOper,
                                              volume=EquipmentVolumn)
-            rwequipment.save()
-
+            # rwequipment.save()
             rwcomponent = models.RwComponent(id=rwassessment,
                                              nominaldiameter=NorminalDiameter,
                                              nominalthickness=NorminalThickness,
@@ -885,37 +888,39 @@ class REGULAR:
                                              nominaloperatingconditions=NominalOperating,
                                              cetgreaterorequal=Cetgreaterorequal, cyclicservice=Cyclicservice,
                                              equipmentcircuitshock=equipmentCircuit,
+                                             brittlefracturethickness=BrittleFacture,
                                              confidencecorrosionrate=confidencecr)
-            rwcomponent.save()
-
-            rwstream = models.RwStream(id=rwassessment, aminesolution=AminSolution,
-                                       aqueousoperation=AqueOp,
-                                       aqueousshutdown=AqueShutdown,
-                                       toxicconstituent=ToxicConstituents,
-                                       caustic=EnvCaustic,
-                                       chloride=ChlorideIon,
-                                       co3concentration=CO3,
-                                       cyanide=PresenceCyanides,
-                                       exposedtogasamine=exposureAcid,
-                                       exposedtosulphur=ExposedSulfur,
-                                       exposuretoamine=ExposureAmine,
-                                       h2s=EnvCH2S,
-                                       h2sinwater=H2SInWater,
-                                       hydrogen=hydrogen,
-                                       hydrofluoric=HydrogenFluoric,
-                                       materialexposedtoclint=materialExposedFluid,
-                                       maxoperatingpressure=maxOP,
-                                       maxoperatingtemperature=float(maxOT),
-                                       minoperatingpressure=float(minOP),
-                                       minoperatingtemperature=minOT,
-                                       criticalexposuretemperature=CriticalTemp,
-                                       naohconcentration=NaOHConcentration,
-                                       releasefluidpercenttoxic=float(ReleasePercentToxic),
-                                       waterph=float(PHWater),
-                                       h2spartialpressure=float(OpHydroPressure),
-                                       flowrate=float(flowrate))
-            rwstream.save()
-
+            # rwcomponent.save()
+            try:
+                rwstream = models.RwStream(id=rwassessment, aminesolution=AminSolution,
+                                           aqueousoperation=AqueOp,
+                                           aqueousshutdown=AqueShutdown,
+                                           toxicconstituent=ToxicConstituents,
+                                           caustic=EnvCaustic,
+                                           chloride=ChlorideIon,
+                                           co3concentration=CO3,
+                                           cyanide=PresenceCyanides,
+                                           exposedtogasamine=exposureAcid,
+                                           exposedtosulphur=ExposedSulfur,
+                                           exposuretoamine=ExposureAmine,
+                                           h2s=EnvCH2S,
+                                           h2sinwater=H2SInWater,
+                                           hydrogen=hydrogen,
+                                           hydrofluoric=HydrogenFluoric,
+                                           materialexposedtoclint=materialExposedFluid,
+                                           maxoperatingpressure=maxOP,
+                                           maxoperatingtemperature=float(maxOT),
+                                           minoperatingpressure=float(minOP),
+                                           minoperatingtemperature=minOT,
+                                           criticalexposuretemperature=CriticalTemp,
+                                           naohconcentration=NaOHConcentration,
+                                           releasefluidpercenttoxic=float(ReleasePercentToxic),
+                                           waterph=float(PHWater),
+                                           h2spartialpressure=float(OpHydroPressure),
+                                           flowrate=float(flowrate))
+                # rwstream.save()
+            except Exception as e:
+                print(e)
             rwexcor = models.RwExtcorTemperature(id=rwassessment, minus12tominus8=OP1,
                                                  minus8toplus6=OP2,
                                                  plus6toplus32=OP3,
@@ -926,7 +931,7 @@ class REGULAR:
                                                  plus135toplus162=OP8,
                                                  plus162toplus176=OP9,
                                                  morethanplus176=OP10)
-            rwexcor.save()
+            # rwexcor.save()
 
             rwcoat = models.RwCoating(id=rwassessment, externalcoating=ExternalCoating,
                                       externalinsulation=ExternalInsulation,
@@ -943,7 +948,7 @@ class REGULAR:
                                       claddingcorrosionrate=CladdingCorrosionRate,
                                       supportconfignotallowcoatingmaint=supportMaterial,
                                       claddingthickness=claddingthickness)
-            rwcoat.save()
+            # rwcoat.save()
 
             rwmaterial = models.RwMaterial(id=rwassessment, corrosionallowance=CorrosionAllowance,
                                            materialname=Material,
@@ -960,7 +965,7 @@ class REGULAR:
                                            nickelbased=NickelAlloy, chromemoreequal12=Chromium,
                                            costfactor=MaterialCostFactor,
                                            yieldstrength=yieldstrength, tensilestrength=tensilestrength)
-            rwmaterial.save()
+            # rwmaterial.save()
 
             rwinputca = models.RwInputCaLevel1(id=rwassessment, api_fluid=APIFluid, system=Systerm,
                                                release_duration=ReleaseDuration,
@@ -974,8 +979,8 @@ class REGULAR:
                                                production_cost=ProductionCost, mass_inventory=MassInventory,
                                                mass_component=MassComponent,
                                                stored_pressure=float(minOP) * 6.895, stored_temp=minOT)
-            rwinputca.save()
-            ReCalculate.ReCalculate(rwassessment.id)
+            # rwinputca.save()
+            # ReCalculate.ReCalculate(rwassessment.id)
         else:
             rwassessment = models.RwAssessment(equipmentid_id=comp.equipmentid_id, componentid_id=comp.componentid,
                                                assessmentdate=datetime.datetime.now(),
@@ -983,7 +988,7 @@ class REGULAR:
                                                isequipmentlinked=comp.isequipmentlinked,
                                                assessmentmethod="",
                                                proposalname=Proposalname)
-            rwassessment.save()
+            # rwassessment.save()
             eq = models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id)
             faci = models.Facility.objects.get(
             facilityid=models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id).facilityid_id)
@@ -1008,7 +1013,7 @@ class REGULAR:
                                              onlinemonitoring=OnlineMonitoring, thermalhistory=ThermalHistory,
                                              managementfactor=faci.managementfactor,
                                              volume=EquipmentVolumn)
-            rwequipment.save()
+            # rwequipment.save()
 
             rwcomponent = models.RwComponent(id=rwassessment, nominaldiameter=NorminalDiameter,
                                              allowablestress=allowablestresss,
@@ -1023,8 +1028,9 @@ class REGULAR:
                                              structuralthickness=structuralthickness,
                                              complexityprotrusion=complex, minstructuralthickness=MinStructuralThickness,
                                              severityofvibration=severityVibration,
+                                             brittlefracturethickness=BrittleFacture,
                                              confidencecorrosionrate=confidencecr)
-            rwcomponent.save()
+            # rwcomponent.save()
             rwstream = models.RwStream(id=rwassessment, maxoperatingtemperature=maxOT,
                                        maxoperatingpressure=maxOP,
                                        minoperatingtemperature=minOT, minoperatingpressure=minOP,
@@ -1044,14 +1050,14 @@ class REGULAR:
                                        caustic=EnvCaustic, hydrogen=hydrogen,
                                        materialexposedtoclint=materialExposedFluid,
                                        exposedtosulphur=ExposedSulfur)
-            rwstream.save()
+            # rwstream.save()
             rwexcor = models.RwExtcorTemperature(id=rwassessment, minus12tominus8=OP1, minus8toplus6=OP2,
                                                  plus6toplus32=OP3, plus32toplus71=OP4,
                                                  plus71toplus107=OP5,
                                                  plus107toplus121=OP6, plus121toplus135=OP7,
                                                  plus135toplus162=OP8, plus162toplus176=OP9,
                                                  morethanplus176=OP10)
-            rwexcor.save()
+            # rwexcor.save()
             rwcoat = models.RwCoating(id=rwassessment, internalcoating=InternalCoating, externalcoating=ExternalCoating,
                                       externalcoatingdate=ExternalCoatingDate,
                                       externalcoatingquality=ExternalCoatingQuality,
@@ -1065,7 +1071,7 @@ class REGULAR:
                                       insulationcondition=InsulationCondition,
                                       claddingthickness=claddingthickness
                                       )
-            rwcoat.save()
+            # rwcoat.save()
             rwmaterial = models.RwMaterial(id=rwassessment, materialname=Material,
                                            designtemperature=MaxDesignTemp,
                                            mindesigntemperature=MinDesignTemp, designpressure=DesignPressure,
@@ -1079,7 +1085,7 @@ class REGULAR:
                                            sulfurcontent=SulfurContent, heattreatment=heatTreatment,
                                            ispta=MaterialPTA, ptamaterialcode=PTAMaterialGrade,
                                            costfactor=MaterialCostFactor)
-            rwmaterial.save()
+            # rwmaterial.save()
 
             rwinputca = models.RwInputCaTank(id=rwassessment, fluid_height=fluidHeight,
                                              shell_course_height=shellHieght,
@@ -1089,9 +1095,10 @@ class REGULAR:
                                              p_onsite=fluidOnsite, soil_type=soiltype,
                                              tank_fluid=fluid, api_fluid=APIFluid, sw=distance,
                                              productioncost=ProductionCost)
-            rwinputca.save()
+            # rwinputca.save()
             # Customize Caculate Here
-            ReCalculate.ReCalculate(rwassessment.id)
+            print("Save tank")
+            # ReCalculate.ReCalculate(rwassessment.id)
         # return redirect('damgeFactor', proposalID=rwassessment.id)
         print("okok")
 if __name__=="__main__":

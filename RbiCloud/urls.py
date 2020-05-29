@@ -68,6 +68,8 @@ urlpatterns = [
     path('export/<int:index>/<str:type>/', views.ExportExcel, name='exportData'),
     path('site/<int:siteID>/upload/InspectionHistory/', views.uploadInspPlan, name='upload'),
     path('site/<int:siteID>/upload/Plan/', views.upload, name='uploadPlan'),
+    path('ManagmentSystems/<int:facilityID>/', views.ManagementSystems, name='managmentsystems'),
+    # path('site/<int:siteID>/upload/DCS-SCADA/', views.uploadSCADA, name='uploadScada'),
     ########################## forum ################################
     path('forum/',views.base_forum,name='forum'),
     path('forum/post/<int:postID>',views.posts_forum,name='posts'),
@@ -122,7 +124,8 @@ urlpatterns = [
     path('proposalCitizen/<int:proposalID>/chart/', views.RiskChartCitizen, name='riskChartCitizen'),
     path('proposalCitizen/<int:proposalID>/fully-consequence/',views.FullyConsequenceCitizen, name='fullyConsequenceCitizen'),
     #############connect thingsboard _____ sensor, gateway #############
-    path('newsensor/<int:componentID>/', views.NewSensor, name='newsensor')
+    path('newsensor/<int:componentID>/', views.NewSensor, name='newsensor'),
+    path('sensor/<int:componentID>/chart/', views.DataChart, name='sensorchart')
 ]
 '''
 Dkm cuong luong

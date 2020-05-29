@@ -19,7 +19,7 @@
 <!----------END BLOCK----------->
 
 {% block data-content %}
-    <form method="post" id="listProposal">
+    <form method="post" id="listProposal" enctype="multipart/form-data">
     {% csrf_token %}
         <div>
             {% if faci %}<a href="{% url 'equipmentDisplay' faci.facilityid %}">{{ faci.facilityname }}</a>{% endif %} <span class="fa fa-angle-right"></span>
@@ -46,7 +46,7 @@
                 <tbody>
                     {% for a in obj %}
                     <tr>
-                        <td style="text-align: center"><input type="checkbox" name="{{ a.id }}"></td>
+                        <td style="text-align: center"><input id="checkbox" type="checkbox" name="{{ a.id }}"></td>
                         <td style="text-align: center"><a href="{% url 'damgeFactor' a.id %}">{{ a.name }}</a></td>
                         <td style="text-align: center">{{ a.df }}</td>
                         <td style="text-align: center">{{ a.fc }}</td>
@@ -94,6 +94,18 @@
                 <button type="submit" name="_new" id="new" class="btn btn-primary"><i class="fa fa-pencil">&emsp;New Proposal</i></button>
             </div>
 
+            <div>
+                <br>
+                <a style="text-align: center">---------------------------------------------------------------------------------</a>
+                <br>
+                <label for="myexcelFile" id="File" class="btn btn-primary" disabled><i class="fa fa-cloud-upload" >&emsp;Import excel file from Dcada/Dcs</i></label>
+                <input type="file" id="myexcelFile" name="myexcelFile" accept="text/csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display: none" disabled>
+                <br>
+                <span id="filestatus" style="font-family: 'Times New Roman'; font-size: 16px;">None file selected...</span>
+                <br>
+                <button type="submit" name="_newscada" id="submitFile" class="btn btn-primary" disabled><i class="fa fa-cloud-upload">&emsp;Save Data</i></button>
+            </div>
+
             <script>
                 function RecalClick() {
                     document.getElementById('listProposal').submit();
@@ -112,6 +124,36 @@
                     $("#edit").attr('disabled', true);
                     return true;
                 }
+
+                $("input[id='checkbox']").change(function (e) {
+                    var isChecked = $(this).prop("checked");
+                    if (isChecked == false) {
+                        $("#submitFile").prop('disabled', true);
+                        $("#File").attr("disabled", true);
+                        $("#myexcelFile").prop('disabled', true);
+                    }
+                    else {
+{#                        $("#submitFile").prop('disabled', false);#}
+                        $("#File").attr("disabled", false);
+                        $("#myexcelFile").prop('disabled', false);
+                    }
+                });
+
+                $("input[id='myexcelFile']").change(function (e) {
+                    var $this = $(this);
+                    var filename = $this.val().split('\\').pop();
+                    if(filename.endsWith(".csv") || filename.endsWith(".xls") || filename.endsWith(".xlsx") || filename.endsWith(".XLS")){
+                        $("#filestatus").text("File selected: " +filename);
+                        $("#filestatus").css("color", "green");
+                        $("#submitFile").prop("disabled",false);
+                    }
+                    else {
+                        $("#filestatus").text("File isn't supported! Please select *.xls | *.xlsx | *.csv file");
+                        $("#filestatus").css("color", "red");
+                        $("#submitFile").prop("disabled",true);
+                    }
+                });
+
             </script>
         </div>
     </form>

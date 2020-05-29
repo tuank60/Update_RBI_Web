@@ -1,6 +1,10 @@
 import os
+from itertools import count
+
 from django.core.wsgi import get_wsgi_application
 from numpy.lib.function_base import vectorize
+from reportlab.platypus.para import paragraphEngine
+from sympy.functions.elementary.complexes import im
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'RbiCloud.settings'
 application = get_wsgi_application()
@@ -25,6 +29,9 @@ from cloud.process.RBI import fastCalulate as ReCalculate
 from django.db.models import Q
 from cloud.regularverification.regular import REGULAR
 import threading
+from cloud.regularverification import subscribe
+import paho.mqtt.client as mqtt
+from cloud.regularverification import subscribe_thingsboard
 
 
 from django.views.decorators.csrf import csrf_protect
@@ -309,7 +316,6 @@ def ListFacilities(request, siteID):
             dataF['ManagementFactor'] = a.managementfactor
             dataF['RiskTarget'] = risTarget.risktarget_fc
             risk.append(dataF)
-
         pagiFaci = Paginator(risk, 25)
         pageFaci = request.GET.get('page',1)
         try:
@@ -933,6 +939,20 @@ def ListProposal(request, componentID):
                 except Exception as e:
                     print(e)
                     raise Http404
+            elif '_newscada' in request.POST and request.FILES['myexcelFile']:
+                print("newscada")
+                try:
+                    for a in rwass:
+                        if request.POST.get('%d' %a.id):
+                            print(a.id)
+                            myfile = request.FILES['myexcelFile']
+                            fs = FileSystemStorage()
+                            filename = fs.save(myfile.name, myfile)
+                            uploaded_file_url = fs.url(filename)
+                            url_file = settings.BASE_DIR.replace('\\', '//') + str(uploaded_file_url).replace('/', '//').replace('%20', ' ')
+                            ExcelImport.ImportSCADA(url_file,a.id)
+                except Exception as e:
+                    print(e)
             else:
                 for a in rwass:
                     if request.POST.get('%d' %a.id):
@@ -3330,19 +3350,28 @@ def upload(request, siteID):
 
     try:
         showcontent = "Choose plan process file"
-        if request.method =='POST' and request.FILES['myexcelFile']:
-            myfile = request.FILES['myexcelFile']
-            fs = FileSystemStorage()
-            filename = fs.save(myfile.name, myfile)
-            uploaded_file_url = fs.url(filename)
-            url_file = settings.BASE_DIR.replace('\\', '//') + str(uploaded_file_url).replace('/', '//').replace('%20', ' ')
-            # time.sleep(7)
-            ExcelImport.importPlanProcess(url_file)
-            try:
-                os.remove(url_file)
-            except OSError:
-                pass
-    except:
+        try:
+            if request.method =='POST' and request.FILES['myexcelFile']:
+                print("myexcelFile")
+                myfile = request.FILES['myexcelFile']
+                fs = FileSystemStorage()
+                filename = fs.save(myfile.name, myfile)
+                uploaded_file_url = fs.url(filename)
+                url_file = settings.BASE_DIR.replace('\\', '//') + str(uploaded_file_url).replace('/', '//').replace('%20', ' ')
+                ExcelImport.importPlanProcess(url_file)
+                try:
+                    os.remove(url_file)
+                except OSError:
+                    pass
+        except:
+            print("ko co file")
+        # try:
+        #     if request.method == 'POST' and request.FILES['myexcelScada']:
+        #         print("myexcelScada")
+        # except:
+        #     print("ko co file scada")
+    except Exception as e:
+        print(e)
         raise Http404
 
     return render(request, 'FacilityUI/facility/uploadData.html', {'siteID': siteID, 'showcontent': showcontent,'noti':noti,'countnoti':countnoti,'count':count,'info':request.session, 'page':'uploadPlan'})
@@ -3369,18 +3398,40 @@ def uploadInspPlan(request, siteID):
         raise Http404
     return render(request, 'FacilityUI/facility/uploadData.html' ,{'siteID': siteID, 'showcontent': showcontent,'noti':noti,'countnoti':countnoti,'count':count,'info':request.session, 'page':'uploadHistory'})
 
+# def uploadSCADA(request, siteID):
+#     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+#     countnoti = noti.filter(state=0).count()
+#     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+#                                           Q(Is_see=0)).count()
+#
+#     return render(request, 'FacilityUI/facility/uploadSCADA.html',
+#                   {'siteID': siteID, 'noti': noti, 'countnoti': countnoti, 'count': count,
+#                    'info': request.session, 'page': 'uploadHistory'})
 ############### Dang Nhap Dang Suat #################
-def RegularVerification():
-    print(1)
-    obj = REGULAR()
-    obj.regular_1()
+# def RegularVerification():
+#     print(1)
+#     obj = REGULAR()
+#     obj.regular_1()
+
+def ManagementSystems(request,facilityID):
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    faci = models.Facility.objects.get(facilityid=facilityID)
+    if request.method == 'POST':
+        print("1")
+    return render(request,'FacilityUI/equipment/ManagementSystems.html',{'page':'mana','facilityID':facilityID, 'siteID':faci.siteid_id,'count':count,'info':request.session,'noti':noti,'countnoti':countnoti})
 
 def signin(request):
     error = ''
     try:
-        t1 = threading.Thread(target=RegularVerification)
-        t1.setDaemon(True)
-        t1.start()
+        # t1 = threading.Thread(target=RegularVerification)
+        # t1.setDaemon(True)
+        # t1.start()
+        t2 = threading.Thread(target=subscribe.SubDATA)
+        t2.setDaemon(True)
+        t2.start()
         if request.session.has_key('id'):
             if request.session['kind']=='citizen':
                 return redirect('citizenHome')
@@ -5388,6 +5439,7 @@ def NewSensor(request,componentID):
         data = {}
         if(sensordata.count()==0):
             if request.method == 'POST':
+                print(site.siteid)
                 gateway = models.ZGateWay.objects.filter(siteid=site.siteid)[0].idgateway
                 print(gateway)
                 print("2")
@@ -5400,9 +5452,52 @@ def NewSensor(request,componentID):
                            'equipmentID': comp.equipmentid_id, 'info': request.session, 'noti': noti,
                            'countnoti': countnoti, 'count': count})
         else:
+            packagedata = models.PackageSensor.objects.filter(idsensor=sensordata[0].idsensor)
+            if '_delete' in request.POST:
+                for pac in packagedata:
+                    if request.POST.get('%d' % pac.idpackage):
+                        pac.delete()
+                return redirect('newsensor', componentID=componentID)
+            if '_new' in request.POST:
+                print("okok")
+                try:
+                    print("1")
+                    thingsboard = subscribe_thingsboard.Subscribe_thingsboard(componentID)
+                    thingsboard.SUBTHINGSBOARD()
+                except:
+                    print("connect error")
+                return redirect('newsensor', componentID=componentID)
+            if '_edit' in request.POST:
+                return redirect('sensorchart', componentID)
             return render(request, 'FacilityUI/proposal/SensorConnect.html',{'sensorName':sensordata[0].Name,'comp': comp, 'equip': equip, 'faci': faci, 'page': 'newsensor', 'componentID': componentID,
                            'equipmentID': comp.equipmentid_id, 'info': request.session, 'noti': noti,
-                           'countnoti': countnoti, 'count': count})
+                           'countnoti': countnoti, 'count': count,'packagedata':packagedata})
     except Exception as e:
         print(e)
         raise Http404
+import json
+def DataChart(request,componentID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    # comp = models.ComponentMaster.objects.get(componentid=componentID)
+    # equip = models.EquipmentMaster.objects.get(equipmentid=comp.equipmentid_id)
+    # faci = models.Facility.objects.get(facilityid=equip.facilityid_id)
+    # site = models.Sites.objects.get(siteid=faci.siteid_id)
+    sensordata = models.ZSensor.objects.filter(Componentid=componentID)
+    packagedata = models.PackageSensor.objects.filter(idsensor=sensordata[0].idsensor)
+    humidity = []
+    temperature = []
+    luminance = []
+    datetimes = []
+    for da in packagedata:
+        data = json.loads(da.package)
+        humidity.append(data['humidity'])
+        temperature.append(data['temperature'])
+        luminance.append(data['luminance'])
+        datetimes.append(da.created)
+    return render(request,'FacilityUI/proposal/SensorChart.html',{'sensorName':sensordata[0].Name, 'page': 'newsensor', 'componentID': componentID,
+                           'info': request.session, 'noti': noti,
+                           'countnoti': countnoti, 'count': count,'humidity':humidity,'temperature':temperature,'luminance':luminance,'datetimes':datetimes})
+

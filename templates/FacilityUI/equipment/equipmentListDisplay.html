@@ -2,6 +2,7 @@
 
 <!--------------- BLOCK MENU ------------->
 {% block listeq %}{% url 'equipmentDisplay' facilityID %}{% endblock %}
+{% block mana %}{% url 'managmentsystems' facilityID %}{% endblock %}
 {% block neweq %}{% url 'equipmentNew' facilityID %}{% endblock %}
 {% block backfaci %}{% url 'facilitiesDisplay' siteID %}{% endblock %}
 {% block listfaci %}{% url 'facilitiesDisplay' siteID %}{% endblock %}

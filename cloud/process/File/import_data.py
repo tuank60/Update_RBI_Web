@@ -1,4 +1,5 @@
 import os
+from operator import eq
 
 import xlrd
 import math
@@ -13,7 +14,7 @@ from xlrd import open_workbook
 from django.shortcuts import Http404
 from cloud import models
 from datetime import datetime
-import datetime
+# import datetime
 
 def checkEquipmentComponentExist(equipmentNumber,componentNumber):
     try:
@@ -1074,4 +1075,30 @@ def importPlanProcess(filename):
     except Exception as e:
         print("Exception at import")
         print(e)
+        raise Http404
+
+def ImportSCADA(filename,proposalID):
+    try:
+        print(proposalID)
+        workbook = open_workbook(filename)
+        sheet_names = workbook.sheet_names()
+        for name in sheet_names:
+            ws0 = workbook.sheet_by_name(name)
+            key = ws0.row_values(0, 3, 9)
+            value = ws0.row_values(1, 3, 9)
+            eq = models.RwEquipment.objects.get(id=proposalID)
+            eq.volume = value[0]
+            eq.minreqtemperaturepressurisation = value[1]
+            eq.save()
+            com = models.RwComponent.objects.get(id=proposalID)
+            com.nominaldiameter = value[2]
+            com.structuralthickness = value[3]
+            com.save()
+            stream = models.RwStream.objects.get(id=proposalID)
+            stream.flowrate = value[4]
+            stream.waterph = value[5]
+            stream.save()
+    except Exception as e:
+        print(e)
+        print("Exception at import Scada")
         raise Http404

@@ -24,3 +24,8 @@
 * Facebook: facebook.com/nguyenanh.vu.330/
 * Email: anhvu01011994@gmail.com
 -----------------------------------------------------------------------
+
+runserver: python manage.py runserver --noreload
+mosquitto_pub -d -h "demo.thingsboard.io" -t "v1/devices/m1" -u "K6BEkJp2NbDSNjq87VVe" -f "data.json"
+mosquitto_pub -d -h "127.0.0.1" -t "v1/devices/me/attributes" -u "$K6BEkJp2NbDSNjq87VVe" -f "data.json"
+mosquitto_sub -d -h "127.0.0.1" -t "v1/devices/me/attributes" -u "$K6BEkJp2NbDSNjq87VVe"

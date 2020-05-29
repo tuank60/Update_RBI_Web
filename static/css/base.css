@@ -50,11 +50,11 @@ body {margin:0;}
     font-size: 22px !important;
 }
 .activeLink {
-    /*background-color: #FFFFFF !important;*/
+    background-color: #ffffff !important;
     color: #3bbfde !important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
     font-size: 22px !important;
-        }
+}
 
 .logout {
   background-color: #f55a10 !important;
