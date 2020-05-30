@@ -253,21 +253,25 @@ def calculateNormal(proposalID):
                                    CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
                                    MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
         ca_cal = CA_CAL.CA_NORMAL(NominalDiametter=rwcomponent.nominaldiameter,
-                                  MATERIAL_COST=rwmaterial.costfactor, FLUID=rwinputca.api_fluid,
-                                  FLUID_PHASE=rwinputca.system,
-                                  API_COMPONENT_TYPE_NAME=models.ApiComponentType.objects.get(apicomponenttypeid= comp.apicomponenttypeid).apicomponenttypename,
+                                  MATERIAL_COST=rwmaterial.costfactor, FLUID=rwinputca.model_fluid,
+                                  FLUID_PHASE=rwstream.storagephase,
+                                  MAX_OPERATING_TEMP=rwstream.maxoperatingtemperature,
+                                  API_COMPONENT_TYPE_NAME=models.ApiComponentType.objects.get(
+                                      apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
                                   DETECTION_TYPE=rwinputca.detection_type,
-                                  ISULATION_TYPE=rwinputca.isulation_type, STORED_PRESSURE=rwstream.minoperatingpressure * 6.895,
-                                  ATMOSPHERIC_PRESSURE=101, STORED_TEMP=rwstream.minoperatingtemperature + 273,
+                                  ISOLATION_TYPE=rwinputca.isulation_type,
+                                  STORED_PRESSURE=rwstream.minoperatingpressure * 6.895,
+                                  ATMOSPHERIC_PRESSURE=101.325, STORED_TEMP=rwstream.minoperatingtemperature + 273,
                                   MASS_INVERT=rwinputca.mass_inventory,
                                   MASS_COMPONENT=rwinputca.mass_component,
                                   MITIGATION_SYSTEM=rwinputca.mitigation_system,
                                   TOXIC_PERCENT=rwinputca.toxic_percent,
                                   RELEASE_DURATION=rwinputca.release_duration,
-                                  PRODUCTION_COST=rwinputca.production_cost,
+                                  PRODUCTION_COST=rwinputca.production_cost, TOXIC_FLUID=rwinputca.toxic_fluid,
                                   INJURE_COST=rwinputca.injure_cost, ENVIRON_COST=rwinputca.evironment_cost,
                                   PERSON_DENSITY=rwinputca.personal_density,
                                   EQUIPMENT_COST=rwinputca.equipment_cost)
+
         TOTAL_DF_API1 = dm_cal.DF_TOTAL_API(0)
         TOTAL_DF_API2 = dm_cal.DF_TOTAL_API(3)
         TOTAL_DF_API3 = dm_cal.DF_TOTAL_API(6)
@@ -376,43 +380,81 @@ def calculateNormal(proposalID):
 
             refullPOF.save()
         # ca level 1( CoF)
-        if countCalv1.count() != 0:
-            calv1 = models.RwCaLevel1.objects.get(id=proposalID)
-            if ca_cal.NominalDiametter == 0 or ca_cal.STORED_PRESSURE == 0 or ca_cal.MASS_INVERT == 0 or ca_cal.MASS_COMPONENT == 0 or ca_cal.FLUID is None:
-                calv1.fc_total = 100000000
-                calv1.fcof_category = "E"
-            else:
-                calv1.release_phase = ca_cal.GET_RELEASE_PHASE()
-                calv1.fact_di = ca_cal.fact_di()
-                calv1.ca_inj_flame = ca_cal.ca_inj_flame()
-                calv1.ca_inj_toxic = ca_cal.ca_inj_tox()
-                calv1.ca_inj_ntnf = ca_cal.ca_inj_nfnt()
-                calv1.fact_mit = ca_cal.fact_mit()
-                calv1.fact_ait = ca_cal.fact_ait()
-                calv1.ca_cmd = ca_cal.ca_cmd()
-                calv1.fc_cmd = ca_cal.fc_cmd()
-                calv1.fc_affa = ca_cal.fc_affa()
-                calv1.fc_envi = ca_cal.fc_environ()
-                calv1.fc_prod = ca_cal.fc_prod()
-                calv1.fc_inj = ca_cal.fc_inj()
-                calv1.fc_total = ca_cal.fc()
-                calv1.fcof_category = ca_cal.FC_Category(ca_cal.fc())
-            calv1.save()
-        else:
-            if ca_cal.NominalDiametter == 0 or ca_cal.STORED_PRESSURE == 0 or ca_cal.MASS_INVERT == 0 or ca_cal.MASS_COMPONENT == 0 or ca_cal.FLUID is None:
-                calv1 = models.RwCaLevel1(id=rwassessment,
-                                              fc_total=100000000, fcof_category="E")
-            else:
-                calv1 = models.RwCaLevel1(id=rwassessment, release_phase=ca_cal.GET_RELEASE_PHASE(),
-                                              fact_di=ca_cal.fact_di(), ca_inj_flame=ca_cal.ca_inj_flame(),
-                                              ca_inj_toxic=ca_cal.ca_inj_tox(), ca_inj_ntnf=ca_cal.ca_inj_nfnt(),
-                                              fact_mit=ca_cal.fact_mit(), fact_ait=ca_cal.fact_ait(),
-                                              ca_cmd=ca_cal.ca_cmd(), fc_cmd=ca_cal.fc_cmd(),
-                                              fc_affa=ca_cal.fc_affa(), fc_envi=ca_cal.fc_environ(),
-                                              fc_prod=ca_cal.fc_prod(), fc_inj=ca_cal.fc_inj(),
-                                              fc_total=ca_cal.fc(), fcof_category=ca_cal.FC_Category(ca_cal.fc()))
+        try:
+            print('test cof level 1')
+            if countCalv1.count() != 0:
+                calv1 = models.RwCaLevel1.objects.get(id=proposalID)
+                # rwcofholesize= models.RwFullCoFHoleSize.objects.get(id=proposalID)
+                if ca_cal.NominalDiametter == 0 or ca_cal.STORED_PRESSURE == 0 or ca_cal.MASS_INVERT == 0 or ca_cal.MASS_COMPONENT == 0 or ca_cal.FLUID is None:
+                    calv1.fc_total = 100000000
+                    calv1.fcof_category = "E"
 
-            calv1.save()
+                else:
+                    calv1.release_phase = ca_cal.GET_RELEASE_PHASE()
+                    calv1.fact_di = ca_cal.fact_di()
+                    calv1.ca_inj_flame = ca_cal.ca_inj_flame()
+                    calv1.ca_final = ca_cal.ca_final()
+                    calv1.ca_inj_toxic = ca_cal.ca_inj_tox()
+                    calv1.ca_inj_ntnf = ca_cal.ca_inj_nfnt()
+                    calv1.fact_mit = ca_cal.fact_mit()
+                    calv1.fact_ait = ca_cal.fact_ait()
+                    calv1.ca_cmd = ca_cal.ca_cmd()
+                    calv1.fc_cmd = ca_cal.fc_cmd()
+                    calv1.fc_affa = ca_cal.fc_affa()
+                    calv1.fc_envi = ca_cal.fc_environ()
+                    calv1.fc_prod = ca_cal.fc_prod()
+                    calv1.fc_inj = ca_cal.fc_inj()
+                    calv1.fc_total = ca_cal.fc()
+                    calv1.fcof_category = ca_cal.FC_Category(ca_cal.fc())
+                    calv1.auto_ignition = ca_cal.auto_ignition_temp()
+                    calv1.ideal_gas = ca_cal.C_P()
+                    calv1.ideal_gas_ratio = ca_cal.ideal_gas_ratio()
+                    calv1.liquid_density = ca_cal.liquid_density()
+                    calv1.ambient = ca_cal.ambient()
+                    calv1.mw = ca_cal.moleculer_weight()
+                    calv1.nbp = ca_cal.NBP()
+                    calv1.model_fluid_type = ca_cal.model_fluid_type()
+                    calv1.toxic_fluid_type = ca_cal.toxic_fluid_type()
+                    calv1.save()
+
+                    # rwcofholesize.gff_n_small = ca_cal.gff(1)
+                    # rwcofholesize.gff_n_medium = ca_cal.gff(2)
+                    # rwcofholesize.gff_n_large = ca_cal.gff(3)
+                    # rwcofholesize.gff_n_rupture = ca_cal.gff(4)
+                    # rwcofholesize.an_small = ca_cal.a_n(1)
+                    # rwcofholesize.an_medium = ca_cal.a_n(2)
+                    # rwcofholesize.an_large = ca_cal.a_n(3)
+                    # rwcofholesize.an_rupture = ca_cal.a_n(4)
+                    # rwcofholesize.save()
+
+            else:
+                if ca_cal.NominalDiametter == 0 or ca_cal.STORED_PRESSURE == 0 or ca_cal.MASS_INVERT == 0 or ca_cal.MASS_COMPONENT == 0 or ca_cal.FLUID is None:
+                    calv1 = models.RwCaLevel1(id=rwassessment,
+                                                  fc_total=100000000, fcof_category="E",
+                                              )
+
+                else:
+                    calv1 = models.RwCaLevel1(id=rwassessment, release_phase=ca_cal.GET_RELEASE_PHASE(),
+                                                  fact_di=ca_cal.fact_di(), ca_inj_flame=ca_cal.ca_inj_flame(),
+                                                  ca_inj_toxic=ca_cal.ca_inj_tox(), ca_inj_ntnf=ca_cal.ca_inj_nfnt(),
+                                                  fact_mit=ca_cal.fact_mit(), fact_ait=ca_cal.fact_ait(),
+                                                  ca_cmd=ca_cal.ca_cmd(), fc_cmd=ca_cal.fc_cmd(),
+                                                  fc_affa=ca_cal.fc_affa(), fc_envi=ca_cal.fc_environ(),
+                                                  fc_prod=ca_cal.fc_prod(), fc_inj=ca_cal.fc_inj(),ca_final = ca_cal.ca_final(),
+                                                  fc_total=ca_cal.fc(), fcof_category=ca_cal.FC_Category(ca_cal.fc()),
+                                                  auto_ignition = ca_cal.auto_ignition_temp(), ideal_gas = ca_cal.C_P(),
+                                                  ideal_gas_ratio = ca_cal.ideal_gas_ratio(), liquid_density = ca_cal.liquid_density(),
+                                                  ambient = ca_cal.ambient(), mw = ca_cal.moleculer_weight(), nbp = ca_cal.NBP(),
+                                                  model_fluid_type = ca_cal.model_fluid_type(), toxic_fluid_type = ca_cal.toxic_fluid_type()
+                                              )
+
+
+                calv1.save()
+            # print('ca_final = ',ca_cal.ca_final() )
+            # print('fact_di = ', calv1.fact_di, )
+        except Exception as e:
+            print(e)
+            print('test ca_cal.final')
         # damage machinsm
         damageList = dm_cal.ISDF()
         for dm in damageMachinsm:
@@ -718,6 +760,7 @@ def calculateTank(proposalID):
                                    CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),
                                    EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
                                    MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
+
         if isshell:
             cacal = CA_CAL.CA_SHELL(FLUID=rwinputca.api_fluid, FLUID_HEIGHT=rwstream.fluidheight,
                                     SHELL_COURSE_HEIGHT=rwinputca.shell_course_height,

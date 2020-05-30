@@ -350,6 +350,16 @@ class RwCaLevel1(models.Model):
     fc_envi = models.FloatField(db_column='FC_envi', blank=True, null=True)  # Field name made lowercase.
     fc_total = models.FloatField(db_column='FC_total', blank=True, null=True)  # Field name made lowercase.
     fcof_category = models.CharField(db_column='FCOF_Category', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    ca_final = models.FloatField(db_column='CA_final', blank=True, null=True)
+    auto_ignition = models.FloatField(db_column='auto_ignition', blank=True, null=True)
+    ideal_gas = models.FloatField(db_column='ideal_gas', blank=True, null=True)
+    ideal_gas_ratio = models.FloatField(db_column='ideal_gas_ratio', blank=True, null=True)
+    liquid_density = models.FloatField(db_column='liquid_density', blank=True, null=True)
+    ambient = models.CharField(db_column='ambient', blank=True, null=True, max_length=50)
+    mw = models.FloatField(db_column='mw', blank=True, null=True)
+    nbp = models.FloatField(db_column='NBP', blank=True, null=True)
+    model_fluid_type = models.CharField(db_column='model_fluid_type', max_length=40, blank=True, null=True)
+    toxic_fluid_type = models.CharField(db_column='toxic_fluid_type', max_length=40, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -626,14 +636,12 @@ class RwFullPof(models.Model):
         ordering = ('id',)
 
 
-class RwInputCaLevel1(models.Model):
+class RwInputCaLevel1(models.Model): # đầu vào ca 1+ 2 chỉnh sửa ngày 26/4/2020
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
     api_fluid = models.CharField(db_column='API_FLUID', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    system = models.CharField(db_column='SYSTEM', max_length=50, blank=True, null=True)  # Field name made lowercase.
     release_duration = models.CharField(db_column='Release_Duration', max_length=50, blank=True, null=True)  # Field name made lowercase.
     detection_type = models.CharField(db_column='Detection_Type', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    isulation_type = models.CharField(db_column='Isulation_Type', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    mitigation_system = models.CharField(db_column='Mitigation_System', max_length=150, blank=True, null=True)  # Field name made lowercase.
+    isulation_type = models.CharField(db_column='Isolation_Type', max_length=50, blank=True, null=True)  # Field name made lowercase.
     equipment_cost = models.FloatField(db_column='Equipment_Cost', blank=True, null=True)  # Field name made lowercase.
     injure_cost = models.FloatField(db_column='Injure_Cost', blank=True, null=True)  # Field name made lowercase.
     evironment_cost = models.FloatField(db_column='Evironment_Cost', blank=True, null=True)  # Field name made lowercase.
@@ -650,6 +658,9 @@ class RwInputCaLevel1(models.Model):
     toxic_percent = models.FloatField(db_column='Toxic_Percent', blank=True, null=True)
     primary_fluid = models.FloatField(db_column='Primary_Fluid', blank=True, null=True)
     volatile_fluid = models.FloatField(db_column='Volatile_Fluid', blank=True, null=True)
+    mitigation_system = models.CharField(db_column='Mitigation', blank=True, null=True,max_length=200)
+    process_unit = models.FloatField(db_column='Process_Unit_Component', blank=True, null=True)
+    outage_multiplier = models.FloatField(db_column='Outage_Multiplier', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -1360,3 +1371,85 @@ class RwInspectionDetail(models.Model):
     class Meta:
         managed = False
         db_table = 'rw_inspection_detail'
+### contain data input and output COF
+
+class RwFullCoFFluid(models.Model):
+    id = models.ForeignKey('RwAssessment', db_column='ID', on_delete=models.CASCADE, primary_key=True)
+    cp = models.FloatField(db_column='Cp', blank=True, null=True )
+    k = models.FloatField(db_column='k', blank=True, null=True)
+    gfftotal = models.FloatField(db_column='GFFTotal', blank=True, null=True)
+    kv_n = models.FloatField(db_column='Kv_n', blank=True, null=True)
+    realeasePhase = models.CharField(db_column='ReleasePhase', blank=True, null=True, max_length=100)
+    cd = models.FloatField(db_column='Cd', blank=True, null=True)
+    Ptrans = models.FloatField(db_column='Ptrans', blank=True, null=True)
+    nbp = models.FloatField(db_column='NBP', blank=True,null=True)
+    density = models.FloatField(db_column='Density', blank=True, null=True)
+    mw = models.FloatField(db_column='MW', blank=True, null=True)
+    r = models.FloatField(db_column='R', blank=True, null=True)
+    ps = models.FloatField(db_column='Ps', blank=True, null=True)
+    ts = models.FloatField(db_column='Ts', blank=True, null=True)
+    patm = models.FloatField(db_column='Patm', blank=True, null=True)
+    fact_di = models.FloatField(db_column='fact_di', blank=True, null=True)
+    fact_mit = models.FloatField(db_column='fact_mit', blank=True, null=True)
+    fact_ait = models.FloatField(db_column='fact_AIT', blank=True, null=True)
+    g = models.FloatField(db_column='g', blank=True, null=True)
+    h = models.FloatField(db_column='h', blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'rw_full_cof_fluid'
+
+class RwFullCoFHoleSize(models.Model):
+    id = models.ForeignKey('RwAssessment', db_column='ID', on_delete=models.CASCADE, primary_key=True)
+    gff_small = models.FloatField(db_column='gff_small', null=True, blank=True)
+    gff_medium = models.FloatField(db_column='gff_medium', null=True, blank=True)
+    gff_large = models.FloatField(db_column='gff_large', null=True, blank=True)
+    gff_rupture = models.FloatField(db_column='gff_rupture', null=True, blank=True)
+    an_small = models.FloatField(db_column='an_small',blank=True,null=True)
+    an_medium = models.FloatField(db_column='an_medium', blank=True, null=True)
+    an_large = models.FloatField(db_column='an_large', blank=True, null=True)
+    an_rupture = models.FloatField(db_column='an_rupture', blank=True, null=True)
+    wn_small = models.FloatField(db_column='wn_small', blank=True, null=True)
+    wn_medium = models.FloatField(db_column='wn_medium', blank=True, null=True)
+    wn_large = models.FloatField(db_column='wn_large', blank=True, null=True)
+    wn_rupture = models.FloatField(db_column='wn_rupture', blank=True, null=True)
+    t_n_small  = models.FloatField(db_column='t_n_small', blank=True, null=True)
+    t_n_medium = models.FloatField(db_column='t_n_medium', blank=True, null=True)
+    t_n_large = models.FloatField(db_column='t_n_large', blank=True, null=True)
+    t_n_rupture = models.FloatField(db_column='t_n_rupture', blank=True, null=True)
+    ld_max_n_small = models.FloatField(db_column='ld_max_n_small', blank=True, null=True)
+    ld_max_n_medium = models.FloatField(db_column='ld_max_n_medium', blank=True, null=True)
+    ld_max_n_large = models.FloatField(db_column='ld_max_n_large', blank=True, null=True)
+    ld_max_n_rupture = models.FloatField(db_column='ld_max_n_rupture', blank=True, null=True)
+    mass_add_n_small = models.FloatField(db_column='mass_add_n_small', blank=True, null=True)
+    mass_add_n_medium = models.FloatField(db_column='mass_add_n_medium', blank=True, null=True)
+    mass_add_n_large = models.FloatField(db_column='mass_add_n_large', blank=True, null=True)
+    mass_add_n_rupture = models.FloatField(db_column='mass_add_n_rupture', blank=True, null=True)
+    rate_n_small = models.FloatField(db_column='rate_n_small', blank=True, null=True)
+    rate_n_medium = models.FloatField(db_column='rate_n_medium', blank=True, null=True)
+    rate_n_large = models.FloatField(db_column='rate_n_large', blank=True, null=True)
+    rate_n_rupture = models.FloatField(db_column='rate_n_rupture', blank=True, null=True)
+    ld_n_small = models.FloatField(db_column='ld_n_small', blank=True, null=True)
+    ld_n_medium = models.FloatField(db_column='ld_n_medium', blank=True, null=True)
+    ld_n_large = models.FloatField(db_column='ld_n_large', blank=True, null=True)
+    ld_n_rupture = models.FloatField(db_column='ld_n_rupture', blank=True, null=True)
+    mass_n_small = models.FloatField(db_column='mass_n_small', blank=True, null=True)
+    mass_n_medium = models.FloatField(db_column='mass_n_medium', blank=True, null=True)
+    mass_n_large = models.FloatField(db_column='mass_n_large', blank=True, null=True)
+    mass_n_rupture = models.FloatField(db_column='mass_n_rupture', blank=True, null=True)
+    eneff_n_small = models.FloatField(db_column='eneff_n_small', blank=True, null=True)
+    eneff_n_medium = models.FloatField(db_column='eneff_n_medium', blank=True, null=True)
+    eneff_n_large = models.FloatField(db_column='eneff_n_large', blank=True, null=True)
+    eneff_n_rupture = models.FloatField(db_column='eneff_n_rupture', blank=True, null=True)
+    factIC_n_small = models.FloatField(db_column='factIC_n_small', blank=True, null=True)
+    factIC_n_medium = models.FloatField(db_column='factIC_n_medium', blank=True, null=True)
+    factIC_n_large = models.FloatField(db_column='factIC_n_large', blank=True, null=True)
+    factIC_n_rupture = models.FloatField(db_column='factIC_n_rupture', blank=True, null=True)
+    releasetype_small = models.CharField(db_column='releasetype_small',max_length=20, blank=True, null=True)
+    releasetype_medium = models.CharField(db_column='releasetype_medium', max_length=20, blank=True, null=True)
+    releasetype_large = models.CharField(db_column='releasetype_large', max_length=20, blank=True, null=True)
+    releasetype_rupture = models.CharField(db_column='releasetype_rupture', max_length=20, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table  = 'rw_full_cof_hole_size'

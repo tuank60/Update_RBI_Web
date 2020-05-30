@@ -316,3 +316,22 @@ class POSTGRESQL:
         #age_insp = int((AssessmentDate.date() - date.date()).days/365)
         age_insp = (AssessmentDate.date() - date.date()).days/365
         return round(age_insp,2)
+
+    ### them vao trong tinh toan ca level 1
+    def GET_MODEL_FLUID_TYPE(coffluid):
+        cof_fluid = models.CofFluid.objects.get(coffluid=coffluid)
+        if (cof_fluid.fluidtype == 0):
+            return "Flammable"
+        elif (cof_fluid.fluidtype == 1):
+            return "Toxic"
+        elif (cof_fluid.fluidtype == 2):
+            return "Flammable & Toxic"
+        else:
+            return "No Flammable & No Toxic"
+
+    def GET_TOXIC_FLUID_TYPE(toxicfluid):
+        if (toxicfluid == "H2S" or toxicfluid == "CO" or toxicfluid == "PO", toxicfluid == "EE"
+        or toxicfluid == "EO" or toxicfluid == "Pyrophoric"):
+            return "Flammable & Toxic"
+        else:
+            return "Toxic"

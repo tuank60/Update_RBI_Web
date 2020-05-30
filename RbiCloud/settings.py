@@ -84,7 +84,7 @@ LOGOUT_REDIRECT_URL = '/'
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.mysql',
-         'NAME': 'rbi23_5',
+         'NAME': 'database-atuan',
          'USER': 'root',
          'PASSWORD': 'root',
          'HOST': 'localhost',

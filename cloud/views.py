@@ -969,12 +969,12 @@ def NewProposal(request, componentID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
-    print("NewProposal")
     try:
         Fluid = ["Acid", "AlCl3", "C1-C2", "C13-C16", "C17-C25", "C25+", "C3-C4", "C5", "C6-C8", "C9-C12", "CO", "DEE",
              "EE", "EEA", "EG", "EO", "H2", "H2S", "HCl", "HF", "Methanol", "Nitric Acid", "NO2", "Phosgene", "PO",
-             "Pyrophoric", "Steam", "Styrene", "TDI", "Water"]
-        print("newproposal not tank")
+             "Pyrophoric", "Steam", "Styrene", "TDI", "Water","Caustic", "Aromatics","Ammonia","Chlorine"]
+        ToxicFluid = ["H2S", "HF Acid", "CO", "HCl", "Nitric Acid", "AlCl3", "NO2", "Phosgene", "TDI", "PO", "EE",
+                      "EO", "Pyrophoric", "Ammonia", "Chlorine"]
         comp = models.ComponentMaster.objects.get(componentid= componentID)
         target = models.FacilityRiskTarget.objects.get(facilityid= models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id).facilityid_id)
         datafaci = models.Facility.objects.get(facilityid= models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id).facilityid_id)
@@ -1344,20 +1344,40 @@ def NewProposal(request, componentID):
             else:
                 materialExposedFluid = 0
             # CA
-            data['APIFluid'] = request.POST.get('APIFluid')
+            data['ModelFluid'] = request.POST.get('APIFluid')
             data['MassInventory'] = request.POST.get('MassInventory')
-            data['Systerm'] = request.POST.get('Systerm')
+            data['ToxicFluid'] = request.POST.get('ToxicFluid')
+            data['ToxicFluidPercent'] = request.POST.get('ToxicFluidPercent')
+            data['PhaseStorage'] = request.POST.get('phaseOfFluid')
+            data['LiquidLevel'] = request.POST.get('LiquidLevel')
             data['MassComponent'] = request.POST.get('MassComponent')
             data['EquipmentCost'] = request.POST.get('EquipmentCost')
-            data['MittigationSysterm'] = request.POST.get('MittigationSysterm')
+            data['MittigationSystem'] = request.POST.get('MittigationSystem')
             data['ProductionCost'] = request.POST.get('ProductionCost')
-            data['ToxicPercent'] = request.POST.get('ToxicPercent')
             data['InjureCost'] = request.POST.get('InjureCost')
             data['ReleaseDuration'] = request.POST.get('ReleaseDuration')
             data['EnvironmentCost'] = request.POST.get('EnvironmentCost')
             data['PersonDensity'] = request.POST.get('PersonDensity')
-            data['DetectionType'] = request.POST.get('DetectionType')
-            data['IsulationType'] = request.POST.get('IsulationType')
+            data['ProcessUnit'] = request.POST.get('ProcessUnit')
+            data['OutageMulti'] = request.POST.get('OutageMulti')
+            if request.POST.get(
+                    'DetectionType') == "Intrumentation designed specifically to detect material losses by changes in operating conditions (i.e loss of pressure or flow) in the system":
+                detectiontype = 'A'
+            elif request.POST.get(
+                    'DetectionType') == "Suitably located detectors to determine when the material is present outside the pressure-containing envelope":
+                detectiontype = 'B'
+            else:
+                detectiontype = 'C'
+            data['DetectionType'] = detectiontype
+            if request.POST.get(
+                    'IsolationType') == "Isolation or shutdown systerms activated directly from process instrumentation or detectors, with no operator intervention":
+                isolationtype = 'A'
+            elif request.POST.get(
+                    'IsolationType') == "Isolation or shutdown systems activated by operators in the control room or other suitable locations remote from the leak":
+                isolationtype = 'B'
+            else:
+                isolationtype = 'C'
+            data['IsolationType'] = isolationtype
             rwassessment = models.RwAssessment(equipmentid_id=comp.equipmentid_id, componentid_id=comp.componentid, assessmentdate=data['assessmentdate'],
                                         riskanalysisperiod=data['riskperiod'], isequipmentlinked= comp.isequipmentlinked,assessmentmethod = data['assessmentmethod'],
                                         proposalname=data['assessmentname'])
@@ -1409,7 +1429,8 @@ def NewProposal(request, componentID):
                                        naohconcentration=data['NaOHConcentration'],
                                        releasefluidpercenttoxic=float(data['ReleasePercentToxic']),
                                        waterph=float(data['PHWater']), h2spartialpressure=float(data['OpHydroPressure']),
-                                       flowrate=float(data['flowrate']))
+                                       flowrate=float(data['flowrate']), liquidlevel= float(data['LiquidLevel']),
+                                       storagephase = data['PhaseStorage'])
             rwstream.save()
             rwexcor = models.RwExtcorTemperature(id=rwassessment, minus12tominus8=data['OP1'], minus8toplus6=data['OP2'],
                                           plus6toplus32=data['OP3'], plus32toplus71=data['OP4'],
@@ -1446,17 +1467,23 @@ def NewProposal(request, componentID):
                                     costfactor=data['materialCostFactor'],
                                     yieldstrength=data['yieldstrength'],tensilestrength= data['tensilestrength'])
             rwmaterial.save()
-            rwinputca = models.RwInputCaLevel1(id=rwassessment, api_fluid=data['APIFluid'], system=data['Systerm'],
-                                        release_duration=data['ReleaseDuration'], detection_type=data['DetectionType'],
-                                        isulation_type=data['IsulationType'],
-                                        mitigation_system=data['MittigationSysterm'],
-                                        equipment_cost=data['EquipmentCost'], injure_cost=data['InjureCost'],
-                                        evironment_cost=data['EnvironmentCost'], toxic_percent=data['ToxicPercent'],
-                                        personal_density=data['PersonDensity'],
-                                        material_cost=data['materialCostFactor'],
-                                        production_cost=data['ProductionCost'], mass_inventory=data['MassInventory'],
-                                        mass_component=data['MassComponent'],
-                                        stored_pressure=float(data['minOP']) * 6.895, stored_temp=data['minOT'])
+            rwinputca = models.RwInputCaLevel1(id=rwassessment,
+                                               release_duration=data['ReleaseDuration'],
+                                               detection_type=data['DetectionType'],
+                                               isulation_type=data['IsolationType'],
+                                               mitigation_system=data['MittigationSystem'],
+                                               equipment_cost=data['EquipmentCost'], injure_cost=data['InjureCost'],
+                                               evironment_cost=data['EnvironmentCost'],
+                                               personal_density=data['PersonDensity'],
+                                               material_cost=data['materialCostFactor'],
+                                               production_cost=data['ProductionCost'],
+                                               mass_inventory=data['MassInventory'],
+                                               mass_component=data['MassComponent'],
+                                               stored_pressure=float(data['minOP']) * 6.895, stored_temp=data['minOT'],
+                                               model_fluid=data['ModelFluid'], toxic_fluid=data['ToxicFluid'],
+                                               toxic_percent=float(data['ToxicFluidPercent']),
+                                               process_unit=float(data['ProcessUnit']),
+                                               outage_multiplier=float(data['OutageMulti']))
             rwinputca.save()
             ReCalculate.ReCalculate(rwassessment.id)
             return redirect('damgeFactor', proposalID= rwassessment.id)
@@ -3192,7 +3219,7 @@ def FullyDamageFactor(request, proposalID):
         raise Http404
     return render(request, 'FacilityUI/risk_summary/dfFull.html', {'page':'damageFactor', 'obj':data, 'assess': rwAss, 'isTank': isTank,
                                                                    'isShell': isShell, 'proposalID':proposalID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
-def FullyConsequence(request, proposalID):
+def FullyConsequence(request, proposalID): #Finance cof
     data = {}
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
@@ -3284,8 +3311,10 @@ def FullyConsequence(request, proposalID):
             data['fc_environ_leak'] = roundData.roundFC(shellConsequences.fc_environ_leak)
             return render(request, 'FacilityUI/risk_summary/fullyShellConsequence.html', {'page':'fullyConse' , 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
         else:
-            ca = models.RwCaLevel1.objects.get(id= proposalID)
-            inputCa = models.RwInputCaLevel1.objects.get(id= proposalID)
+            material = models.RwMaterial.objects.get(id=proposalID)
+            ca = models.RwCaLevel1.objects.get(id=proposalID)
+            inputCa = models.RwInputCaLevel1.objects.get(id=proposalID)
+            data['material_cost'] = material.costfactor
             data['production_cost'] = roundData.roundMoney(inputCa.production_cost)
             data['equipment_cost'] = roundData.roundMoney(inputCa.equipment_cost)
             data['personal_density'] = inputCa.personal_density
@@ -3299,7 +3328,9 @@ def FullyConsequence(request, proposalID):
             data['fc_envi'] = roundData.roundMoney(ca.fc_envi)
             data['fc_total'] = roundData.roundMoney(ca.fc_total)
             data['fcof_category'] = ca.fcof_category
-            return render(request, 'FacilityUI/risk_summary/fullyNormalConsequence.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+            return render(request, 'FacilityUI/risk_summary/fullyNormalConsequence.html',
+                          {'page': 'fullyConse', 'data': data, 'proposalID': proposalID, 'ass': rwAss,
+                           'info': request.session, 'noti': noti, 'countnoti': countnoti, 'count': count})
     except Exception as e:
         print(e)
         raise Http404
@@ -4236,6 +4267,49 @@ def FullyConsequenceMana(request, proposalID):
             return render(request, 'ManagerUI/RiskSummaryMana/fullyNormalConsequenceMana.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
     except:
         raise Http404
+def AreaBasedCoF(request, proposalID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    data = {}
+    try:
+        rwAss = models.RwAssessment.objects.get(id=proposalID)
+        component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        ca = models.RwCaLevel1.objects.get(id=proposalID)
+        apiComType = models.ApiComponentType.objects.get(apicomponenttypeid=component.apicomponenttypeid)
+        inputCa = models.RwInputCaLevel1.objects.get(id=proposalID)
+        rwcomponent = models.RwComponent.objects.get(id=proposalID)
+        rwstream = models.RwStream.objects.get(id=proposalID)
+        rwcalevel1 = models.RwCaLevel1.objects.get(id=proposalID)
+        data['ca_final'] = ca.ca_final
+        data['fcof_category'] = ca.fcof_category
+        data['api_comp_type'] = apiComType.apicomponenttypename
+        data['diameter'] = rwcomponent.nominaldiameter
+        data['liquidlevel'] = rwstream.liquidlevel
+        data['componentvolume'] = rwcomponent.componentvolume
+        data['model_fluid'] = inputCa.model_fluid
+        data['toxic_fluid'] = inputCa.toxic_fluid
+        data['toxic_fluid_percentage'] = inputCa.toxic_percent
+        data['phase_fluid_storage'] = rwstream.storagephase
+        data['max_operating_temp'] = rwstream. maxoperatingtemperature
+        data['max_operating_pressure'] = rwstream.maxoperatingpressure * 1000
+        data['ambient_state'] = rwcalevel1.ambient
+        data['ideal_gas'] = rwcalevel1.ideal_gas
+        data['ideal_gas_ratio'] = rwcalevel1.ideal_gas_ratio
+        data['release_magnitude'] = rwcalevel1.fact_di
+        data['liquid_density'] = rwcalevel1.liquid_density
+        data['CA_reduction'] = rwcalevel1.fact_mit
+        data['auto_ignition'] = rwcalevel1.auto_ignition
+        data['release_phase'] = rwcalevel1.release_phase
+        data['mw'] = rwcalevel1.mw
+        data['nbp'] = rwcalevel1.nbp
+        data['model_fluid_type'] = rwcalevel1.model_fluid_type
+        data['toxic_fluid_type'] = rwcalevel1.toxic_fluid_type
+    except Exception as e:
+        print(e)
+    return render(request, 'FacilityUI/risk_summary/areaBasedCoFforNormal.html',{'page':'areaBasedCoF','noti':noti, 'countnoti':countnoti,'count':count,'proposalID':proposalID,'ass':rwAss,'data': data,'info':request.session })
+
 def RiskChartMana(request, proposalID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
