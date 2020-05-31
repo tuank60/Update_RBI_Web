@@ -445,6 +445,15 @@ def CorrisionRate(request,proposalID):
     list = []
     dataF = {}
     rwAss = models.RwAssessment.objects.get(id=proposalID)
+    component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+    if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
+        isBottom = 1
+    else:
+        isBottom = 0
+    if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
+        isShell = 1
+    else:
+        isShell = 0
     componentID = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
     dataF = models.CorrosionRateTank.objects.filter(id_id = proposalID)
     for a in dataF:
@@ -506,7 +515,8 @@ def CorrisionRate(request,proposalID):
         raise Http404
     return render(request, 'FacilityUI/risk_summary/proposalCorrisionRate.html',
                   {'page': 'corrsionRate', 'proposalID': proposalID, 'componentID':rwAss.componentid_id, 'info': request.session, 'noti': noti,
-                   'countnoti': countnoti, 'count': count,'list':list,'dataF':dataF})
+                   'countnoti': countnoti, 'count': count,'list':list,'dataF':dataF,'isTank': isBottom,
+                                                                   'isShell': isShell})
 
 def CaculateCorrision(request,proposalID):
     return render(request,'FacilityUI/risk_summary/CaculateCorrision.html',
@@ -3265,7 +3275,8 @@ def FullyConsequence(request, proposalID): #Finance cof
             data['business_cost'] = roundData.roundMoney(bottomConsequences.business_cost)
             data['consequence'] = roundData.roundMoney(bottomConsequences.consequence)
             data['consequencecategory'] = bottomConsequences.consequencecategory
-            return render(request, 'FacilityUI/risk_summary/fullyBottomConsequence.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+            return render(request, 'FacilityUI/risk_summary/fullyBottomConsequence.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count,'isTank': isBottom,
+                                                                   'isShell': isShell})
         elif isShell:
             shellConsequences = models.RwCaTank.objects.get(id=proposalID)
             data['hydraulic_water'] = roundData.roundFC(shellConsequences.hydraulic_water)  # tuansua
@@ -3309,7 +3320,8 @@ def FullyConsequence(request, proposalID): #Finance cof
             data['barrel_offsite_leak'] = roundData.roundFC(shellConsequences.barrel_offsite_leak)
             data['barrel_water_leak'] = roundData.roundFC(shellConsequences.barrel_water_leak)
             data['fc_environ_leak'] = roundData.roundFC(shellConsequences.fc_environ_leak)
-            return render(request, 'FacilityUI/risk_summary/fullyShellConsequence.html', {'page':'fullyConse' , 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+            return render(request, 'FacilityUI/risk_summary/fullyShellConsequence.html', {'page':'fullyConse' , 'data': data, 'proposalID':proposalID, 'ass':rwAss,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count,'isTank': isBottom,
+                                                                   'isShell': isShell})
         else:
             material = models.RwMaterial.objects.get(id=proposalID)
             ca = models.RwCaLevel1.objects.get(id=proposalID)
@@ -3330,16 +3342,80 @@ def FullyConsequence(request, proposalID): #Finance cof
             data['fcof_category'] = ca.fcof_category
             return render(request, 'FacilityUI/risk_summary/fullyNormalConsequence.html',
                           {'page': 'fullyConse', 'data': data, 'proposalID': proposalID, 'ass': rwAss,
-                           'info': request.session, 'noti': noti, 'countnoti': countnoti, 'count': count})
+                           'info': request.session, 'noti': noti, 'countnoti': countnoti, 'count': count,'isTank': isBottom,
+                                                                   'isShell': isShell})
     except Exception as e:
         print(e)
         raise Http404
+
+def AreaBasedCoF(request, proposalID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    data = {}
+    try:
+        rwAss = models.RwAssessment.objects.get(id=proposalID)
+        component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
+            isBottom = 1
+        else:
+            isBottom = 0
+        if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
+            isShell = 1
+        else:
+            isShell = 0
+        ca = models.RwCaLevel1.objects.get(id=proposalID)
+        apiComType = models.ApiComponentType.objects.get(apicomponenttypeid=component.apicomponenttypeid)
+        inputCa = models.RwInputCaLevel1.objects.get(id=proposalID)
+        rwcomponent = models.RwComponent.objects.get(id=proposalID)
+        rwstream = models.RwStream.objects.get(id=proposalID)
+        rwcalevel1 = models.RwCaLevel1.objects.get(id=proposalID)
+        data['ca_final'] = ca.ca_final
+        data['fcof_category'] = ca.fcof_category
+        data['api_comp_type'] = apiComType.apicomponenttypename
+        data['diameter'] = rwcomponent.nominaldiameter
+        data['liquidlevel'] = rwstream.liquidlevel
+        data['componentvolume'] = rwcomponent.componentvolume
+        data['model_fluid'] = inputCa.model_fluid
+        data['toxic_fluid'] = inputCa.toxic_fluid
+        data['toxic_fluid_percentage'] = inputCa.toxic_percent
+        data['phase_fluid_storage'] = rwstream.storagephase
+        data['max_operating_temp'] = rwstream. maxoperatingtemperature
+        data['max_operating_pressure'] = rwstream.maxoperatingpressure * 1000
+        data['ambient_state'] = rwcalevel1.ambient
+        data['ideal_gas'] = rwcalevel1.ideal_gas
+        data['ideal_gas_ratio'] = rwcalevel1.ideal_gas_ratio
+        data['release_magnitude'] = rwcalevel1.fact_di
+        data['liquid_density'] = rwcalevel1.liquid_density
+        data['CA_reduction'] = rwcalevel1.fact_mit
+        data['auto_ignition'] = rwcalevel1.auto_ignition
+        data['release_phase'] = rwcalevel1.release_phase
+        data['mw'] = rwcalevel1.mw
+        data['nbp'] = rwcalevel1.nbp
+        data['model_fluid_type'] = rwcalevel1.model_fluid_type
+        data['toxic_fluid_type'] = rwcalevel1.toxic_fluid_type
+    except Exception as e:
+        print(e)
+    return render(request, 'FacilityUI/risk_summary/areaBasedCoFforNormal.html',{'page':'areaBasedCoF','noti':noti, 'countnoti':countnoti,'count':count,'proposalID':proposalID,'ass':rwAss,'data': data,'info':request.session,'isTank': isBottom,
+                                                                   'isShell': isShell})
+
 def RiskChart(request, proposalID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
     try:
+        rwAss = models.RwAssessment.objects.get(id=proposalID)
+        component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
+            isBottom = 1
+        else:
+            isBottom = 0
+        if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
+            isShell = 1
+        else:
+            isShell = 0
         rwAssessment = models.RwAssessment.objects.get(id= proposalID)
         rwFullpof = models.RwFullPof.objects.get(id= proposalID)
         rwFullcof = models.RwFullFcof.objects.get(id= proposalID)
@@ -3362,7 +3438,8 @@ def RiskChart(request, proposalID):
                       chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget]
         endLabel = date2Str.date2str(date2Str.dateFuture(assessmentDate, 15))
         content = {'page': 'riskChart', 'label': dataLabel, 'data':dataChart, 'target':dataTarget, 'endLabel':endLabel, 'proposalname':rwAssessment.proposalname,
-                   'proposalID':rwAssessment.id, 'componentID':rwAssessment.componentid_id,'noti':noti,'countnoti':countnoti,'count':count}
+                   'proposalID':rwAssessment.id, 'componentID':rwAssessment.componentid_id,'noti':noti,'countnoti':countnoti,'count':count,'isTank': isBottom,
+                                                                   'isShell': isShell}
         return render(request, 'FacilityUI/risk_summary/riskChart.html', content)
     except Exception as e:
         print("Exception")
@@ -4267,48 +4344,6 @@ def FullyConsequenceMana(request, proposalID):
             return render(request, 'ManagerUI/RiskSummaryMana/fullyNormalConsequenceMana.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
     except:
         raise Http404
-def AreaBasedCoF(request, proposalID):
-    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
-    countnoti = noti.filter(state=0).count()
-    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
-                                          Q(Is_see=0)).count()
-    data = {}
-    try:
-        rwAss = models.RwAssessment.objects.get(id=proposalID)
-        component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
-        ca = models.RwCaLevel1.objects.get(id=proposalID)
-        apiComType = models.ApiComponentType.objects.get(apicomponenttypeid=component.apicomponenttypeid)
-        inputCa = models.RwInputCaLevel1.objects.get(id=proposalID)
-        rwcomponent = models.RwComponent.objects.get(id=proposalID)
-        rwstream = models.RwStream.objects.get(id=proposalID)
-        rwcalevel1 = models.RwCaLevel1.objects.get(id=proposalID)
-        data['ca_final'] = ca.ca_final
-        data['fcof_category'] = ca.fcof_category
-        data['api_comp_type'] = apiComType.apicomponenttypename
-        data['diameter'] = rwcomponent.nominaldiameter
-        data['liquidlevel'] = rwstream.liquidlevel
-        data['componentvolume'] = rwcomponent.componentvolume
-        data['model_fluid'] = inputCa.model_fluid
-        data['toxic_fluid'] = inputCa.toxic_fluid
-        data['toxic_fluid_percentage'] = inputCa.toxic_percent
-        data['phase_fluid_storage'] = rwstream.storagephase
-        data['max_operating_temp'] = rwstream. maxoperatingtemperature
-        data['max_operating_pressure'] = rwstream.maxoperatingpressure * 1000
-        data['ambient_state'] = rwcalevel1.ambient
-        data['ideal_gas'] = rwcalevel1.ideal_gas
-        data['ideal_gas_ratio'] = rwcalevel1.ideal_gas_ratio
-        data['release_magnitude'] = rwcalevel1.fact_di
-        data['liquid_density'] = rwcalevel1.liquid_density
-        data['CA_reduction'] = rwcalevel1.fact_mit
-        data['auto_ignition'] = rwcalevel1.auto_ignition
-        data['release_phase'] = rwcalevel1.release_phase
-        data['mw'] = rwcalevel1.mw
-        data['nbp'] = rwcalevel1.nbp
-        data['model_fluid_type'] = rwcalevel1.model_fluid_type
-        data['toxic_fluid_type'] = rwcalevel1.toxic_fluid_type
-    except Exception as e:
-        print(e)
-    return render(request, 'FacilityUI/risk_summary/areaBasedCoFforNormal.html',{'page':'areaBasedCoF','noti':noti, 'countnoti':countnoti,'count':count,'proposalID':proposalID,'ass':rwAss,'data': data,'info':request.session })
 
 def RiskChartMana(request, proposalID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
