@@ -2,10 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7f231c43-833f-45f1-9b74-18536c96b33c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/RbiCloud/settings.py" afterPath="$PROJECT_DIR$/RbiCloud/settings.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cloud/process/RBI/CA_Flammable.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cloud/process/RBI/FinancialCOF.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cloud/process/RBI/ToxicConsequenceArea.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloud/models.py" afterPath="$PROJECT_DIR$/cloud/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py" afterPath="$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py" afterPath="$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cloud/views.py" afterPath="$PROJECT_DIR$/cloud/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseRiskSummary.html" afterPath="$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseRiskSummary.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/css/base.css" afterPath="$PROJECT_DIR$/static/css/base.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html" afterPath="$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/FacilityUI/facility/uploadData.html" afterPath="$PROJECT_DIR$/templates/FacilityUI/facility/uploadData.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html" afterPath="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html" afterPath="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/FacilityUI/risk_summary/areaBasedCoFforNormal.html" afterPath="$PROJECT_DIR$/templates/FacilityUI/risk_summary/areaBasedCoFforNormal.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyNormalConsequence.html" afterPath="$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyNormalConsequence.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,31 +26,166 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="rbi31_5@localhost" type="e3449647:DbNodeDescriptor" />
+      </path>
+      <path>
+        <item name="" type="eadb38e5:DatabaseStructure$Root" />
+        <item name="rbi31_5@localhost" type="e3449647:DbNodeDescriptor" />
+        <item name="rbi31_5" type="e3449647:DbNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="66" column="105" lean-forward="true" selection-start-line="66" selection-start-column="105" selection-end-line="66" selection-end-column="105" />
+            <state relative-caret-position="247">
+              <caret line="3654" column="25" lean-forward="false" selection-start-line="3654" selection-start-column="14" selection-end-line="3654" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ToxicConsequenceArea.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/process/RBI/ToxicConsequenceArea.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="14" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="riskMatrix.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/riskMatrix.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3961">
+              <caret line="233" column="29" lean-forward="false" selection-start-line="233" selection-start-column="27" selection-end-line="233" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="areaBasedCoFforNormal.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/areaBasedCoFforNormal.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="218" column="91" lean-forward="true" selection-start-line="218" selection-start-column="91" selection-end-line="218" selection-end-column="91" />
               <folding>
-                <element signature="e#632#664#0" expanded="true" />
+                <marker date="1591865506179" expanded="false" signature="5438:5443" ph="°" />
+                <marker date="1591865506179" expanded="false" signature="5678:5683" ph="°" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wsgi.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/RbiCloud/wsgi.py">
+      <file leaf-file-name="fastCalulate.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="86">
+              <caret line="550" column="110" lean-forward="false" selection-start-line="550" selection-start-column="110" selection-end-line="550" selection-end-column="110" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FinancialCOF.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/process/RBI/FinancialCOF.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="117">
+              <caret line="131" column="19" lean-forward="false" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="rw_input_ca_level1" pinned="false" current-in-tab="false">
+        <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_input_ca_level1">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state>
+              <filtering enabled="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CA_CAL.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="248">
+              <caret line="58" column="22" lean-forward="true" selection-start-line="48" selection-start-column="4" selection-end-line="58" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CA_Flammable.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CA_Flammable.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-4799">
+              <caret line="2" column="3" lean-forward="false" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="3" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>h2spartialpressure</find>
+      <find>operation</find>
+      <find>con</find>
+      <find>editp</find>
+      <find>Toxic Fluid Percentage,</find>
+      <find>fully-consequence</find>
+      <find>{2, 3, 14}</find>
+      <find>out</find>
+      <find>eneff</find>
+      <find>mass</find>
+      <find>FC_cm</find>
+      <find>Are</find>
+      <find>MATERIAL_COST</find>
+      <find>process u</find>
+      <find>phase_fluid_storage</find>
+      <find>NBP</find>
+      <find>den</find>
+      <find>FC_inj</find>
+      <find>total</find>
+      <find>riskmatrix</find>
+      <find>FullyConsequence</find>
+      <find>RISKMA</find>
+      <find>FC</find>
+      <find>CA_inj</find>
+      <find>api_com_type</find>
+      <find>factIC_n_small</find>
+      <find>CA_cmd</find>
+      <find>Fact</find>
+      <find>ca_flam_cmd</find>
+      <find>frac</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -47,8 +194,24 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/RbiCloud/settings.py" />
-        <option value="$PROJECT_DIR$/cloud/views.py" />
         <option value="$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseRiskSummary.html" />
+        <option value="$PROJECT_DIR$/cloud/process/RBI/Postgresql.py" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html" />
+        <option value="$PROJECT_DIR$/static/css/styles.css" />
+        <option value="$PROJECT_DIR$/static/js/app.js" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/facility/uploadData.html" />
+        <option value="$PROJECT_DIR$/static/css/base.css" />
+        <option value="$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html" />
+        <option value="$PROJECT_DIR$/cloud/models.py" />
+        <option value="$PROJECT_DIR$/cloud/process/RBI/CA_Flammable.py" />
+        <option value="$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyNormalConsequence.html" />
+        <option value="$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py" />
+        <option value="$PROJECT_DIR$/cloud/process/RBI/FinancialCOF.py" />
+        <option value="$PROJECT_DIR$/cloud/process/RBI/ToxicConsequenceArea.py" />
+        <option value="$PROJECT_DIR$/cloud/views.py" />
+        <option value="$PROJECT_DIR$/templates/FacilityUI/risk_summary/areaBasedCoFforNormal.html" />
       </list>
     </option>
   </component>
@@ -58,7 +221,7 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="width" value="808" />
     <option name="height" value="728" />
   </component>
@@ -78,6 +241,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -93,19 +258,128 @@
             <path>
               <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
               <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="cloud" type="462c0819:PsiDirectoryNode" />
+              <item name="process" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="cloud" type="462c0819:PsiDirectoryNode" />
+              <item name="process" type="462c0819:PsiDirectoryNode" />
+              <item name="RBI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="cloud" type="462c0819:PsiDirectoryNode" />
+              <item name="regularverification" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
               <item name="RbiCloud" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseUI" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseFacility" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseUI" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseWeb" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="component" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="design_code" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="facility" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="proposal" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="risk_excel" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="risk_summary" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="F:/HOC TAP/ProjectDjango/PycharmProject/madiadomo" />
+    <property name="com.intellij.database.dataSource.DataSourceTemplate" value="MySQL" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.django.DjangoModulesConfigurable" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -158,27 +432,27 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24962178" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.23146747" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22087745" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32569557" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39934534" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -189,64 +463,175 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseRiskSummary.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="158">
-          <caret line="10" column="129" lean-forward="false" selection-start-line="10" selection-start-column="129" selection-end-line="10" selection-end-column="129" />
-          <folding>
-            <element signature="e#705#711#0#HTML" expanded="false" />
-            <element signature="e#1210#1216#0#HTML" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/areaBasedCoFforNormal.html">
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_excel/tableExcel.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="43" lean-forward="false" selection-start-line="0" selection-start-column="43" selection-end-line="0" selection-end-column="43" />
-          <folding />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/proposalCorrisionRate.html">
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.cof_fluid">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_full_pof">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.dm_category">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.dm_expected_type">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.dm_items">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/regularverification/regular.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18679">
+          <caret line="1110" column="16" lean-forward="false" selection-start-line="1110" selection-start-column="8" selection-end-line="1110" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/regularverification/interpolation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4692">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/regularverification/subscribe.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="44" lean-forward="false" selection-start-line="0" selection-start-column="44" selection-end-line="0" selection-end-column="44" />
-          <folding />
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/views.py">
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_full_cof_fluid">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/regularverification/subscribe_thingsboard.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="3399" column="101" lean-forward="false" selection-start-line="3399" selection-start-column="89" selection-end-line="3399" selection-end-column="101" />
-          <folding>
-            <element signature="e#0#9#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="172">
+          <caret line="68" column="29" lean-forward="true" selection-start-line="68" selection-start-column="29" selection-end-line="68" selection-end-column="29" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RbiCloud/settings.py">
+    <entry file="file://$PROJECT_DIR$/manage.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-49">
-          <caret line="88" column="28" lean-forward="true" selection-start-line="88" selection-start-column="28" selection-end-line="88" selection-end-column="28" />
-          <folding />
+        <state relative-caret-position="-266">
+          <caret line="9" column="49" lean-forward="false" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="49" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/riskChart.html">
+    <entry file="file://$PROJECT_DIR$/cloud/regularverification/Pub_Thingsboard.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="52" column="18" lean-forward="true" selection-start-line="52" selection-start-column="18" selection-end-line="52" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.tbl_52_ca_properties_level_1">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_full_cof_input">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_full_cof">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="1053" column="117" lean-forward="false" selection-start-line="1053" selection-start-column="100" selection-end-line="1053" selection-end-column="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.tbl_3b21_si_conversion">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.tbl_58_ca_component_dm">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/styles.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="23" lean-forward="false" selection-start-line="1" selection-start-column="15" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="41" lean-forward="true" selection-start-line="11" selection-start-column="41" selection-end-line="11" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseBusiness.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="41" lean-forward="false" selection-start-line="0" selection-start-column="41" selection-end-line="0" selection-end-column="41" />
+          <caret line="0" column="30" lean-forward="false" selection-start-line="0" selection-start-column="30" selection-end-line="0" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/RbiCloud/wsgi.py">
+    <entry file="file://$PROJECT_DIR$/static/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="23" lean-forward="false" selection-start-line="6" selection-start-column="20" selection-end-line="6" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseProposal.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -254,12 +639,213 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseFacility.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-51">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RbiCloud/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="156" column="35" lean-forward="true" selection-start-line="156" selection-start-column="35" selection-end-line="156" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="40" column="126" lean-forward="false" selection-start-line="40" selection-start-column="126" selection-end-line="40" selection-end-column="126" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/facility/uploadData.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="73" column="184" lean-forward="true" selection-start-line="73" selection-start-column="184" selection-end-line="73" selection-end-column="184" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30362">
+          <caret line="1786" column="48" lean-forward="false" selection-start-line="1786" selection-start-column="35" selection-end-line="1786" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/File/import_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="245" column="20" lean-forward="false" selection-start-line="245" selection-start-column="11" selection-end-line="245" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.ca_level1">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="66" column="105" lean-forward="true" selection-start-line="66" selection-start-column="105" selection-end-line="66" selection-end-column="105" />
+        <state relative-caret-position="214">
+          <caret line="66" column="73" lean-forward="false" selection-start-line="66" selection-start-column="73" selection-end-line="66" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.equipment_master">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.component_master">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.api_component_type">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/Postgresql.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="237">
+          <caret line="265" column="25" lean-forward="false" selection-start-line="265" selection-start-column="25" selection-end-line="265" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_material">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_full_cof_hole_size">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_full_fcof">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="31025">
+          <caret line="1825" column="123" lean-forward="false" selection-start-line="1825" selection-start-column="108" selection-end-line="1825" selection-end-column="123" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/riskMatrix.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3961">
+          <caret line="233" column="29" lean-forward="false" selection-start-line="233" selection-start-column="27" selection-end-line="233" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://table:/1c37ae7f/7515b3e9-6805-4df5-aa01-9c8087f0af77/rbi31_5.rw_input_ca_level1">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state>
+          <filtering enabled="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="638" column="6" lean-forward="false" selection-start-line="638" selection-start-column="6" selection-end-line="638" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="86">
+          <caret line="550" column="110" lean-forward="false" selection-start-line="550" selection-start-column="110" selection-end-line="550" selection-end-column="110" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CA_Flammable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4799">
+          <caret line="2" column="3" lean-forward="false" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/FinancialCOF.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="131" column="19" lean-forward="false" selection-start-line="131" selection-start-column="8" selection-end-line="131" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/CA_CAL.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="248">
+          <caret line="58" column="22" lean-forward="true" selection-start-line="48" selection-start-column="4" selection-end-line="58" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyNormalConsequence.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="16" column="32" lean-forward="false" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="3654" column="25" lean-forward="false" selection-start-line="3654" selection-start-column="14" selection-end-line="3654" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/process/RBI/ToxicConsequenceArea.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="6" column="14" lean-forward="false" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/areaBasedCoFforNormal.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="218" column="91" lean-forward="true" selection-start-line="218" selection-start-column="91" selection-end-line="218" selection-end-column="91" />
           <folding>
-            <element signature="e#632#664#0" expanded="true" />
+            <marker date="1591865506179" expanded="false" signature="5438:5443" ph="°" />
+            <marker date="1591865506179" expanded="false" signature="5678:5683" ph="°" />
           </folding>
         </state>
       </provider>

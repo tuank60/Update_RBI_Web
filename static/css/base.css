@@ -4,7 +4,8 @@ body {margin:0;}
 
 .header {
   overflow: hidden;
-  background-color: #4575B7;
+  background-color: red;
+  background-image: linear-gradient(to right, #ffffff , #2989cc);
   position: fixed;
   top: 0;
   width: 100%;

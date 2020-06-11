@@ -66,9 +66,10 @@ class CA_NORMAL: #LEVEL 1
     def liquid_density(self):
         data = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
         return data[1] * 16.02
+        # return data[1]
 
     def ideal_gas_ratio(self):
-        return self.C_P() / (self.C_P() - 8.314)
+        return max(self.C_P() / (self.C_P() - 8.314),1.01)
 
     def ambient(self):
         return DAL_CAL.POSTGRESQL.GET_RELEASE_PHASE(self.FLUID)
@@ -80,13 +81,13 @@ class CA_NORMAL: #LEVEL 1
     def gff(self, i):
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
         if (i == 1):
-            return obj[1]
+            return obj[0]
         elif (i == 2):
-            return obj[2]
+            return obj[1]
         elif (i == 3):
-            return obj[3]
+            return obj[2]
         else:
-            return obj[4]
+            return obj[3]
     def model_fluid_type(self):
         fluidtype  = DAL_CAL.POSTGRESQL.GET_MODEL_FLUID_TYPE(self.FLUID)
         return fluidtype
@@ -131,7 +132,7 @@ class CA_NORMAL: #LEVEL 1
 
     def GET_RELEASE_PHASE(self): #done
         try:
-            print('test get_release_phase')
+            # print('test get_release_phase')
             return self.FLUID_PHASE
         except Exception as e:
             print(e)
@@ -162,10 +163,14 @@ class CA_NORMAL: #LEVEL 1
                 CP_C2 = (data[6] / t) / ( math.sinh(data[6] / t))
                 CP_E2 = (data[8] / t) / ( math.cosh(data[8] / t))
                 if (data[3] == 1):
+                    print("1")
+                    print(data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3))
                     return data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3)
                 elif(data[3] == 2):
+                    print("2")
                     return data[4] + data[5] * CP_C2 * CP_C2 + data[6] * CP_E2 * CP_E2
                 elif(data[3] == 3):
+                    print("3")
                     return data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3) + data[8] * pow(t, 4)
                 else:
                     return 0
@@ -175,81 +180,113 @@ class CA_NORMAL: #LEVEL 1
             print(e)
             print('exception at C_p')
 
+    def ReleasePhase(self):
+        if (self.ambient()=="Liquid") and (self.FLUID_PHASE=="Liquid"):
+            return "Liquid"
+        elif self.FLUID_PHASE == "Gas":
+            return "Gas"
+        elif self.NBP()<=300:
+            return "Liquid"
+        else:
+            return "Gas"
+
     def W_n(self, i):   #checking
         try:
-            # data = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
-            an = self.a_n(i)
-            mw = self.moleculer_weight()
-            gc = 1
-            print("fluid_phase = ", self.FLUID_PHASE)
-            if (self.FLUID_PHASE == "Liquid" or self.FLUID_PHASE == "Two-phase" or self.FLUID_PHASE == "Powder"):
-                wn = 0.61 * self.liquid_density() * an * math.sqrt(2 * gc * abs(self.STORED_PRESSURE - self.ATMOSPHERIC_PRESSURE) / (self.liquid_density()))/31623
-            else:
+            print(self.ambient())
+            C1 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(1)
+            C2 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(2)
+            print("fluid_phase = ", self.ambient())
+            if (self.ReleasePhase() != "Liquid"):
                 R = 8.314
                 k = self.ideal_gas_ratio()
-                p_trans = self.ATMOSPHERIC_PRESSURE * pow((k + 1) / 2, k / (k - 1))
+                print("k=" + str(k))
+                p_trans = 101.325 * pow((k + 1) / 2, k / (k - 1))
+                print(self.FLUID)
+                print(p_trans)
+                print("moleculer_weight=" + str(self.moleculer_weight()))
+                print("STORED_PRESSURE=" + str(self.STORED_PRESSURE))
                 if (self.STORED_PRESSURE > p_trans):
-                    x = ((k * mw * gc / (R * self.STORED_TEMP)) * pow(2 / (k + 1), (k + 1) / (k - 1)))
-                    wn = 0.9 * an * self.STORED_PRESSURE * math.sqrt(abs(x)) / (DAL_CAL.POSTGRESQL.GET_TBL_3B21(2))
+                    print("okok")
+                    x = (
+                    (k * self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * pow(2 / (k + 1), (k + 1) / (k - 1)))
+                    print("W_n0" + str(i) + "=" + str((0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)))
+                    return (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
                 else:
-                    x = (mw * gc / (R * self.STORED_TEMP)) * ((2 * k) / (k - 1)) * pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, 2 / k) * (1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
-                    wn = 0.9 * an * self.STORED_PRESSURE * math.sqrt(abs(x)) / (DAL_CAL.POSTGRESQL.GET_TBL_3B21(2))
+                    print("nono")
+                    x = (self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * ((2 * k) / (k - 1)) * pow(
+                        101.325 / self.STORED_PRESSURE, 2 / k) * (
+                        1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
+                    print("W_n0" + str(i) + "=" + str(
+                        (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(abs(x))))
+                    # print(((((0.9 / C2) * self.a_n(i)) * self.STORED_PRESSURE) * math.sqrt((((self.moleculer_weight() / (R * self.STORED_PRESSURE)) * ((2.0 * k) / (k - 1.0))) * math.pow(101.325 / self.STORED_PRESSURE, 2.0 / k)) * (1.0 - math.pow(101.325 / self.STORED_PRESSURE, (k - 1.0) / k)))))
+                    return (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
+            else:
+                print("W_n0" + str(i) + "=" + str(0.61 * self.liquid_density() * (self.a_n(i) / C1) * pow(
+                    (2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)))
+                return 0.61 * self.liquid_density() * (self.a_n(i) / C1) * math.pow((2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)
+
         except Exception as e :
-            wn = 0
+            # return 0
             print(e)
             print('exception at def w_n')
-        return wn
 
 
-    def W_max8(self): #done
+    def W_max8(self,i): #done
         try:
-            data = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
-            an = 32450
-            mw = self.moleculer_weight()
-            gc = 1
-            if (self.FLUID_PHASE == "Liquid" or self.FLUID_PHASE == "Two-phase" or self.FLUID_PHASE == "Powder"):
-                w_max8 = 0.61 * 1 * data[1] * 16.02 * an * math.sqrt(2 * gc * abs(self.STORED_PRESSURE - self.ATMOSPHERIC_PRESSURE) / (data[1] * 16.02)) / DAL_CAL.POSTGRESQL.GET_TBL_3B21(1)
-            else:
+            print(self.ambient())
+            C1 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(1)
+            C2 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(2)
+            # print("fluid_phase = ", self.ambient())
+            if (self.ReleasePhase() != "Liquid"):
                 R = 8.314
-                k = (self.C_P() / (self.C_P() - R))
-                p_trans = (self.ATMOSPHERIC_PRESSURE * pow((k + 1) / 2, k / (k - 1)))
+                k = self.ideal_gas_ratio()
+                # print("k=" + str(k))
+                p_trans = 101.325 * pow((k + 1) / 2, k / (k - 1))
+                # print(self.FLUID)
+                # print(p_trans)
+                # print("moleculer_weight=" + str(self.moleculer_weight()))
+                # print("STORED_PRESSURE=" + str(self.STORED_PRESSURE))
                 if (self.STORED_PRESSURE > p_trans):
-                    x = ((k * mw * gc / (R * self.STORED_TEMP)) * pow(2 / (k + 1), (k + 1) / (k - 1)))
-                    w_max8 = 0.9 * an * self.STORED_PRESSURE * math.sqrt(abs(x)) / (DAL_CAL.POSTGRESQL.GET_TBL_3B21(2))
+                    # print("okok")
+                    x = (
+                    (k * self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * pow(2 / (k + 1), (k + 1) / (k - 1)))
+                    # print("W_n0" + str(i) + "=" + str((0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)))
+                    return (0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)
                 else:
-                    x = (mw * gc / (R * self.STORED_TEMP)) * ((2 * k) / (k - 1)) * pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, 2 / k) * (1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
-                    w_max8 = 0.9 * an * self.STORED_PRESSURE * math.sqrt(abs(x)) / (DAL_CAL.POSTGRESQL.GET_TBL_3B21(2))
-        except Exception as e:
-            w_max8 = 0
+                    print("nono")
+                    x = (self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * ((2 * k) / (k - 1)) * pow(
+                        101.325 / self.STORED_PRESSURE, 2 / k) * (
+                        1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
+                    # print("W_n0" + str(i) + "=" + str(
+                    #     (0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(abs(x))))
+                    # print(((((0.9 / C2) * 32.45) * self.STORED_PRESSURE) * math.sqrt((((self.moleculer_weight() / (R * self.STORED_PRESSURE)) * ((2.0 * k) / (k - 1.0))) * math.pow(101.325 / self.STORED_PRESSURE, 2.0 / k)) * (1.0 - math.pow(101.325 / self.STORED_PRESSURE, (k - 1.0) / k)))))
+                    return (0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)
+            else:
+                # print("W_n0" + str(i) + "=" + str(0.61 * self.liquid_density() * (32.45 / C1) * pow(
+                #     (2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)))
+                return 0.61 * self.liquid_density() * (32.45 / C1) * math.pow((2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)
+
+        except Exception as e :
+            # return 0
             print(e)
-            print('exception at W_max8')
-        return w_max8
+            print('exception at def w_n')
 
     def mass_addn(self, i): #checked
         try:
-            wn = self.W_n(i)
-            print('w1 = ', self.W_n(1))
-            print('w2 = ', self.W_n(2))
-            print('w3 = ', self.W_n(3))
-            print('w4 = ', self.W_n(4))
             if (self.a_n(i) == 0):
                 return 0
             else:
-                return 180 * min(wn,(32450 *wn)/self.a_n(i))
+                return 180 * min(self.W_n(i),self.W_max8(i))
         except Exception as e:
             print(e)
             print('exception at mass_addn')
 
-    def mass_availn(self, i): #checked
+    def mass_avail_n(self, i): #checked
         try:
-            print('mass_addn1 = ', self.mass_addn(1))
-            print('mass_addn2 = ', self.mass_addn(2))
-            print('mass_addn3 = ', self.mass_addn(3))
-            print('mass_addn4 = ', self.mass_addn(4))
             return min(float(self.MASS_COMPONENT + self.mass_addn(i)), float(self.MASS_INVERT))
         except Exception as e:
             print(e)
-            print('exception at mass_availn')
+            return 0
 
     def t_n(self, i): #checked
         try:
@@ -371,20 +408,16 @@ class CA_NORMAL: #LEVEL 1
                 return 0
             else:
                 if (ldmax != 0):
-                    return min(self.mass_availn(i) / self.rate_n(i), 60 * ldmax)
+                    return min(self.mass_avail_n(i) / self.rate_n(i), 60 * ldmax)
                 else:
-                    return (self.mass_availn(i) / self.rate_n(i))
-            print('ld_max1 = ', ldmax[1])
-            print('ld_max2 = ', ldmax[2])
-            print('ld_max3 = ', ldmax[3])
-            print('ld_max4 = ', ldmax[4])
+                    return (self.mass_avail_n(i) / self.rate_n(i))
         except Exception as e:
             print(e)
             print('exception at ld_n')
 
     def mass_n(self, i):#checked
         try:
-            return min(self.rate_n(i) * self.ld_n(i), self.mass_availn(i))
+            return min(self.rate_n(i) * self.ld_n(i), self.mass_avail_n(i))
         except Exception as e:
             print(e)
             print('exception at mass_n')
@@ -422,7 +455,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             data = DAL_CAL.POSTGRESQL.GET_TBL_58(self.FLUID)
             a_cmd = [0,0,0,0]
-            if(self.GET_RELEASE_PHASE() == "Gas"):
+            if(self.ReleasePhase() == "Gas"):
                 a_cmd[0] = data[0]
                 a_cmd[1] = data[4]
                 a_cmd[2] = data[8]
@@ -444,7 +477,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             data = DAL_CAL.POSTGRESQL.GET_TBL_58(self.FLUID)
             b_cmd = [0, 0, 0, 0]
-            if(self.GET_RELEASE_PHASE() == "Gas"):
+            if(self.ReleasePhase() == "Gas"):
                 b_cmd[0] = data[1]
                 b_cmd[1] = data[5]
                 b_cmd[2] = data[9]
@@ -546,10 +579,10 @@ class CA_NORMAL: #LEVEL 1
     def fact_n_ic(self, i): #checked
         try:
             releasetype = self.releaseType(i)
-            print('releasetype1 = ',self.releaseType(1))
-            print('releasetype2 = ', self.releaseType(2))
-            print('releasetype3 = ', self.releaseType(3))
-            print('releasetype4 = ', self.releaseType(4))
+            # print('releasetype1 = ',self.releaseType(1))
+            # print('releasetype2 = ', self.releaseType(2))
+            # print('releasetype3 = ', self.releaseType(3))
+            # print('releasetype4 = ', self.releaseType(4))
             if (releasetype == "Continuous"):
                 return min(self.rate_n(i) / (DAL_CAL.POSTGRESQL.GET_TBL_3B21(5)), 1.0)
             else:

@@ -655,7 +655,6 @@ class RwInputCaLevel1(models.Model): # đầu vào ca 1+ 2 chỉnh sửa ngày 2
     stored_temp = models.FloatField(db_column='Stored_Temp', blank=True, null=True)  # Field name made lowercase.
     model_fluid = models.CharField(db_column='Model_Fluid', max_length=50, blank=True, null=True)
     toxic_fluid = models.CharField(db_column='Toxic_Fluid', max_length=50, blank=True, null=True)
-    toxic_percent = models.FloatField(db_column='Toxic_Percent', blank=True, null=True)
     primary_fluid = models.FloatField(db_column='Primary_Fluid', blank=True, null=True)
     volatile_fluid = models.FloatField(db_column='Volatile_Fluid', blank=True, null=True)
     mitigation_system = models.CharField(db_column='Mitigation', blank=True, null=True,max_length=200)
@@ -1425,6 +1424,10 @@ class RwFullCoFHoleSize(models.Model):
     mass_add_n_medium = models.FloatField(db_column='mass_add_n_medium', blank=True, null=True)
     mass_add_n_large = models.FloatField(db_column='mass_add_n_large', blank=True, null=True)
     mass_add_n_rupture = models.FloatField(db_column='mass_add_n_rupture', blank=True, null=True)
+    mass_avail_n_small = models.FloatField(db_column='mass_avail_n_small',blank=True,null=True)
+    mass_avail_n_medium = models.FloatField(db_column='mass_avail_n_medium',blank=True,null=True)
+    mass_avail_n_large = models.FloatField(db_column='mass_avail_n_large',blank=True,null=True)
+    mass_avail_n_rupture = models.FloatField(db_column='mass_avail_n_rupture',blank=True,null=True)
     rate_n_small = models.FloatField(db_column='rate_n_small', blank=True, null=True)
     rate_n_medium = models.FloatField(db_column='rate_n_medium', blank=True, null=True)
     rate_n_large = models.FloatField(db_column='rate_n_large', blank=True, null=True)
