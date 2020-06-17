@@ -572,13 +572,13 @@ class DM_CAL:
     #Calculate Linning:
     def DFB_LINNING(self, age):
         if (self.INTERNAL_LINNING):
-            if (self.LinningType == "Organic Low Quality"):
+            if (self.LinningType == "Organic - Low Quality"):
                 SUSCEP_LINNING ="MoreThan6Years"
                 return DAL_CAL.POSTGRESQL.GET_TBL_65(math.ceil(age), SUSCEP_LINNING)
-            elif(self.LinningType == "Organic Medium Quality"):
+            elif(self.LinningType == "Organic - Medium Quality"):
                 SUSCEP_LINNING ="WithinLast6Years"
                 return DAL_CAL.POSTGRESQL.GET_TBL_65(math.ceil(age), SUSCEP_LINNING)
-            elif(self.LinningType == "Organic High Quality"):
+            elif(self.LinningType == "Organic - High Quality"):
                 SUSCEP_LINNING ="WithinLast3Years"
                 return DAL_CAL.POSTGRESQL.GET_TBL_65(math.ceil(age), SUSCEP_LINNING)
             else:
@@ -1359,7 +1359,6 @@ class DM_CAL:
                 return 6500;
                 # return 1390
             else:
-                print("--------go table")
                 print(DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
                                                      self.EXTERNAL_INSP_EFF))
                 return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
@@ -1370,7 +1369,6 @@ class DM_CAL:
                 return 6500;
             else:
                 try:
-                    print("---------go abc")
                     a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))
                     b = self.Po_P2_EXTERNAL() * self.ncdf(- self.B2_EXTERNAL(age))
                     c = self.Pr_P3_EXTERNAL() * self.ncdf(- self.B3_EXTERNAL(age))
@@ -1910,17 +1908,20 @@ class DM_CAL:
                                                  self.API_SIZE_BRITTLE(self.BRITTLE_THICK))
 
     def DF_BRITTLE(self,i):
-        Fse = 1
-        if(self.BRITTLE_THICK<=12.7 or (self.FABRICATED_STEEL and self.EQUIPMENT_SATISFIED and self.NOMINAL_OPERATING_CONDITIONS
-        and self.CET_THE_MAWP and self.CYCLIC_SERVICE and self.EQUIPMENT_CIRCUIT_SHOCK and (self.NomalThick <=50.8))):
-            Fse = 0.01
-        if (self.CARBON_ALLOY and (self.CRITICAL_TEMP < self.MIN_DESIGN_TEMP or self.MAX_OP_TEMP < self.MIN_DESIGN_TEMP)):
-            # if (self.LOWEST_TEMP):
-            return self.DFB_BRIITLE() * Fse
-            # else:
-            #     return self.DFB_BRIITLE()
-        else:
-            return 0
+        try:
+            Fse = 1
+            if(self.BRITTLE_THICK<=12.7 or (self.FABRICATED_STEEL and self.EQUIPMENT_SATISFIED and self.NOMINAL_OPERATING_CONDITIONS
+            and self.CET_THE_MAWP and self.CYCLIC_SERVICE and self.EQUIPMENT_CIRCUIT_SHOCK and (self.NomalThick <=50.8))):
+                Fse = 0.01
+            if (self.CARBON_ALLOY and (self.CRITICAL_TEMP < self.MIN_DESIGN_TEMP or self.MAX_OP_TEMP < self.MIN_DESIGN_TEMP)):
+                # if (self.LOWEST_TEMP):
+                return self.DFB_BRIITLE() * Fse
+                # else:
+                #     return self.DFB_BRIITLE()
+            else:
+                return 0
+        except Exception as e:
+            print(e)
 
     # Calculate TEMP EMBRITTLE
     def API_SIZE_BRITTLE(self, SIZE):
@@ -2282,7 +2283,7 @@ class DM_CAL:
         return self.DF_HTHA(self.GET_AGE()[15] + i)
 
     def DF_BRITTLE_API(self, i):
-        return  self.DF_BRITTLE(self.GET_AGE()[16] + i)
+        return self.DF_BRITTLE(self.GET_AGE()[16] + i)
 
     def DF_TEMP_EMBRITTLE_API(self,i):
         return self.DF_TEMP_EMBRITTLE(self.GET_AGE()[17] + i)
@@ -2297,7 +2298,7 @@ class DM_CAL:
         return self.DF_PIPE(self.GET_AGE()[20] + i)
 
     # TOTAL ---------------------
-    def DF_SSC_TOTAL_API(self, i):#done - con anie
+    def DF_SSC_TOTAL_API(self, i):#done - con anie)
         DF_SCC = max(self.DF_CAUTISC_API(i), self.DF_AMINE_API(i), self.DF_SULPHIDE_API(i), self.DF_HIC_SOHIC_HF_API(i), self.DF_HICSOHIC_H2S_API(i),
                      self.DF_CACBONATE_API(i), self.DF_PTA_API(i), self.DF_CLSCC_API(i), self.DF_HSCHF(i))
         return DF_SCC
@@ -2320,11 +2321,82 @@ class DM_CAL:
         except Exception as e:
             print(e)
 
+    def DF_RISK_CHART_THINNING(self):
+        try:
+            data = []
+            # for a in range(1, 16):
+            for a in range(1, 16):
+                risk = self.DF_THINNING_TOTAL_API(a)
+                data.append(risk)
+            return data
+        except Exception as e:
+            print(e)
+        return data
+
+    def DF_RISK_CHART_EXT(self):
+        try:
+            data = []
+            # for a in range(1, 16):
+            for a in range(1, 16):
+                risk = self.DF_EXT_TOTAL_API(a)
+                data.append(risk)
+            return data
+        except Exception as e:
+            print(e)
+        return data
+
+    def DF_RISK_CHART_SSC(self):
+        try:
+            data = []
+            # for a in range(1, 16):
+            for a in range(1, 16):
+                risk = self.DF_SSC_TOTAL_API(a)
+                data.append(risk)
+            return data
+        except Exception as e:
+            print(e)
+        return data
+
+    def DF_RISK_CHART_HTHA(self):
+        try:
+            data = []
+            # for a in range(1, 16):
+            for a in range(1, 16):
+                risk = self.DF_HTHA_API(a)
+                data.append(risk)
+            return data
+        except Exception as e:
+            print(e)
+        return data
+
+    def DF_RISK_CHART_BRIT(self):
+        try:
+            data = []
+            # for a in range(1, 16):
+            for a in range(1, 16):
+                risk = self.DF_BRIT_TOTAL_API(a)
+                data.append(risk)
+            return data
+        except Exception as e:
+            print(e)
+        return data
+
+    def DF_RISK_CHART_PIPE(self):
+        try:
+            data = []
+            # for a in range(1, 16):
+            for a in range(1, 16):
+                risk = self.DF_PIPE_API(a)
+                data.append(risk)
+            return data
+        except Exception as e:
+            print(e)
+        return data
+
     def DF_TOTAL_API(self,i):#testing df_htha
         try:
             TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i), self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(
                 i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
-            TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i),self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
         except Exception as e:
             print(e)
         return TOTAL_DF_API

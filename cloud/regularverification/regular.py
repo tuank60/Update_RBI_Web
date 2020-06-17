@@ -2,7 +2,7 @@ import os,sys
 
 
 from django.core.wsgi import get_wsgi_application
-import paho.mqtt.client as mqtt
+# import paho.mqtt.client as mqtt
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'RbiCloud.settings'
 application = get_wsgi_application()

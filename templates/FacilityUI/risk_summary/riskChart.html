@@ -43,7 +43,68 @@
                             borderColor: "#0000BB",
                             data: [{% for data in data %}{{ data }},{% endfor %}],
                             fill: false,
+                            lineTension:0.2,
+                        },{
+                            label: 'Present Risk',
+                            backgroundColor: "#3FBF63",
+                            borderColor: "#3FBF63",
+                            data: [{% for data in data1 %}{{ data }},{% endfor %}],
+                            fill: false,
                             lineTension:0.2
+                        },{
+                            label: 'Thining Total',
+                            backgroundColor: "#8B8D06",
+                            borderColor: "#8B8D06",
+                            data: [{% for data in thiningToTal %}{{ data }},{% endfor %}],
+                            fill: false,
+                            lineTension:0.2,
+                            showLine:false,
+                            pointRadius:0
+                        },{
+                            label: 'SCC',
+                            backgroundColor: "#F4BA5C",
+                            borderColor: "#F4BA5C",
+                            data: [{% for data in scc %}{{ data }},{% endfor %}],
+                            fill: false,
+                            lineTension:0.2,
+                            showLine:false,
+                            pointRadius:0
+                        },{
+                            label: 'HTHA',
+                            backgroundColor: "#47041E",
+                            borderColor: "#47041E",
+                            data: [{% for data in htha %}{{ data }},{% endfor %}],
+                            fill: false,
+                            lineTension:0.2,
+                            showLine:false,
+                            pointRadius:0
+                        },{
+                            label: 'BRIT',
+                            backgroundColor: "#F46D5C",
+                            borderColor: "#F46D5C",
+                            data: [{% for data in brit %}{{ data }},{% endfor %}],
+                            fill: false,
+                            lineTension:0.2,
+                            showLine:false,
+                            pointRadius:0
+                        },{
+                            label: 'PIPE',
+                            backgroundColor: "#EAF759",
+                            borderColor: "#EAF759",
+                            data: [{% for data in pipe %}{{ data }},{% endfor %}],
+                            fill: false,
+                            lineTension:0.2,
+                            showLine:false,
+                            pointRadius:0
+                        },{
+                            label: 'External Total',
+                            backgroundColor: "#4AF6DF",
+                            borderColor: "#4AF6DF",
+                            data: [{% for data in ext %}{{ data }},{% endfor %}],
+                            fill: false,
+                            lineTension:0.2,
+                            showLine:false,
+                            pointRadius:0
                         },{
                             label: 'Risk Target',
                             backgroundColor: "#CC0000",

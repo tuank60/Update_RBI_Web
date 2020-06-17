@@ -31,7 +31,7 @@ from django.db.models import Q
 from cloud.regularverification.regular import REGULAR
 import threading
 from cloud.regularverification import subscribe
-import paho.mqtt.client as mqtt
+# import paho.mqtt.client as mqtt
 from cloud.regularverification import subscribe_thingsboard
 
 
@@ -237,7 +237,6 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
         if '_select' in request.POST:
             for a in site:
                 if (request.POST.get('%d' % a.siteid)):
-                    print("cuong")
                     return redirect('addInspectionPlan', siteID=a.siteid, name=name, date=date,facilityID=1,equipID=3)
         if '_selectFac' in request.POST:
             for a in facility:
@@ -288,10 +287,8 @@ def CreateInspectionPlan(request, siteID):
         site = models.Sites.objects.filter(siteid=siteID)
         if request.method == 'POST':
             data['inspectionplanname'] = request.POST.get('InspectionPlan')
-            print(data['inspectionplanname'])
             data['inspectiondate'] = request.POST.get('InspectionDate')
             countIns = models.InspecPlan.objects.filter(inspectionplanname= data['inspectionplanname']).count()
-            print(countIns)
             if countIns > 0:
                 error['exist'] = "This Inspection Plan Name already exists!"
             else:
@@ -3663,41 +3660,112 @@ def RiskChart(request, proposalID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
+    list = []
+    time = []
+    listDamage = []
+    OldProsal = 0
+    thiningToTal = []
+    ext = []
+    scc = []
+    htha = []
+    brit = []
+    pipe = []
     try:
-        rwAss = models.RwAssessment.objects.get(id=proposalID)
-        component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
-        if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
-            isBottom = 1
-        else:
-            isBottom = 0
-        if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
-            isShell = 1
-        else:
-            isShell = 0
-        rwAssessment = models.RwAssessment.objects.get(id= proposalID)
-        rwFullpof = models.RwFullPof.objects.get(id= proposalID)
-        rwFullcof = models.RwFullFcof.objects.get(id= proposalID)
-        risk = rwFullpof.pofap1 * rwFullcof.fcofvalue
-        chart = models.RwDataChart.objects.get(id= proposalID)
+        listDamage = ReCalculate.caculateRiskChart(proposalID)
+        for a in listDamage[0]:
+            thiningToTal.append(a)
+        for a in listDamage[1]:
+            ext.append(a)
+        for a in listDamage[2]:
+            scc.append(a)
+        for a in listDamage[3]:
+            htha.append(a)
+        for a in listDamage[4]:
+            brit.append(a)
+        for a in listDamage[5]:
+            pipe.append(a)
+
+        rwAssesmentAll = models.RwAssessment.objects.all()
+        rwAssessment = models.RwAssessment.objects.get(id=proposalID)
+        comp = models.ComponentMaster.objects.get(componentid=rwAssessment.componentid_id)
+        # print("1")
         assessmentDate = rwAssessment.assessmentdate
-        dataChart = [risk, chart.riskage1, chart.riskage2, chart.riskage3, chart.riskage4, chart.riskage5, chart.riskage6,
+        timerNew = assessmentDate.year*365+assessmentDate.month*30+assessmentDate.day
+        # print(timerNew)
+        for a in rwAssesmentAll:
+            if(a.componentid_id == comp.componentid):
+                b = a.assessmentdate
+                timerOld = b.year*365+b.month*30+b.day
+                print(timerOld)
+                H = timerNew - timerOld
+                if(a.id!=proposalID and H>0):
+                    list.append(a)
+                    time.append(H)
+        # print(list)
+        # print(time)
+        # datanew
+        rwFullpof = models.RwFullPof.objects.get(id=proposalID)
+        rwFullcof = models.RwFullFcof.objects.get(id=proposalID)
+        risk = rwFullpof.pofap1 * rwFullcof.fcofvalue
+        chart = models.RwDataChart.objects.get(id=proposalID)
+        assessmentDate = rwAssessment.assessmentdate
+        dataChart = [risk, chart.riskage1, chart.riskage2, chart.riskage3, chart.riskage4, chart.riskage5,
+                     chart.riskage6,
                      chart.riskage7, chart.riskage8, chart.riskage9, chart.riskage9, chart.riskage10, chart.riskage11,
                      chart.riskage12, chart.riskage13, chart.riskage14, chart.riskage15]
-        dataLabel = [date2Str.date2str(assessmentDate), date2Str.date2str(date2Str.dateFuture(assessmentDate,1)),
-                     date2Str.date2str(date2Str.dateFuture(assessmentDate, 2)),date2Str.date2str(date2Str.dateFuture(assessmentDate,3)),
-                     date2Str.date2str(date2Str.dateFuture(assessmentDate, 4)),date2Str.date2str(date2Str.dateFuture(assessmentDate,5)),
-                     date2Str.date2str(date2Str.dateFuture(assessmentDate, 6)),date2Str.date2str(date2Str.dateFuture(assessmentDate,7)),
-                     date2Str.date2str(date2Str.dateFuture(assessmentDate, 8)),date2Str.date2str(date2Str.dateFuture(assessmentDate,9)),
-                     date2Str.date2str(date2Str.dateFuture(assessmentDate, 10)),date2Str.date2str(date2Str.dateFuture(assessmentDate,11)),
-                     date2Str.date2str(date2Str.dateFuture(assessmentDate, 12)),date2Str.date2str(date2Str.dateFuture(assessmentDate,13)),
-                     date2Str.date2str(date2Str.dateFuture(assessmentDate, 14))]
+        # print(dataChart)
+        # xác dịnh Olddata
+        if list:
+            for a in list:
+                b = a.assessmentdate
+                timerOld = b.year * 365 + b.month * 30 + b.day
+                H = timerNew - timerOld
+                if(H == min(time)):
+                    OldProsal = a.id
+                    OldassessmentDate=a.assessmentdate
+            # print(OldProsal)
+            # print(proposalID)
+            # dataOld
+            rwFullpofOld = models.RwFullPof.objects.get(id=OldProsal)
+            rwFullcofOld = models.RwFullFcof.objects.get(id=OldProsal)
+            riskOld = rwFullpofOld.pofap1 * rwFullcofOld.fcofvalue
+            chartOld = models.RwDataChart.objects.get(id=OldProsal)
+            dataOldChart = [riskOld, chartOld.riskage1, chartOld.riskage2, chartOld.riskage3, chartOld.riskage4,
+                            chartOld.riskage5, chartOld.riskage6,
+                            chartOld.riskage7, chartOld.riskage8, chartOld.riskage9, chartOld.riskage9,
+                            chartOld.riskage10, chartOld.riskage11,
+                            chartOld.riskage12, chartOld.riskage13, chartOld.riskage14, chartOld.riskage15]
+            dateold = OldassessmentDate.year * 365 + OldassessmentDate.month * 30 + OldassessmentDate.day
+            i = (timerNew - dateold) / 365
+            datachartCompine = dataOldChart[0:int(i)]
+            for a in dataChart:
+                datachartCompine.append(a)
+            datachartFinal = datachartCompine[0:16]
+            dataLabel = [date2Str.date2str(OldassessmentDate),date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 1)),
+                         date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 2)),date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 3)),
+                         date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 4)),date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 5)),
+                         date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 6)),date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 7)),
+                         date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 8)),date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 9)),
+                         date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 10)),date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 11)),
+                         date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 12)),date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 13)),
+                         date2Str.date2str(date2Str.dateFuture(OldassessmentDate, 14))]
+        else:
+            dataOldChart = dataChart
+            datachartFinal = dataChart
+            dataLabel = [date2Str.date2str(assessmentDate), date2Str.date2str(date2Str.dateFuture(assessmentDate,1)),
+                         date2Str.date2str(date2Str.dateFuture(assessmentDate, 2)),date2Str.date2str(date2Str.dateFuture(assessmentDate,3)),
+                         date2Str.date2str(date2Str.dateFuture(assessmentDate, 4)),date2Str.date2str(date2Str.dateFuture(assessmentDate,5)),
+                         date2Str.date2str(date2Str.dateFuture(assessmentDate, 6)),date2Str.date2str(date2Str.dateFuture(assessmentDate,7)),
+                         date2Str.date2str(date2Str.dateFuture(assessmentDate, 8)),date2Str.date2str(date2Str.dateFuture(assessmentDate,9)),
+                         date2Str.date2str(date2Str.dateFuture(assessmentDate, 10)),date2Str.date2str(date2Str.dateFuture(assessmentDate,11)),
+                         date2Str.date2str(date2Str.dateFuture(assessmentDate, 12)),date2Str.date2str(date2Str.dateFuture(assessmentDate,13)),
+                         date2Str.date2str(date2Str.dateFuture(assessmentDate, 14))]
         dataTarget = [chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget,
                       chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget,
                       chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget]
         endLabel = date2Str.date2str(date2Str.dateFuture(assessmentDate, 15))
-        content = {'page': 'riskChart', 'label': dataLabel, 'data':dataChart, 'target':dataTarget, 'endLabel':endLabel, 'proposalname':rwAssessment.proposalname,
-                   'proposalID':rwAssessment.id, 'componentID':rwAssessment.componentid_id,'noti':noti,'countnoti':countnoti,'count':count,'isTank': isBottom,
-                                                                   'isShell': isShell}
+        content = {'page': 'riskChart', 'label': dataLabel, 'data':dataOldChart,'data1': datachartFinal, 'target':dataTarget, 'endLabel':endLabel, 'proposalname':rwAssessment.proposalname,
+                   'proposalID':rwAssessment.id, 'componentID':rwAssessment.componentid_id,'noti':noti,'countnoti':countnoti,'count':count,'thiningToTal':thiningToTal,'ext':ext,'scc':scc,'htha':htha,'brit':brit,'pipe':pipe}
         return render(request, 'FacilityUI/risk_summary/riskChart.html', content)
     except Exception as e:
         print("Exception")
@@ -4925,7 +4993,6 @@ def Inputdata(request, proposalID):
 
             if request.POST.get('InternalCladding'):
                 InternalCladding = 1
-                print("InternalCladding = 1")
             else:
                 InternalCladding = 0
 
@@ -5258,7 +5325,6 @@ def VeriFullyDamageFactorMana(request, proposalID):
             veri.save()
             some_var = request.POST.getlist('check')
             for some_var in some_var:
-                print(some_var)
                 vericontent=models.VeriContent(Verification_id=veri.id,content=some_var)
                 vericontent.save()
             return HttpResponse("Bạn đã yêu cầu kiểm định thành công")
@@ -5764,7 +5830,6 @@ def RiskChartCitizen(request, proposalID):
         equip = models.EquipmentMaster.objects.get(equipmentid=component.equipmentid_id)
         faci = models.Facility.objects.get(facilityid=equip.facilityid_id)
         si = models.Sites.objects.get(siteid=faci.siteid_id)
-        print(rwAssessment)
         rwFullpof = models.RwFullPof.objects.get(id= proposalID)
         rwFullcof = models.RwFullFcof.objects.get(id= proposalID)
         risk = rwFullpof.pofap1 * rwFullcof.fcofvalue

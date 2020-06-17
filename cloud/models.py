@@ -102,47 +102,47 @@ class AuthUserUserPermissions(models.Model):
 #bo sung bang rwcatank 30/11/2019
 class RwCaTank(models.Model):
     id= models.ForeignKey('RwAssessment', on_delete=models.CASCADE, db_column='ID',primary_key=True)
-    hydraulic_water =  models.FloatField(db_column='Hydraulic_Water', blank=True,null=True)
-    hydraulic_fluid = models.FloatField(db_column='Hydraulic_Fluid', blank=True,null=True)
-    seepage_velocity = models.FloatField(db_column='Seepage_Velocity', blank=True,null=True)
-    flow_rate_d1 = models.FloatField(db_column='Flow_Rate_D1', blank=True,null=True)
-    flow_rate_d2 = models.FloatField(db_column='Flow_Rate_D2', blank=True, null=True)
-    flow_rate_d3 = models.FloatField(db_column='Flow_Rate_D3', blank=True, null=True)
-    flow_rate_d4 = models.FloatField(db_column='Flow_Rate_D4', blank=True, null=True)
-    leak_duration_d1 = models.FloatField(db_column='Leak_Duration_D1', blank=True, null=True)
-    leak_duration_d2 = models.FloatField(db_column='Leak_Duration_D2', blank=True, null=True)
-    leak_duration_d3 = models.FloatField(db_column='Leak_Duration_D3', blank=True, null=True)
-    leak_duration_d4 = models.FloatField(db_column='Leak_Duration_D4', blank=True, null=True)
-    release_volume_leak_d1 = models.FloatField(db_column='Release_Volume_Leak_D1', blank=True, null=True)
-    release_volume_leak_d2 = models.FloatField(db_column='Release_Volume_Leak_D2', blank=True, null=True)
-    release_volume_leak_d3 = models.FloatField(db_column='Release_Volume_Leak_D3', blank=True, null=True)
-    release_volume_leak_d4 = models.FloatField(db_column='Release_Volume_Leak_D4', blank=True, null=True)
-    release_volume_rupture = models.FloatField(db_column='Release_Volume_Rupture', blank=True, null=True)
-    liquid_height = models.FloatField(db_column='Liquid_Height', blank=True, null=True)
-    volume_fluid = models.FloatField(db_column='Volume_Fluid', blank=True, null=True)
-    time_leak_ground = models.FloatField(db_column='Time_Leak_Ground', blank=True, null=True)
-    volume_subsoil_leak_d1 = models.FloatField(db_column='Volume_SubSoil_Leak_D1', blank=True, null=True)
-    volume_subsoil_leak_d4 = models.FloatField(db_column='Volume_SubSoil_Leak_D4', blank=True, null=True)
-    volume_ground_water_leak_d1 = models.FloatField(db_column='Volume_Ground_Water_Leak_D1', blank=True, null=True)
-    volume_ground_water_leak_d4 = models.FloatField(db_column='Volume_Ground_Water_Leak_D4', blank=True, null=True)
-    barrel_dike_rupture = models.FloatField(db_column='Barrel_Dike_Rupture', blank=True, null=True)
-    barrel_dike_leak = models.FloatField(db_column='Barrel_Dike_Leak', blank=True, null=True)
-    barrel_onsite_leak = models.FloatField(db_column='Barrel_Onsite_Leak', blank=True, null=True)
-    barrel_onsite_rupture = models.FloatField(db_column='Barrel_Onsite_Rupture', blank=True, null=True)
-    barrel_offsite_leak = models.FloatField(db_column='Barrel_Offsite_Leak', blank=True, null=True)
-    barrel_dike_leak = models.FloatField(db_column='Barrel_Dike_Leak', blank=True, null=True)
-    barrel_offsite_rupture = models.FloatField(db_column='Barrel_Offsite_Rupture', blank=True, null=True)
-    barrel_water_leak = models.FloatField(db_column='Barrel_Water_Leak', blank=True, null=True)
-    barrel_water_rupture = models.FloatField(db_column='Barrel_Water_Rupture', blank=True, null=True)
-    fc_environ_leak = models.FloatField(db_column='FC_Environ_Leak', blank=True, null=True)
-    fc_environ_rupture = models.FloatField(db_column='FC_Environ_Rupture', blank=True, null=True)
-    fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True)
-    material_factor = models.FloatField(db_column='Material_Factor', blank=True, null=True)
-    fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True)
-    component_damage_cost = models.FloatField(db_column='Component_Damage_Cost', blank=True, null=True)
-    business_cost = models.FloatField(db_column='Business_Cost', blank=True, null=True)
-    consequence = models.FloatField(db_column='Consequence', blank=True, null=True)
-    consequencecategory = models.CharField(db_column='ConsequenceCategory', max_length=150, blank=True, null=True)
+    hydraulic_water =  models.FloatField(db_column='Hydraulic_Water', blank=True,null=True,default=0)
+    hydraulic_fluid = models.FloatField(db_column='Hydraulic_Fluid', blank=True,null=True,default=0)
+    seepage_velocity = models.FloatField(db_column='Seepage_Velocity', blank=True,null=True,default=0)
+    flow_rate_d1 = models.FloatField(db_column='Flow_Rate_D1', blank=True,null=True,default=0)
+    flow_rate_d2 = models.FloatField(db_column='Flow_Rate_D2', blank=True, null=True,default=0)
+    flow_rate_d3 = models.FloatField(db_column='Flow_Rate_D3', blank=True, null=True,default=0)
+    flow_rate_d4 = models.FloatField(db_column='Flow_Rate_D4', blank=True, null=True,default=0)
+    leak_duration_d1 = models.FloatField(db_column='Leak_Duration_D1', blank=True, null=True,default=0)
+    leak_duration_d2 = models.FloatField(db_column='Leak_Duration_D2', blank=True, null=True,default=0)
+    leak_duration_d3 = models.FloatField(db_column='Leak_Duration_D3', blank=True, null=True,default=0)
+    leak_duration_d4 = models.FloatField(db_column='Leak_Duration_D4', blank=True, null=True,default=0)
+    release_volume_leak_d1 = models.FloatField(db_column='Release_Volume_Leak_D1', blank=True, null=True,default=0)
+    release_volume_leak_d2 = models.FloatField(db_column='Release_Volume_Leak_D2', blank=True, null=True,default=0)
+    release_volume_leak_d3 = models.FloatField(db_column='Release_Volume_Leak_D3', blank=True, null=True,default=0)
+    release_volume_leak_d4 = models.FloatField(db_column='Release_Volume_Leak_D4', blank=True, null=True,default=0)
+    release_volume_rupture = models.FloatField(db_column='Release_Volume_Rupture', blank=True, null=True,default=0)
+    liquid_height = models.FloatField(db_column='Liquid_Height', blank=True, null=True,default=0)
+    volume_fluid = models.FloatField(db_column='Volume_Fluid', blank=True, null=True,default=0)
+    time_leak_ground = models.FloatField(db_column='Time_Leak_Ground', blank=True, null=True,default=0)
+    volume_subsoil_leak_d1 = models.FloatField(db_column='Volume_SubSoil_Leak_D1', blank=True, null=True,default=0)
+    volume_subsoil_leak_d4 = models.FloatField(db_column='Volume_SubSoil_Leak_D4', blank=True, null=True,default=0)
+    volume_ground_water_leak_d1 = models.FloatField(db_column='Volume_Ground_Water_Leak_D1', blank=True, null=True,default=0)
+    volume_ground_water_leak_d4 = models.FloatField(db_column='Volume_Ground_Water_Leak_D4', blank=True, null=True,default=0)
+    barrel_dike_rupture = models.FloatField(db_column='Barrel_Dike_Rupture', blank=True, null=True,default=0)
+    barrel_dike_leak = models.FloatField(db_column='Barrel_Dike_Leak', blank=True, null=True,default=0)
+    barrel_onsite_leak = models.FloatField(db_column='Barrel_Onsite_Leak', blank=True, null=True,default=0)
+    barrel_onsite_rupture = models.FloatField(db_column='Barrel_Onsite_Rupture', blank=True, null=True,default=0)
+    barrel_offsite_leak = models.FloatField(db_column='Barrel_Offsite_Leak', blank=True, null=True,default=0)
+    barrel_dike_leak = models.FloatField(db_column='Barrel_Dike_Leak', blank=True, null=True,default=0)
+    barrel_offsite_rupture = models.FloatField(db_column='Barrel_Offsite_Rupture', blank=True, null=True,default=0)
+    barrel_water_leak = models.FloatField(db_column='Barrel_Water_Leak', blank=True, null=True,default=0)
+    barrel_water_rupture = models.FloatField(db_column='Barrel_Water_Rupture', blank=True, null=True,default=0)
+    fc_environ_leak = models.FloatField(db_column='FC_Environ_Leak', blank=True, null=True,default=0)
+    fc_environ_rupture = models.FloatField(db_column='FC_Environ_Rupture', blank=True, null=True,default=0)
+    fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True,default=0)
+    material_factor = models.FloatField(db_column='Material_Factor', blank=True, null=True,default=0)
+    fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True,default=0)
+    component_damage_cost = models.FloatField(db_column='Component_Damage_Cost', blank=True, null=True,default=0)
+    business_cost = models.FloatField(db_column='Business_Cost', blank=True, null=True,default=0)
+    consequence = models.FloatField(db_column='Consequence', blank=True, null=True,default=0)
+    consequencecategory = models.CharField(db_column='ConsequenceCategory', max_length=150, blank=True, null=True,default=0)
     class Meta:
         managed = False
         db_table = 'rw_ca_tank'
@@ -460,7 +460,7 @@ class RwComponent(models.Model):
     cyclicservice = models.IntegerField(db_column='CyclicServiceFatigueVibration',default=0, blank=True,null=True)
     equipmentcircuitshock = models.IntegerField(db_column='EquipmentCircuitShock',default=0, blank=True,null=True)
     confidencecorrosionrate = models.CharField(db_column='ConfidenceCorrosionRate',max_length=50,blank=True,null=True)
-    brittlefracturethickness = models.FloatField(db_column='BrittleFractureThickness', blank=True,null=True)  # Field name made lowercase.
+    brittlefracturethickness = models.FloatField(db_column='BrittleFractureThickness', blank=True,null=True,default=0)  # Field name made lowercase.
     class Meta:
         managed = False
         db_table = 'rw_component'
@@ -648,7 +648,7 @@ class RwInputCaLevel1(models.Model): # đầu vào ca 1+ 2 chỉnh sửa ngày 2
     toxic_percent = models.FloatField(db_column='Toxic_Percent', blank=True, null=True)  # Field name made lowercase.
     personal_density = models.FloatField(db_column='Personal_Density', blank=True, null=True)  # Field name made lowercase.
     material_cost = models.FloatField(db_column='Material_Cost', blank=True, null=True)  # Field name made lowercase.
-    production_cost = models.FloatField(db_column='Production_Cost', blank=True, null=True)  # Field name made lowercase.
+    production_cost = models.FloatField(db_column='Production_Cost', blank=True, null=True,default=0)  # Field name made lowercase.
     mass_inventory = models.FloatField(db_column='Mass_Inventory', blank=True, null=True)  # Field name made lowercase.
     mass_component = models.FloatField(db_column='Mass_Component', blank=True, null=True)  # Field name made lowercase.
     stored_pressure = models.FloatField(db_column='Stored_Pressure', blank=True, null=True)  # Field name made lowercase.
@@ -681,7 +681,7 @@ class RwInputCaTank(models.Model):
     tank_fluid = models.CharField(db_column='TANK_FLUID', max_length=150, blank=True, null=True)  # Field name made lowercase.
     api_fluid = models.CharField(db_column='API_FLUID', max_length=50, blank=True, null=True)  # Field name made lowercase.
     sw = models.FloatField(db_column='SW', blank=True, null=True)  # Field name made lowercase.
-    productioncost = models.FloatField(db_column='ProductionCost', blank=True, null=True)  # Field name made lowercase.
+    productioncost = models.FloatField(db_column='ProductionCost', blank=True, null=True,default=0)  # Field name made lowercase.
     primary_fluid = models.FloatField(db_column='Primary_Fluid', blank=True, null=True)
     volatile_fluid = models.FloatField(db_column='Volatile_Fluid', blank=True, null=True)
     class Meta:
@@ -713,7 +713,7 @@ class RwMaterial(models.Model):
     designpressure = models.FloatField(db_column='DesignPressure', blank=True, null=True,default=0)  # Field name made lowercase.
     designtemperature = models.FloatField(db_column='DesignTemperature', blank=True, null=True,default=0)  # Field name made lowercase.
     mindesigntemperature = models.FloatField(db_column='MinDesignTemperature', blank=True, null=True,default=0)  # Field name made lowercase.
-    brittlefracturethickness = models.FloatField(db_column='BrittleFractureThickness',blank=True,null=True)
+    brittlefracturethickness = models.FloatField(db_column='BrittleFractureThickness',blank=True,null=True,default=0)
     corrosionallowance = models.FloatField(db_column='CorrosionAllowance', blank=True, null=True)  # Field name made lowercase.
     sigmaphase = models.FloatField(db_column='SigmaPhase', blank=True, null=True,default=0)  # Field name made lowercase.
     sulfurcontent = models.CharField(db_column='SulfurContent', max_length=50, blank=True, null=True)  # Field name made lowercase.

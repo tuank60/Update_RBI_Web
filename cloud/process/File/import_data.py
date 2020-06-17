@@ -732,7 +732,7 @@ def processRwComponent(ws):
                                 rwCom.nominaldiameter = convertFloat(ws.cell(row,9).value)
                                 rwInputCaTank.tank_diametter = convertFloat(ws.cell(row,9).value)
                                 rwCom.nominalthickness = convertFloat(ws.cell(row,10).value)
-                                # rwCom.currentthickness = convertFloat(ws.cell(row,11).value)
+                                rwCom.currentthickness = convertFloat(ws.cell(row,11).value)
                                 rwCom.minstructuralthickness = convertFloat(ws.cell(row,11).value)
                                 rwCom.minreqthickness = convertFloat(ws.cell(row,13).value)
                                 rwCom.currentcorrosionrate = convertFloat(ws.cell(row,12).value)

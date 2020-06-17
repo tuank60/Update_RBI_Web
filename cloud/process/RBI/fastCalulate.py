@@ -14,6 +14,246 @@ from cloud.process.RBI import CA_Flammable
 from cloud.process.RBI import ToxicConsequenceArea
 from cloud.process.RBI import FinancialCOF
 
+def caculateRiskChart(proposalID):
+    listDamage = []
+    DF_EXT_TOTAL_API = []
+    DF_THINNING_TOTAL_API = []
+    DF_SSC_TOTAL_API = []
+    DF_HTHA_API = []
+    DF_BRIT_TOTAL_API = []
+    DF_PIPE_API = []
+    try:
+        rwassessment = models.RwAssessment.objects.get(id=proposalID)
+        rwequipment = models.RwEquipment.objects.get(id=proposalID)
+        rwcomponent = models.RwComponent.objects.get(id=proposalID)
+        rwstream = models.RwStream.objects.get(id=proposalID)
+        rwexcor = models.RwExtcorTemperature.objects.get(id=proposalID)
+        rwcoat = models.RwCoating.objects.get(id=proposalID)
+        rwmaterial = models.RwMaterial.objects.get(id=proposalID)
+
+        comp = models.ComponentMaster.objects.get(componentid=rwassessment.componentid_id)
+        comptype = models.ComponentType.objects.get(componenttypeid=comp.componenttypeid_id)
+
+        if not rwcoat.externalcoating:
+            dm_cal = DM_CAL.DM_CAL(ComponentNumber=str(comp.componentnumber),
+                                   Commissiondate=models.EquipmentMaster.objects.get(
+                                       equipmentid=comp.equipmentid_id).commissiondate,
+                                   AssessmentDate=rwassessment.assessmentdate,
+                                   APIComponentType=models.ApiComponentType.objects.get(
+                                       apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
+                                   Diametter=rwcomponent.nominaldiameter, NomalThick=rwcomponent.nominalthickness,
+                                   CurrentThick=rwcomponent.currentthickness, MinThickReq=rwcomponent.minreqthickness,
+                                   CorrosionRate=rwcomponent.currentcorrosionrate, CA=rwmaterial.corrosionallowance,
+                                   CladdingCorrosionRate=rwcoat.claddingcorrosionrate,
+                                   InternalCladding=bool(rwcoat.internalcladding),
+                                   OnlineMonitoring=rwequipment.onlinemonitoring,
+                                   HighlyEffectDeadleg=bool(rwequipment.highlydeadleginsp),
+                                   ContainsDeadlegs=bool(rwequipment.containsdeadlegs),
+                                   LinningType=rwcoat.internallinertype,
+                                   LINNER_ONLINE=bool(rwequipment.lineronlinemonitoring),
+                                   LINNER_CONDITION=rwcoat.internallinercondition,
+                                   INTERNAL_LINNING=bool(rwcoat.internallining),
+                                   HEAT_TREATMENT=rwmaterial.heattreatment,
+                                   NaOHConcentration=rwstream.naohconcentration,
+                                   HEAT_TRACE=bool(rwequipment.heattraced),
+                                   STEAM_OUT=bool(rwequipment.steamoutwaterflush),
+                                   AMINE_EXPOSED=bool(rwstream.exposedtogasamine),
+                                   AMINE_SOLUTION=rwstream.aminesolution,
+                                   ENVIRONMENT_H2S_CONTENT=bool(rwstream.h2s),
+                                   AQUEOUS_OPERATOR=bool(rwstream.aqueousoperation),
+                                   AQUEOUS_SHUTDOWN=bool(rwstream.aqueousshutdown),
+                                   H2SContent=rwstream.h2sinwater, PH=rwstream.waterph,
+                                   PRESENT_CYANIDE=bool(rwstream.cyanide), BRINNEL_HARDNESS=rwcomponent.brinnelhardness,
+                                   SULFUR_CONTENT=rwmaterial.sulfurcontent,
+                                   CO3_CONTENT=rwstream.co3concentration,
+                                   PTA_SUSCEP=bool(rwmaterial.ispta), NICKEL_ALLOY=bool(rwmaterial.nickelbased),
+                                   EXPOSED_SULFUR=bool(rwstream.exposedtosulphur),
+                                   ExposedSH2OOperation=bool(rwequipment.presencesulphideso2),
+                                   ExposedSH2OShutdown=bool(rwequipment.presencesulphideso2shutdown),
+                                   ThermalHistory=rwequipment.thermalhistory, PTAMaterial=rwmaterial.ptamaterialcode,
+                                   DOWNTIME_PROTECTED=bool(rwequipment.downtimeprotectionused),
+                                   INTERNAL_EXPOSED_FLUID_MIST=bool(rwstream.materialexposedtoclint),
+                                   EXTERNAL_EXPOSED_FLUID_MIST=bool(rwequipment.materialexposedtoclext),
+                                   CHLORIDE_ION_CONTENT=rwstream.chloride,
+                                   HF_PRESENT=bool(rwstream.hydrofluoric),
+                                   INTERFACE_SOIL_WATER=bool(rwequipment.interfacesoilwater),
+                                   SUPPORT_COATING=bool(rwcoat.supportconfignotallowcoatingmaint),
+                                   INSULATION_TYPE=rwcoat.externalinsulationtype,
+                                   CUI_PERCENT_1=rwexcor.minus12tominus8, CUI_PERCENT_2=rwexcor.minus8toplus6,
+                                   CUI_PERCENT_3=rwexcor.plus6toplus32, CUI_PERCENT_4=rwexcor.plus32toplus71,
+                                   CUI_PERCENT_5=rwexcor.plus71toplus107,
+                                   CUI_PERCENT_6=rwexcor.plus107toplus121, CUI_PERCENT_7=rwexcor.plus121toplus135,
+                                   CUI_PERCENT_8=rwexcor.plus135toplus162,
+                                   CUI_PERCENT_9=rwexcor.plus162toplus176, CUI_PERCENT_10=rwexcor.morethanplus176,
+                                   EXTERNAL_INSULATION=bool(rwcoat.externalinsulation),
+                                   COMPONENT_INSTALL_DATE=models.EquipmentMaster.objects.get(
+                                       equipmentid=comp.equipmentid_id).commissiondate,
+                                   CRACK_PRESENT=bool(rwcomponent.crackspresent),
+                                   EXTERNAL_EVIRONMENT=rwequipment.externalenvironment,
+                                   EXTERN_COAT_QUALITY=rwcoat.externalcoatingquality,
+                                   PIPING_COMPLEXITY=rwcomponent.complexityprotrusion,
+                                   INSULATION_CONDITION=rwcoat.insulationcondition,
+                                   INSULATION_CHLORIDE=bool(rwcoat.insulationcontainschloride),
+                                   MATERIAL_SUSCEP_HTHA=bool(rwmaterial.ishtha),
+                                   HTHA_MATERIAL=rwmaterial.hthamaterialcode,
+                                   HTHA_PRESSURE=rwstream.h2spartialpressure * 0.006895,
+                                   CRITICAL_TEMP=rwstream.criticalexposuretemperature,
+                                   DAMAGE_FOUND=bool(rwcomponent.damagefoundinspection),
+                                   LOWEST_TEMP=bool(rwequipment.yearlowestexptemp),
+                                   TEMPER_SUSCEP=bool(rwmaterial.temper), PWHT=bool(rwequipment.pwht),
+                                   BRITTLE_THICK=rwcomponent.brittlefracturethickness,
+                                   CARBON_ALLOY=bool(rwmaterial.carbonlowalloy),
+                                   DELTA_FATT=rwcomponent.deltafatt,
+                                   MAX_OP_TEMP=rwstream.maxoperatingtemperature,
+                                   CHROMIUM_12=bool(rwmaterial.chromemoreequal12),
+                                   MIN_OP_TEMP=rwstream.minoperatingtemperature,
+                                   MIN_DESIGN_TEMP=rwmaterial.mindesigntemperature,
+                                   Hydrogen=rwstream.hydrogen,
+                                   REF_TEMP=rwmaterial.referencetemperature,
+                                   AUSTENITIC_STEEL=bool(rwmaterial.austenitic), PERCENT_SIGMA=rwmaterial.sigmaphase,
+                                   EquipmentType=models.EquipmentType.objects.get(
+                                       equipmenttypeid=models.EquipmentMaster.objects.get(
+                                           equipmentid=comp.equipmentid_id).equipmenttypeid_id).equipmenttypename,
+                                   PREVIOUS_FAIL=rwcomponent.previousfailures,
+                                   AMOUNT_SHAKING=rwcomponent.shakingamount, TIME_SHAKING=rwcomponent.shakingtime,
+                                   CYLIC_LOAD=rwcomponent.cyclicloadingwitin15_25m,
+                                   CORRECT_ACTION=rwcomponent.correctiveaction, NUM_PIPE=rwcomponent.numberpipefittings,
+                                   PIPE_CONDITION=rwcomponent.pipecondition, JOINT_TYPE=rwcomponent.branchjointtype,
+                                   BRANCH_DIAMETER=rwcomponent.branchdiameter,
+                                   TensileStrengthDesignTemp=rwmaterial.tensilestrength,
+                                   StructuralThickness=rwcomponent.structuralthickness,
+                                   MINIUM_STRUCTURAL_THICKNESS_GOVERS=rwcomponent.minstructuralthickness,
+                                   WeldJonintEfficiency=rwcomponent.weldjointefficiency,
+                                   AllowableStress=rwcomponent.allowablestress,
+                                   YeildStrengthDesignTemp=rwmaterial.yieldstrength, Pressure=rwmaterial.designpressure,
+                                   ShapeFactor=comptype.shapefactor,
+                                   CR_Confidents_Level=rwcomponent.confidencecorrosionrate,
+                                   PRESSSURE_CONTROL=bool(rwequipment.pressurisationcontrolled),
+                                   FABRICATED_STEEL=bool(rwcomponent.fabricatedsteel),
+                                   EQUIPMENT_SATISFIED=bool(rwcomponent.equipmentsatisfied),
+                                   NOMINAL_OPERATING_CONDITIONS=bool(rwcomponent.nominaloperatingconditions),
+                                   CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
+                                   CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),
+                                   EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
+        else:
+            dm_cal = DM_CAL.DM_CAL(ComponentNumber=str(comp.componentnumber),
+                                   Commissiondate=models.EquipmentMaster.objects.get(
+                                       equipmentid=comp.equipmentid_id).commissiondate,
+                                   AssessmentDate=rwassessment.assessmentdate,
+                                   APIComponentType=models.ApiComponentType.objects.get(
+                                       apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
+                                   Diametter=rwcomponent.nominaldiameter, NomalThick=rwcomponent.nominalthickness,
+                                   CurrentThick=rwcomponent.currentthickness, MinThickReq=rwcomponent.minreqthickness,
+                                   CorrosionRate=rwcomponent.currentcorrosionrate, CA=rwmaterial.corrosionallowance,
+                                   CladdingCorrosionRate=rwcoat.claddingcorrosionrate,
+                                   InternalCladding=bool(rwcoat.internalcladding),
+                                   OnlineMonitoring=rwequipment.onlinemonitoring,
+                                   HighlyEffectDeadleg=bool(rwequipment.highlydeadleginsp),
+                                   ContainsDeadlegs=bool(rwequipment.containsdeadlegs),
+                                   LinningType=rwcoat.internallinertype,
+                                   LINNER_ONLINE=bool(rwequipment.lineronlinemonitoring),
+                                   LINNER_CONDITION=rwcoat.internallinercondition,
+                                   INTERNAL_LINNING=bool(rwcoat.internallining),
+                                   HEAT_TREATMENT=rwmaterial.heattreatment,
+                                   NaOHConcentration=rwstream.naohconcentration,
+                                   HEAT_TRACE=bool(rwequipment.heattraced),
+                                   STEAM_OUT=bool(rwequipment.steamoutwaterflush),
+                                   AMINE_EXPOSED=bool(rwstream.exposedtogasamine),
+                                   AMINE_SOLUTION=rwstream.aminesolution,
+                                   ENVIRONMENT_H2S_CONTENT=bool(rwstream.h2s),
+                                   AQUEOUS_OPERATOR=bool(rwstream.aqueousoperation),
+                                   AQUEOUS_SHUTDOWN=bool(rwstream.aqueousshutdown),
+                                   H2SContent=rwstream.h2sinwater, PH=rwstream.waterph,
+                                   PRESENT_CYANIDE=bool(rwstream.cyanide), BRINNEL_HARDNESS=rwcomponent.brinnelhardness,
+                                   SULFUR_CONTENT=rwmaterial.sulfurcontent,
+                                   CO3_CONTENT=rwstream.co3concentration,
+                                   PTA_SUSCEP=bool(rwmaterial.ispta), NICKEL_ALLOY=bool(rwmaterial.nickelbased),
+                                   EXPOSED_SULFUR=bool(rwstream.exposedtosulphur),
+                                   Hydrogen=rwstream.hydrogen,
+                                   ExposedSH2OOperation=bool(rwequipment.presencesulphideso2),
+                                   ExposedSH2OShutdown=bool(rwequipment.presencesulphideso2shutdown),
+                                   ThermalHistory=rwequipment.thermalhistory, PTAMaterial=rwmaterial.ptamaterialcode,
+                                   DOWNTIME_PROTECTED=bool(rwequipment.downtimeprotectionused),
+                                   INTERNAL_EXPOSED_FLUID_MIST=bool(rwstream.materialexposedtoclint),
+                                   EXTERNAL_EXPOSED_FLUID_MIST=bool(rwequipment.materialexposedtoclext),
+                                   CHLORIDE_ION_CONTENT=rwstream.chloride,
+                                   HF_PRESENT=bool(rwstream.hydrofluoric),
+                                   INTERFACE_SOIL_WATER=bool(rwequipment.interfacesoilwater),
+                                   SUPPORT_COATING=bool(rwcoat.supportconfignotallowcoatingmaint),
+                                   INSULATION_TYPE=rwcoat.externalinsulationtype,
+                                   CUI_PERCENT_1=rwexcor.minus12tominus8, CUI_PERCENT_2=rwexcor.minus8toplus6,
+                                   CUI_PERCENT_3=rwexcor.plus6toplus32, CUI_PERCENT_4=rwexcor.plus32toplus71,
+                                   CUI_PERCENT_5=rwexcor.plus71toplus107,
+                                   CUI_PERCENT_6=rwexcor.plus107toplus121, CUI_PERCENT_7=rwexcor.plus121toplus135,
+                                   CUI_PERCENT_8=rwexcor.plus135toplus162,
+                                   CUI_PERCENT_9=rwexcor.plus162toplus176, CUI_PERCENT_10=rwexcor.morethanplus176,
+                                   EXTERNAL_INSULATION=bool(rwcoat.externalinsulation),
+                                   COMPONENT_INSTALL_DATE=rwcoat.externalcoatingdate,
+                                   CRACK_PRESENT=bool(rwcomponent.crackspresent),
+                                   EXTERNAL_EVIRONMENT=rwequipment.externalenvironment,
+                                   EXTERN_COAT_QUALITY=rwcoat.externalcoatingquality,
+                                   PIPING_COMPLEXITY=rwcomponent.complexityprotrusion,
+                                   INSULATION_CONDITION=rwcoat.insulationcondition,
+                                   INSULATION_CHLORIDE=bool(rwcoat.insulationcontainschloride),
+                                   MATERIAL_SUSCEP_HTHA=bool(rwmaterial.ishtha),
+                                   HTHA_MATERIAL=rwmaterial.hthamaterialcode,
+                                   HTHA_PRESSURE=rwstream.h2spartialpressure * 0.006895,
+                                   CRITICAL_TEMP=rwstream.criticalexposuretemperature,
+                                   DAMAGE_FOUND=bool(rwcomponent.damagefoundinspection),
+                                   LOWEST_TEMP=bool(rwequipment.yearlowestexptemp),
+                                   TEMPER_SUSCEP=bool(rwmaterial.temper), PWHT=bool(rwequipment.pwht),
+                                   BRITTLE_THICK=rwcomponent.brittlefracturethickness,
+                                   CARBON_ALLOY=bool(rwmaterial.carbonlowalloy),
+                                   DELTA_FATT=rwcomponent.deltafatt,
+                                   MAX_OP_TEMP=rwstream.maxoperatingtemperature,
+                                   CHROMIUM_12=bool(rwmaterial.chromemoreequal12),
+                                   MIN_OP_TEMP=rwstream.minoperatingtemperature,
+                                   MIN_DESIGN_TEMP=rwmaterial.mindesigntemperature,
+                                   REF_TEMP=rwmaterial.referencetemperature,
+                                   AUSTENITIC_STEEL=bool(rwmaterial.austenitic), PERCENT_SIGMA=rwmaterial.sigmaphase,
+                                   EquipmentType=models.EquipmentType.objects.get(
+                                       equipmenttypeid=models.EquipmentMaster.objects.get(
+                                           equipmentid=comp.equipmentid_id).equipmenttypeid_id).equipmenttypename,
+                                   PREVIOUS_FAIL=rwcomponent.previousfailures,
+                                   AMOUNT_SHAKING=rwcomponent.shakingamount, TIME_SHAKING=rwcomponent.shakingtime,
+                                   CYLIC_LOAD=rwcomponent.cyclicloadingwitin15_25m,
+                                   CORRECT_ACTION=rwcomponent.correctiveaction, NUM_PIPE=rwcomponent.numberpipefittings,
+                                   PIPE_CONDITION=rwcomponent.pipecondition, JOINT_TYPE=rwcomponent.branchjointtype,
+                                   BRANCH_DIAMETER=rwcomponent.branchdiameter,
+                                   TensileStrengthDesignTemp=rwmaterial.tensilestrength,
+                                   StructuralThickness=rwcomponent.structuralthickness,
+                                   MINIUM_STRUCTURAL_THICKNESS_GOVERS=rwcomponent.minstructuralthickness,
+                                   WeldJonintEfficiency=rwcomponent.weldjointefficiency,
+                                   AllowableStress=rwcomponent.allowablestress,
+                                   YeildStrengthDesignTemp=rwmaterial.yieldstrength, Pressure=rwmaterial.designpressure,
+                                   ShapeFactor=comptype.shapefactor,
+                                   CR_Confidents_Level=rwcomponent.confidencecorrosionrate,
+                                   PRESSSURE_CONTROL=bool(rwequipment.pressurisationcontrolled),
+                                   FABRICATED_STEEL=bool(rwcomponent.fabricatedsteel),
+                                   EQUIPMENT_SATISFIED=bool(rwcomponent.equipmentsatisfied),
+                                   NOMINAL_OPERATING_CONDITIONS=bool(rwcomponent.nominaloperatingconditions),
+                                   CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
+                                   CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),
+                                   EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
+        for a in dm_cal.DF_RISK_CHART_THINNING():
+            DF_THINNING_TOTAL_API.append(a)
+        for a in dm_cal.DF_RISK_CHART_EXT():
+            DF_EXT_TOTAL_API.append(a)
+        for a in dm_cal.DF_RISK_CHART_SSC():
+            DF_SSC_TOTAL_API.append(a)
+        for a in dm_cal.DF_RISK_CHART_HTHA():
+            DF_HTHA_API.append(a)
+        for a in dm_cal.DF_RISK_CHART_BRIT():
+            DF_BRIT_TOTAL_API.append(a)
+        for a in dm_cal.DF_RISK_CHART_PIPE():
+            DF_PIPE_API.append(a)
+        listDamage = [DF_THINNING_TOTAL_API, DF_EXT_TOTAL_API,DF_SSC_TOTAL_API,DF_HTHA_API,DF_BRIT_TOTAL_API,DF_PIPE_API]
+    except Exception as e:
+        print(e)
+    return listDamage
+
 def caculateCorrisionRate(proposalID):
     try:
         rwassessment = models.RwAssessment.objects.get(id=proposalID)
@@ -41,7 +281,6 @@ def caculateCorrisionRate(proposalID):
     except Exception as e:
         print("Exception at fast calculate")
         print(e)
-
 
 def calculateNormal(proposalID):
     try:
