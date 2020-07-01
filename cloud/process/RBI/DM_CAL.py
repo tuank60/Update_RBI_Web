@@ -2313,6 +2313,9 @@ class DM_CAL:
 
     def DF_THINNING_TOTAL_API(self, i):#done
         try:
+            print(self.DF_THINNING_API(i))
+            print(self.DF_LINNING_API(i))
+
             if self.INTERNAL_LINNING and (self.DF_LINNING_API(i) != 0):
                 DF_THINNING_TOTAL = min(self.DF_THINNING_API(i), self.DF_LINNING_API(i))
             else:
@@ -2395,6 +2398,13 @@ class DM_CAL:
 
     def DF_TOTAL_API(self,i):#testing df_htha
         try:
+            print(self.DF_THINNING_TOTAL_API(i))
+            print(self.DF_EXT_TOTAL_API(i))
+            print(self.DF_SSC_TOTAL_API(i))
+            print(self.DF_HTHA_API(i))
+            print(self.DF_BRIT_TOTAL_API(i))
+            print(self.DF_PIPE_API(i))
+
             TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i), self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(
                 i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
         except Exception as e:

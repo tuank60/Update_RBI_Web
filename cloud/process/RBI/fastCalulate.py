@@ -636,11 +636,14 @@ def calculateNormal(proposalID):
                                                     rwinputca.mitigation_system, proposalID,
                                                     rwstream.minoperatingtemperature + 273,
                                                     api_com_type, toxic_fluid_percentage)
+            catoxic = ToxicConsequenceArea.CA_Toxic(proposalID, rwinputca.toxic_fluid, caflammable.ReleasePhase(),
+                                                    toxic_fluid_percentage, api_com_type)
             CA_cmd = caflammable.CA_Flam_Cmd()
-            CA_inj = caflammable.CA_Flam_inj()
+            CA_inj = max(caflammable.CA_Flam_inj(),catoxic.CA_toxic_inj(),catoxic.NoneCA_leck())
             fullcof = FinancialCOF.FinancialCOF(proposalID, model_fluid, toxic_fluid,
                                                 toxic_fluid_percentage, api_com_type,
                                                 MATERIAL_COST, CA_cmd, CA_inj)
+            print("ok1")
             if rwcofholesize.count() != 0:
                 print('test cof level 11')
                 calv1 = models.RwCaLevel1.objects.get(id=proposalID)
@@ -780,18 +783,8 @@ def calculateNormal(proposalID):
                                                       mass_n_large=ca_cal.mass_n(3),
                                                       mass_n_rupture=ca_cal.mass_n(4))
                 rwholesize.save()
-                calv1 = models.RwCaLevel1(id=rwassessment, release_phase=ca_cal.GET_RELEASE_PHASE(),
-                                              fact_di=ca_cal.fact_di(), ca_inj_flame=ca_cal.ca_inj_flame(),
-                                              ca_inj_toxic=ca_cal.ca_inj_tox(), ca_inj_ntnf=ca_cal.ca_inj_nfnt(),
-                                              fact_mit=ca_cal.fact_mit(), fact_ait=ca_cal.fact_ait(),
-                                              ca_cmd=ca_cal.ca_cmd(), fc_cmd=ca_cal.fc_cmd(),
-                                              fc_affa=ca_cal.fc_affa(), fc_envi=ca_cal.fc_environ(),
-                                              fc_prod=ca_cal.fc_prod(), fc_inj=ca_cal.fc_inj(),ca_final = ca_cal.ca_final(),
-                                              fc_total=fullcof.FC_total(), fcof_category=fullcof.FC_Category(),
-                                              auto_ignition = ca_cal.auto_ignition_temp(), ideal_gas = ca_cal.C_P(),
-                                              ideal_gas_ratio = ca_cal.ideal_gas_ratio(), liquid_density = ca_cal.liquid_density(),
-                                              ambient = ca_cal.ambient(), mw = ca_cal.moleculer_weight(), nbp = ca_cal.NBP(),
-                                              model_fluid_type = ca_cal.model_fluid_type(), toxic_fluid_type = ca_cal.toxic_fluid_type()
+                calv1 = models.RwCaLevel1(id=rwassessment,
+                                              fc_total=fullcof.FC_total(), fcof_category=fullcof.FC_Category()
                                           )
                 calv1.save()
             # print('ca_final = ',ca_cal.ca_final() )

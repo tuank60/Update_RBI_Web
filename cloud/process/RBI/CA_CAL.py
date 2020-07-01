@@ -226,7 +226,7 @@ class CA_NORMAL: #LEVEL 1
                 return 0.61 * self.liquid_density() * (self.a_n(i) / C1) * math.pow((2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)
 
         except Exception as e :
-            # return 0
+            return 0
             print(e)
             print('exception at def w_n')
 
@@ -278,6 +278,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return 180 * min(self.W_n(i),self.W_max8(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at mass_addn')
 
@@ -331,64 +332,67 @@ class CA_NORMAL: #LEVEL 1
             print('exception at fact_di')
 
     def ld_n_max(self, i):#checked
-        dn = self.d_n(i)
-        if (self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "A"):
-            if (dn == 6.4):
-                ld_max = 20
-            elif (dn == 25):
-                ld_max = 10
-            elif (dn == 102):
-                ld_max = 5
+        try:
+            dn = self.d_n(i)
+            if (self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "A"):
+                if (dn == 6.4):
+                    ld_max = 20
+                elif (dn == 25):
+                    ld_max = 10
+                elif (dn == 102):
+                    ld_max = 5
+                else:
+                    ld_max = 1
+            elif(self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "B"):
+                if (dn == 6.4):
+                    ld_max = 30
+                elif (dn == 25):
+                    ld_max = 20
+                elif (dn == 102):
+                    ld_max = 10
+                else:
+                    ld_max = 1
+            elif(self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "C"):
+                if (dn == 6.4):
+                    ld_max = 40
+                elif (dn == 25):
+                    ld_max = 30
+                elif (dn == 102):
+                    ld_max = 20
+                else:
+                    ld_max = 1
+            elif((self.ISOLATION_TYPE == "A" or self.ISOLATION_TYPE == "B") and self.DETECTION_TYPE == "B"):
+                if (dn == 6.4):
+                    ld_max = 40
+                elif (dn == 25):
+                    ld_max = 30
+                elif (dn == 102):
+                    ld_max = 20
+                else:
+                    ld_max = 1
+            elif(self.DETECTION_TYPE == "B" and self.ISOLATION_TYPE == "C"):
+                if (dn == 6.4):
+                    ld_max = 60
+                elif (dn == 25):
+                    ld_max = 30
+                elif (dn == 102):
+                    ld_max = 20
+                else:
+                    ld_max = 1
+            elif(self.DETECTION_TYPE == "C" and (self.ISOLATION_TYPE == "A" or self.ISOLATION_TYPE == "B" or self.ISOLATION_TYPE == "C")):
+                if (dn == 6.4):
+                    ld_max = 60
+                elif (dn == 25):
+                    ld_max = 40
+                elif (dn == 102):
+                    ld_max = 20
+                else:
+                    ld_max = 1
             else:
                 ld_max = 1
-        elif(self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "B"):
-            if (dn == 6.4):
-                ld_max = 30
-            elif (dn == 25):
-                ld_max = 20
-            elif (dn == 102):
-                ld_max = 10
-            else:
-                ld_max = 1
-        elif(self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "C"):
-            if (dn == 6.4):
-                ld_max = 40
-            elif (dn == 25):
-                ld_max = 30
-            elif (dn == 102):
-                ld_max = 20
-            else:
-                ld_max = 1
-        elif((self.ISOLATION_TYPE == "A" or self.ISOLATION_TYPE == "B") and self.DETECTION_TYPE == "B"):
-            if (dn == 6.4):
-                ld_max = 40
-            elif (dn == 25):
-                ld_max = 30
-            elif (dn == 102):
-                ld_max = 20
-            else:
-                ld_max = 1
-        elif(self.DETECTION_TYPE == "B" and self.ISOLATION_TYPE == "C"):
-            if (dn == 6.4):
-                ld_max = 60
-            elif (dn == 25):
-                ld_max = 30
-            elif (dn == 102):
-                ld_max = 20
-            else:
-                ld_max = 1
-        elif(self.DETECTION_TYPE == "C" and (self.ISOLATION_TYPE == "A" or self.ISOLATION_TYPE == "B" or self.ISOLATION_TYPE == "C")):
-            if (dn == 6.4):
-                ld_max = 60
-            elif (dn == 25):
-                ld_max = 40
-            elif (dn == 102):
-                ld_max = 20
-            else:
-                ld_max = 1
-        else:
-            ld_max = 1
-        return ld_max
+            return ld_max
+        except:
+            return 0
 
 
     def rate_n(self, i): #checked
@@ -398,6 +402,7 @@ class CA_NORMAL: #LEVEL 1
             rate = wn * (1 - factdi)
             return rate
         except Exception as e:
+            return 0
             print(e)
             print('exception at rate_n')
 
@@ -412,6 +417,7 @@ class CA_NORMAL: #LEVEL 1
                 else:
                     return (self.mass_avail_n(i) / self.rate_n(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ld_n')
 
@@ -419,6 +425,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             return min(self.rate_n(i) * self.ld_n(i), self.mass_avail_n(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at mass_n')
 
@@ -434,6 +441,7 @@ class CA_NORMAL: #LEVEL 1
          else:
              return 0.15
      except Exception as e:
+        return 0
         print(e)
         print('exception at fact_mit')
 
@@ -448,6 +456,7 @@ class CA_NORMAL: #LEVEL 1
                 else:
                     return calenff
         except Exception as e:
+            return 0
             print(e)
             print('exception at eneff_n')
 
@@ -470,6 +479,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return a_cmd[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at a_cmd')
 
@@ -489,6 +499,7 @@ class CA_NORMAL: #LEVEL 1
                 b_cmd[3] = data[15]
             return b_cmd[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at b_cmd')
 
@@ -508,6 +519,7 @@ class CA_NORMAL: #LEVEL 1
                 a_inj[3] = data[14]
             return a_inj[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at a_inj')
 
@@ -527,6 +539,7 @@ class CA_NORMAL: #LEVEL 1
                 b_inj[3] = data[15]
             return b_inj[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at b_inj')
 
@@ -534,6 +547,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             return self.a_cmd(select) * pow(self.rate_n(i), self.b_cmd(select)) * (1 - self.fact_mit())
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_cmdn_cont')
 
@@ -548,6 +562,7 @@ class CA_NORMAL: #LEVEL 1
             except:
                 return self.rate_n(i)
         except Exception as e:
+            return 0
             print(e)
             print('exception at effrate_n')
 
@@ -558,6 +573,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return self.a_cmd(select) * pow(self.mass_n(i), self.b_cmd(select)) * (1 - self.fact_mit()) * (1/self.eneff_n(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_cmdn_inst')
 
@@ -565,6 +581,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             return self.a_inj(select) * pow(self.rate_n(i), self.b_inj(select)) * (1 - self.fact_mit())
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_inj_cont')
     def ca_injn_inst(self, select, i):#done
@@ -574,6 +591,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return self.a_inj(select) * pow(self.mass_n(i), self.b_inj(select)) * ((1 - self.fact_mit()) / self.eneff_n(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_injn_inst')
     def fact_n_ic(self, i): #checked
@@ -588,6 +606,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return 1
         except Exception as e:
+            return 0
             print(e)
             print('exception at fact_n_ic')
 
@@ -604,6 +623,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return (self.STORED_TEMP - ait + (DAL_CAL.POSTGRESQL.GET_TBL_3B21(6))) / (2 * (DAL_CAL.POSTGRESQL.GET_TBL_3B21(6)))
         except Exception as e:
+            return 0
             print(e)
             print('exception at fact_ait')
 
@@ -613,6 +633,7 @@ class CA_NORMAL: #LEVEL 1
             caainlcmdn = self.ca_cmdn_cont(1, i) * self.fact_n_ic(i) + self.ca_cmdn_inst(3, i) * (1 - self.fact_n_ic(i))
             return caailcmdn * self.fact_ait() + caainlcmdn * (1 - self.fact_ait())
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_cmd_flame')
     def ca_injn_flame(self, i): #test
@@ -621,6 +642,7 @@ class CA_NORMAL: #LEVEL 1
             caainlinjn = abs(self.ca_injn_cont(1, i)) * self.fact_n_ic(i) + abs(self.ca_injn_inst(3, i)) * (1 - self.fact_n_ic(i))
             return caailinjn * self.fact_ait() + caainlinjn * (1 - self.fact_ait())
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_injn_flam')
     def checkFlame(self): #test
@@ -633,6 +655,7 @@ class CA_NORMAL: #LEVEL 1
                     break
             return  check
         except Exception as e:
+            return 0
             print(e)
             print('exception at checkflame')
     def ca_cmd_flame(self): #test
@@ -645,6 +668,7 @@ class CA_NORMAL: #LEVEL 1
                 ca_cmd_flame = t / obj[4] # t / gff_Total
                 return math.fabs(ca_cmd_flame)
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_cmd_flame')
     def ca_inj_flame(self): #test
@@ -659,6 +683,7 @@ class CA_NORMAL: #LEVEL 1
                 return math.fabs(ca_inj)
             print('ca_inj=', ca_inj)
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_inj_flame')
 
@@ -666,6 +691,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             return self.TOXIC_PERCENT * self.W_n(i) / 100
         except Exception as e:
+            return 0
             print(e)
             print('exception at rate_tox_n')
 
@@ -673,6 +699,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             return self.TOXIC_PERCENT * self.mass_n(i) / 100
         except Exception as e:
+            return 0
             print(e)
             print('exception at mass_tox_n')
 
@@ -947,6 +974,7 @@ class CA_NORMAL: #LEVEL 1
                 a = [0, 0]
             return a
         except Exception as e:
+            return 0
             print(e)
             print('Exception at get_toxic')
 
@@ -978,6 +1006,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return 0
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_injn_tox')
     def checkToxic(self): #done
@@ -1011,6 +1040,7 @@ class CA_NORMAL: #LEVEL 1
                         break
             return check
         except Exception as e:
+            return 0
             print(e)
             print('exception at check toxic')
 
@@ -1025,6 +1055,7 @@ class CA_NORMAL: #LEVEL 1
                 ca_inj_tox = t / obj[4]
                 return abs(ca_inj_tox)
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_inj_tox')
 
@@ -1043,6 +1074,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return 0.2 * (C8 * g * pow(C4 * self.rate_n(i), h))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_inj_contnfnt')
 
@@ -1054,6 +1086,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return 0
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_injn_instnfnt')
 
@@ -1065,6 +1098,7 @@ class CA_NORMAL: #LEVEL 1
             else:
                 return 0
         except Exception as e:
+            return 0
             print(e)
             print('exception at fact_n_icnfnt')
 
@@ -1072,6 +1106,7 @@ class CA_NORMAL: #LEVEL 1
         try:
             return self.ca_injn_instnfnt(i) * self.fact_n_icnfnt(i) + self.ca_injn_contnfnt(i) * (1 - self.fact_n_icnfnt(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_injn_leaknfnt')
     def checkNone(self): #
@@ -1333,17 +1368,29 @@ class CA_SHELL:
         return math.pi * pow(self.TANK_DIAMETER,2) * self.LHT_above(i) / 4
 
     def W_n_Tank(self, i):
-        C32 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(32)
-        return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.LHT_above(i))
-        # return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * self.FLUID_HEIGHT)
+        try:
+            C32 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(32)
+            return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.LHT_above(i))
+            # return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * self.FLUID_HEIGHT)
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_total_shell(self):
-        return math.pi * pow(self.TANK_DIAMETER,2) * self.FLUID_HEIGHT / (4* DAL_CAL.POSTGRESQL.GET_TBL_3B21(13))
+        try:
+            return math.pi * pow(self.TANK_DIAMETER,2) * self.FLUID_HEIGHT / (4* DAL_CAL.POSTGRESQL.GET_TBL_3B21(13))
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_avail(self, i):
-        C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-        return self.Lvol_abouve(i)*C13
-        # return math.pi * pow(self.TANK_DIAMETER, 2) * (self.FLUID_HEIGHT - (i - 1) * self.SHELL_COURSE_HEIGHT) / (4 * C13)
+        try:
+            C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
+            return self.Lvol_abouve(i)*C13
+            # return math.pi * pow(self.TANK_DIAMETER, 2) * (self.FLUID_HEIGHT - (i - 1) * self.SHELL_COURSE_HEIGHT) / (4 * C13)
+        except Exception as e:
+            print(e)
+            return 0
 
     def ld_tank(self, i):
         try:
@@ -1359,87 +1406,148 @@ class CA_SHELL:
         return min(self.W_n_Tank(i) * self.ld_tank(i), self.Bbl_avail(i))
 
     def getCost(self):
-        costTANK = [0, 0, 0, 0, 0, 0]
-        if (self.EnvironSensitivity == "High"):
-            costTANK[0] = 10
-            costTANK[1] = 50
-            costTANK[2] = 500
-            costTANK[3] = 3000
-            costTANK[4] = 10000
-            costTANK[5] = 5000
-        elif(self.EnvironSensitivity == "Medium"):
-            costTANK[0] = 10
-            costTANK[1] = 50
-            costTANK[2] = 250
-            costTANK[3] = 1500
-            costTANK[4] = 5000
-            costTANK[5] = 1500
-        elif(self.EnvironSensitivity == "Low"):
-            costTANK[0] = 10
-            costTANK[1] = 50
-            costTANK[2] = 100
-            costTANK[3] = 500
-            costTANK[4] = 1000
-            costTANK[5] = 500
-        else:
-            costTANK[0] = 0
-            costTANK[1] = 0
-            costTANK[2] = 0
-            costTANK[3] = 0
-            costTANK[4] = 0
-            costTANK[5] = 0
-        return costTANK
+        try:
+            costTANK = [0, 0, 0, 0, 0, 0]
+            if (self.EnvironSensitivity == "High"):
+                costTANK[0] = 10
+                costTANK[1] = 50
+                costTANK[2] = 500
+                costTANK[3] = 3000
+                costTANK[4] = 10000
+                costTANK[5] = 5000
+            elif(self.EnvironSensitivity == "Medium"):
+                costTANK[0] = 10
+                costTANK[1] = 50
+                costTANK[2] = 250
+                costTANK[3] = 1500
+                costTANK[4] = 5000
+                costTANK[5] = 1500
+            elif(self.EnvironSensitivity == "Low"):
+                costTANK[0] = 10
+                costTANK[1] = 50
+                costTANK[2] = 100
+                costTANK[3] = 500
+                costTANK[4] = 1000
+                costTANK[5] = 500
+            else:
+                costTANK[0] = 0
+                costTANK[1] = 0
+                costTANK[2] = 0
+                costTANK[3] = 0
+                costTANK[4] = 0
+                costTANK[5] = 0
+            return costTANK
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_leak_release(self):
-        obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        summ = self.Bbl_leak_n(1) * obj[0] + self.Bbl_leak_n(2) * obj[1] + self.Bbl_leak_n(3) * obj[2]
-        return summ / obj[4]
+        try:
+            obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
+            summ = self.Bbl_leak_n(1) * obj[0] + self.Bbl_leak_n(2) * obj[1] + self.Bbl_leak_n(3) * obj[2]
+            return summ / obj[4]
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_leak_indike(self):
-        return self.Bbl_leak_release() * (1 - self.P_lvdike / 100)
+        try:
+            return self.Bbl_leak_release() * (1 - self.P_lvdike / 100)
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_leak_ssonsite(self):
-        return self.P_onsite * (self.Bbl_leak_release() - self.Bbl_leak_indike()) / 100
+        try:
+            return self.P_onsite * (self.Bbl_leak_release() - self.Bbl_leak_indike()) / 100
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_leak_ssoffsite(self):
-        return self.P_offsite * (self.Bbl_leak_release() - self.Bbl_leak_indike() - self.Bbl_leak_ssonsite()) / 100
+        try:
+            return self.P_offsite * (self.Bbl_leak_release() - self.Bbl_leak_indike() - self.Bbl_leak_ssonsite()) / 100
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_leak_water(self):
-        return self.Bbl_leak_release() - (self.Bbl_leak_indike() + self.Bbl_leak_ssonsite() + self.Bbl_leak_ssoffsite())
+        try:
+            return self.Bbl_leak_release() - (self.Bbl_leak_indike() + self.Bbl_leak_ssonsite() + self.Bbl_leak_ssoffsite())
+        except Exception as e:
+            print(e)
+            return 0
 
     def FC_leak_environ(self):
-        cost = self.getCost()
-        return self.Bbl_leak_indike() * cost[0] + self.Bbl_leak_ssonsite() * cost[1] + self.Bbl_leak_ssoffsite() * cost[2] + self.Bbl_leak_water() * cost[5]
+        try:
+            cost = self.getCost()
+            return self.Bbl_leak_
+            indike() * cost[0] + self.Bbl_leak_ssonsite() * cost[1] + self.Bbl_leak_ssoffsite() * cost[2] + self.Bbl_leak_water() * cost[5]
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_rupture_n(self):
-        return self.Bbl_avail(4)
+        try:
+            return self.Bbl_avail(4)
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_rupture_release(self):
-        # print(self.API_COMPONENT_TYPE_NAME)
-        obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        # print(obj[3])
-        return self.Bbl_rupture_n() * obj[3] / obj[4]
+        try:
+            # print(self.API_COMPONENT_TYPE_NAME)
+            obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
+            # print(obj[3])
+            return self.Bbl_rupture_n() * obj[3] / obj[4]
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_rupture_indike(self):
-        # print(self.Bbl_rupture_n())
-        # print(self.Bbl_rupture_release())
-        return self.Bbl_rupture_release() * (1 - self.P_lvdike / 100)
+        try:
+            # print(self.Bbl_rupture_n())
+            # print(self.Bbl_rupture_release())
+            return self.Bbl_rupture_release() * (1 - self.P_lvdike / 100)
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_rupture_ssonsite(self):
-        return self.P_onsite * (self.Bbl_rupture_release() - self.Bbl_rupture_indike()) / 100
+        try:
+            return self.P_onsite * (self.Bbl_rupture_release() - self.Bbl_rupture_indike()) / 100
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_rupture_ssoffsite(self):
-        return self.P_offsite * (self.Bbl_rupture_release() - self.Bbl_rupture_indike() - self.Bbl_rupture_ssonsite()) / 100
+        try:
+            return self.P_offsite * (self.Bbl_rupture_release() - self.Bbl_rupture_indike() - self.Bbl_rupture_ssonsite()) / 100
+        except Exception as e:
+            print(e)
+            return 0
 
     def Bbl_rupture_water(self):
-        return self.Bbl_rupture_release() - (self.Bbl_rupture_indike() + self.Bbl_rupture_ssonsite() + self.Bbl_rupture_ssoffsite())
+        try:
+            return self.Bbl_rupture_release() - (self.Bbl_rupture_indike() + self.Bbl_rupture_ssonsite() + self.Bbl_rupture_ssoffsite())
+        except Exception as e:
+            print(e)
+            return 0
 
     def FC_rupture_environ(self):
-        cost = self.getCost()
-        return self.Bbl_rupture_indike() * cost[0] + self.Bbl_rupture_ssonsite() * cost[1] + self.Bbl_rupture_ssoffsite() * cost[2] + self.Bbl_rupture_water() * cost[5]
+        try:
+            cost = self.getCost()
+            return self.Bbl_rupture_indike() * cost[0] + self.Bbl_rupture_ssonsite() * cost[1] + self.Bbl_rupture_ssoffsite() * cost[2] + self.Bbl_rupture_water() * cost[5]
+        except Exception as e:
+            print(e)
+            return 0
 
     def FC_environ_shell(self):
-        return self.FC_leak_environ() + self.FC_rupture_environ()
+        try:
+            return self.FC_leak_environ() + self.FC_rupture_environ()
+        except Exception as e:
+            print(e)
+            return 0
 
     def FC_PROD_SHELL(self):
         try:
@@ -1450,11 +1558,14 @@ class CA_SHELL:
             return 0
 
     def fc_cmd(self):
-        obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        t = obj[0] * obj[5] + obj[1] * obj[6] + obj[2] * obj[7] + obj[3] * obj[8]
-        fc_cmd = t * self.MATERIAL_COST / obj[4]
-        return fc_cmd
-
+        try:
+            obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
+            t = obj[0] * obj[5] + obj[1] * obj[6] + obj[2] * obj[7] + obj[3] * obj[8]
+            fc_cmd = t * self.MATERIAL_COST / obj[4]
+            return fc_cmd
+        except Exception as e:
+            print(e)
+            return 0
     # def CA_cmd(self):
     #     return 0
     #

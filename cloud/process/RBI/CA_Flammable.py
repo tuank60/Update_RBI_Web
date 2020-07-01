@@ -23,12 +23,16 @@ class CA_Flammable: #LEVEL 1
         return DAL_CAL.POSTGRESQL.GET_RELEASE_PHASE(self.FLUID)
 
     def ReleasePhase(self):
-        if (self.ambient()=="Liquid") and (self.FLUID_PHASE=="Liquid"):
-            return "Liquid"
-        elif self.NBP()<=300:
-            return "Liquid"
-        else:
-            return "Gas"
+        try:
+            if (self.ambient()=="Liquid") and (self.FLUID_PHASE=="Liquid"):
+                return "Liquid"
+            elif self.NBP()<=300:
+                return "Liquid"
+            else:
+                return "Gas"
+        except Exception as e:
+            print(e)
+            return 0
 
     def a_cmd(self, select): #done
         try:
@@ -49,6 +53,7 @@ class CA_Flammable: #LEVEL 1
             else:
                 return a_cmd[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at a_cmd')
 
@@ -68,6 +73,7 @@ class CA_Flammable: #LEVEL 1
                 b_cmd[3] = data[15]
             return b_cmd[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at b_cmd')
 
@@ -87,6 +93,7 @@ class CA_Flammable: #LEVEL 1
                 a_inj[3] = data[14]
             return a_inj[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at a_inj')
 
@@ -106,6 +113,7 @@ class CA_Flammable: #LEVEL 1
                 b_inj[3] = data[15]
             return b_inj[select - 1]
         except Exception as e:
+            return 0
             print(e)
             print('exception at b_inj')
 
@@ -121,6 +129,7 @@ class CA_Flammable: #LEVEL 1
             else:
                 return 0.15
         except Exception as e:
+            return 0
             print(e)
             print('exception at fact_mit')
 
@@ -144,52 +153,67 @@ class CA_Flammable: #LEVEL 1
                     API_TYPE = "TYPE 0"
             return API_TYPE
         except Exception as e:
+            return 0
             print(e)
             print('exception at type fluid')
 
     def RATE_N(self,i):
-        if(self.TYPE_FLUID()=="TYPE 0" and self.ReleasePhase()=="Liquid123"):
-            return 0
-        else:
-            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-            if i==1:
-                return rwcofholesize.rate_n_small
-            elif i==2:
-                return rwcofholesize.rate_n_medium
-            elif i==3:
-                return rwcofholesize.rate_n_large
+        try:
+            if(self.TYPE_FLUID()=="TYPE 0" and self.ReleasePhase()=="Liquid123"):
+                return 0
             else:
-                return rwcofholesize.rate_n_rupture
+                rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+                if i==1:
+                    return rwcofholesize.rate_n_small
+                elif i==2:
+                    return rwcofholesize.rate_n_medium
+                elif i==3:
+                    return rwcofholesize.rate_n_large
+                else:
+                    return rwcofholesize.rate_n_rupture
+        except Exception as e:
+            return 0
+            print(e)
+            return 0
 
     def ca_cmdn_cont(self, select , i): #done
         try:
             x = self.RATE_N(i) * self.toxic_percent/100
             return (self.a_cmd(select) * pow(x, self.b_cmd(select)) * (1 - self.fact_mit()))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_cmdn_cont')
 
     def eneff_n(self,i):
-        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-        if i==1:
-            return rwcofholesize.eneff_n_small
-        elif i==2:
-            return rwcofholesize.eneff_n_medium
-        elif i==3:
-            return rwcofholesize.eneff_n_large
-        else:
-            return rwcofholesize.eneff_n_rupture
+        try:
+            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+            if i==1:
+                return rwcofholesize.eneff_n_small
+            elif i==2:
+                return rwcofholesize.eneff_n_medium
+            elif i==3:
+                return rwcofholesize.eneff_n_large
+            else:
+                return rwcofholesize.eneff_n_rupture
+        except Exception as e:
+            print(e)
+            return 0
 
     def mass_n(self,i):
-        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-        if i==1:
-            return rwcofholesize.mass_n_small
-        elif i==2:
-            return rwcofholesize.mass_n_medium
-        elif i==3:
-            return rwcofholesize.mass_n_large
-        else:
-            return rwcofholesize.mass_n_rupture
+        try:
+            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+            if i==1:
+                return rwcofholesize.mass_n_small
+            elif i==2:
+                return rwcofholesize.mass_n_medium
+            elif i==3:
+                return rwcofholesize.mass_n_large
+            else:
+                return rwcofholesize.mass_n_rupture
+        except Exception as e:
+            print(e)
+            return 0
 
     def ca_cmdn_inst(self, select , i): #done
         try:
@@ -199,6 +223,7 @@ class CA_Flammable: #LEVEL 1
             else:
                 return self.a_cmd(select) * pow(x, self.b_cmd(select)) * (1 - self.fact_mit()) * (1/self.eneff_n(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_cmdn_inst')
 
@@ -207,6 +232,7 @@ class CA_Flammable: #LEVEL 1
         try:
             return self.a_inj(select) * pow(x, self.b_inj(select)) * (1 - self.fact_mit())
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_inj_cont')
 
@@ -218,19 +244,24 @@ class CA_Flammable: #LEVEL 1
             else:
                 return self.a_inj(select) * pow(x, self.b_inj(select)) * ((1 - self.fact_mit()) / self.eneff_n(i))
         except Exception as e:
+            return 0
             print(e)
             print('exception at ca_injn_inst')
 
     def fact_n_ic(self,i):
-        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-        if i == 1:
-            return rwcofholesize.factIC_n_small
-        elif i == 2:
-            return rwcofholesize.factIC_n_medium
-        elif i == 3:
-            return rwcofholesize.factIC_n_large
-        else:
-            return rwcofholesize.factIC_n_rupture
+        try:
+            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+            if i == 1:
+                return rwcofholesize.factIC_n_small
+            elif i == 2:
+                return rwcofholesize.factIC_n_medium
+            elif i == 3:
+                return rwcofholesize.factIC_n_large
+            else:
+                return rwcofholesize.factIC_n_rupture
+        except Exception as e:
+            print(e)
+            return 0
 
     def CA_AINL_CMD_n(self,i):
         try:
@@ -258,8 +289,12 @@ class CA_Flammable: #LEVEL 1
             return 0
 
     def auto_ignition_temp(self):
-        tbl52 = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
-        return (tbl52[9] - 32) / 1.8  # doi tu do K sang do C
+        try:
+            tbl52 = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
+            return (tbl52[9] - 32) / 1.8  # doi tu do K sang do C
+        except Exception as e:
+            print(e)
+            return 0
 
     def fact_ait(self): #checked
         try:
@@ -272,6 +307,7 @@ class CA_Flammable: #LEVEL 1
             else:
                 return (self.STORED_TEMP - ait + (DAL_CAL.POSTGRESQL.GET_TBL_3B21(6))) / (2 * (DAL_CAL.POSTGRESQL.GET_TBL_3B21(6)))
         except Exception as e:
+            return 0
             print(e)
             print('exception at fact_ait')
 
@@ -294,5 +330,9 @@ class CA_Flammable: #LEVEL 1
         return (obj[0]*self.CA_Flam_Cmd_n(1)+obj[1]*self.CA_Flam_Cmd_n(2)+obj[2]*self.CA_Flam_Cmd_n(3)+obj[3]*self.CA_Flam_Cmd_n(4))/obj[4]
 
     def CA_Flam_inj(self):
-        obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        return (obj[0]*self.CA_Flam_inj_n(1)+obj[1]*self.CA_Flam_inj_n(2)+obj[2]*self.CA_Flam_inj_n(3)+obj[3]*self.CA_Flam_inj_n(4))/obj[4]
+        try:
+            obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
+            return (obj[0]*self.CA_Flam_inj_n(1)+obj[1]*self.CA_Flam_inj_n(2)+obj[2]*self.CA_Flam_inj_n(3)+obj[3]*self.CA_Flam_inj_n(4))/obj[4]
+        except Exception as e:
+            print(e)
+            return 0

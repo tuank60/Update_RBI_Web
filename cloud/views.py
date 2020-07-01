@@ -444,23 +444,23 @@ def CorrisionRate(request,proposalID):
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
 
-    list = []
-    dataF = {}
-    rwAss = models.RwAssessment.objects.get(id=proposalID)
-    component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
-    if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
-        isBottom = 1
-    else:
-        isBottom = 0
-    if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
-        isShell = 1
-    else:
-        isShell = 0
-    componentID = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
-    dataF = models.CorrosionRateTank.objects.filter(id_id = proposalID)
-    for a in dataF:
-        list.append(a)
     try:
+        list = []
+        dataF = {}
+        rwAss = models.RwAssessment.objects.get(id=proposalID)
+        component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
+            isBottom = 1
+        else:
+            isBottom = 0
+        if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
+            isShell = 1
+        else:
+            isShell = 0
+        componentID = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        dataF = models.CorrosionRateTank.objects.filter(id_id=proposalID)
+        for a in dataF:
+            list.append(a)
         error = {}
         data = {}
         rwAss = models.RwAssessment.objects.get(id=proposalID)
@@ -795,7 +795,8 @@ def NewComponent(request, equipmentID):
         componentType = models.ComponentType.objects.all()
         apicomponentType = models.ApiComponentType.objects.all()
         prdType = models.PRDType.objects.all()
-        tankapi = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 36, 38, 39]
+        # tankapi = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 36, 38, 39]
+        tankapi = [36, 38, 39]
         other = []
         for a in apicomponentType:
             if a.apicomponenttypeid not in tankapi:
@@ -2155,6 +2156,7 @@ def EditProposal(request, proposalID):
             data['weldjointeff'] = request.POST.get('WeldJointEff')
             data['structuralthickness']= request.POST.get('StructuralThickness')
             data['compvolume'] = request.POST.get('CompVolume')
+            data['allowStress'] = request.POST.get('AllowableStress')
             if request.POST.get('DFDI'):
                 damageDuringInsp = 1
             else:
@@ -2220,7 +2222,7 @@ def EditProposal(request, proposalID):
             data['minDesignTemp'] = request.POST.get('MinDesignTemp')
             data['designPressure'] = request.POST.get('DesignPressure')
             data['tempRef'] = request.POST.get('ReferenceTemperature')
-            data['allowStress'] = request.POST.get('ASAT')
+            # data['allowStress'] = request.POST.get('ASAT')
             data['BrittleFacture'] = request.POST.get('BFGT')
             data['CA'] = request.POST.get('CorrosionAllowance')
             data['sigmaPhase'] = request.POST.get('SigmaPhase')

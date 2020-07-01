@@ -51,7 +51,7 @@ class FinancialCOF: #LEVEL 1
         try:
             return pow(10,(1.242+0.585*math.log10(self.FC_affa()*pow(10,-6))))
         except Exception as e:
-            pow(e)
+            print(e)
             return 0
 
     def outage_cmd(self):

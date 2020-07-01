@@ -336,28 +336,28 @@ class RwAssessment(models.Model):
 class RwCaLevel1(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.
     release_phase = models.CharField(db_column='Release_Phase', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    fact_di = models.FloatField(blank=True, null=True)
-    fact_mit = models.FloatField(blank=True, null=True)
-    fact_ait = models.FloatField(blank=True, null=True)
-    ca_cmd = models.FloatField(db_column='CA_cmd', blank=True, null=True)  # Field name made lowercase.
-    ca_inj_flame = models.FloatField(db_column='CA_inj_flame', blank=True, null=True)  # Field name made lowercase.
-    ca_inj_toxic = models.FloatField(db_column='CA_inj_toxic', blank=True, null=True)  # Field name made lowercase.
-    ca_inj_ntnf = models.FloatField(db_column='CA_inj_ntnf', blank=True, null=True)  # Field name made lowercase.
-    fc_cmd = models.FloatField(db_column='FC_cmd', blank=True, null=True)  # Field name made lowercase.
-    fc_affa = models.FloatField(db_column='FC_affa', blank=True, null=True)  # Field name made lowercase.
-    fc_prod = models.FloatField(db_column='FC_prod', blank=True, null=True)  # Field name made lowercase.
-    fc_inj = models.FloatField(db_column='FC_inj', blank=True, null=True)  # Field name made lowercase.
-    fc_envi = models.FloatField(db_column='FC_envi', blank=True, null=True)  # Field name made lowercase.
-    fc_total = models.FloatField(db_column='FC_total', blank=True, null=True)  # Field name made lowercase.
+    fact_di = models.FloatField(blank=True, null=True,default=0)
+    fact_mit = models.FloatField(blank=True, null=True,default=0)
+    fact_ait = models.FloatField(blank=True, null=True,default=0)
+    ca_cmd = models.FloatField(db_column='CA_cmd', blank=True, null=True,default=0)  # Field name made lowercase.
+    ca_inj_flame = models.FloatField(db_column='CA_inj_flame', blank=True, null=True,default=0)  # Field name made lowercase.
+    ca_inj_toxic = models.FloatField(db_column='CA_inj_toxic', blank=True, null=True,default=0)  # Field name made lowercase.
+    ca_inj_ntnf = models.FloatField(db_column='CA_inj_ntnf', blank=True, null=True,default=0)  # Field name made lowercase.
+    fc_cmd = models.FloatField(db_column='FC_cmd', blank=True, null=True,default=0)  # Field name made lowercase.
+    fc_affa = models.FloatField(db_column='FC_affa', blank=True, null=True,default=0)  # Field name made lowercase.
+    fc_prod = models.FloatField(db_column='FC_prod', blank=True, null=True,default=0)  # Field name made lowercase.
+    fc_inj = models.FloatField(db_column='FC_inj', blank=True, null=True,default=0)  # Field name made lowercase.
+    fc_envi = models.FloatField(db_column='FC_envi', blank=True, null=True,default=0)  # Field name made lowercase.
+    fc_total = models.FloatField(db_column='FC_total', blank=True, null=True,default=0)  # Field name made lowercase.
     fcof_category = models.CharField(db_column='FCOF_Category', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    ca_final = models.FloatField(db_column='CA_final', blank=True, null=True)
-    auto_ignition = models.FloatField(db_column='auto_ignition', blank=True, null=True)
-    ideal_gas = models.FloatField(db_column='ideal_gas', blank=True, null=True)
-    ideal_gas_ratio = models.FloatField(db_column='ideal_gas_ratio', blank=True, null=True)
-    liquid_density = models.FloatField(db_column='liquid_density', blank=True, null=True)
+    ca_final = models.FloatField(db_column='CA_final', blank=True, null=True,default=0)
+    auto_ignition = models.FloatField(db_column='auto_ignition', blank=True, null=True,default=0)
+    ideal_gas = models.FloatField(db_column='ideal_gas', blank=True, null=True,default=0)
+    ideal_gas_ratio = models.FloatField(db_column='ideal_gas_ratio', blank=True, null=True,default=0)
+    liquid_density = models.FloatField(db_column='liquid_density', blank=True, null=True,default=0)
     ambient = models.CharField(db_column='ambient', blank=True, null=True, max_length=50)
-    mw = models.FloatField(db_column='mw', blank=True, null=True)
-    nbp = models.FloatField(db_column='NBP', blank=True, null=True)
+    mw = models.FloatField(db_column='mw', blank=True, null=True,default=0)
+    nbp = models.FloatField(db_column='NBP', blank=True, null=True,default=0)
     model_fluid_type = models.CharField(db_column='model_fluid_type', max_length=40, blank=True, null=True)
     toxic_fluid_type = models.CharField(db_column='toxic_fluid_type', max_length=40, blank=True, null=True)
 
