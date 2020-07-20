@@ -368,6 +368,10 @@ class DM_CAL:
         return self.ShapeFactor
     def SRp_Thin(self):
         if self.MINIUM_STRUCTURAL_THICKNESS_GOVERS == False:
+            print(self.getalpha())
+            print(self.FS_Thin())
+            print(self.trdi())
+
             return (self.Pressure * self.Diametter)/(self.getalpha() * self.FS_Thin() * self.trdi())
         else:
             # return (self.WeldJointEffciency * self.TensileStrengthDesignTemp * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.trdi())
@@ -1326,6 +1330,7 @@ class DM_CAL:
             CR_EXTERN = (self.CUI_PERCENT_3*0.254+self.CUI_PERCENT_4*0.254+self.CUI_PERCENT_5*0.254+self.CUI_PERCENT_6*0.051)/100
         else:
             CR_EXTERN = (self.CUI_PERCENT_3*0.076+self.CUI_PERCENT_4*0.076+self.CUI_PERCENT_5*0.051)/100
+
         return CR_EXTERN
 
     def API_ART_EXTERNAL(self, age):
@@ -1338,8 +1343,11 @@ class DM_CAL:
         else:
             FIP = 1
         CR = self.API_EXTERNAL_CORROSION_RATE() * max(FPS, FIP)
+
         try:
             ART_EXT = (CR*self.AGE_CUI(age))/self.trdi()
+            print(self.AGE_CUI(age))
+            print(self.trdi())
         except Exception as e:
             print(e)
             ART_EXT = 1
@@ -1367,6 +1375,9 @@ class DM_CAL:
             if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency== 0 or
             (self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0) or self.EXTERN_COAT_QUALITY == "" or (bool(self.COMPONENT_INSTALL_DATE) == False)):
                 return 6500;
+            elif(self.APIComponentType =="TANKBOTTOM" and self.ShapeFactor==0.0 and self.MINIUM_STRUCTURAL_THICKNESS_GOVERS==False):#bổ sung trường hợp
+                print("go here")
+                return 6500
             else:
                 try:
                     a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))
@@ -1375,6 +1386,8 @@ class DM_CAL:
                     return (a + b + c) / (1.56 * pow(10, -4))
                 except Exception as e:
                     print(e)
+                    print(self.APIComponentType)
+                    print(self.ShapeFactor)
                     return 0
         # else:
         #     return 0
@@ -2306,6 +2319,7 @@ class DM_CAL:
     def DF_EXT_TOTAL_API(self, i):#done
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(i), self.DF_CUI_CLSCC_API(i))
         return DF_EXT
+        #return 0.07
 
     def DF_BRIT_TOTAL_API(self,i):#done
         DF_BRIT = max(self.DF_BRITTLE_API(i) + self.DF_TEMP_EMBRITTLE_API(i), self.DF_SIGMA_API(i), self.DF_885_API(i))
@@ -2313,8 +2327,8 @@ class DM_CAL:
 
     def DF_THINNING_TOTAL_API(self, i):#done
         try:
-            print(self.DF_THINNING_API(i))
-            print(self.DF_LINNING_API(i))
+            # print(self.DF_THINNING_API(i))
+            # print(self.DF_LINNING_API(i))
 
             if self.INTERNAL_LINNING and (self.DF_LINNING_API(i) != 0):
                 DF_THINNING_TOTAL = min(self.DF_THINNING_API(i), self.DF_LINNING_API(i))
@@ -2398,12 +2412,12 @@ class DM_CAL:
 
     def DF_TOTAL_API(self,i):#testing df_htha
         try:
-            print(self.DF_THINNING_TOTAL_API(i))
-            print(self.DF_EXT_TOTAL_API(i))
-            print(self.DF_SSC_TOTAL_API(i))
-            print(self.DF_HTHA_API(i))
-            print(self.DF_BRIT_TOTAL_API(i))
-            print(self.DF_PIPE_API(i))
+            # print(self.DF_THINNING_TOTAL_API(i))
+            # print(self.DF_EXT_TOTAL_API(i))
+            # print(self.DF_SSC_TOTAL_API(i))
+            # print(self.DF_HTHA_API(i))
+            # print(self.DF_BRIT_TOTAL_API(i))
+            # print(self.DF_PIPE_API(i))
 
             TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i), self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(
                 i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
@@ -2463,7 +2477,8 @@ class DM_CAL:
                 DFm =models.DMItems.objects.get(dmitemid=da)
                 message += "  + "+str(DFm.dmdescription) + ".\n"
             message += "\n Email from Facility"
-            to_email = "doanhtuan14111997@gmail.com"
+            #to_email = "doanhtuan14111997@gmail.com"
+            to_email = "luongvancuongkmhd1998@gmail.com"
             Email = EmailMessage(email_subject, message, to=[to_email])
             Email.send()
 

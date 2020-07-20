@@ -1330,9 +1330,15 @@ class CA_SHELL:
         elif(self.TANK_FLUID == "Crude Oil"):
             data[0] = 775.019
             data[1] = 3.69 * pow(10, -2)
-        else:
+        elif (self.TANK_FLUID == "Heavy Crude Oil"):
             data[0] = 900.026
             data[1] = 4.6 * pow(10, -2)
+        elif (self.TANK_FLUID == "Heavy Fuel Oil"):
+            data[0] = 900.026
+            data[1] = 4.6 * pow(10, -2)
+        else:
+            data[0] = 1000
+            data[1] = 1
         return data
 
     def k_h_prod(self):
@@ -1691,12 +1697,13 @@ class CA_TANK_BOTTOM:
         C40 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(40)
         if self.PREVENTION_BARRIER:
             if (self.k_h_prod() > C34 * pow(self.dn_bottom(i), 2)):
-                return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * 0.0762) * self.n_rh()
+                #return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * 0.0762) * self.n_rh()
+                return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 9.81 * 0.0762) * self.n_rh()
             elif (self.k_h_prod() <= C37 * pow(pow(self.dn_bottom(i), 1.8) / (0.21 * pow(0.0762, 0.4)),1 / 0.74)):
                 return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(0.0762, 0.9) * pow(self.k_h_prod(),0.74) * self.n_rh()
             else:
                 m = C40 - 0.4324 * math.log10(self.dn_bottom(i)) + 0.5405 * math.log10(0.0762)
-                return 3*C38 * pow(10,(2 * math.log10(self.dn_bottom(i)) + 0.5 * math.log10(0.0762) - 0.74 * pow((C39 + 2 * math.log10(self.dn_bottom(i)) - math.log10(self.k_h_prod()))/m, m)))
+                return 3*C38 * pow(10,(2 * math.log10(self.dn_bottom(i)) + 0.5 * math.log10(0.0762) - 0.74 * pow((C39 * 2 * math.log10(self.dn_bottom(i)) - math.log10(self.k_h_prod()))/m, m)))
         else:
             if (self.k_h_prod() > C34 * pow(self.dn_bottom(i), 2)):
                 return C33 * math.pi * self.dn_bottom(i) * math.sqrt(2 * 1 * self.FLUID_HEIGHT) * self.n_rh()
@@ -1704,7 +1711,7 @@ class CA_TANK_BOTTOM:
                 return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(self.FLUID_HEIGHT, 0.9) * pow(self.k_h_prod(), 0.74) * self.n_rh()
             else:
                 m = C40-0.4324*math.log10(self.dn_bottom(i)) + 0.5405*math.log10(self.FLUID_HEIGHT)
-                return 3*C38*pow(10,2*math.log10(self.dn_bottom(i))+0.5*math.log10(self.FLUID_HEIGHT)-0.74*pow((C39+2*math.log10(self.dn_bottom(i))-math.log10(self.k_h_prod()))/m,m))
+                return 3*C38*pow(10,2*math.log10(self.dn_bottom(i))+0.5*math.log10(self.FLUID_HEIGHT)-0.74*pow((C39 * 2*math.log10(self.dn_bottom(i))-math.log10(self.k_h_prod()))/m,m))
 
     def t_ld_tank_bottom(self):
         if (self.Concrete_Asphalt):
@@ -1753,12 +1760,18 @@ class CA_TANK_BOTTOM:
         elif(self.TANK_FLUID == "Fuel Oil"):
             data[0] = 775.019
             data[1] = 3.69 * pow(10, -2)
-        elif(self.TANK_FLUID == "Crude Oil"):
+        elif (self.TANK_FLUID == "Crude Oil"):
             data[0] = 775.019
             data[1] = 3.69 * pow(10, -2)
-        else:
+        elif (self.TANK_FLUID == "Heavy Crude Oil"):
             data[0] = 900.026
             data[1] = 4.6 * pow(10, -2)
+        elif (self.TANK_FLUID == "Heavy Fuel Oil"):
+            data[0] = 900.026
+            data[1] = 4.6 * pow(10, -2)
+        else:
+            data[0] = 1000
+            data[1] = 1
         return data
 
     def k_h_prod(self):
@@ -1826,7 +1839,10 @@ class CA_TANK_BOTTOM:
         summa = 0
         for i in range(1,4):
             summa = summa +(self.Bbl_leak_groundwater(i) * cost[4] + self.Bbl_leak_subsoil(i) * cost[3])*obj[i-1]
-        return summa/obj[4]
+        if(self.TANK_FLUID == "Water"):
+            return 0
+        else:
+            return summa/obj[4]
 
     def Bbl_rupture_release_bottom(self):
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
@@ -1864,7 +1880,10 @@ class CA_TANK_BOTTOM:
 
     def FC_rupture_environ_bottom(self):
         cost = self.getCost()
-        return self.Bbl_rupture_indike_bottom() * cost[0] + self.Bbl_rupture_ssonsite_bottom() * cost[1] + self.Bbl_rupture_ssoffsite_bottom() * cost[2] + self.Bbl_rupture_water_bottom() * cost[5]
+        if (self.TANK_FLUID == "Water"):
+            return 0
+        else:
+            return self.Bbl_rupture_indike_bottom() * cost[0] + self.Bbl_rupture_ssonsite_bottom() * cost[1] + self.Bbl_rupture_ssoffsite_bottom() * cost[2] + self.Bbl_rupture_water_bottom() * cost[5]
 
     def FC_environ_bottom(self):
         return self.FC_leak_environ_bottom() + self.FC_rupture_environ_bottom()

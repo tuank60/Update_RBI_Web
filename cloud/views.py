@@ -1874,6 +1874,8 @@ def NewTank(request, componentID):
                 apiFluid = "C13-C16"
             elif str(data['fluid']) == "Fuel Oil" or str(data['fluid']) == "Crude Oil":
                 apiFluid = "C17-C25"
+            elif str(data['fluid']) =="Water":
+                apiFluid = "Water"
             else:
                 apiFluid = "C25+"
             rwassessment = models.RwAssessment(equipmentid_id=comp.equipmentid_id, componentid_id=comp.componentid, assessmentdate=data['assessmentdate'],
@@ -2614,8 +2616,12 @@ def EditTank(request, proposalID):
     try:
         rwassessment = models.RwAssessment.objects.get(id=proposalID)
         rwequipment = models.RwEquipment.objects.get(id=proposalID)
+        print("test externalenvironment")
+        print(rwequipment.externalenvironment)
         rwcomponent = models.RwComponent.objects.get(id=proposalID)
         rwstream = models.RwStream.objects.get(id=proposalID)
+        print("test flowrate")
+        print(rwstream.flowrate)
         rwexcor = models.RwExtcorTemperature.objects.get(id=proposalID)
         rwcoat = models.RwCoating.objects.get(id=proposalID)
         rwmaterial = models.RwMaterial.objects.get(id=proposalID)
@@ -2732,6 +2738,7 @@ def EditTank(request, proposalID):
 
             data['adjustSettlement'] = request.POST.get('AdjForSettlement')
             data['extEnvironment'] = request.POST.get('ExternalEnvironment')
+            print(data['extEnvironment'])
             data['EnvSensitivity'] = request.POST.get('EnvironmentSensitivity')
             data['themalHistory'] = request.POST.get('ThermalHistory')
             data['onlineMonitor'] = request.POST.get('OnlineMonitoring')
@@ -2817,6 +2824,8 @@ def EditTank(request, proposalID):
             data['H2Spressure'] = request.POST.get('OHPP')
             data['criticalTemp'] = request.POST.get('CET')
             data['flowrate'] = request.POST.get('FlowRate')
+            print("==============")
+            print(data['flowrate'])
             data['OP1'] = request.POST.get('Operating1')
             data['OP2'] = request.POST.get('Operating2')
             data['OP3'] = request.POST.get('Operating3')
@@ -3051,6 +3060,7 @@ def EditTank(request, proposalID):
             rwcomponent.cetgreaterorequal = cet
             rwcomponent.cyclicservice = cyclicservice
             rwcomponent.equipmentcircuitshock = equipmentorCircuit
+            rwcomponent.minstructuralthickness = minstruc
             rwcomponent.save()
             # print("6")
             rwstream.maxoperatingtemperature=data['maxOT']
