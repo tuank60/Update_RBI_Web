@@ -140,6 +140,8 @@ class RwCaTank(models.Model):
     material_factor = models.FloatField(db_column='Material_Factor', blank=True, null=True,default=0)
     fc_environ = models.FloatField(db_column='FC_Environ', blank=True, null=True,default=0)
     component_damage_cost = models.FloatField(db_column='Component_Damage_Cost', blank=True, null=True,default=0)
+    damage_surrounding_equipment_cost = models.FloatField(db_column='Damage_Surrounding_Equipment_Cost', blank=True, null=True, default=0)
+    associated_personnel_injury_cost = models.FloatField(db_column='Associated_Personnel_Injury_Cost', blank=True,null=True, default=0)
     business_cost = models.FloatField(db_column='Business_Cost', blank=True, null=True,default=0)
     consequence = models.FloatField(db_column='Consequence', blank=True, null=True,default=0)
     consequencecategory = models.CharField(db_column='ConsequenceCategory', max_length=150, blank=True, null=True,default=0)
@@ -548,6 +550,21 @@ class RwExtcorTemperature(models.Model):
         db_table = 'rw_extcor_temperature'
         ordering = ('id',)
 
+class RWFullCofTank(models.Model):
+    id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID',primary_key=True)  # Field name made lowercase.
+    cofvalue = models.FloatField(db_column='CoFValue', blank=True, null=True,default=0)  # Field name made lowercase.
+    cofcategory = models.CharField(db_column='CoFCategory', max_length=50, blank=True,null=True)  # Field name made lowercase.
+    prodcost = models.FloatField(db_column='ProdCost', blank=True, null=True,default=0)   # Field name made lowercase.
+    equipoutagemultiplier = models.FloatField(db_column='EquipOutageMultiplier', blank=True, null=True,default=0)  # Field name made lowercase.
+    equipcost = models.FloatField(db_column='equipcost', blank=True, null=True,default=0)  # Field name made lowercase.
+    popdens = models.FloatField(db_column='popdens', blank=True, null=True,default=0)  # Field name made lowercase.
+    injcost = models.FloatField(db_column='injcost', blank=True, null=True,default=0)  # Field name made lowercase.
+    cofmatrixvalue = models.FloatField(db_column='CoFMatrixValue', blank=True, null=True,default=0)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'rw_full_cof_tank'
+        ordering = ('id',)
 
 class RwFullFcof(models.Model):
     id = models.ForeignKey(RwAssessment, on_delete=models.CASCADE, db_column='ID', primary_key=True)  # Field name made lowercase.

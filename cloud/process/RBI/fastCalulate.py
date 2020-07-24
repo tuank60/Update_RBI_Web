@@ -884,6 +884,9 @@ def calculateTank(proposalID):
         countRefullfc = models.RwFullFcof.objects.filter(id=proposalID)
         chart = models.RwDataChart.objects.filter(id=proposalID)
         FullFCof = models.RwFullFcof.objects.filter(id=proposalID)
+        rwFullCofTank =models.RWFullCofTank.objects.get(id=proposalID)
+        print(proposalID)
+        print(rwFullCofTank.prodcost)
 
         comp = models.ComponentMaster.objects.get(componentid=rwassessment.componentid_id)
         eq = models.EquipmentMaster.objects.get(equipmentid=rwassessment.equipmentid_id)
@@ -1112,7 +1115,10 @@ def calculateTank(proposalID):
                                     PRODUCTION_COST=rwinputca.productioncost,
                                     Soil_type=rwequipment.typeofsoil,
                                     TANK_FLUID=rwstream.tankfluidname,
-                                    CHT=rwcomponent.shellheight)
+                                    CHT=rwcomponent.shellheight,PROD_COST=rwFullCofTank.prodcost,
+                                    EQUIP_OUTAGE_MULTIPLIER=rwFullCofTank.equipoutagemultiplier,
+                                    EQUIP_COST=rwFullCofTank.equipcost,POP_DENS=rwFullCofTank.popdens,
+                                    INJ_COST=rwFullCofTank.injcost)
                                     # EQUIPMENT_COST=FullFCof.equipcost)
             if countRwcatank.count() != 0:
                 rwcatank = models.RwCaTank.objects.get(id=proposalID)
@@ -1132,8 +1138,8 @@ def calculateTank(proposalID):
                 rwcatank.release_volume_leak_d3 = cacal.Bbl_leak_n(3)
                 rwcatank.release_volume_leak_d4 = cacal.Bbl_leak_n(4)
                 rwcatank.release_volume_rupture = cacal.Bbl_rupture_n()
-                rwcatank.liquid_height = cacal.LHT_above(3)
-                rwcatank.volume_fluid = cacal.Lvol_abouve(3)
+                rwcatank.liquid_height = cacal.LHT_above()
+                rwcatank.volume_fluid = cacal.Lvol_abouve()
                 rwcatank.time_leak_ground = cacal.ld_tank(4)
                 rwcatank.volume_subsoil_leak_d1 = cacal.Bbl_leak_release()
                 rwcatank.volume_subsoil_leak_d4 = cacal.Bbl_rupture_release()
@@ -1152,9 +1158,12 @@ def calculateTank(proposalID):
                 rwcatank.fc_environ = cacal.FC_environ_shell()
                 rwcatank.material_factor = rwmaterial.costfactor
                 rwcatank.component_damage_cost = cacal.fc_cmd()
-                rwcatank.business_cost = cacal.FC_PROD_SHELL()
+                #rwcatank.business_cost = cacal.FC_PROD_SHELL()
+                rwcatank.business_cost = cacal.fc_prod_tank()
                 rwcatank.consequence = cacal.FC_total_shell()
                 rwcatank.consequencecategory = cacal.FC_Category(cacal.FC_total_shell())
+                #bổ sung 3 tham số đầu ra
+                rwcatank.damage_surrounding_equipment_cost=cacal.fc_affa_tank()
                 rwcatank.save()
             else:
                 rwcatank = models.RwCaTank(id=rwassessment, hydraulic_water=cacal.k_h_water(),
@@ -1172,8 +1181,8 @@ def calculateTank(proposalID):
                                            release_volume_leak_d3=cacal.Bbl_leak_n(3),
                                            release_volume_leak_d4=cacal.Bbl_leak_n(4),
                                            release_volume_rupture=cacal.Bbl_rupture_release(),
-                                           liquid_height=cacal.LHT_above(3),
-                                           volume_fluid=cacal.Lvol_abouve(3),
+                                           liquid_height=cacal.LHT_above(),
+                                           volume_fluid=cacal.Lvol_abouve(),
                                            time_leak_ground=cacal.ld_tank(4),
                                            volume_subsoil_leak_d1=cacal.Bbl_leak_release(),
                                            volume_subsoil_leak_d4=cacal.Bbl_rupture_release(),
@@ -1192,9 +1201,11 @@ def calculateTank(proposalID):
                                            fc_environ=cacal.FC_environ_shell(),
                                            material_factor=rwinputca.productioncost,
                                            component_damage_cost=cacal.fc_cmd(),
-                                           business_cost=cacal.FC_PROD_SHELL(),
+                                           #business_cost=cacal.FC_PROD_SHELL(),
+                                           business_cost=cacal.fc_prod_tank(),
                                            consequence=cacal.FC_total_shell(),
-                                           consequencecategory=cacal.FC_Category(cacal.FC_total_shell()))
+                                           consequencecategory=cacal.FC_Category(cacal.FC_total_shell()),
+                                           damage_surrounding_equipment_cost=cacal.fc_affa_tank())
                 rwcatank.save()
             FC_TOTAL = cacal.FC_total_shell()
             FC_CATEGORY = cacal.FC_Category(cacal.FC_total_shell())

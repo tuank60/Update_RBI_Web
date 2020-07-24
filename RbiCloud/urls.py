@@ -37,8 +37,8 @@ urlpatterns = [
     path('designcode/', views.base_designcode, name='designcode'),
     path('manufacture/', views.base_manufacture, name= 'manufacture'),
     ########################## Facility UI################################
-    path('inspection/plan/<int:siteID>/', views.InpsectionPlan, name='inspectionPlan'),
-    path('inspection/plan/<int:siteID>/InpsectionPlan<str:name>/InpsectionPlan<str:date>/', views.InpsectionPlan,name='inspectionPlan'),
+    path('inspection/plan/<int:siteID>/', views.MainInpsectionPlan, name='inspectionPlan'),
+    path('inspection/plan/<int:siteID>/InpsectionPlan<str:name>/InpsectionPlan<str:date>/', views.MainInpsectionPlan,name='inspectionPlan'),
     path('add/<int:siteID>/<int:facilityID>/<int:equipID>/<str:name>/<str:date>/plan/', views.AdddInssepctionPlan,name='addInspectionPlan'),
     path('create/<int:siteID>/plan/', views.CreateInspectionPlan, name='createInspectionPlan'),
     path('facilities/display/<int:siteID>/', views.ListFacilities, name='facilitiesDisplay'),

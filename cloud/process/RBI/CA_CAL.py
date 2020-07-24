@@ -163,14 +163,14 @@ class CA_NORMAL: #LEVEL 1
                 CP_C2 = (data[6] / t) / ( math.sinh(data[6] / t))
                 CP_E2 = (data[8] / t) / ( math.cosh(data[8] / t))
                 if (data[3] == 1):
-                    print("1")
-                    print(data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3))
+                    # print("1")
+                    # print(data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3))
                     return data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3)
                 elif(data[3] == 2):
-                    print("2")
+                    # print("2")
                     return data[4] + data[5] * CP_C2 * CP_C2 + data[6] * CP_E2 * CP_E2
                 elif(data[3] == 3):
-                    print("3")
+                    # print("3")
                     return data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3) + data[8] * pow(t, 4)
                 else:
                     return 0
@@ -192,37 +192,37 @@ class CA_NORMAL: #LEVEL 1
 
     def W_n(self, i):   #checking
         try:
-            print(self.ambient())
+            # print(self.ambient())
             C1 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(1)
             C2 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(2)
-            print("fluid_phase = ", self.ambient())
+            # print("fluid_phase = ", self.ambient())
             if (self.ReleasePhase() != "Liquid"):
                 R = 8.314
                 k = self.ideal_gas_ratio()
-                print("k=" + str(k))
+                # print("k=" + str(k))
                 p_trans = 101.325 * pow((k + 1) / 2, k / (k - 1))
-                print(self.FLUID)
-                print(p_trans)
-                print("moleculer_weight=" + str(self.moleculer_weight()))
-                print("STORED_PRESSURE=" + str(self.STORED_PRESSURE))
+                # print(self.FLUID)
+                # print(p_trans)
+                # print("moleculer_weight=" + str(self.moleculer_weight()))
+                # print("STORED_PRESSURE=" + str(self.STORED_PRESSURE))
                 if (self.STORED_PRESSURE > p_trans):
-                    print("okok")
+                    # print("okok")
                     x = (
                     (k * self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * pow(2 / (k + 1), (k + 1) / (k - 1)))
-                    print("W_n0" + str(i) + "=" + str((0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)))
+                    # print("W_n0" + str(i) + "=" + str((0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)))
                     return (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
                 else:
-                    print("nono")
+                    # print("nono")
                     x = (self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * ((2 * k) / (k - 1)) * pow(
                         101.325 / self.STORED_PRESSURE, 2 / k) * (
                         1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
-                    print("W_n0" + str(i) + "=" + str(
-                        (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(abs(x))))
+                    # print("W_n0" + str(i) + "=" + str(
+                    #     (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(abs(x))))
                     # print(((((0.9 / C2) * self.a_n(i)) * self.STORED_PRESSURE) * math.sqrt((((self.moleculer_weight() / (R * self.STORED_PRESSURE)) * ((2.0 * k) / (k - 1.0))) * math.pow(101.325 / self.STORED_PRESSURE, 2.0 / k)) * (1.0 - math.pow(101.325 / self.STORED_PRESSURE, (k - 1.0) / k)))))
                     return (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
             else:
-                print("W_n0" + str(i) + "=" + str(0.61 * self.liquid_density() * (self.a_n(i) / C1) * pow(
-                    (2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)))
+                # print("W_n0" + str(i) + "=" + str(0.61 * self.liquid_density() * (self.a_n(i) / C1) * pow(
+                #     (2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)))
                 return 0.61 * self.liquid_density() * (self.a_n(i) / C1) * math.pow((2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)
 
         except Exception as e :
@@ -233,7 +233,7 @@ class CA_NORMAL: #LEVEL 1
 
     def W_max8(self,i): #done
         try:
-            print(self.ambient())
+            # print(self.ambient())
             C1 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(1)
             C2 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(2)
             # print("fluid_phase = ", self.ambient())
@@ -253,7 +253,7 @@ class CA_NORMAL: #LEVEL 1
                     # print("W_n0" + str(i) + "=" + str((0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)))
                     return (0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)
                 else:
-                    print("nono")
+                    # print("nono")
                     x = (self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * ((2 * k) / (k - 1)) * pow(
                         101.325 / self.STORED_PRESSURE, 2 / k) * (
                         1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
@@ -431,7 +431,6 @@ class CA_NORMAL: #LEVEL 1
 
     def fact_mit(self): #checked
      try:
-         print('test fact_mit')
          if (self.MITIGATION_SYSTEM == "Inventory blowdown, couple with isolation system activated remotely or automatically"):
              return 0.25
          elif (self.MITIGATION_SYSTEM == "Fire water deluge system and monitors"):
@@ -1243,7 +1242,7 @@ class CA_NORMAL: #LEVEL 1
 class CA_SHELL:
     def __init__(self, FLUID, FLUID_HEIGHT, SHELL_COURSE_HEIGHT, TANK_DIAMETER, EnvironSensitivity,
                  P_lvdike, P_onsite, P_offsite, MATERIAL_COST, API_COMPONENT_TYPE_NAME, PRODUCTION_COST,Soil_type,
-                 TANK_FLUID,CHT):
+                 TANK_FLUID,CHT,PROD_COST,EQUIP_OUTAGE_MULTIPLIER,EQUIP_COST,POP_DENS,INJ_COST):
         self.FLUID = FLUID
         self.FLUID_HEIGHT = FLUID_HEIGHT
         self.SHELL_COURSE_HEIGHT = SHELL_COURSE_HEIGHT
@@ -1259,6 +1258,12 @@ class CA_SHELL:
         self.TANK_FLUID=TANK_FLUID
         self.CHT=CHT
         # self.EQUIPMENT_COST = EQUIPMENT_COST
+        #bổ sung 5 tham số đầu vào cho TankShell
+        self.PROD_COST = PROD_COST
+        self.EQUIP_OUTAGE_MULTIPLIER = EQUIP_OUTAGE_MULTIPLIER
+        self.EQUIP_COST = EQUIP_COST
+        self.POP_DENS = POP_DENS
+        self.INJ_COST = INJ_COST
 
     def FC_Category(self, fc):
         if (fc <= 10000):
@@ -1363,21 +1368,45 @@ class CA_SHELL:
     def a_n_shell(self, i):
         return math.pi * pow(self.d_n_shell(i),2) / 4
 
-    def LHT_above(self,i):
-        LHTab = self.FLUID_HEIGHT-(i-1)*self.CHT
+    def LHT_above(self):
+        LHTab = self.FLUID_HEIGHT-(self.get_Course()-1)*self.CHT
         if LHTab>=0:
             return LHTab
         else:
             return 0
 
-    def Lvol_abouve(self,i):
-        return math.pi * pow(self.TANK_DIAMETER,2) * self.LHT_above(i) / 4
+    def get_Course(self):
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-1":
+            return 1
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-2":
+            return 2
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-3":
+            return 3
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-4":
+            return 4
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-5":
+            return 5
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-6":
+            return 6
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-7":
+            return 7
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-8":
+            return 8
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-9":
+            return 9
+        if self.API_COMPONENT_TYPE_NAME=="COURSE-10":
+            return 10
+
+    def Lvol_abouve(self):
+        return math.pi * pow(self.TANK_DIAMETER,2) * self.LHT_above() / 4
 
     def W_n_Tank(self, i):
         try:
             C32 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(32)
-            return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.LHT_above(i))
-            # return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * self.FLUID_HEIGHT)
+            if(self.MATERIAL_COST==1):
+                return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.LHT_above())
+            else:
+                return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.FLUID_HEIGHT)
         except Exception as e:
             print(e)
             return 0
@@ -1392,7 +1421,7 @@ class CA_SHELL:
     def Bbl_avail(self, i):
         try:
             C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-            return self.Lvol_abouve(i)*C13
+            return self.Lvol_abouve()*C13
             # return math.pi * pow(self.TANK_DIAMETER, 2) * (self.FLUID_HEIGHT - (i - 1) * self.SHELL_COURSE_HEIGHT) / (4 * C13)
         except Exception as e:
             print(e)
@@ -1487,8 +1516,7 @@ class CA_SHELL:
     def FC_leak_environ(self):
         try:
             cost = self.getCost()
-            return self.Bbl_leak_
-            indike() * cost[0] + self.Bbl_leak_ssonsite() * cost[1] + self.Bbl_leak_ssoffsite() * cost[2] + self.Bbl_leak_water() * cost[5]
+            return self.Bbl_leak_indike() * cost[0] + self.Bbl_leak_ssonsite() * cost[1] + self.Bbl_leak_ssoffsite() * cost[2] + self.Bbl_leak_water() * cost[5]
         except Exception as e:
             print(e)
             return 0
@@ -1572,7 +1600,74 @@ class CA_SHELL:
         except Exception as e:
             print(e)
             return 0
-    # def CA_cmd(self):
+#bổ sung tính 3 tham số đầu ra cho tankshell
+    def fc_affa_tank(self):
+        cacmd =self.ca_cmd_flame_shell()
+        fc_affa = cacmd * self.EQUIP_COST
+        if(fc_affa>0):
+            return fc_affa
+        else:
+            return 0
+    def outage_affa_tank(self):
+        fcaffa = abs(self.fc_affa_tank())
+        if fcaffa != 0:
+            b = 1.242 + 0.585 * math.log10(fcaffa * pow(10, -6))
+        else:
+            b = 0
+        return pow(10, b)
+    def ca_cmd_flame_shell(self):
+        t=7*pow(10,-5)*self.AINL_Cmd(1)+2.5*pow(10,-5)*self.AINL_Cmd(2)+5*pow(10,-6)*self.AINL_Cmd(3)+ pow(10,-7)*self.AINL_Cmd(4)
+        ca_cmd_flame = t/0.0001001
+        return abs(ca_cmd_flame)
+
+    def AINL_Cmd(self,i):
+        AINL_Cmd =self.getEquationConstants(0)*pow(self.rate_Flammable(i),self.getEquationConstants(1))
+        if (AINL_Cmd >0):
+            return AINL_Cmd
+        else:
+            return 0
+
+    def rate_Flammable(self,i):
+        pl_ul = CA_TANK_BOTTOM.GET_PL_UL(self)
+        rate_Flammable = (self.W_n_Tank(i)*1.84*pow(10,-6))*pl_ul[0]
+        if(rate_Flammable>0):
+            return rate_Flammable
+        else:
+            return 0
+
+    def getEquationConstants(self, select):
+        try:
+            data1 = DAL_CAL.POSTGRESQL.GET_TBL_58(self.FLUID)
+            data2 = DAL_CAL.POSTGRESQL.GET_TBL_59(self.FLUID)
+            input = [0, 0, 0, 0, 0, 0, 0, 0]
+
+            if (self.FLUID == "Water"):
+                return 0
+            else:
+                input[0] = data1[2]
+                input[1] = data1[3]
+                input[2] = data1[6]
+                input[3] = data1[7]
+                input[0] = data2[2]
+                input[1] = data2[3]
+                input[2] = data2[6]
+                input[3] = data2[7]
+            return input[select - 1]
+        except Exception as e:
+            return 0
+            print(e)
+            print('exception at getEquationConstants')
+
+    def fc_prod_tank(self):
+        fc_prod = (CA_NORMAL.outage_cmd(self)+self.outage_affa_tank())*self.PROD_COST
+        print("fc_prod_tank")
+        print(self.PROD_COST)
+        print(fc_prod)
+        if(fc_prod>0):
+            return fc_prod
+        else:
+            return 0
+        # def CA_cmd(self):
     #     return 0
     #
     # def FC_affa(self):
@@ -1711,7 +1806,7 @@ class CA_TANK_BOTTOM:
                 return C35 * 0.21 * pow(self.dn_bottom(i), 0.2) * pow(self.FLUID_HEIGHT, 0.9) * pow(self.k_h_prod(), 0.74) * self.n_rh()
             else:
                 m = C40-0.4324*math.log10(self.dn_bottom(i)) + 0.5405*math.log10(self.FLUID_HEIGHT)
-                return 3*C38*pow(10,2*math.log10(self.dn_bottom(i))+0.5*math.log10(self.FLUID_HEIGHT)-0.74*pow((C39 * 2*math.log10(self.dn_bottom(i))-math.log10(self.k_h_prod()))/m,m))
+                return C38*pow(10,2*math.log10(self.dn_bottom(i))+0.5*math.log10(self.FLUID_HEIGHT)-0.74*pow((C39 * 2*math.log10(self.dn_bottom(i))-math.log10(self.k_h_prod()))/m,m))
 
     def t_ld_tank_bottom(self):
         if (self.Concrete_Asphalt):

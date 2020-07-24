@@ -158,7 +158,7 @@ div.a:hover {
         </ul>
 
     <!-------------- Body ---------------->
-      <div class="tab-content">
+        <div class="tab-content">
           <!-------------- Inspection Scope ---------------->
         <div id="menu0" class="tab-pane fade in active">
             <div class="city" style="font-size: 15px; color: #444444;background-color:white">
@@ -325,17 +325,9 @@ div.a:hover {
                             <div class="city" style="font-size: 13px; color: #444444;background-color:white">
                                 <div class="container">
                                     <div class="table-responsive">
-                                      <!----hide or show column--------->
-                                      <!--<script>
-                                          $(document).ready(function(){
-                                                $('#portests ,#portests1').on('click',function(){
-                                                    $('.test').toggle();
-                                                });
-                                            });
-                                      </script>-->
                                     <table width=100% id="testing">
-                                      <thead>
-                                      <tr>
+                                        <thead>
+                                        <tr>
                                           <!--<th style="background-color:#387BF9;font-size: 15px;font-family: 'Spartan', sans-serif; color:White" colspan="17"><input type = "button" name = "-" id="portests1" style="color:black;" value = "Proposal"></th>-->
                                           <th style="background-color:#387BF9;font-size: 15px;font-family: 'Spartan', sans-serif; color:White" colspan="17">Proposal</th>
                                           <th style="background-color:#387BF9;font-size: 15px;font-family: 'Spartan', sans-serif; color:White" colspan="21">Equipment Properties</th>
@@ -343,7 +335,7 @@ div.a:hover {
                                           <th style="background-color:#387BF9;font-size: 15px;font-family: 'Spartan', sans-serif; color:White" colspan="26">Stream /Process Flow</th>
                                           <th style="background-color:#387BF9;font-size: 15px;font-family: 'Spartan', sans-serif; color:White" colspan="14">Material</th>
                                           <th style="background-color:#387BF9;font-size: 15px;font-family: 'Spartan', sans-serif; color:White" colspan="14">Coating, Cladding,Lining and Insulation</th>
-                                      </tr>
+                                        </tr>
                                         <tr>
                                             <!------- Proposal-------->
                                           <th width="100px" style="text-align: center"><input type="checkbox" id="check"></th>
@@ -467,500 +459,271 @@ div.a:hover {
                                             <th style="overflow: auto; white-space: nowrap;">Insulation Contains<br>Chlorides</th>
                                             <th ></th>
                                         </tr>
-                                      </thead>
-                                      <tbody>
-                                      {% if allSite %}
-                                      {% for s in site %}
-                                      {% for f in faci %}
-                                        {% if s.siteid == f.siteid_id %}
-                                        {% for e in equi %}
-                                            {% if f.facilityid == e.facilityid_id %}
-                                            {% for c in comp %}
-                                                {% if e.equipmentid == c.equipmentid_id %}
-                                                    {% for p in pros %}
-                                                        {% if c.componentid == p.componentid_id %}
-                                                        {% ifnotequal c.componenttypeid_id 8 %}
-                                                        {% ifnotequal c.componenttypeid_id 12 %}
-                                                        {% ifnotequal c.componenttypeid_id 14 %}
-                                                        {% ifnotequal c.componenttypeid_id 15 %}
-                                                            <tr class="a">
-                                                                {% if c.componentid in dataF %}
-                                                                <td><input type="checkbox" name="{{p.id}}" checked></td>
-                                                                {% else %}
-                                                                <td><input type="checkbox" name="{{p.id}}" ></td>
-                                                                {% endif %}
-                                                              <td><div class="a">{{e.equipmentnumber}}</div></td>
-                                                              <td><div class="a">{{c.componentname}}</div></td>
-                                                              <td><div class="a">{{c.componentnumber}}</div></td>
-                                                              <td><div class="a">{{s.sitename}}</div></td>
-                                                              <td><div class="a">{{f.facilityname}}</div></td>
-
-                                                                {% if p.id in datapof %}
-                                                                    {% for pof in rwfullpof %}
-                                                                        {% for fcof in rwfullfcof %}
-                                                                            {% if p.id == pof.id_id %}
-                                                                                {% if p.id == fcof.id_id %}
-                                                                              <td ><div class="a">{{pof.pofap1category}}{{fcof.fcofcategory}}</div></td>
-                                                                              <td ><div class="a">{{pof.pofap2category}}{{fcof.fcofcategory}}</div></td>
-                                                                              <td ><div class="a">{{pof.pofap3category}}{{fcof.fcofcategory}}</div></td>
-                                                                              <td ><div class="a">{{pof.rli}}</div></td>
-                                                                                {% endif %}
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    {% endfor %}
-                                                                {% else %}
-                                                                <td ><div class="a">none</div></td>
-                                                                <td ><div class="a">none</div></td>
-                                                                <td ><div class="a">none</div></td>
-                                                                <td ><div class="a">none</div></td>
-                                                                {% endif %}
-
-                                                              <td><div class="a">{{p.proposalname}}</div></td>
-                                                              <td><div class="a">{{p.assessmentdate}}</div></td>
-                                                              <td><div class="a">{{e.commissiondate}}</div></td>
-                                                              <td><div class="a">{{p.riskanalysisperiod}}</div></td>
-
-                                                                {% for etype in equiptype %}
-                                                                {% if etype.equipmenttypeid == e.equipmenttypeid_id %}
-                                                              <td><div class="a">{{etype.equipmenttypename}}</div></td>
-                                                                 {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for ctype in comptype %}
-                                                                {% if ctype.componenttypeid == c.componenttypeid_id %}
-                                                              <td><div class="a">{{ctype.componenttypename}}</div></td>
-                                                                 {% endif %}
-                                                                {% endfor %}
-
-                                                                {% if p.id in datarw %}
-                                                                {% for rw in rwdam %}
-                                                                {% if p.id == rw.id_dm_id %}
-                                                              <td ><div class="a">{{rw.inspduedate}}</div></td>
-                                                                {% endif %}
-                                                                {% endfor %}
-                                                                {% else %}
-                                                                <td ><div class="a">none</div></td> <!------- cần set gia tri--------->
-                                                                {% endif %}
-
-
-                                                                {% for de in desi %}
-                                                                {% if de.designcodeid == e.designcodeid_id %}
-                                                              <td><div class="a">{{de.designcode}}</div></td>
-                                                                 {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for rwe in rwequip %}
-                                                                {% if p.id == rwe.id_id %}
-                                                                <td><input type="checkbox"  name="adminControlUpset" id="{{p.id}}" disabled></td>
-                                                                <td><input type="checkbox"  name="ContainsDeadlegs" id="{{p.id}}1" disabled></td>
-                                                                <td ><input type="checkbox"  name="PresenceofSulphides" id="{{p.id}}2" disabled></td >
-                                                                <td><input type="checkbox"  name="SteamedOut" id="{{p.id}}3" disabled></td>
-                                                                <td><div class="a">{{rwe.thermalhistory}}</div></td>
-                                                                <td><div class="a">{{rwe.managementfactor}}</div></td>
-                                                                <td><input type="checkbox"  name="PWHT" id="{{p.id}}4" disabled></td>
-                                                                <td><input type="checkbox"  name="PressurisationControlled" id="{{p.id}}5" disabled></td>
-                                                                <td><input type="checkbox"  name="PresenceofSulphidesShutdow" id="{{p.id}}6" disabled></td>
-                                                                <td ><div class="a">{{rwe.onlinemonitoring}}</div></td>
-                                                                <td><div class="a">{{rwe.minreqtemperaturepressurisation}}</div></td>
-                                                                <td><input type="checkbox"  name="MFTF" id="{{p.id}}8" disabled></td>
-                                                                <td><input type="checkbox"  name="CylicOper" id="{{p.id}}9" disabled></td>
-                                                                <td><input type="checkbox"  name="LOM" id="{{p.id}}7" disabled></td>
-                                                                <td><input type="checkbox"  name="Downtime" id="{{p.id}}10" disabled></td>
-                                                                <td><input type="checkbox"  name="EquOper" id="{{p.id}}11" disabled></td>
-                                                                <td>{{rwe.volume}}</td>
-                                                                <td><input type="checkbox"  name="InterfaceSoilWater" id="{{p.id}}12" disabled></td>
-                                                                <td><div class="a">{{rwe.externalenvironment}}</div></td>
-                                                                <td><input type="checkbox"  name="HeatTraced" id="{{p.id}}13" disabled></td>
-                                                                <td><input type="checkbox"  name="Highly" id="{{p.id}}14" disabled></td>
-                                                                <script>
-                                                                    if({{ rwe.adminupsetmanagement }})
-                                                                        $("#{{p.id}}").attr('checked', 'checked');
-                                                                    if({{ rwe.containsdeadlegs }})
-                                                                        $("#{{p.id}}1").attr('checked', 'checked');
-                                                                    if({{ rwe.presencesulphideso2 }})
-                                                                        $("#{{p.id}}2").attr('checked', 'checked');
-                                                                    if({{ rwe.steamoutwaterflush }})
-                                                                        $("#{{p.id}}3").attr('checked', 'checked');
-                                                                    if({{ rwe.pwht }})
-                                                                        $("#{{p.id}}4").attr('checked', 'checked');
-                                                                    if({{ rwe.pressurisationcontrolled }})
-                                                                        $("#{{p.id}}5").attr('checked', 'checked');
-                                                                    if({{ rwe.presencesulphideso2shutdown }})
-                                                                        $("#{{p.id}}6").attr('checked', 'checked');
-                                                                    if({{ rwe.lineronlinemonitoring }})
-                                                                        $("#{{p.id}}7").attr('checked', 'checked');
-                                                                    if({{ rwe.materialexposedtoclext }})
-                                                                        $("#{{p.id}}8").attr('checked', 'checked');
-                                                                    if({{ rwe.cyclicoperation }})
-                                                                        $("#{{p.id}}9").attr('checked', 'checked');
-                                                                    if({{ rwe.downtimeprotectionused }})
-                                                                        $("#{{p.id}}10").attr('checked', 'checked');
-                                                                    if({{ rwe.yearlowestexptemp }})
-                                                                        $("#{{p.id}}11").attr('checked', 'checked');
-                                                                    if({{ rwe.interfacesoilwater }})
-                                                                        $("#{{p.id}}12").attr('checked', 'checked');
-                                                                    if({{ rwe.heattraced }})
-                                                                        $("#{{p.id}}13").attr('checked', 'checked');
-                                                                    if({{ rwe.highlydeadleginsp }})
-                                                                        $("#{{p.id}}14").attr('checked', 'checked');
-                                                                </script>
-                                                                 {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for rwComp in rwcomponent %}
-                                                                {% if p.id == rwComp.id_id %}
-                                                                    <td><div class="a">{{rwComp.currentthickness}}</div></td>
-                                                                    <td><div class="a">{{rwComp.nominalthickness}}</div></td>
-                                                                    <td><div class="a">{{rwComp.nominaldiameter}}</div></td>
-                                                                    <td><div class="a">{{rwComp.minreqthickness}}</div></td>
-                                                                    <td><div class="a">{{rwComp.currentcorrosionrate}}</div></td>
-                                                                    <td><input type="checkbox"  name="PresenceCracks" id="{{p.id}}15" disabled></td>
-                                                                    <td><div class="a">{{rwComp.previousfailures}}</div></td>
-                                                                    <td><input type="checkbox"  name="DFDI" id="{{p.id}}16" disabled></td>
-                                                                    <td><input type="checkbox"  name="DFDI" id="{{p.id}}17" disabled></td>
-                                                                    <td><input type="checkbox"  name="HFICI" id="{{p.id}}18" disabled></td>
-                                                                    <td><input type="checkbox"  name="TrampElements" id="{{p.id}}19" disabled></td>
-                                                                    <td><div class="a">{{rwComp.deltafatt}}</div></td>
-                                                                    <td><div class="a">{{rwComp.cyclicloadingwitin15_25m}}</div></td>
-                                                                    <td><div class="a">{{rwComp.brinnelhardness}}</div></td>
-                                                                    <td><div class="a">{{rwComp.numberpipefittings}}</div></td>
-                                                                    <td><div class="a">{{rwComp.branchjointtype}}</div></td>
-                                                                    <td><div class="a">{{rwComp.pipecondition}}</div></td>
-                                                                    <td><input type="checkbox"  name="VASD" id="{{p.id}}20" disabled></td>
-                                                                    <td><div class="a">{{rwComp.shakingamount}}</div></td>
-                                                                    <td><div class="a">{{rwComp.correctiveaction}}</div></td>
-                                                                    <td><div class="a">{{rwComp.branchdiameter}}</div></td>
-                                                                    <td><div class="a">{{rwComp.complexityprotrusion}}</div></td>
-                                                                <script>
-                                                                    if({{ rwComp.crackspresent }})
-                                                                        $("#{{p.id}}15").attr('checked', 'checked');
-                                                                    if({{ rwComp.damagefoundinspection }})
-                                                                        $("#{{p.id}}16").attr('checked', 'checked');
-                                                                    if({{ rwComp. }})//loi can fix
-                                                                        $("#{{p.id}}17").attr('checked', 'checked');
-                                                                    if({{ rwComp.highlyinjectioninsp }})//loi can fix
-                                                                        $("#{{p.id}}18").attr('checked', 'checked');
-                                                                    if({{ rwComp.trampelements }})
-                                                                        $("#{{p.id}}19").attr('checked', 'checked');
-                                                                    if({{ rwComp.shakingdetected }})
-                                                                        $("#{{p.id}}20").attr('checked', 'checked');
-                                                                </script>
-                                                                {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for rwStre in rwstream %}
-                                                                {% if p.id == rwStre.id_id %}
-                                                                    <td><div class="a">{{rwStre.maxoperatingtemperature}}</div></td>
-                                                                    <td><div class="a">{{rwStre.minoperatingtemperature}}</div></td>
-                                                                    <td><div class="a">{{rwStre.maxoperatingtemperature}}</div></td>
-                                                                    <td><div class="a">{{rwStre.minoperatingpressure}}</div></td>
-                                                                    <td><div class="a">{{rwStre.criticalexposuretemperature}}</div></td>
-                                                                    <td><div class="a">{{rwStre.aminesolution}}</div></td>
-                                                                    <td><div class="a">{{rwStre.naohconcentration}}</div></td>
-                                                                    <td><div class="a">{{rwStre.h2sinwater}}</div></td>
-                                                                    <td><input type="checkbox"  name="VASD" id="{{p.id}}21" disabled></td>
-                                                                    <td><div class="a">{{rwStre.flowrate}}</div></td>
-                                                                    <td><div class="a">{{rwStre.waterph}}</div></td>
-                                                                    <td><input type="checkbox"  name="ToxicConstituents" id="{{p.id}}22" disabled></td>
-                                                                    <td><div class="a">{{rwStre.releasefluidpercenttoxic}}</div></td>
-                                                                    <td><input type="checkbox"  name="PCH" id="{{p.id}}23" disabled></td>
-                                                                    <td><input type="checkbox"  name="PHA" id="{{p.id}}24" disabled></td>
-                                                                    <td><div class="a">{{rwStre.exposuretoamine}}</div></td>
-                                                                    <td><input type="checkbox"  name="PresenceCyanides" id="{{p.id}}25" disabled></td>
-                                                                    <td><div class="a">{{rwStre.h2spartialpressure}}</div></td>
-                                                                    <td><input type="checkbox"  name="PresenceCyanides" id="{{p.id}}26" disabled></td>
-                                                                    <td><input type="checkbox"  name="EAGTA" id="{{p.id}}27" disabled></td>
-                                                                    <td><input type="checkbox"  name="EnvironmentCH2S" id="{{p.id}}28" disabled></td>
-                                                                    <td><input type="checkbox"  name="ECCAC" id="{{p.id}}29" disabled></td>
-                                                                    <td><div class="a">{{rwStre.co3concentration}}</div></td>
-                                                                    <td><div class="a">{{rwStre.chloride}}</div></td>
-                                                                    <td><input type="checkbox"  name="APDO" id="{{p.id}}30" disabled></td>
-                                                                    <td><input type="checkbox"  name="APDSD" id="{{p.id}}31" disabled></td>
-                                                                <script>
-                                                                    if({{ rwStre.materialexposedtoclint }})
-                                                                        $("#{{p.id}}21").attr('checked', 'checked');
-                                                                    if({{ rwStre.toxicconstituent }})
-                                                                        $("#{{p.id}}22").attr('checked', 'checked');
-                                                                    if({{ rwStre.hydrogen }})
-                                                                        $("#{{p.id}}23").attr('checked', 'checked');
-                                                                    if({{ rwStre.hydrofluoric }})
-                                                                        $("#{{p.id}}24").attr('checked', 'checked');
-                                                                    if({{ rwStre.cyanide }})
-                                                                        $("#{{p.id}}25").attr('checked', 'checked');
-                                                                    if({{ rwStre.exposedtosulphur }})
-                                                                        $("#{{p.id}}26").attr('checked', 'checked');
-                                                                    if({{ rwStre.exposedtogasamine }})
-                                                                        $("#{{p.id}}27").attr('checked', 'checked');
-                                                                    if({{ rwStre.h2s }})
-                                                                        $("#{{p.id}}28").attr('checked', 'checked');
-                                                                    if({{ rwStre.caustic }})
-                                                                        $("#{{p.id}}29").attr('checked', 'checked');
-                                                                    if({{ rwStre.aqueousoperation }})
-                                                                        $("#{{p.id}}30").attr('checked', 'checked');
-                                                                    if({{ rwStre.aqueousshutdown }})
-                                                                        $("#{{p.id}}31").attr('checked', 'checked');
-                                                                </script>
-                                                                {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for rwmat in rwmaterial %}
-                                                                {% if p.id == rwmat.id_id %}
-                                                                    <td><div class="a">{{rwmat.designtemperature}}</div></td>
-                                                                {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for rwComp in rwcomponent %}
-                                                                {% if p.id == rwComp.id_id %}
-                                                                    <td><div class="a">{{rwComp.allowablestress}}</div></td>
-                                                                {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for rwmat in rwmaterial %}
-                                                                {% if p.id == rwmat.id_id %}
-                                                                    <td><div class="a">{{rwmat.designpressure}}</div></td>
-                                                                    <td><input type="checkbox"  name="sulfurcontent" id="{{p.id}}32" disabled></td>
-                                                                    <td><div class="a">{{rwmat.designpressure}}</div></td>
-                                                                    <td><div class="a">{{rwmat.sigmaphase}}</div></td>
-                                                                    <td><div class="a">{{rwmat.referencetemperature}}</div></td>
-                                                                    <td><input type="checkbox"  name="NickelAlloy" id="{{p.id}}33" disabled></td>
-                                                                    <td><div class="a">{{rwmat.costfactor}}</div></td>
-                                                                    <td><div class="a">{{rwmat.heattreatment}}</div></td>
-                                                                    <td><div class="a">{{rwmat.corrosionallowance}}</div></td>
-                                                                    <td><input type="checkbox"  name="Chromium" id="{{p.id}}34" disabled></td>
-                                                                    <td><input type="checkbox"  name="CoLAS" id="{{p.id}}35" disabled></td>
-                                                                    <td><input type="checkbox"  name="AusteniticSteel" id="{{p.id}}36" disabled></td>
-                                                                <script>
-                                                                    if({{ rwmat.temper }})
-                                                                        $("#{{p.id}}32").attr('checked', 'checked');
-                                                                    if({{ rwmat.nickelbased }})
-                                                                        $("#{{p.id}}33").attr('checked', 'checked');
-                                                                    if({{ rwmat.chromemoreequal12 }})
-                                                                        $("#{{p.id}}34").attr('checked', 'checked');
-                                                                    if({{ rwmat.carbonlowalloy }})
-                                                                        $("#{{p.id}}35").attr('checked', 'checked');
-                                                                    if({{ rwmat.austenitic }})
-                                                                        $("#{{p.id}}36").attr('checked', 'checked');
-                                                                </script>
-                                                                {% endif %}
-                                                                {% endfor %}
-
-                                                                {% for rwCoat in rwcoat %}
-                                                                {% if p.id == rwCoat.id_id %}
-                                                                    <td><input type="checkbox"  name="InternalCoating" id="{{p.id}}37" disabled></td>
-                                                                    <td><input type="checkbox"  name="ExternalCoating" id="{{p.id}}38" disabled></td>
-                                                                    <td><div class="a">{{rwCoat.externalcoatingdate}}</div></td>
-                                                                    <td><div class="a">{{rwCoat.externalcoatingquality}}</div></td>
-                                                                    <td><input type="checkbox"  name="ExternalCoating" id="{{p.id}}39" disabled></td>
-                                                                    <td><input type="checkbox"  name="InternalLining" id="{{p.id}}40" disabled></td>
-                                                                    <td><div class="a">{{rwCoat.internallinertype}}</div></td>
-                                                                    <td><div class="a">{{rwCoat.internallinercondition}}</div></td>
-                                                                    <td><input type="checkbox"  name="InternalCladding" id="{{p.id}}41" disabled></td>
-                                                                    <td><div class="a">{{rwCoat.claddingcorrosionrate}}</div></td>
-                                                                    <td><input type="checkbox"  name="ExternalInsulation" id="{{p.id}}42" disabled></td>
-                                                                    <td><div class="a">{{rwCoat.externalinsulationtype}}</div></td>
-                                                                    <td><div class="a">{{rwCoat.insulationcondition}}</div></td>
-                                                                    <td><input type="checkbox"  name="ExternalInsulation" id="{{p.id}}43" disabled></td>
-                                                                    <td><input type="checkbox"  name="ICC" id="{{p.id}}44" disabled></td>
-                                                                <script>
-                                                                    if({{ rwCoat.internalcoating }})
-                                                                        $("#{{p.id}}37").attr('checked', 'checked');
-                                                                    if({{ rwCoat.externalcoating }})
-                                                                        $("#{{p.id}}38").attr('checked', 'checked');
-                                                                    if({{ rwCoat.supportconfignotallowcoatingmaint }})
-                                                                        $("#{{p.id}}39").attr('checked', 'checked');
-                                                                    if({{ rwCoat.internallining }})
-                                                                        $("#{{p.id}}40").attr('checked', 'checked');
-                                                                    if({{ rwCoat.internalcladding }})
-                                                                        $("#{{p.id}}41").attr('checked', 'checked');
-                                                                    if({{ rwCoat.externalinsulation }})
-                                                                        $("#{{p.id}}42").attr('checked', 'checked');
-                                                                    if({{ rwCoat.externalinsulation }})
-                                                                        $("#{{p.id}}42").attr('checked', 'checked');
-                                                                    if({{ rwCoat.insulationcontainschloride }})
-                                                                        $("#{{p.id}}43").attr('checked', 'checked');
-                                                                </script>
-                                                                {% endif %}
-                                                                {% endfor %}
-
-                                                            </tr>
-                                                            {% endifnotequal %}
-                                                            {% endifnotequal %}
-                                                            {% endifnotequal %}
-                                                            {% endifnotequal %}
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endif %}
-                                            {% endfor %}
-                                         {% endif %}
+                                        </thead>
+                                        <tbody>
+                                        {% for a in data %}
+                                            <tr>
+                                                <td><div class="a"><input type="checkbox" name="{{ a.ID }}"></div></td>
+                                                <td><div class="a">{{a.EquipmentNumber}}</div></td>
+                                                <td><div class="a">{{a.ConponentName}}</div></td>
+                                                <td><div class="a">{{a.ConponentNumber}}</div></td>
+                                                <td><div class="a">{{a.Site}}</div></td>
+                                                <td><div class="a">{{a.Facility}}</div></td>
+                                                <td><div class="a">{{a.API1}}</div></td>
+                                                <td><div class="a">{{a.API2}}</div></td>
+                                                <td><div class="a">{{a.API3}}</div></td>
+                                                <td><div class="a">{{a.RLI}}</div></td>
+                                                <td><div class="a">{{a.AssessmentName}}</div></td>
+                                                <td><div class="a">{{a.AssessmentDate}}</div></td>
+                                                <td><div class="a">{{a.CommissionDate}}</div></td>
+                                                <td><div class="a">{{a.RiskAnalysisPeriod}}</div></td>
+                                                <td><div class="a">{{a.EquipmentType}}</div></td>
+                                                <td><div class="a">{{a.ComponentType}}</div></td>
+                                                <td><div class="a">{{a.InspectionDueDate}}</div></td>
+                                                <td><div class="a">{{a.DesignCode}}</div></td>
+                                                <td><input type="checkbox"  name="adminControlUpset" id="{{a.ID}}1" disabled></td>
+                                                <td><input type="checkbox"  name="ContainsDeadlegs" id="{{a.ID}}2" disabled></td>
+                                                <td ><input type="checkbox"  name="PresenceofSulphides" id="{{a.ID}}3" disabled></td >
+                                                <td><input type="checkbox"  name="SteamedOut" id="{{a.ID}}4" disabled></td>
+                                                <td><div class="a">{{a.ThermalHistory}}</div></td>
+                                                <td><div class="a">{{a.SystemManagementFactor}}</div></td>
+                                                <td><input type="checkbox"  name="PWHT" id="{{a.ID}}5" disabled></td>
+                                                <td><input type="checkbox"  name="PressurisationControlled" id="{{a.ID}}6" disabled></td>
+                                                <td><input type="checkbox"  name="PresenceofSulphidesShutdow" id="{{a.ID}}7" disabled></td>
+                                                <td ><div class="a">{{a.OnlineMonitoring}}</div></td>
+                                                <td><div class="a">{{a.minreqtemperaturepressurisation}}</div></td>
+                                                <td><input type="checkbox"  name="MFTF" id="{{a.ID}}9" disabled></td>
+                                                <td><input type="checkbox"  name="CylicOper" id="{{a.ID}}10" disabled></td>
+                                                <td><input type="checkbox"  name="LOM" id="{{a.ID}}8" disabled></td>
+                                                <td><input type="checkbox"  name="Downtime" id="{{a.ID}}11" disabled></td>
+                                                <td><input type="checkbox"  name="EquOper" id={{a.ID}}12" disabled></td>
+                                                <td>{{a.EquipmentVolume}}</td>
+                                                <td><input type="checkbox"  name="InterfaceSoilWater" id="{{a.ID}}13" disabled></td>
+                                                <td><div class="a">{{a.ExternalEnvironment}}</div></td>
+                                                <td><input type="checkbox"  name="HeatTraced" id="{{a.ID}}14" disabled></td>
+                                                <td><input type="checkbox"  name="Highly" id="{{a.ID}}15" disabled></td>
+                                                <script>
+                                                    if({{ a.adminControlUpset }})
+                                                        $("#{{a.ID}}1").attr('checked', 'checked');
+                                                    if({{ a.ContainsDeadlegs }})
+                                                        $("#{{a.ID}}2").attr('checked', 'checked');
+                                                    if({{ a.PresenceofSulphides }})
+                                                        $("#{{a.ID}}3").attr('checked', 'checked');
+                                                    if({{ a.SteamedOut }})
+                                                        $("#{{a.ID}}4").attr('checked', 'checked');
+                                                    if({{ a.PWHT }})
+                                                        $("#{a.ID}}5").attr('checked', 'checked');
+                                                    if({{ a.PressurisationControlled }})
+                                                        $("#{{a.ID}}6").attr('checked', 'checked');
+                                                    if({{ a.PresenceofSulphidesShutdow }})
+                                                        $("#{{a.ID}}7").attr('checked', 'checked');
+                                                    if({{ a.LOM }})
+                                                        $("#{{a.ID}}8").attr('checked', 'checked');
+                                                    if({{ a.MFTF }})
+                                                        $("#{{a.ID}}9").attr('checked', 'checked');
+                                                    if({{ a.CylicOper }})
+                                                        $("#{{a.ID}}10").attr('checked', 'checked');
+                                                    if({{ a.Downtime }})
+                                                        $("#{{a.ID}}11").attr('checked', 'checked');
+                                                    if({{ a.EquOper }})
+                                                        $("#{{a.ID}}12").attr('checked', 'checked');
+                                                    if({{ a.InterfaceSoilWater }})
+                                                        $("#{{a.ID}}13").attr('checked', 'checked');
+                                                    if({{ a.HeatTraced }})
+                                                        $("#{{a.ID}}14").attr('checked', 'checked');
+                                                    if({{ a.Highly }})
+                                                        $("#{{a.ID}}15").attr('checked', 'checked');
+                                                </script>
+                                                <td><div class="a">{{a.MinimumMeasuredThickness}}</div></td>
+                                                <td><div class="a">{{a.NominalThickness}}</div></td>
+                                                <td><div class="a">{{a.NominalDiameter}}</div></td>
+                                                <td><div class="a">{{a.MinRequiredThickness}}</div></td>
+                                                <td><div class="a">{{a.CurrentCorrosionRate}}</div></td>
+                                                <td><input type="checkbox"  name="PresenceCracks" id="{{a.ID}}16" disabled></td>
+                                                <td><div class="a">{{a.PreviousFailure}}</div></td>
+                                                <td><input type="checkbox"  name="DFDI" id="{{a.ID}}17" disabled></td>
+                                                <td><input type="checkbox"  name="HFICI" id="{{a.ID}}18" disabled></td>
+                                                <td><input type="checkbox"  name="PIMP" id="{{a.ID}}21" disabled></td>
+                                                <td><input type="checkbox"  name="TrampElements" id="{{a.ID}}19" disabled></td>
+                                                <td><div class="a">{{a.DeltaFATT}}</div></td>
+                                                <td><div class="a">{{a.CylicLoadingConnectedwithin1525m}}</div></td>
+                                                <td><div class="a">{{a.MaximumBrinnellHardnessofWeld}}</div></td>
+                                                <td><div class="a">{{a.NumberofFittingsonPipe}}</div></td>
+                                                <td><div class="a">{{a.JointTypeofBranch}}</div></td>
+                                                <td><div class="a">{{a.PipeCondition}}</div></td>
+                                                <td><input type="checkbox"  name="VASD" id="{{a.ID}}20" disabled></td>
+                                                <td><div class="a">{{a.shakingamount}}</div></td>
+                                                <td><div class="a">{{a.correctiveaction}}</div></td>
+                                                <td><div class="a">{{a.branchdiameter}}</div></td>
+                                                <td><div class="a">{{a.complexityprotrusion}}</div></td>
+                                                <script>
+                                                    if({{ rwComp.PresenceCracks }})
+                                                        $("#{{a.ID}}16").attr('checked', 'checked');
+                                                    if({{ rwComp.DFDI }})
+                                                        $("#{{a.ID}}17").attr('checked', 'checked');
+                                                    if({{ rwComp.HFICI }})//loi can fix
+                                                        $("#{{a.ID}}18").attr('checked', 'checked');
+                                                    if({{ rwComp.TrampElements }})
+                                                        $("#{{a.ID}}19").attr('checked', 'checked');
+                                                    if({{ rwComp.VASD }})
+                                                        $("#{{a.ID}}20").attr('checked', 'checked');
+                                                    if({{ rwComp.PIMP }})
+                                                        $("#{{a.ID}}21").attr('checked', 'checked');
+                                                </script>
+                                                <td><div class="a">{{a.maxoperatingtemperature}}</div></td>
+                                                <td><div class="a">{{a.minoperatingtemperature}}</div></td>
+                                                <td><div class="a">{{a.maxoperatingtemperature}}</div></td>
+                                                <td><div class="a">{{a.minoperatingpressure}}</div></td>
+                                                <td><div class="a">{{a.criticalexposuretemperature}}</div></td>
+                                                <td><div class="a">{{a.aminesolution}}</div></td>
+                                                <td><div class="a">{{a.naohconcentration}}</div></td>
+                                                <td><div class="a">{{a.h2sinwater}}</div></td>
+                                                <td><input type="checkbox"  name="MEFMSCC" id="{{a.ID}}22" disabled></td>
+                                                <td><div class="a">{{a.flowrate}}</div></td>
+                                                <td><div class="a">{{a.waterph}}</div></td>
+                                                <td><input type="checkbox"  name="ToxicConstituents" id="{{a.ID}}23" disabled></td>
+                                                <td><div class="a">{{a.releasefluidpercenttoxic}}</div></td>
+                                                <td><input type="checkbox"  name="PCH" id="{{a.ID}}24" disabled></td>
+                                                <td><input type="checkbox"  name="PHA" id="{{a.ID}}25" disabled></td>
+                                                <td><div class="a">{{a.exposuretoamine}}</div></td>
+                                                <td><input type="checkbox"  name="PresenceCyanides" id="{{a.ID}}26" disabled></td>
+                                                <td><div class="a">{{a.h2spartialpressure}}</div></td>
+                                                <td><input type="checkbox"  name="ESBC" id="{{a.ID}}27" disabled></td>
+                                                <td><input type="checkbox"  name="EAGTA" id="{{a.ID}}28" disabled></td>
+                                                <td><input type="checkbox"  name="EnvironmentCH2S" id="{{a.ID}}29" disabled></td>
+                                                <td><input type="checkbox"  name="ECCAC" id="{{a.ID}}30" disabled></td>
+                                                <td><div class="a">{{a.co3concentration}}</div></td>
+                                                <td><div class="a">{{a.chloride}}</div></td>
+                                                <td><input type="checkbox"  name="APDO" id="{{a.ID}}31" disabled></td>
+                                                <td><input type="checkbox"  name="APDSD" id="{{a.ID}}32" disabled></td>
+                                                <script>
+                                                    if({{ a.MEFMSCC }})
+                                                        $("#{{a.ID}}22").attr('checked', 'checked');
+                                                    if({{ a.ToxicConstituents }})
+                                                        $("#{{a.ID}}23").attr('checked', 'checked');
+                                                    if({{ a.PCH }})
+                                                        $("#{{a.ID}}24").attr('checked', 'checked');
+                                                    if({{ a.PHA }})
+                                                        $("#{{a.ID}}25").attr('checked', 'checked');
+                                                    if({{ a.PresenceCyanides }})
+                                                        $("#{{a.ID}}26").attr('checked', 'checked');
+                                                    if({{ a.ESBC }})
+                                                        $("#{{a.ID}}27").attr('checked', 'checked');
+                                                    if({{ a.EAGTA }})
+                                                        $("#{{a.ID}}28").attr('checked', 'checked');
+                                                    if({{ a.EnvironmentCH2S }})
+                                                        $("#{{a.ID}}29").attr('checked', 'checked');
+                                                    if({{ a.ECCAC }})
+                                                        $("#{{a.ID}}30").attr('checked', 'checked');
+                                                    if({{ a.APDO }})
+                                                        $("#{{a.ID}}31").attr('checked', 'checked');
+                                                    if({{ a.APDSD }})
+                                                        $("#{{a.ID}}32").attr('checked', 'checked');
+                                                </script>
+                                                <td><div class="a">{{a.designtemperature}}</div></td>
+                                                <td><div class="a">{{a.allowablestress}}</div></td>
+                                                <td><div class="a">{{a.designpressure}}</div></td>
+                                                <td><input type="checkbox"  name="temper" id="{{a.ID}}33" disabled></td>
+                                                <td><div class="a">{{a.sulfurcontent}}</div></td>
+                                                <td><div class="a">{{a.sigmaphase}}</div></td>
+                                                <td><div class="a">{{a.referencetemperature}}</div></td>
+                                                <td><input type="checkbox"  name="NickelAlloy" id="{{a.ID}}34" disabled></td>
+                                                <td><div class="a">{{a.costfactor}}</div></td>
+                                                <td><div class="a">{{a.heattreatment}}</div></td>
+                                                <td><div class="a">{{a.corrosionallowance}}</div></td>
+                                                <td><input type="checkbox"  name="Chromium" id="{{a.ID}}35" disabled></td>
+                                                <td><input type="checkbox"  name="CoLAS" id="{{a.ID}}36" disabled></td>
+                                                <td><input type="checkbox"  name="AusteniticSteel" id="{{a.ID}}37" disabled></td>
+                                                <script>
+                                                    if({{ a.temper }})
+                                                        $("#{{a.ID}}33").attr('checked', 'checked');
+                                                    if({{ a.NickelAlloy }})
+                                                        $("#{{a.ID}}34").attr('checked', 'checked');
+                                                    if({{ a.chromemoreequal12 }})
+                                                        $("#{{a.ID}}35").attr('checked', 'checked');
+                                                    if({{ a.CoLAS }})
+                                                        $("#{{a.ID}}36").attr('checked', 'checked');
+                                                    if({{ a.AusteniticSteel }})
+                                                        $("#{{a.ID}}37").attr('checked', 'checked');
+                                                </script>
+                                                <td><input type="checkbox"  name="InternalCoating" id="{{a.ID}}38" disabled></td>
+                                                <td><input type="checkbox"  name="ExternalCoating" id="{{a.ID}}39" disabled></td>
+                                                <td><div class="a">{{a.externalcoatingdate}}</div></td>
+                                                <td><div class="a">{{a.externalcoatingquality}}</div></td>
+                                                <td><input type="checkbox"  name="ExternalCoating" id="{{a.ID}}40" disabled></td>
+                                                <td><input type="checkbox"  name="InternalLining" id="{{a.ID}}41" disabled></td>
+                                                <td><div class="a">{{a.internallinertype}}</div></td>
+                                                <td><div class="a">{{a.internallinercondition}}</div></td>
+                                                <td><input type="checkbox"  name="internalcladding" id="{{a.ID}}42" disabled></td>
+                                                <td><div class="a">{{a.claddingcorrosionrate}}</div></td>
+                                                <td><input type="checkbox"  name="externalinsulation" id="{{a.ID}}43" disabled></td>
+                                                <td><div class="a">{{a.externalinsulationtype}}</div></td>
+                                                <td><div class="a">{{a.insulationcondition}}</div></td>
+                                                <td><input type="checkbox"  name="externalinsulationtype" id="{{a.ID}}44" disabled></td>
+                                                <td><input type="checkbox"  name="ICC" id="{{a.ID}}45" disabled></td>
+                                                <script>
+                                                    if({{ a.InternalCoating }})
+                                                        $("#{{a.ID}}38").attr('checked', 'checked');
+                                                    if({{ a.ExternalCoating }})
+                                                        $("#{{a.ID}}39").attr('checked', 'checked');
+                                                    if({{ a.supportMaterial }})
+                                                        $("#{{a.ID}}40").attr('checked', 'checked');
+                                                    if({{ a.InternalLining }})
+                                                        $("#{{a.ID}}41").attr('checked', 'checked');
+                                                    if({{ a.internalcladding }})
+                                                        $("#{{a.ID}}42").attr('checked', 'checked');
+                                                    if({{ a.externalinsulation }})
+                                                        $("#{{a.ID}}43").attr('checked', 'checked');
+                                                    if({{ a.externalinsulationtype }})
+                                                        $("#{{a.ID}}44").attr('checked', 'checked');
+                                                    if({{ a.insulationcontainschloride }})
+                                                        $("#{{a.ID}}45").attr('checked', 'checked');
+                                                </script>
+                                            </tr>
                                         {% endfor %}
-                                        {% endfor %}
-
-                                        {% else %}
-                                       <tr>
-                                          <td><input type="checkbox" name=""></td>
-                                          <td>Anna</td>
-                                          <td>Pitt</td>
-                                          <td>35</td>
-                                          <td></td>
-                                          <td>USA</td>
-                                          <td >Female</td>
-                                          <td >Yes</td>
-                                          <td >Yes</td>
-                                          <td >Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>1</td>
-                                          <td>Anna</td>
-                                          <td>Pitt</td>
-                                          <td>35</td>
-                                          <td></td>
-                                          <td>USA</td>
-                                          <td>Female</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>1</td>
-                                          <td>Anna</td>
-                                          <td>Pitt</td>
-                                          <td>35</td>
-                                          <td>/td>
-                                          <td>USA</td>
-                                          <td>Female</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>1</td>
-                                          <td>Anna</td>
-                                          <td>Pitt</td>
-                                          <td>35</td>
-                                          <td></td>
-                                          <td>USA</td>
-                                          <td>Female</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>1</td>
-                                          <td>Anna</td>
-                                          <td>Pitt</td>
-                                          <td>35</td>
-                                          <td></td>
-                                          <td>USA</td>
-                                          <td>Female</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>1</td>
-                                          <td>Anna</td>
-                                          <td>Pitt</td>
-                                          <td>35</td>
-                                          <td></td>
-                                          <td>USA</td>
-                                          <td>Female</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td>Yes</td>
-                                          <td></td>
-                                        </tr>
-                                      {% endif %}
-                                      </tbody>
+                                        </tbody>
                                         <tfoot>
                                         <tr>
-                                          <th width="100px" style="text-align: center"><input type="checkbox" id=""></th>
-                                          <th >Equipment Number</th>
+                                            <th width="100px" style="text-align: center"><input type="checkbox" id=""></th>
+                                            <th >Equipment Number</th>
                                             <th>Conponent</th>
-                                          <th>Conponent Number</th>
-                                          <th>Site</th>
-                                          <th>Facility</th>
-                                          <th>AP1</th>
-                                          <th>AP2</th>
-                                          <th>AP3</th>
-                                          <th>RLI9(months)</th>
-                                          <th>Assessment Name</th>
-                                          <th>Assessment Date</th>
-                                          <th>Commission Date</th>
-                                          <th>Risk Analysis Period</th>
-                                          <th>Equipment Type</th>
-                                          <th>Component Type</th>
-                                          <th>Inspection Due Date</th>
-                                          <th>Design Code</th>
+                                            <th>Conponent Number</th>
+                                            <th>Site</th>
+                                            <th>Facility</th>
+                                            <th>AP1</th>
+                                            <th>AP2</th>
+                                            <th>AP3</th>
+                                            <th>RLI9(months)</th>
+                                            <th>Assessment Name</th>
+                                            <th>Assessment Date</th>
+                                            <th>Commission Date</th>
+                                            <th>Risk Analysis Period</th>
+                                            <th>Equipment Type</th>
+                                            <th>Component Type</th>
+                                            <th>Inspection Due Date</th>
+                                            <th>Design Code</th>
                                             <!------- Equipment Properties-------->
-                                          <th>Administrative Control for Upset Management</th>
-                                          <th>Contains Deadlegs</th>
-                                          <th>Presence of Sulphides,Moisture and Oxygen During Operation</th>
-                                          <th>Steamed Out Prior to Water Flushing</th>
-                                          <th>Thermal History</th>
-                                          <th>System Management Factor</th>
-                                          <th>PWHT</th>
-                                          <th>Pressurisation Controlled by Admin</th>
-                                          <th>Presence of Sulphides, Moisture and Oxygen During Shutdown</th>
-                                          <th>Online Monitoring</th>
-                                          <th>Min.Required Temperature Before Pressuresation Allowed by Admin(&deg;C)</th>
-                                          <th>Material is Exposed to Fluids,Mists or Solids Containing Chlorine Externally</th>
-                                          <th>Cylic Operation</th>
-                                          <th>Linner Online Monitoring</th>
-                                          <th>Downtime Protection Used</th>
-                                          <th>Equipment is Operating for Many Years at Lowest Expected Temperature</th>
-                                          <th>Equipment Volume (m<sup>3</sup>)</th>
-                                          <th>Interface at Soil or Water</th>
-                                          <th>External Environment</th>
-                                          <th>Heat Traced</th>
-                                          <th>Highly Effective Inspection for Deadlegs</th>
+                                            <th>Administrative Control for Upset Management</th>
+                                            <th>Contains Deadlegs</th>
+                                            <th>Presence of Sulphides,Moisture and Oxygen During Operation</th>
+                                            <th>Steamed Out Prior to Water Flushing</th>
+                                            <th>Thermal History</th>
+                                            <th>System Management Factor</th>
+                                            <th>PWHT</th>
+                                            <th>Pressurisation Controlled by Admin</th>
+                                            <th>Presence of Sulphides, Moisture and Oxygen During Shutdown</th>
+                                            <th>Online Monitoring</th>
+                                            <th>Min.Required Temperature Before Pressuresation Allowed by Admin(&deg;C)</th>
+                                            <th>Material is Exposed to Fluids,Mists or Solids Containing Chlorine Externally</th>
+                                            <th>Cylic Operation</th>
+                                            <th>Linner Online Monitoring</th>
+                                            <th>Downtime Protection Used</th>
+                                            <th>Equipment is Operating for Many Years at Lowest Expected Temperature</th>
+                                            <th>Equipment Volume (m<sup>3</sup>)</th>
+                                            <th>Interface at Soil or Water</th>
+                                            <th>External Environment</th>
+                                            <th>Heat Traced</th>
+                                            <th>Highly Effective Inspection for Deadlegs</th>
                                             <!------- Component Properties-------->
                                             <th>Minimum Measured Thickness(mm)</th>
                                             <th>Nominal Thickness(mm)</th>
@@ -1044,7 +807,7 @@ div.a:hover {
                                             <th></th>
                                             <th>lAB411</th>
                                         </tr>
-                                      </tfoot>
+                                        </tfoot>
                                     </table>
                                   </div>
                                 </div>
@@ -1082,45 +845,113 @@ div.a:hover {
                     <div class="row">
                         <div class="containerflex" title="choose inspection technique" data-toggle="tooltip" data-placement="top">
                             <!-------------- Inspection Methods ---------------->
-                            <div class="flexitem">
-                                <caption><strong style="color:#03090C;">Inspection Methods</strong></caption>
-                                <div style="font-size: 15px; color: #444444;background-color:white; overflow:scroll; width: 530px; height: 200px;border: 1px solid black;">
-                                    {% for a in imitem %}
-                                        <label for="{{a.imitemid}}"><input type="radio" name="checkRadio" value="{{a.imdescription}}" id="{{a.imitemid}}" onclick="ShowHideDiv()"> {{a.imdescription}}</label>
-                                        <br>
-                                    {% endfor %}
-                                    <script type="text/javascript">
-                                        function ShowHideDiv() {
-                                            var bien={{a.imitemid}}
-                                            var b ={{b.imtypeid}}
-                                            var chkYes = document.getElementById("bien");
-                                            var dvPassport = document.getElementById("b");
-                                            dvPassport.style.display = chkYes.checked ? "block" : "none";
-                                        }
-                                    </script>
-                                    <br>
-                                    {% for b in imtype %}
-                                    <div id="{{b.imtypeid}}" style="display: none">
-                                        <label><input type="radio" name="selectRadio" value="{{b.imtypename}}"> {{b.imtypename}}</label>
-                                    </div>
-                                    {% endfor %}
+                            <div class="row">
+                                <div class="col-md-8">Inspection Methods<span style="color: red">*</span></div>
+                                <div class="col-md-8">
+                                    <select class="form-control" name="inspectionMethod" id="inspectionMethod" onchange="visiblehidden(this)" required>
+                                        <option disabled selected>Please select inspection method..</option>
+                                        {% for a in imitem %}
+                                            {% if a.imdescription == a.inspectionMethod %}
+                                            <option selected>{{ a.componenttypename }}</option>
+                                            {% else %}
+                                            <option>{{ a.imdescription }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <!-------------- Inspection Technique---------------->
-                            <div class="flexitem">
-                                <caption><strong style="color:#03090C;">Inspection Technique</strong></caption>
-                                <div style="font-size: 15px; color: #444444;background-color:white; overflow:scroll; width: 530px; height: 200px;border: 1px solid black;">
-
+                            <div class="row">
+                                <div class="col-md-8">API Component Type:<span style="color: red">*</span></div>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="inspectionTechnique" name="inspectionTechnique" required>
+                                        <option disabled selected>Please select api component type..</option>
+                                        {% for a in imtype %}
+                                            {% if a.imtypename == data.inspectionTechnique %}
+                                            <option selected>{{ a.imtypename }}</option>
+                                            {% else %}
+                                            <option>{{ a.imtypename }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
+                            <!------------------Inspection Type Change------------------------->
+                            <script>
+                            $(document).ready(function () {
+                                $("#inspectionMethod").change(function () {
+                                    $("#inspectionTechnique").empty();
+                                    var inspectionmethod = $("#inspectionMethod").val();
+                                    if( inspectionmethod == "Visual"){
+                                        $("#inspectionTechnique").html("<option value ='Endoscopy'>Endoscopy</option>"+
+                                        "<option value='Hydrotesting'>Hydrotesting</option><option value='Naked Eye'>Naked Eye</option>"+
+                                        "<option value='Video'>Video</option>"+
+                                        "<option value='Holiday Test'>Holiday Test</option>");
+                                    }
+                                    else if(inspectionmethod == "Magnetic"){
+                                        $("#inspectionTechnique").html("<option value ='Magnetic Fluorescent Inspection'>Magnetic Fluorescent Inspection</option>"+
+                                        "<option value='Magnetic Flux Leakage'>Magnetic Flux Leakage</option>"+
+                                        "<option value='Magnetic Particle Inspection'>Magnetic Particle Inspection</option>");
+                                    }
+                                    else if(inspectionmethod == "Penetrant"){
+                                        $("#inspectionTechnique").html("<option value ='Liquid Penetrant Inspection'>Liquid Penetrant Inspection</option>"+
+                                        "<option value='Penetrant Leak Detection'>Penetrant Leak Detection</option>");
+                                    }
+                                    else if(inspectionmethod == "Radiography") {
+                                        $("#inspectionTechnique").html("<option value ='Compton Scatter'>Compton Scatter</option>"+
+                                        "<option value='Gamma Radiography'>Gamma Radiography</option>"+
+                                        "<option value='Real-time Radiography'>Real-time Radiography</option>"+
+                                        "<option value='X-Radiography'>X-Radiography</option>");
+                                    }
+                                    else if(inspectionmethod == "Ultrasonic") {
+                                        $("#inspectionTechnique").html("<option value ='Angled Compression Wave'>Angled Compression Wave</option>"+
+                                        "<option value='Angled Shear Wave'>Angled Shear Wave</option>"+
+                                        "<option value='A-scan Thickness Survey'>A-scan Thickness Survey</option>"+
+                                        "<option value='B-scan'>B-scan</option>"+
+                                        "<option value='Chime'>Chime</option>"+
+                                        "<option value='C-scan'>C-scan</option>"+
+                                        "<option value='Digital Ultrasonic Thickness Gauge'>Digital Ultrasonic Thickness Gauge</option>"+
+                                        "<option value='Lorus'>Lorus</option>"+
+                                        "<option value='Surface Waves'>Surface Waves</option>"+
+                                        "<option value='Teletest'>Teletest</option>"+
+                                        "<option value='TOFD'>TOFD</option>"+
+                                        "<option value='Advanced Ultrasonic Backscatter Technique'>Advanced Ultrasonic Backscatter Technique</option>"+
+                                        "<option value='Internal Rotational Inspection System'>Internal Rotational Inspection System</option>");
+                                    }
+                                    else if(inspectionmethod == "Eddy Current") {
+                                        $("#inspectionTechnique").html("<option value ='ACFM'>ACFM</option>"+
+                                        "<option value='Low frequency'>Low frequency</option>"+
+                                        "<option value='Pulsed'>Pulsed</option>"+
+                                        "<option value='Remote field'>Remote field</option>"+
+                                         "<option value='Standard (flat coil)'>Standard (flat coil)</option>");
+                                    }
+                                    else if( inspectionmethod == "Thermography"){
+                                        $("#inspectionTechnique").html("<option value ='Passive Thermography'>Passive Thermography</option>"+
+                                        "<option value='Transient Thermography'>Transient Thermography</option>");
+                                    }
+                                    else if( inspectionmethod == "Acoustic Emission"){
+                                        $("#inspectionTechnique").html("<option value ='Crack Detection'>Crack Detection</option>"+
+                                        "<option value='Leak Detection'>Leak Detection</option>");
+                                    }
+                                    else if( inspectionmethod == "Metallurgical"){
+                                        $("#inspectionTechnique").html("<option value ='Hardness Surveys'>Hardness Surveys</option>"+
+                                        "<option value='Microstructure Replication'>Microstructure Replication</option>");
+                                    }
+                                    else {
+                                        $("#inspectionTechnique").html("<option value ='On-line Monitoring'>On-line Monitoring</option>");
+                                    }
+                                    })
+                                })
+                            </script>
+                            <!----------------------------------------------------------------->
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="col-md-12" style="text-align: left"><button type="submit" class="btn btn-primary">Add</button>
-                </div>
             </div>
+            <div>
+                <div class="col-md-12" style="text-align: left"><button type="submit" class="btn btn-primary">Add</button></div>
             </div>
+        </div>
         </div>
 
 <!-------------- Damage Mechanism ---------------->
@@ -1131,9 +962,9 @@ div.a:hover {
 
           <!-------------- Inspection Findings/Description ---------------->
         <div id="menu3" class="tab-pane fade">
-          <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+            </div>
         </div>
-      </div>
 <!-------------- End Body ---------------->
         <div class="row">
             <div class="col-md-12" style="text-align: center">

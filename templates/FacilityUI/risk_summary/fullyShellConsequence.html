@@ -18,6 +18,33 @@
             <fieldset class="scheduler-border">
                 <legend class="scheduler-border"><b>Fully-Quantitative Financial Cosequense of Failure</b></legend>
                 <!---------- BLOCK DATA--------------->
+                <!-------- block 0------------->
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border"><b>Input</b></legend>
+                    <div class="row">
+                        <div class="col-md-8">Process unit replacement costs for component:<span style="color: red">*</span></div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="EquipCost" value="{{data.equip_cost}}" placeholder="Input here!" required/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">Equipment Outage Multiplier:<span style="color: red">*</span></div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="EquipOutageMultiplier" value="{{data.equip_outage_multiplier}}" placeholder="Input here!" required/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">Cost of Loss Production:<span style="color: red">*</span></div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="ProdCost" value="{{data.prod_cost}}" placeholder="Input here!" required/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">Population Density of Personel:<span style="color: red">*</span></div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="PopDens" value="{{data.pop_dens}}" placeholder="Input here!" required/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">Cost associated with serious injury of fatality of personel:<span style="color: red">*</span></div>
+                        <div class="col-md-4"><input type="text" class="form-control" name="InjCost" value="{{data.inj_cost}}" placeholder="Input here!" required/></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"><button name="_calculate" class="btn btn-primary" type="submit"><i class="fa fa-pencil">Calculate</i></button></div>
+                    </div>
+                </fieldset>
                 <!-------- block 1------------->
                 <fieldset class="scheduler-border">
                     <legend class="scheduler-border"><b>Fully-Quantitative Financial Cosequense of Failure and Category</b></legend>
