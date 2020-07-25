@@ -3968,7 +3968,7 @@ def FullyConsequence(request, proposalID): #Finance cof
                                                                    'isShell': isShell})
         elif isShell:
             shellConsequences = models.RwCaTank.objects.get(id=proposalID)
-            rwfullcoftank = models.RWFullCofTank.objects.get(id=proposalID)
+            rwfullcoftank = models.RWFullCofTank.objects.filter(id=proposalID)
             data['hydraulic_water'] = roundData.roundFC(shellConsequences.hydraulic_water)  # tuansua
             data['hydraulic_fluid'] = roundData.roundFC(shellConsequences.hydraulic_fluid)  # tuansua
             data['seepage_velocity'] = roundData.roundFC(shellConsequences.seepage_velocity)  # tuansua
@@ -4011,11 +4011,19 @@ def FullyConsequence(request, proposalID): #Finance cof
             data['barrel_water_leak'] = roundData.roundFC(shellConsequences.barrel_water_leak)
             data['fc_environ_leak'] = roundData.roundFC(shellConsequences.fc_environ_leak)
             #bổ sung hiển thị 5 giá trị đầu vào và 3 kết quả đầu ra
-            data['equip_cost'] = rwfullcoftank.equipcost
-            data['equip_outage_multiplier'] = rwfullcoftank.equipoutagemultiplier
-            data['prod_cost'] = rwfullcoftank.prodcost
-            data['pop_dens'] = rwfullcoftank.popdens
-            data['inj_cost'] = rwfullcoftank.injcost
+            if rwfullcoftank.count() ==0:
+                data['equip_cost'] = 0
+                data['equip_outage_multiplier'] = 0
+                data['prod_cost'] = 0
+                data['pop_dens'] = 0
+                data['inj_cost'] = 0
+            else:
+                rwfullcoftank = models.RWFullCofTank.objects.get(id=proposalID)
+                data['equip_cost'] = rwfullcoftank.equipcost
+                data['equip_outage_multiplier'] = rwfullcoftank.equipoutagemultiplier
+                data['prod_cost'] = rwfullcoftank.prodcost
+                data['pop_dens'] = rwfullcoftank.popdens
+                data['inj_cost'] = rwfullcoftank.injcost
             #bo sung 5 tham số đầu vào
             if '_calculate' in request.POST:
                 if request.method == 'POST':

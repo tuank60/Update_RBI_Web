@@ -884,9 +884,9 @@ def calculateTank(proposalID):
         countRefullfc = models.RwFullFcof.objects.filter(id=proposalID)
         chart = models.RwDataChart.objects.filter(id=proposalID)
         FullFCof = models.RwFullFcof.objects.filter(id=proposalID)
-        rwFullCofTank =models.RWFullCofTank.objects.get(id=proposalID)
-        print(proposalID)
-        print(rwFullCofTank.prodcost)
+        rwFullCofTank =models.RWFullCofTank.objects.filter(id=proposalID)
+        # print(proposalID)
+        # print(rwFullCofTank.prodcost)
 
         comp = models.ComponentMaster.objects.get(componentid=rwassessment.componentid_id)
         eq = models.EquipmentMaster.objects.get(equipmentid=rwassessment.equipmentid_id)
@@ -1102,24 +1102,45 @@ def calculateTank(proposalID):
                                    MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
 
         if isshell:
-            cacal = CA_CAL.CA_SHELL(FLUID=rwinputca.api_fluid, FLUID_HEIGHT=rwstream.fluidheight,
-                                    SHELL_COURSE_HEIGHT=rwinputca.shell_course_height,
-                                    TANK_DIAMETER=rwcomponent.nominaldiameter,
-                                    EnvironSensitivity=rwequipment.environmentsensitivity,
-                                    P_lvdike=rwstream.fluidleavedikepercent,
-                                    P_onsite=rwstream.fluidleavedikeremainonsitepercent,
-                                    P_offsite=rwstream.fluidgooffsitepercent,
-                                    MATERIAL_COST=rwmaterial.costfactor,
-                                    API_COMPONENT_TYPE_NAME=models.ApiComponentType.objects.get(
-                                        apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
-                                    PRODUCTION_COST=rwinputca.productioncost,
-                                    Soil_type=rwequipment.typeofsoil,
-                                    TANK_FLUID=rwstream.tankfluidname,
-                                    CHT=rwcomponent.shellheight,PROD_COST=rwFullCofTank.prodcost,
-                                    EQUIP_OUTAGE_MULTIPLIER=rwFullCofTank.equipoutagemultiplier,
-                                    EQUIP_COST=rwFullCofTank.equipcost,POP_DENS=rwFullCofTank.popdens,
-                                    INJ_COST=rwFullCofTank.injcost)
-                                    # EQUIPMENT_COST=FullFCof.equipcost)
+            if rwFullCofTank.count()==0:
+                cacal = CA_CAL.CA_SHELL(FLUID=rwinputca.api_fluid, FLUID_HEIGHT=rwstream.fluidheight,
+                                        SHELL_COURSE_HEIGHT=rwinputca.shell_course_height,
+                                        TANK_DIAMETER=rwcomponent.nominaldiameter,
+                                        EnvironSensitivity=rwequipment.environmentsensitivity,
+                                        P_lvdike=rwstream.fluidleavedikepercent,
+                                        P_onsite=rwstream.fluidleavedikeremainonsitepercent,
+                                        P_offsite=rwstream.fluidgooffsitepercent,
+                                        MATERIAL_COST=rwmaterial.costfactor,
+                                        API_COMPONENT_TYPE_NAME=models.ApiComponentType.objects.get(
+                                            apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
+                                        PRODUCTION_COST=rwinputca.productioncost,
+                                        Soil_type=rwequipment.typeofsoil,
+                                        TANK_FLUID=rwstream.tankfluidname,
+                                        CHT=rwcomponent.shellheight,PROD_COST=0,
+                                        EQUIP_OUTAGE_MULTIPLIER=0,
+                                        EQUIP_COST=0,POP_DENS=0,
+                                        INJ_COST=0)
+                                        # EQUIPMENT_COST=FullFCof.equipcost)
+            else:
+                rwFullCofTank = models.RWFullCofTank.objects.get(id=proposalID)
+                cacal = CA_CAL.CA_SHELL(FLUID=rwinputca.api_fluid, FLUID_HEIGHT=rwstream.fluidheight,
+                                        SHELL_COURSE_HEIGHT=rwinputca.shell_course_height,
+                                        TANK_DIAMETER=rwcomponent.nominaldiameter,
+                                        EnvironSensitivity=rwequipment.environmentsensitivity,
+                                        P_lvdike=rwstream.fluidleavedikepercent,
+                                        P_onsite=rwstream.fluidleavedikeremainonsitepercent,
+                                        P_offsite=rwstream.fluidgooffsitepercent,
+                                        MATERIAL_COST=rwmaterial.costfactor,
+                                        API_COMPONENT_TYPE_NAME=models.ApiComponentType.objects.get(
+                                            apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename,
+                                        PRODUCTION_COST=rwinputca.productioncost,
+                                        Soil_type=rwequipment.typeofsoil,
+                                        TANK_FLUID=rwstream.tankfluidname,
+                                        CHT=rwcomponent.shellheight, PROD_COST=rwFullCofTank.prodcost,
+                                        EQUIP_OUTAGE_MULTIPLIER=rwFullCofTank.equipoutagemultiplier,
+                                        EQUIP_COST=rwFullCofTank.equipcost, POP_DENS=rwFullCofTank.popdens,
+                                        INJ_COST=rwFullCofTank.injcost)
+                # EQUIPMENT_COST=FullFCof.equipcost)
             if countRwcatank.count() != 0:
                 rwcatank = models.RwCaTank.objects.get(id=proposalID)
                 rwcatank.hydraulic_water = cacal.k_h_water()

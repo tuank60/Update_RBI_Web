@@ -1404,7 +1404,8 @@ class CA_SHELL:
         try:
             C32 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(32)
             if(self.MATERIAL_COST==1):
-                return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.LHT_above())
+                return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.FLUID_HEIGHT)
+                # return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.LHT_above())
             else:
                 return C32 * 0.61 * self.a_n_shell(i) * math.sqrt(2 * 9.8196 * self.FLUID_HEIGHT)
         except Exception as e:
