@@ -279,7 +279,7 @@ def caculateCorrisionRate(proposalID):
             corri.finalestimatedcorrosionrate = co_cal.FinalEstimated_CR()
             corri.save()
     except Exception as e:
-        print("Exception at fast calculate")
+
         print(e)
 
 def calculateNormal(proposalID):

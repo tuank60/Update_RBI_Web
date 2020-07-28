@@ -13,48 +13,61 @@ class CA_Toxic: #LEVEL 1
         self.API_COMPONENT_TYPE_NAME = API_COMPONENT_TYPE_NAME
 
     def ld_n_max(self,i):
-        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-        if i==1:
-            return rwcofholesize.ld_max_n_small
-        elif i==2:
-            return rwcofholesize.ld_max_n_medium
-        elif i==3:
-            return rwcofholesize.ld_max_n_large
-        else:
-            return rwcofholesize.ld_max_n_rupture
+        try:
+            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+            if i==1:
+                return rwcofholesize.ld_max_n_small
+            elif i==2:
+                return rwcofholesize.ld_max_n_medium
+            elif i==3:
+                return rwcofholesize.ld_max_n_large
+            else:
+                return rwcofholesize.ld_max_n_rupture
+        except:
+            return 0
 
     def mass_n(self,i):
-        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-        if i == 1:
-            return rwcofholesize.mass_n_small
-        elif i == 2:
-            return rwcofholesize.mass_n_medium
-        elif i == 3:
-            return rwcofholesize.mass_n_large
-        else:
-            return rwcofholesize.mass_n_rupture
+        try:
+            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+            if i == 1:
+                return rwcofholesize.mass_n_small
+            elif i == 2:
+                return rwcofholesize.mass_n_medium
+            elif i == 3:
+                return rwcofholesize.mass_n_large
+            else:
+                return rwcofholesize.mass_n_rupture
+        except:
+            return 0
 
     def W_n(self,i):
-        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-        if i == 1:
-            return rwcofholesize.wn_small
-        elif i == 2:
-            return rwcofholesize.wn_medium
-        elif i == 3:
-            return rwcofholesize.wn_large
-        else:
-            return rwcofholesize.wn_rupture
+        try:
+            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+            if i == 1:
+                return rwcofholesize.wn_small
+            elif i == 2:
+                return rwcofholesize.wn_medium
+            elif i == 3:
+                return rwcofholesize.wn_large
+            else:
+                return rwcofholesize.wn_rupture
+        except:
+            return 0
+
 
     def ReleasetType(self,i):
-        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
-        if i == 1:
-            return rwcofholesize.releasetype_small
-        elif i == 2:
-            return rwcofholesize.releasetype_medium
-        elif i == 3:
-            return rwcofholesize.releasetype_large
-        else:
-            return rwcofholesize.releasetype_rupture
+        try:
+            rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
+            if i == 1:
+                return rwcofholesize.releasetype_small
+            elif i == 2:
+                return rwcofholesize.releasetype_medium
+            elif i == 3:
+                return rwcofholesize.releasetype_large
+            else:
+                return rwcofholesize.releasetype_rupture
+        except:
+            return 0
 
     def ld_tox_n(self,i):
         try:
@@ -222,8 +235,11 @@ class CA_Toxic: #LEVEL 1
         return self.toxic_percent
 
     def Rate_tox_n(self,i):
-        return (self.mfrac_tox() * self.W_n(i))/100
-
+        try:
+            return (self.mfrac_tox() * self.W_n(i))/100
+        except Exception as e:
+            print(e)
+            print("error at rate_tox_n")
     def Mass_tox_n(self,i):
         return (self.mass_n(i) * self.mfrac_tox())/100
 
@@ -231,15 +247,14 @@ class CA_Toxic: #LEVEL 1
         try:
             C8 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(8)
             C4 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(4)
-            print(C8)
-            print(C4)
-            print(self.TOXIC_FLUID)
             if self.TOXIC_FLUID == "HF Acid" or self.TOXIC_FLUID == "H2S":
                 return C8 * math.pow(10,(self.ContantC(i)*math.log10(C4*self.Rate_tox_n(i))+self.ContantD(i)))
             else:
                 return self.ContantE(i) * pow(self.Rate_tox_n(i),self.ContantF(i))
         except Exception as e:
             print(e)
+            print("exception at ca_tox_cont_inj_n")
+
 
     def CA_tox_Inst_inj_n(self, i):
         try:
@@ -253,11 +268,19 @@ class CA_Toxic: #LEVEL 1
             print(e)
 
     def CA_toxic(self,i):
-        return min(self.CA_tox_Cont_inj_n(i),self.CA_tox_Inst_inj_n(i))
+        try:
+            return min(self.CA_tox_Cont_inj_n(i),self.CA_tox_Inst_inj_n(i))
+        except Exception as e:
+            print(e)
+            print("error ca_toxic")
 
     def CA_toxic_inj(self):
-        obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        return (obj[0] * self.CA_toxic(1) + obj[1] * self.CA_toxic(2) + obj[2] * self.CA_toxic(3) + obj[3] * self.CA_toxic(4)) / obj[4]
+        try:
+            obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
+            return (obj[0] * self.CA_toxic(1) + obj[1] * self.CA_toxic(2) + obj[2] * self.CA_toxic(3) + obj[3] * self.CA_toxic(4)) / obj[4]
+        except Exception as e:
+            print(e)
+            print("error at ca_toxic_inj")
 
 
     #None Toxic
@@ -307,7 +330,6 @@ class CA_Toxic: #LEVEL 1
             return 0
 
     def CA_total(self, flammable_cmd,flammable_inj):
-        print("tuan")
         cainj = max(flammable_inj,self.CA_toxic_inj(),self.NoneCA_leck())
         return max(flammable_cmd,cainj)
 

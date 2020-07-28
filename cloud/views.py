@@ -1575,13 +1575,12 @@ def ListProposal(request, componentID):
                 for a in rwass:
                     if request.POST.get('%d' %a.id):
                         if istank: #tuansua
-                            print("tank")
+                            # print("tank")
                             return redirect('tankEdit', proposalID= a.id)
                         elif isshell:
-                            print("tank")
+                            # print("tank")
                             return redirect('tankEdit', proposalID=a.id)
                         else:
-                            print("nottank")
                             return redirect('prosalEdit', proposalID= a.id)
             elif '_new' in request.POST:
                 try:

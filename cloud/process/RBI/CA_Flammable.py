@@ -326,7 +326,6 @@ class CA_Flammable: #LEVEL 1
 
     def CA_Flam_Cmd(self):
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
-        print(self.API_COMPONENT_TYPE_NAME)
         return (obj[0]*self.CA_Flam_Cmd_n(1)+obj[1]*self.CA_Flam_Cmd_n(2)+obj[2]*self.CA_Flam_Cmd_n(3)+obj[3]*self.CA_Flam_Cmd_n(4))/obj[4]
 
     def CA_Flam_inj(self):

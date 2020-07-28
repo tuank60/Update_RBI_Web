@@ -1037,6 +1037,53 @@ def processCoating(ws):
         print("Exception at RwCoating")
         print(e)
 
+def processFullyCoF(ws):
+    try:
+        ncol = ws.ncols
+        nrow = ws.nrows
+        if ncol == 11:
+            for row in range(1,nrow):
+                if ws.cell(row,0).value:
+                    for a in listProposal:
+                        if a.componentid_id == getComponentID(ws.cell(row,0).value):
+                            rwInputCalevel1 = models.RwInputCaLevel1.objects.get(id=a.id)
+                            if ws.cell(row,1).value:
+                                rwInputCalevel1.mass_inventory = convertFloat(ws.cell(row,1).value)
+                            else:
+                                rwInputCalevel1.mass_inventory = 0
+                            if ws.cell(row,2).value:
+                                rwInputCalevel1.detection_type = ws.cell(row,2).value
+                            rwInputCalevel1.isulation_type =  ws.cell(row,3).value
+                            rwInputCalevel1.mitigation_system = ws.cell(row,4).value
+                            if ws.cell(row,5).value:
+                                rwInputCalevel1.process_unit = ws.cell(row,5).value
+                            else:
+                                rwInputCalevel1.process_unit = 0
+                            if ws.cell(row,6).value:
+                                rwInputCalevel1.outage_multiplier = ws.cell(row,6).value
+                            else:
+                                rwInputCalevel1.outage_multiplier = 0
+                            if ws.cell(row,7).value:
+                                rwInputCalevel1.production_cost = ws.cell(row,7).value
+                            else:
+                                rwInputCalevel1.production_cost = 0
+                            if ws.cell(row,8).value:
+                                rwInputCalevel1.personal_density = ws.cell(row,8).value
+                            else:
+                                rwInputCalevel1.personal_density = 0
+                            if ws.cell(row,9).value:
+                                rwInputCalevel1.injure_cost = ws.cell(row,9).value
+                            else:
+                                rwInputCalevel1.injure_cost = 0
+                            if ws.cell(row,10).value:
+                                rwInputCalevel1.evironment_cost = ws.cell(row,10).value
+                            else:
+                                rwInputCalevel1.evironment_cost = 0
+                            rwInputCalevel1.save()
+    except Exception as e:
+        print("exception at FullyCoF")
+        print(e)
+
 def importPlanProcess(filename):
     try:
         workbook = open_workbook(filename)
@@ -1046,6 +1093,7 @@ def importPlanProcess(filename):
         ws3 = workbook.sheet_by_name("Stream")
         ws4 = workbook.sheet_by_name("Material")
         ws5 = workbook.sheet_by_name("CoatingCladdingLiningInsulation")
+        ws6 = workbook.sheet_by_name("Fully CoF")
 
         ncol0 = ws0.ncols
         ncol1 = ws1.ncols
@@ -1053,9 +1101,10 @@ def importPlanProcess(filename):
         ncol3 = ws3.ncols
         ncol4 = ws4.ncols
         ncol5 = ws5.ncols
+        ncol6 = ws6.ncols
 
-        if (ncol0 == 30 and ncol1 == 44 and ncol2 == 18 and ncol3 == 27 and ncol4 == 21 and ncol5 == 16) or (ncol0 == 34 and ncol1 == 33 and ncol2 == 17 and ncol3 == 26 and ncol4 == 17 and ncol5 == 16
-                                                                                                             ):
+        if (ncol0 == 30 and ncol1 == 44 and ncol2 == 18 and ncol3 == 27 and ncol4 == 21 and ncol5 == 16) or (ncol0 == 34 and ncol1 == 33 and ncol2 == 17 and ncol3 == 26 and ncol4 == 17 and ncol5 == 16 and ncol6 == 11
+                                                                                                             ): #check dieu kien file exccel la planprocess
             # step 1: processing data Equipment master
             processEquipmentMaster(ws0)
 
@@ -1071,7 +1120,7 @@ def importPlanProcess(filename):
             processStream2(ws3)
             processMaterial(ws4)
             processCoating(ws5)
-
+            processFullyCoF(ws6)
     except Exception as e:
         print("Exception at import")
         print(e)
