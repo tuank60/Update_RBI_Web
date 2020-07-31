@@ -1473,3 +1473,30 @@ class RwFullCoFHoleSize(models.Model):
     class Meta:
         managed = False
         db_table  = 'rw_full_cof_hole_size'
+
+## calculation toxic consequence
+class TBL_513_Ca_Toxic(models.Model):
+     toxic = models.TextField(db_column='Toxic', blank=True, primary_key=True)
+     releasetype = models.TextField(db_column='ReleaseType', blank=True, null=True)
+     contReleaseDuration = models.TextField(db_column='ContinousReleaseDuration', blank=True)
+     c = models.FloatField(db_column='c', blank=True)
+     d = models.FloatField(db_column='d', blank=True)
+     e = models.FloatField(db_column='e',blank=True)
+     f = models.FloatField(db_column='f',blank=True)
+
+     class Meta:
+         managed = False
+         db_table = 'tbl_513_ca_toxic'
+
+class TBL_511_512_Ca_Gas_Toxic(models.Model):
+    toxicname = models.TextField(db_column='ToxicName', primary_key=True, blank=True)
+    contReleaseDuration = models.TextField(db_column='ContinousReleaseDuration', blank=True)
+    c = models.FloatField(db_column='c', blank=True)
+    d = models.FloatField(db_column='d', blank=True)
+    e = models.FloatField(db_column='e', blank=True)
+    f = models.FloatField(db_column='f', blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'tbl_511_512_ca_gas_toxic'
+

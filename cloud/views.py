@@ -4486,6 +4486,7 @@ def upload(request, siteID):
         #     print("ko co file scada")
     except Exception as e:
         print(e)
+        print("exception at upload excel")
         raise Http404
 
     return render(request, 'FacilityUI/facility/uploadData.html', {'siteID': siteID, 'showcontent': showcontent,'noti':noti,'countnoti':countnoti,'count':count,'info':request.session, 'page':'uploadPlan'})

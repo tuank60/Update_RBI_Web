@@ -334,3 +334,23 @@ class POSTGRESQL:
             return "Flammable & Toxic"
         else:
             return "Toxic"
+
+    def GET_TBL_511_512_Ca_Gas_Toxic(toxicname,contReleaseDuration):
+        row = np.zeros(4)
+        tbl_511_512 = models.TBL_511_512_Ca_Gas_Toxic.objects.get(toxicname = toxicname, contReleaseDuration = contReleaseDuration)
+        row[1] = tbl_511_512.c
+        row[2] = tbl_511_512.d
+        row[3] = tbl_511_512.e
+        row[4] = tbl_511_512.f
+        return row
+
+    def GET_TBL_513_Ca_Toxic(toxic, releasetype, ContRelease): ## releasetype = releasephase o dau vao
+        row = np.zeros(4)
+        tbl_513_ca = models.TBL_513_Ca_Toxic.objects.get(toxic = toxic, releasetype = releasetype,contReleaseDuration=ContRelease)
+        row[1] = tbl_513_ca.c
+        row[2] = tbl_513_ca.d
+        row[3] = tbl_513_ca.e
+        row[4] = tbl_513_ca.f
+        return row
+
+

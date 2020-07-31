@@ -2,6 +2,7 @@ import math
 import numpy as np
 #from rbi import MYSQL_CAL as DAL_CAL
 from cloud.process.RBI import Postgresql as DAL_CAL
+from cloud.process.RBI import CA_CAL
 from cloud import models
 
 class CA_Toxic: #LEVEL 1
@@ -69,25 +70,63 @@ class CA_Toxic: #LEVEL 1
         except:
             return 0
 
-    def ld_tox_n(self,i):
+    def ld_tox_n(self,i): ## = toxic leak duration (seconds unit)
         try:
             return min(3600,(self.mass_n(i)/self.W_n(i)),(60*self.ld_n_max(i)))
         except:
             return 0
 
+
     def ContantC(self,i):
-        if self.TOXIC_FLUID == "HF Acid":
-            if self.ReleasetType(i)=="Continuous":
-                return 1.1401
+        toxicleak = self.ld_tox_n(i) / 60
+        if (self.TOXIC_FLUID == "HF Acid" or self.TOXIC_FLUID == "H2S" or self.TOXIC_FLUID == "Ammonina" or self.TOXIC_FLUID == "Chlorine"):
+            if toxicleak < 10:
+                contRelease = 5
+            elif 10 <= toxicleak <15:
+                contRelease = 10
+            elif 15 <= toxicleak < 20:
+                contRelease = 15
+            elif 20 <= toxicleak < 25:
+                contRelease = 20
+            elif 25 <= toxicleak < 30:
+                contRelease = 25
+            elif 30 <= toxicleak < 35:
+                contRelease = 30
+            elif 35 <= toxicleak < 40:
+                contRelease = 35
+            elif 40 <= toxicleak < 45:
+                contRelease = 40
+            elif 45 <= toxicleak < 50:
+                contRelease = 45
+            elif 50 <= toxicleak < 55:
+                contRelease = 50
+            elif 55 <= toxicleak < 60:
+                contRelease = 55
+            elif toxicleak == 60:
+                contRelease = 60
             else:
-                return 1.4056
-        elif self.TOXIC_FLUID == "H2S":
-            if self.ReleasetType(i)=="Continuous":
-                return 1.2411
+                contRelease = "Instantaneous Releases"
+            constc = DAL_CAL.POSTGRESQL.GET_TBL_511_512_Ca_Gas_Toxic(toxicname = self.TOXIC_FLUID, contReleaseDuration=contRelease)
+            return constc[1]
+        elif (self.TOXIC_FLUID == "CO" or self.TOXIC_FLUID == "HCL" or self.TOXIC_FLUID == "Nitric Acid" or self.TOXIC_FLUID == "ALCL3" or self.TOXIC_FLUID == "NO2" or
+              self.TOXIC_FLUID == "Phosgene" or self.TOXIC_FLUID == "TDI" or self.TOXIC_FLUID =="PO" or self.TOXIC_FLUID == "EE" or
+              self.TOXIC_FLUID == "EO" or self.TOXIC_FLUID == "Pyrophoric"):
+            if toxicleak < 3:
+                contRelease = 1.5
+            elif 3 <= toxicleak < 5:
+                contRelease = 3
+            elif 5 <= toxicleak < 10:
+                contRelease = 5
+            elif 10 <= toxicleak < 20:
+                contRelease = 10
+            elif 20 <= toxicleak < 40:
+                contRelease = 20
+            elif 40 <= toxicleak < 60:
+                contRelease = 40
             else:
-                return 0.974
-        else:
-            return 0
+                contRelease = 60
+            constc = DAL_CAL.POSTGRESQL.GET_TBL_513_Ca_Toxic(toxic = self.TOXIC_FLUID, contReleaseDuration = contRelease, releasetype=)
+
 
     def ContantD(self,i):
         if self.TOXIC_FLUID == "HF Acid":

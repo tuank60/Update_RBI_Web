@@ -778,8 +778,11 @@ def processRwExtcor(ws):
             for row in range(1,nrow):
                 if ws.cell(row,0).value:
                     for a in listProposal:
+                        print("rwextcor1")
                         if a.componentid_id == getComponentID(ws.cell(row,0).value):
+                            print("rwextcor2")
                             rwExt = models.RwExtcorTemperature.objects.get(id= a.id)
+                            print("rwextcor3")
                             rwExt.minus12tominus8 = convertFloat(ws.cell(row,7).value)
                             rwExt.minus8toplus6 = convertFloat(ws.cell(row,8).value)
                             rwExt.plus6toplus32 = convertFloat(ws.cell(row,9).value)
@@ -1080,6 +1083,7 @@ def processFullyCoF(ws):
                             else:
                                 rwInputCalevel1.evironment_cost = 0
                             rwInputCalevel1.save()
+
     except Exception as e:
         print("exception at FullyCoF")
         print(e)
@@ -1103,11 +1107,11 @@ def importPlanProcess(filename):
         ncol5 = ws5.ncols
         ncol6 = ws6.ncols
 
-        if (ncol0 == 30 and ncol1 == 44 and ncol2 == 18 and ncol3 == 27 and ncol4 == 21 and ncol5 == 16) or (ncol0 == 34 and ncol1 == 33 and ncol2 == 17 and ncol3 == 26 and ncol4 == 17 and ncol5 == 16 and ncol6 == 11
-                                                                                                             ): #check dieu kien file exccel la planprocess
-            # step 1: processing data Equipment master
-            processEquipmentMaster(ws0)
 
+        if (ncol0 == 30 and ncol1 == 44 and ncol2 == 18 and ncol3 == 27 and ncol4 == 21 and ncol5 == 16 and ncol6 == 11) or (ncol0 == 34 and ncol1 == 33 and ncol2 == 17 and ncol3 == 26 and ncol4 == 17 and ncol5 == 16
+                                                                                                             ): #check dieu kien file exccel
+            #step 1: processing data Equipment master
+            processEquipmentMaster(ws0)
             # step 2: processing data Component master
             processComponentMaster(ws1)
             # step 3: processing data RwAssessment
@@ -1121,6 +1125,7 @@ def importPlanProcess(filename):
             processMaterial(ws4)
             processCoating(ws5)
             processFullyCoF(ws6)
+
     except Exception as e:
         print("Exception at import")
         print(e)
