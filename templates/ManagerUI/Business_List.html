@@ -1,9 +1,12 @@
 {% extends 'BaseUI/BaseManager/ManagerHome.html' %}
 
 <!-------------- BLOCK MENU ---------------->
+{% block homedetail %}{% url 'managerhomedetail' siteID %}{% endblock %}
 {% block listmana %}{% url 'manager' siteID %}{% endblock %}
-{% block design %}{% url 'designcodeDisplayMana' siteID %}{% endblock %}
-{% block manu %}{% url 'manufactureDisplayMana' siteID %}{% endblock %}
+{% block calculate %}{% url 'calculatefunctionmanager' siteID %}{% endblock %}
+<!--{% block toolmanage %}{% url 'toolmanager' siteID %}{% endblock %}-->
+<!--{% block design %}{% url 'designcodeDisplayMana' siteID %}{% endblock %}-->
+<!--{% block manu %}{% url 'manufactureDisplayMana' siteID %}{% endblock %}-->
 <!----------------- END BLOCK----------------->
 
 {% block data-content %}
@@ -15,15 +18,15 @@
             <table class="table" id="mytable" >
                 <thead >
                     <tr>
-                        <th width="200px" style="text-align: center"><i class="fa fa-tag"></i>&ensp;Name Company</th>
-                        <th width="200px" style="text-align: center"><i class="fa fa-bar-chart-o"></i>&ensp;Risk Summary</th>
+                        <th width="200px" style="text-align: left"><i class="fa fa-tag"></i>&ensp;Name Company</th>
+                        <th width="200px" style="text-align: left"><i class="fa fa-bar-chart-o"></i>&ensp;Risk Summary</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for a in obj %}
                     <tr >
-                        <td align="center"><a href="{% url 'facilitiesDisplayMana' a.ID %}">{{ a.SideName }}</a></td>
-                        <td align="center"><a href="{% url 'exportData' a.ID 'Facility' %}"><i class="fa fa-print" ></i></a></td>
+                        <td align="left"><a href="{% url 'facilitiesDisplayMana' a.ID %}">{{ a.SideName }}</a></td>
+                        <td align="left"><a href="{% url 'exportData' a.ID 'Facility' %}"><i class="fa fa-print" ></i></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

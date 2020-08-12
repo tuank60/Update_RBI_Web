@@ -324,7 +324,7 @@ class DM_CAL:
     #step 1
 
     def getTmin(self):
-        if self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType =="0TANKROOFFLOAT":
+        if self.APIComponentType == "TANKBOTTOM0" or self.APIComponentType =="TANKROOFFLOAT0":
             if (self.ProtectedBarrier):
                 #t = 2.54
                 t=0.05
@@ -346,7 +346,9 @@ class DM_CAL:
             return 0
     def Art(self,age):
         try:
-            if self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType == "0TANKROOFFLOAT":
+            if self.APIComponentType == "TANKBOTTOM0" or self.APIComponentType == "TANKROOFFLOAT0":
+                # print("Art")
+                # print(max((1-(self.trdi() - self.CorrosionRate * self.agetk(age)) / (self.getTmin() + self.CA)), 0.0))
                 return max((1-(self.trdi() - self.CorrosionRate * self.agetk(age)) / (self.getTmin() + self.CA)), 0.0)
             elif (self.InternalCladding):
                 if (self.agetk(age) < self.agerc()):
@@ -368,10 +370,6 @@ class DM_CAL:
         return self.ShapeFactor
     def SRp_Thin(self):
         if self.MINIUM_STRUCTURAL_THICKNESS_GOVERS == False:
-            print(self.getalpha())
-            print(self.FS_Thin())
-            print(self.trdi())
-
             return (self.Pressure * self.Diametter)/(self.getalpha() * self.FS_Thin() * self.trdi())
         else:
             # return (self.WeldJointEffciency * self.TensileStrengthDesignTemp * max(self.getTmin(),self.StructuralThickness))/(self.FS_Thin() * self.trdi())
@@ -436,7 +434,7 @@ class DM_CAL:
         return (1- 4*self.Art(age)-self.SRp_Thin())/math.sqrt(pow(self.Art(age),2)*16*0.04 + pow(1-4*self.Art(age),2)*0.04+pow(self.SRp_Thin(),2)*pow(0.05,2))
 
     def API_ART(self, a):
-        if self.APIComponentType == '0TANKBOTTOM' or self.APIComponentType == '0TANKROOFFLOAT':
+        if self.APIComponentType == 'TANKBOTTOM0' or self.APIComponentType == 'TANKROOFFLOAT0':
             data = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9,
                     0.95, 1]
             if a < (data[0] + data[1]) / 2:
@@ -503,7 +501,7 @@ class DM_CAL:
     def DFB_THIN(self, age):
         self.EFF_THIN = DAL_CAL.POSTGRESQL.GET_MAX_INSP(self.ComponentNumber, self.DM_Name[0])
         self.NoINSP_THINNING = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber,self.DM_Name[0])
-        if (self.APIComponentType == '0TANKBOTTOM' or self.APIComponentType == '0TANKROOFFLOAT'):
+        if (self.APIComponentType == 'TANKBOTTOM0' or self.APIComponentType == 'TANKROOFFLOAT0'):
             if (self.NomalThick == 0 or self.CurrentThick == 0):
                 return 1390
             else:
@@ -534,13 +532,12 @@ class DM_CAL:
             Fdl = 3
         else:
             Fdl = 1
-
+        print(self.EquipmentType)
         if self.EquipmentType == "Tank":
             if (self.ComponentIsWeld):
                 Fwd = 1
             else:
                 Fwd = 10
-
             if (self.TankMaintain653):
                 Fam = 1
             else:
@@ -553,8 +550,7 @@ class DM_CAL:
             elif (self.AdjustmentSettle == "Settlement never evaluated"):
                 Fsm = 1.5
             else:
-                Fsm = 1
-
+                Fsm = 0
         if (
                                                                 self.OnlineMonitoring == "Amine high velocity corrosion - Electrical resistance probes" or self.OnlineMonitoring == "Amine high velocity corrosion - Key process variable" or self.OnlineMonitoring == "Amine low velocity corrosion - Electrical resistance probes" or self.OnlineMonitoring == "HCL corrosion - Electrical resistance probes" or
                                                     self.OnlineMonitoring == "HCL corrosion - Key process variable" or self.OnlineMonitoring == "HF corrosion - Key process variable" or self.OnlineMonitoring == "High temperature H2S/H2 corrosion - Electrical resistance probes" or self.OnlineMonitoring == "High temperature Sulfidic / Naphthenic acid corrosion - Electrical resistance probes" or
@@ -1346,8 +1342,6 @@ class DM_CAL:
 
         try:
             ART_EXT = (CR*self.AGE_CUI(age))/self.trdi()
-            print(self.AGE_CUI(age))
-            print(self.trdi())
         except Exception as e:
             print(e)
             ART_EXT = 1
@@ -1361,7 +1355,7 @@ class DM_CAL:
             self.NoINSP_EXTERNAL = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[11])
         if (self.EXTERNAL_INSP_EFF == "" or self.EXTERNAL_INSP_NUM == 0):
             self.EXTERNAL_INSP_EFF = "E"
-        if (self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType == "0TANKROOFFLOAT"):
+        if (self.APIComponentType == "TANKBOTTOM0" or self.APIComponentType == "TANKROOFFLOAT0"):
             if (self.NomalThick == 0 or self.CurrentThick == 0 or self.WeldJointEffciency == 0 or(
              self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0) or self.EXTERN_COAT_QUALITY == "" or (bool(self.COMPONENT_INSTALL_DATE) == False)):
                 return 6500;
@@ -1383,11 +1377,10 @@ class DM_CAL:
                     a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))
                     b = self.Po_P2_EXTERNAL() * self.ncdf(- self.B2_EXTERNAL(age))
                     c = self.Pr_P3_EXTERNAL() * self.ncdf(- self.B3_EXTERNAL(age))
+                    print((a + b + c) / (1.56 * pow(10, -4)))
                     return (a + b + c) / (1.56 * pow(10, -4))
                 except Exception as e:
                     print(e)
-                    print(self.APIComponentType)
-                    print(self.ShapeFactor)
                     return 0
         # else:
         #     return 0
@@ -1589,7 +1582,7 @@ class DM_CAL:
             self.CUI_INSP_NUM = DAL_CAL.POSTGRESQL.GET_NUMBER_INSP(self.ComponentNumber, self.DM_Name[12])
             if (self.CUI_INSP_EFF == "" or self.CUI_INSP_NUM == 0):
                 self.CUI_INSP_EFF = "E"
-            if (self.APIComponentType == "0TANKBOTTOM" or self.APIComponentType == "0TANKROOFFLOAT"):
+            if (self.APIComponentType == "TANKBOTTOM0" or self.APIComponentType == "TANKROOFFLOAT0"):
                 if (self.NomalThick == 0 or self.CurrentThick == 0):
                     return 1390
                 else:
@@ -1603,6 +1596,7 @@ class DM_CAL:
                         b = self.Po_P2_FERRITIC() * self.ncdf(- self.B2_FERRITIC(age))
                         c = self.Po_P3_FERRITIC() * self.ncdf(- self.B3_FERRITIC(age))
                         s=(a + b + c) / (1.56 * pow(10, -4))
+                        print(s)
                         return (a + b + c) / (1.56 * pow(10, -4))
                     except Exception as e:
                         print(e)
@@ -2317,6 +2311,8 @@ class DM_CAL:
         return DF_SCC
 
     def DF_EXT_TOTAL_API(self, i):#done
+        print("DF_EXTERNAL_CORROSION_API")
+        print(self.DF_EXTERNAL_CORROSION_API(i))
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(i), self.DF_CUI_CLSCC_API(i))
         return DF_EXT
         #return 0.07
@@ -2327,9 +2323,9 @@ class DM_CAL:
 
     def DF_THINNING_TOTAL_API(self, i):#done
         try:
-            # print(self.DF_THINNING_API(i))
-            # print(self.DF_LINNING_API(i))
-
+            print("DF_THINNING_TOTAL_API")
+            print(self.DF_THINNING_API(i))
+            print(self.DF_LINNING_API(i))
             if self.INTERNAL_LINNING and (self.DF_LINNING_API(i) != 0):
                 DF_THINNING_TOTAL = min(self.DF_THINNING_API(i), self.DF_LINNING_API(i))
             else:
@@ -2412,12 +2408,12 @@ class DM_CAL:
 
     def DF_TOTAL_API(self,i):#testing df_htha
         try:
-            # print(self.DF_THINNING_TOTAL_API(i))
-            # print(self.DF_EXT_TOTAL_API(i))
-            # print(self.DF_SSC_TOTAL_API(i))
-            # print(self.DF_HTHA_API(i))
-            # print(self.DF_BRIT_TOTAL_API(i))
-            # print(self.DF_PIPE_API(i))
+            print(self.DF_THINNING_TOTAL_API(i))
+            print(self.DF_EXT_TOTAL_API(i))
+            print(self.DF_SSC_TOTAL_API(i))
+            print(self.DF_HTHA_API(i))
+            print(self.DF_BRIT_TOTAL_API(i))
+            print(self.DF_PIPE_API(i))
 
             TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i), self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(
                 i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
@@ -2454,18 +2450,26 @@ class DM_CAL:
         return data
 
     def INSP_DUE_DATE(self, FC_Total, GFF, FSM, Risk_Target):
+        print("INSP_DUE_DATE")
         DF_TARGET = Risk_Target/(FC_Total * GFF * FSM)
         for a in range(1,16):
             if self.DF_TOTAL_API(a) >= DF_TARGET:
                 break
-        return self.AssesmentDate + relativedelta(years=a)
+        if(a==15):
+            return self.AssesmentDate + relativedelta(years=a+1)
+        else:
+            return self.AssesmentDate + relativedelta(years=a-1)
 
     def INSP_DUE_DATE_General(self, FC_total, GFF, FSM, Risk_Target):
+        print("INSP_DUE_DATE_General")
         DF_TARGET = Risk_Target/(FC_total*GFF*FSM)
         for a in range(1,16):
             if self.DF_TOTAL_GENERAL(a) >= DF_TARGET:
                 break
-        return self.AssesmentDate + relativedelta(year=a)
+        if(a==15):
+            return self.AssesmentDate + relativedelta(year=a+1)
+        else:
+            return self.AssesmentDate + relativedelta(year=a)
 
     def SEND_EMAIL(self, FC_Total, GFF, FSM, Risk_Target,ErrDammage,facilityname):
         DF_TARGET = Risk_Target/(FC_Total * GFF * FSM)

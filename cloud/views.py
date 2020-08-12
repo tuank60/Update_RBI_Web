@@ -126,6 +126,7 @@ def ListNormalProposalFofInpsection(siteID,facilityID,equimentID):
     componenttypeID = 0
     rwdamAll = models.RwDamageMechanism.objects.all()
     rwfullpofAll = models.RwFullPof.objects.all()
+    print("go select equip ListNormalProposalFofInpsection")
     for a in rwdamAll:
         array = a.id_dm_id
         datarw.append(array)
@@ -137,9 +138,10 @@ def ListNormalProposalFofInpsection(siteID,facilityID,equimentID):
             faci = models.Facility.objects.filter(facilityid=facilityID)
             for f in faci:
                 if equimentID:
-                    equip = models.EquipmentMaster.objects.filter(facilityid_id=f.facilityid)
-                else:
                     equip = models.EquipmentMaster.objects.filter(equipmentid=equimentID)
+                    print("go here")
+                else:
+                    equip = models.EquipmentMaster.objects.filter(facilityid_id=f.facilityid)
                 for e in equip:
                     comp = models.ComponentMaster.objects.filter(equipmentid_id=e.equipmentid)
                     equiptype = models.EquipmentType.objects.get(equipmenttypeid=e.equipmenttypeid_id)
@@ -147,14 +149,14 @@ def ListNormalProposalFofInpsection(siteID,facilityID,equimentID):
                     for c in comp:
                         pros = models.RwAssessment.objects.filter(componentid_id=c.componentid)
                         comptype = models.ComponentType.objects.get(componenttypeid=c.componenttypeid_id)
-                        componenttypeID = comptype.componenttypeid
                         for p in pros:
+                            componenttypeID = comptype.componenttypeid
+                            obj = {}
                             rwequip = models.RwEquipment.objects.get(id_id=p.id)
                             rwcomponent = models.RwComponent.objects.get(id_id=p.id)
                             rwstream = models.RwStream.objects.get(id_id=p.id)
                             rwmaterial = models.RwMaterial.objects.get(id_id=p.id)
                             rwcoat = models.RwCoating.objects.get(id_id=p.id)
-                            obj = {}
                             obj['ID'] = p.id
                             obj['ConponentName'] = c.componentname
                             obj['ConponentNumber'] = c.componentnumber
@@ -449,7 +451,7 @@ def ListNormalProposalFofInpsection(siteID,facilityID,equimentID):
     except Exception as e:
         print(e)
     return data
-def ListTankProposalForInpsection(siteID,facilityID=0,equimentID=0):
+def ListTankProposalForInpsection(siteID,facilityID,equimentID):
     dataTank = []
     tank = [8, 9, 12, 13, 14, 15]
     datarw = []  # kiem tra id proposal co ton tai trong bang RwDamageMechanism
@@ -778,7 +780,7 @@ def MainInpsectionPlan(request, siteID,name="",date=""):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
     inspection = models.InspecPlan.objects.all()
-    # inspecCover = models.InspectionCoverage.objects.all()
+    inspecCover = models.InspectionCoverage.objects.all()
     try:
          listInpsec = ListInpsectionPlan()
          listInpsecCoverage = []
@@ -841,22 +843,26 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
     countnoti = noti.filter(state=0).count()
 
     site = models.Sites.objects.all()
-    faci = models.Facility.objects.all()
+    facility = models.Facility.objects.filter(siteid_id=siteID)
     pros = models.RwAssessment.objects.all()
 
     siteT = models.Sites.objects.get(siteid=siteID)
-    facility = models.Facility.objects.filter(siteid_id=siteID)
-    facilityT = models.Facility.objects.filter(facilityid=facilityID)
 
     inspecplan = models.InspecPlan.objects.all()
     imtype = models.IMType.objects.all()
     imitem = models.IMItem.objects.all()
-
     try:
+        siteAll = []
         typeInspec = []
-        data = []
-        dataTank = []
         dataF = []
+        equipName = ''
+        dataSite = models.Sites.objects.all()
+        for a in dataSite:
+            siteobj = {}
+            siteobj['ID'] = a.siteid
+            siteobj['SiteName'] = a.sitename
+            siteobj['Create'] = a.create
+            siteAll.append(siteobj)
         for a in inspecplan:
             if (a.inspectionplanname == name):
                 inspecCover = models.InspectionCoverage.objects.filter(planid_id=a.id)
@@ -868,41 +874,45 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
             allSite = 1
         else:
             allSite = 0
-
         if not facilityID:
-            print("facilityID====0")
-            allSite=1
-            facilityID=0
-            equipID=0
-            fac = models.Facility.objects.get(facilityid=1)
+            allSite = 1
             facName = "All"
-            equip = models.EquipmentMaster.objects.filter(facilityid_id=1)
+            equip = models.EquipmentMaster.objects.all()
             equipName = "All"
         else:
-            print("go faci # 0 ")
-            facilityID=facilityID
+            allSite=allSite
             fac = models.Facility.objects.get(facilityid=facilityID)
-            facName=fac.facilityname
+            facName = fac.facilityname
             equip = models.EquipmentMaster.objects.filter(facilityid_id=facilityID)
-            equipName = models.EquipmentMaster.objects.get(equipmentid=equipID)
-
+            if equipID:
+                equipName = models.EquipmentMaster.objects.get(equipmentid=equipID)
+            else:
+                equipName = models.EquipmentMaster.objects.all()
         if allSite:
-            print("GO allSite =1")
             data = ListNormalProposalFofInpsection(siteID=siteID, facilityID=0, equimentID=0)
             dataTank = ListTankProposalForInpsection(siteID=siteID, facilityID=0, equimentID=0)
         else:
-            print("go allSite = 0")
             data = ListNormalProposalFofInpsection(siteID=siteID, facilityID=facilityID, equimentID=equipID)
             dataTank = ListTankProposalForInpsection(siteID=siteID, facilityID=facilityID, equimentID=equipID)
-        if request.method == 'POST':
-            typeInspec['inspectionMethod'] = request.POST.get('inspectionMethod')
-            typeInspec['inspectionTechnique'] = request.POST.get('inspectionTechnique')
-
+        if '_select' in request.POST:
+            for a in site:
+                if (request.POST.get('%d' % a.siteid)):
+                    return redirect('addInspectionPlan', siteID=a.siteid, name=name, date=date, facilityID=0, equipID=0)
+        if '_selectFac' in request.POST:
+            for a in facility:
+                if (request.POST.get('%d' % a.facilityid)):
+                    return redirect('addInspectionPlan', siteID=siteID, name=name, date=date, facilityID=a.facilityid,equipID=0)
+        if '_selectEquip' in request.POST:
+            for a in equip:
+                if (request.POST.get('%d' % a.equipmentid)):
+                    return redirect('addInspectionPlan', siteID=siteID, name=name, date=date, facilityID=facilityID,equipID=a.equipmentid)
+        if '_cancel' in request.POST:
+            return redirect('inspectionPlan', siteID=siteID, name=name, date=date)
         if '_ok' in request.POST:
             for b in inspecplan:
                 inspectionCover = models.InspectionCoverage.objects.filter(planid_id=b.id)
                 if (b.inspectionplanname == name):
-                    if(inspectionCover.count() > 0):
+                    if (inspectionCover.count() > 0):
                         for c in inspectionCover:
                             c.delete()
             for a in pros:
@@ -911,37 +921,19 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
                         if (b.inspectionplanname == name):
                             inspecCover = models.InspectionCoverage(planid_id=b.id, equipmentid_id=a.equipmentid_id,componentid_id=a.componentid_id)
                             inspecCover.save()
-            return redirect('inspectionPlan',siteID=siteID,name=name,date=date)
-        if '_cancel' in request.POST:
-            return redirect('inspectionPlan',siteID=siteID,name='Plan Name',date='Plan Date')
-        if '_delete' in request.POST:
-            for a in site:
-                if (request.POST.get('%d' % a.siteid)):
-                    a.delete()
-            return redirect('addInspectionPlan', siteID=a.siteid,name=name,date=date,facilityID=0,equipID=0)
-        if '_select' in request.POST:
-            print("start select")
-            for a in site:
-                print("go loop")
-                if (request.POST.get('%d' % a.siteid)):
-                    print("go select")
-                    return redirect('addInspectionPlan', siteID=a.siteid, name=name, date=date,facilityID=1,equipID=1)
-        if '_selectFac' in request.POST:
-            for a in facility:
-                if (request.POST.get('%d' % a.facilityid)):
-                    return redirect('addInspectionPlan', siteID=siteID, name=name, date=date, facilityID=a.facilityid,equipID=1)
-        if '_selectEquip' in request.POST:
-            for a in equip:
-                if (request.POST.get('%d' % a.equipmentid)):
-                    return redirect('addInspectionPlan', siteID=siteID, name=name, date=date, facilityID=facilityID,equipID=a.equipmentid)
+                    rwdama = models.RwDamageMechanism.objects.filter(id_dm_id=a.id)
+                    for c in rwdama:
+                        print("test",c.dmitemid_id)
+                        dmitem = models.DMItems.objects.filter(dmitemid=c.dmitemid_id)
+                        for d in dmitem:
+                            print("description",d.dmdescription)
+            # return redirect('inspectionPlan', siteID=siteID, name=name, date=date)
     except Exception as e:
         print(e)
-        raise Http404
-    return render(request,'FacilityUI/inspection_plan/addInspectionPlan.html',
-                  {'page':'addInspectionPlan','siteID':siteID, 'count': count, 'info': request.session,'noti': noti, 'countnoti': countnoti,
-                   'name':name,'date':date,'siteT':siteT,'facility':facility,'facilityT':facilityT,'facName':facName,'equip':equip,
-                   'equipName':equipName,'allSite':allSite,'site':site,'faci':faci,'facilityID':facilityID,'dataF':dataF,'data':data,'dataTank':dataTank,
-                   'imitem':imitem,'imtype':imtype,'typeInspec':typeInspec})
+    return render(request, 'FacilityUI/inspection_plan/addInspectionPlan.html',
+                  {'page': 'addInspectionPlan', 'siteID': siteID, 'count': count, 'info': request.session, 'noti': noti,
+                   'countnoti': countnoti,'allSite':allSite,'siteAll':siteAll,'siteT':siteT,'allSite':allSite,'facName':facName,'facility':facility,
+                   'equipName':equipName,'equip':equip,'data':data,'dataTank':dataTank,'dataF':dataF,'imtype':imtype,'imitem':imitem,'name':name,'date':date})
 
 ################ Business UI Control ###################
 def ListFacilities(request, siteID):
@@ -1538,10 +1530,14 @@ def ListProposal(request, componentID):
             else:
                 obj1['fc'] = 0
             if dm.count() != 0:
+                print("dm count")
                 obj1['duedate'] = dm[0].inspduedate.date().strftime('%Y-%m-%d')
+                obj1['lastinsp'] = dm[0].lastinspdate.date().strftime('%Y-%m-%d')
             else:
-                obj1['duedate'] = (a.assessmentdate.date() + relativedelta(years=15)).strftime('%Y-%m-%d')
-                obj1['lastinsp'] = equip.commissiondate.date().strftime('%Y-%m-%d')
+                print("go here")
+                # obj1['duedate'] = (a.assessmentdate.date() + relativedelta(years=15)).strftime('%Y-%m-%d')
+                obj1['duedate'] = (a.assessmentdate.date() + relativedelta(years=16)).strftime('%Y-%m-%d')#cuong sua
+                obj1['lastinsp'] = equip.commissiondate.date().strftime('%Y-%m-%d')#cuong them vao
             obj1['risk'] = round(obj1['df'] * obj1['gff'] * obj1['fms'] * obj1['fc'], 2)
             data.append(obj1)
         pagidata = Paginator(data,25)
@@ -1575,12 +1571,13 @@ def ListProposal(request, componentID):
                 for a in rwass:
                     if request.POST.get('%d' %a.id):
                         if istank: #tuansua
-                            # print("tank")
+                            print("tank")
                             return redirect('tankEdit', proposalID= a.id)
                         elif isshell:
-                            # print("tank")
+                            print("tank")
                             return redirect('tankEdit', proposalID=a.id)
                         else:
+                            print("nottank")
                             return redirect('prosalEdit', proposalID= a.id)
             elif '_new' in request.POST:
                 try:
@@ -1618,6 +1615,7 @@ def ListProposal(request, componentID):
     return render(request, 'FacilityUI/proposal/proposalListDisplay.html', {'page':'listProposal','obj':obj, 'istank': istank, 'isshell':isshell,
                                                                             'componentID':componentID,
                                                                             'equipmentID':comp.equipmentid_id,'comp':comp,'equip':equip,'faci':faci,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+
 def NewProposal(request, componentID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
@@ -4473,6 +4471,7 @@ def upload(request, siteID):
                 uploaded_file_url = fs.url(filename)
                 url_file = settings.BASE_DIR.replace('\\', '//') + str(uploaded_file_url).replace('/', '//').replace('%20', ' ')
                 ExcelImport.importPlanProcess(url_file)
+                print("go done")
                 try:
                     os.remove(url_file)
                 except OSError:
@@ -4486,7 +4485,6 @@ def upload(request, siteID):
         #     print("ko co file scada")
     except Exception as e:
         print(e)
-        print("exception at upload excel")
         raise Http404
 
     return render(request, 'FacilityUI/facility/uploadData.html', {'siteID': siteID, 'showcontent': showcontent,'noti':noti,'countnoti':countnoti,'count':count,'info':request.session, 'page':'uploadPlan'})
@@ -4575,7 +4573,7 @@ def signin(request):
                         facilityID = models.Sites.objects.filter(userID_id=request.session['id'])[0].siteid
                         return redirect('facilitiesDisplay',facilityID)
                     else:
-                        return redirect('manager',3)
+                        return redirect('managerhomedetail',3)
                 else:
                     error="Tài khoản hoặc mật khẩu không đúng"
             return render(request,'Home/index.html',{'error':error})
@@ -4989,6 +4987,27 @@ def activate(request, uidb64, token):
         return HttpResponse("Can't activate now, please try again later or contact us")
 
 ################ Manager UI Control ###################
+def ManagerHomeDetail(request,siteID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    return render(request, 'ManagerUI/Home_Manager.html', {'page':'managerHomeDetail','siteID':siteID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+# NOTE: page: managerHomeDetail dùng cho baseMN khi so sanh, khác với name: managerhomedetail trong view
+def CalculateFunctionManager(request,siteID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    return render(request, 'ManagerUI/Calculate_Function_Manager.html', {'page':'calculateFunctionManager','siteID':siteID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+def ToolManager(request,siteID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    return render(request, 'ManagerUI/Tool_Manager.html',
+                  {'page': 'toolManager', 'siteID': siteID, 'info': request.session, 'noti': noti,
+                   'countnoti': countnoti, 'count': count})
 def ManagerHome(request, siteID):
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email), Q(Is_see=0)).count()
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
@@ -5183,6 +5202,7 @@ def ListDesignCodeMana(request, siteID):
     except:
         raise Http404
     return render(request, 'ManagerUI/designcode_List.html', {'page':'listDesign', 'obj':obj, 'siteID':siteID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+
 def FullyDamageFactorMana(request, proposalID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()

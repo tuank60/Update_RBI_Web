@@ -14,7 +14,7 @@ from xlrd import open_workbook
 from django.shortcuts import Http404
 from cloud import models
 from datetime import datetime
-# import datetime
+import datetime
 
 def checkEquipmentComponentExist(equipmentNumber,componentNumber):
     try:
@@ -42,6 +42,15 @@ def getDMItemID(damagename):
 
 def xldate_to_datetime(xldatetime):  # something like 43705.6158241088
     try:
+        # print(xldatetime)
+        # xldatetime1 = str(xldatetime)
+        # print(xldatetime1)
+        # time = datetime.datetime.strptime(xldatetime1, "%d/%m/%Y").strftime("%Y-%m-%d")
+        # my_time = datetime.datetime.min.time()
+        # print("ddd")
+        # my_datetime = datetime.datetime.combine(time, my_time)
+        # print(my_datetime)
+        # print(time)
         tempDate = datetime.datetime(1899, 12, 31)
         (days, portion) = math.modf(xldatetime)
 
@@ -52,6 +61,7 @@ def xldate_to_datetime(xldatetime):  # something like 43705.6158241088
         TheTime = (tempDate + deltaDays + detlaSeconds)
         timeinsp = TheTime.strftime("%Y-%m-%d %H:%M:%S")
         inspdatetime = datetime.datetime.strptime(timeinsp, "%Y-%m-%d %H:%M:%S")
+        print(inspdatetime)
         return inspdatetime
     except Exception as e:
         print("error in xldate")
@@ -240,9 +250,15 @@ def checkEquipmentAvaiable(site,facility,equipmentnumber, equipmentName):
 
 def checkComponentAvaiable(equipmentnumber, componentnumber):
     try:
+        print("checkComponentAvaiable")
+        print(equipmentnumber)
+        print(componentnumber)
         equ = models.EquipmentMaster.objects.get(equipmentnumber= equipmentnumber)
         countComp = models.ComponentMaster.objects.filter(componentnumber= componentnumber, equipmentid= equ.equipmentid).exists()
         avaiComp = models.ComponentMaster.objects.filter(componentnumber= componentnumber).exists()
+        print("test")
+        print(countComp)
+        print(avaiComp)
         if countComp or not avaiComp:
             return True
         else:
@@ -378,7 +394,7 @@ def processEquipmentMaster(ws):
                                 eq = models.EquipmentMaster.objects.get(equipmentnumber=ws.cell(row, 0).value)
                                 eq.equipmenttypeid_id = getEquipmentTypeID(ws.cell(row, 1).value)
                                 eq.equipmentname = ws.cell(row, 2).value
-                                eq.commissiondate = convertDateInsp(ws.cell(row, 7).value)
+                                eq.commissiondate = xldate_to_datetime(ws.cell(row, 7).value)
                                 eq.designcodeid_id = getDesigncodeID(ws.cell(row, 3).value)
                                 eq.siteid_id = getSiteID(ws.cell(row, 4).value)
                                 eq.facilityid_id = getFacilityID(ws.cell(row, 5).value)
@@ -389,7 +405,7 @@ def processEquipmentMaster(ws):
                                 eq.save()
                             else:
                                 eq = models.EquipmentMaster(equipmentnumber= ws.cell(row,0).value, equipmenttypeid_id= getEquipmentTypeID(ws.cell(row, 1).value),
-                                                            equipmentname= ws.cell(row,2).value, commissiondate = convertDateInsp(ws.cell(row, 7).value),
+                                                            equipmentname= ws.cell(row,2).value, commissiondate = xldate_to_datetime(ws.cell(row, 7).value),
                                                             designcodeid_id=getDesigncodeID(ws.cell(row, 3).value), siteid_id = getSiteID(ws.cell(row, 4).value),
                                                             facilityid_id=getFacilityID(ws.cell(row, 5).value), manufacturerid_id = getManufactureID(ws.cell(row, 6).value),
                                                             pfdno=ws.cell(row, 8).value, processdescription = ws.cell(row, 9).value, equipmentdesc = ws.cell(row, 10).value)
@@ -426,7 +442,7 @@ def processEquipmentMaster(ws):
                                 eq = models.EquipmentMaster.objects.get(equipmentnumber=ws.cell(row, 0).value)
                                 eq.equipmenttypeid_id = getEquipmentTypeID(ws.cell(row, 1).value)
                                 eq.equipmentname = ws.cell(row, 2).value
-                                eq.commissiondate = convertDateInsp(ws.cell(row, 7).value)
+                                eq.commissiondate = xldate_to_datetime(ws.cell(row, 7).value)
                                 eq.designcodeid_id = getDesigncodeID(ws.cell(row, 3).value)
                                 eq.siteid_id = getSiteID(ws.cell(row, 4).value)
                                 eq.facilityid_id = getFacilityID(ws.cell(row, 5).value)
@@ -437,7 +453,7 @@ def processEquipmentMaster(ws):
                                 eq.save()
                             else:
                                 eq = models.EquipmentMaster(equipmentnumber= ws.cell(row,0).value, equipmenttypeid_id= getEquipmentTypeID(ws.cell(row, 1).value),
-                                                            equipmentname= ws.cell(row,2).value, commissiondate = convertDateInsp(ws.cell(row, 7).value),
+                                                            equipmentname= ws.cell(row,2).value, commissiondate = xldate_to_datetime(ws.cell(row, 7).value),
                                                             designcodeid_id=getDesigncodeID(ws.cell(row, 3).value), siteid_id = getSiteID(ws.cell(row, 4).value),
                                                             facilityid_id=getFacilityID(ws.cell(row, 5).value), manufacturerid_id = getManufactureID(ws.cell(row, 6).value),
                                                             pfdno=ws.cell(row, 8).value, processdescription = ws.cell(row, 9).value, equipmentdesc = ws.cell(row, 10).value)
@@ -480,18 +496,20 @@ def processAssessment(ws):
         ncol = ws.ncols
         nrow = ws.nrows
         if ncol == 44:
+            print("1111111")
             for row in range(1,nrow):
                 if ws.cell(row, 0).value and ws.cell(row, 1).value and ws.cell(row, 2).value and ws.cell(row,
                                                                                                          3).value and ws.cell(
                     row, 4).value and ws.cell(row, 7).value:
                     if checkComponentAvaiable(ws.cell(row, 0).value, ws.cell(row, 1).value):
                         rwAss = models.RwAssessment(equipmentid_id= getEquipmentID(ws.cell(row,0).value), componentid_id= getComponentID(ws.cell(row,1).value),
-                                                    assessmentdate= convertDateInsp(ws.cell(row,7).value), riskanalysisperiod= 36,
-                                                    isequipmentlinked= convertTF(ws.cell(row,5).value), proposalname= "New Excel Proposal " + str(datetime.now().strftime('%m-%d-%y')))
+                                                    assessmentdate= xldate_to_datetime(ws.cell(row,7).value), riskanalysisperiod= 36,
+                                                    isequipmentlinked= convertTF(ws.cell(row,5).value), proposalname= "New Excel Proposal " + str(datetime.datetime.now().strftime('%m-%d-%y')))
                         rwAss.save()
 
                         #Luu lai cac bang trung gian
-                        rwEquip = models.RwEquipment(id= rwAss, commissiondate= datetime.now())
+                        rwEquip = models.RwEquipment(id= rwAss, commissiondate= datetime.datetime.now())
+                        # rwEquip = models.RwEquipment(id= rwAss) #Cương Sửa
                         rwEquip.save()
 
                         rwComp = models.RwComponent(id = rwAss)
@@ -506,7 +524,8 @@ def processAssessment(ws):
                         rwMater = models.RwMaterial(id= rwAss)
                         rwMater.save()
 
-                        rwCoat = models.RwCoating(id= rwAss, externalcoatingdate= datetime.now())
+                        rwCoat = models.RwCoating(id= rwAss, externalcoatingdate= datetime.datetime.now())
+                        # rwCoat = models.RwCoating(id= rwAss)#Cương Sửa
                         rwCoat.save()
 
                         rwInputCa = models.RwInputCaLevel1(id = rwAss)
@@ -515,38 +534,50 @@ def processAssessment(ws):
 
 
         elif ncol == 33:
+            print("22222222222222")
             for row in range(1, nrow):
+                print("get value")
                 if ws.cell(row, 0).value and ws.cell(row, 1).value and ws.cell(row, 2).value and ws.cell(row,
                                                                                                          3).value and ws.cell(
                     row, 4).value and ws.cell(row, 7).value:
+                    print("get value 2")
                     if checkComponentAvaiable(ws.cell(row, 0).value, ws.cell(row, 1).value):
                         rwAss = models.RwAssessment(equipmentid_id=getEquipmentID(ws.cell(row, 0).value),
                                                     componentid_id=getComponentID(ws.cell(row, 1).value),
-                                                    assessmentdate=convertDateInsp(ws.cell(row, 7).value),
+                                                    assessmentdate=xldate_to_datetime(ws.cell(row, 7).value),
                                                     riskanalysisperiod=36,
                                                     isequipmentlinked=convertTF(ws.cell(row, 5).value),
                                                     proposalname="New Excel Proposal " + str(
-                                                        datetime.now().strftime('%m-%d-%y')))
+                                                        datetime.datetime.now().strftime('%m-%d-%y')))
                         rwAss.save()
+                        print("get value 3")
 
                         # Luu lai cac bang trung gian
-                        rwEquip = models.RwEquipment(id=rwAss, commissiondate= datetime.now())
+                        rwEquip = models.RwEquipment(id= rwAss, commissiondate= datetime.datetime.now())
+                        # rwEquip = models.RwEquipment(id=rwAss)  # Cương Sửa
                         rwEquip.save()
+                        print("get value 4")
 
                         rwComp = models.RwComponent(id=rwAss)
                         rwComp.save()
+                        print("get value 5")
 
                         rwExco = models.RwExtcorTemperature(id=rwAss)
                         rwExco.save()
+                        print("get value 6")
 
                         rwStream = models.RwStream(id=rwAss)
                         rwStream.save()
+                        print("get value 7")
 
                         rwMater = models.RwMaterial(id=rwAss)
                         rwMater.save()
+                        print("get value 8")
 
-                        rwCoat = models.RwCoating(id=rwAss, externalcoatingdate= datetime.now())
+                        rwCoat = models.RwCoating(id= rwAss, externalcoatingdate= datetime.datetime.now())
+                        # rwCoat = models.RwCoating(id=rwAss)  # Cương Sửa
                         rwCoat.save()
+                        print("get value 9")
 
                         rwInputTank = models.RwInputCaTank(id= rwAss)
                         rwInputTank.save()
@@ -570,7 +601,7 @@ def processRwEquipment(ws):
                         for a in listProposal:
                             if a.equipmentid_id == getEquipmentID(ws.cell(row,0).value):
                                 rwEq = models.RwEquipment.objects.get(id=a.id)
-                                rwEq.commissiondate = convertDateInsp(ws.cell(row,7).value)
+                                rwEq.commissiondate = xldate_to_datetime(ws.cell(row,7).value)
                                 rwEq.adminupsetmanagement = convertTF(ws.cell(row,15).value)
                                 rwEq.containsdeadlegs= convertTF(ws.cell(row,28).value)
                                 # rwEq.cyclicoperation= convertTF(ws.cell(row,14).value)
@@ -610,7 +641,7 @@ def processRwEquipment(ws):
                             if a.equipmentid_id == getEquipmentID(ws.cell(row,0).value):
                                 rwEq = models.RwEquipment.objects.get(id= a.id)
                                 rwInputCaTank = models.RwInputCaTank.objects.get(id= a.id)
-                                rwEq.commissiondate = convertDateInsp(ws.cell(row,7).value)
+                                rwEq.commissiondate = xldate_to_datetime(ws.cell(row,7).value)
                                 rwEq.adminupsetmanagement = convertTF(ws.cell(row,15).value)
 
                                 # rwEq.cyclicoperation = convertTF(ws.cell(row,12).value)
@@ -778,11 +809,8 @@ def processRwExtcor(ws):
             for row in range(1,nrow):
                 if ws.cell(row,0).value:
                     for a in listProposal:
-                        print("rwextcor1")
                         if a.componentid_id == getComponentID(ws.cell(row,0).value):
-                            print("rwextcor2")
                             rwExt = models.RwExtcorTemperature.objects.get(id= a.id)
-                            print("rwextcor3")
                             rwExt.minus12tominus8 = convertFloat(ws.cell(row,7).value)
                             rwExt.minus8toplus6 = convertFloat(ws.cell(row,8).value)
                             rwExt.plus6toplus32 = convertFloat(ws.cell(row,9).value)
@@ -1009,15 +1037,20 @@ def processCoating(ws):
         ncol = ws.ncols
         nrow = ws.nrows
         if ncol == 16:
+            print("processCoating")
             for row in range(1,nrow):
                 if ws.cell(row,0).value:
                     for a in listProposal:
+                        print("========1")
+                        print(a.componentid_id)
+                        print(getComponentID(ws.cell(row,0).value))
                         if a.componentid_id == getComponentID(ws.cell(row,0).value):
+                            print("============2")
                             rwCoating = models.RwCoating.objects.get(id= a.id)
                             rwCoating.internalcoating = convertTF(ws.cell(row,8).value)
                             rwCoating.externalcoating = convertTF(ws.cell(row,7).value)
                             if ws.cell(row,9).value:
-                                rwCoating.externalcoatingdate = convertDateInsp(ws.cell(row,9).value)
+                                rwCoating.externalcoatingdate = xldate_to_datetime(ws.cell(row,9).value)
                             if ws.cell(row,10).value:
                                 rwCoating.externalcoatingquality = ws.cell(row,10).value
                             rwCoating.supportconfignotallowcoatingmaint = convertTF(ws.cell(row,11).value)
@@ -1040,54 +1073,6 @@ def processCoating(ws):
         print("Exception at RwCoating")
         print(e)
 
-def processFullyCoF(ws):
-    try:
-        ncol = ws.ncols
-        nrow = ws.nrows
-        if ncol == 11:
-            for row in range(1,nrow):
-                if ws.cell(row,0).value:
-                    for a in listProposal:
-                        if a.componentid_id == getComponentID(ws.cell(row,0).value):
-                            rwInputCalevel1 = models.RwInputCaLevel1.objects.get(id=a.id)
-                            if ws.cell(row,1).value:
-                                rwInputCalevel1.mass_inventory = convertFloat(ws.cell(row,1).value)
-                            else:
-                                rwInputCalevel1.mass_inventory = 0
-                            if ws.cell(row,2).value:
-                                rwInputCalevel1.detection_type = ws.cell(row,2).value
-                            rwInputCalevel1.isulation_type =  ws.cell(row,3).value
-                            rwInputCalevel1.mitigation_system = ws.cell(row,4).value
-                            if ws.cell(row,5).value:
-                                rwInputCalevel1.process_unit = ws.cell(row,5).value
-                            else:
-                                rwInputCalevel1.process_unit = 0
-                            if ws.cell(row,6).value:
-                                rwInputCalevel1.outage_multiplier = ws.cell(row,6).value
-                            else:
-                                rwInputCalevel1.outage_multiplier = 0
-                            if ws.cell(row,7).value:
-                                rwInputCalevel1.production_cost = ws.cell(row,7).value
-                            else:
-                                rwInputCalevel1.production_cost = 0
-                            if ws.cell(row,8).value:
-                                rwInputCalevel1.personal_density = ws.cell(row,8).value
-                            else:
-                                rwInputCalevel1.personal_density = 0
-                            if ws.cell(row,9).value:
-                                rwInputCalevel1.injure_cost = ws.cell(row,9).value
-                            else:
-                                rwInputCalevel1.injure_cost = 0
-                            if ws.cell(row,10).value:
-                                rwInputCalevel1.evironment_cost = ws.cell(row,10).value
-                            else:
-                                rwInputCalevel1.evironment_cost = 0
-                            rwInputCalevel1.save()
-
-    except Exception as e:
-        print("exception at FullyCoF")
-        print(e)
-
 def importPlanProcess(filename):
     try:
         workbook = open_workbook(filename)
@@ -1097,7 +1082,6 @@ def importPlanProcess(filename):
         ws3 = workbook.sheet_by_name("Stream")
         ws4 = workbook.sheet_by_name("Material")
         ws5 = workbook.sheet_by_name("CoatingCladdingLiningInsulation")
-        ws6 = workbook.sheet_by_name("Fully CoF")
 
         ncol0 = ws0.ncols
         ncol1 = ws1.ncols
@@ -1105,13 +1089,12 @@ def importPlanProcess(filename):
         ncol3 = ws3.ncols
         ncol4 = ws4.ncols
         ncol5 = ws5.ncols
-        ncol6 = ws6.ncols
 
-
-        if (ncol0 == 30 and ncol1 == 44 and ncol2 == 18 and ncol3 == 27 and ncol4 == 21 and ncol5 == 16 and ncol6 == 11) or (ncol0 == 34 and ncol1 == 33 and ncol2 == 17 and ncol3 == 26 and ncol4 == 17 and ncol5 == 16
-                                                                                                             ): #check dieu kien file exccel
-            #step 1: processing data Equipment master
+        if (ncol0 == 30 and ncol1 == 44 and ncol2 == 18 and ncol3 == 27 and ncol4 == 21 and ncol5 == 16) or (ncol0 == 34 and ncol1 == 33 and ncol2 == 17 and ncol3 == 26 and ncol4 == 17 and ncol5 == 16
+                                                                                                             ):
+            # step 1: processing data Equipment master
             processEquipmentMaster(ws0)
+
             # step 2: processing data Component master
             processComponentMaster(ws1)
             # step 3: processing data RwAssessment
@@ -1124,7 +1107,6 @@ def importPlanProcess(filename):
             processStream2(ws3)
             processMaterial(ws4)
             processCoating(ws5)
-            processFullyCoF(ws6)
 
     except Exception as e:
         print("Exception at import")

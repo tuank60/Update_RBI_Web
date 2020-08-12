@@ -1369,6 +1369,15 @@ class InspectionCoverageDetail(models.Model):
         managed = False
         db_table = 'inspection_coverage_detail'
 
+
+class InspectionTechnique(models.Model):
+    id = models.AutoField(primary_key=True, blank=True, null=False, db_column='ID')
+    coverageid = models.IntegerField(db_column="CoverageID", blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'inspection_detail_technique'
+
 class RwInspectionDetail(models.Model):
     id = models.IntegerField(blank=True, null=True, db_column='ID')
     detailid = models.AutoField(db_column='DetailID', blank=True, null=False, primary_key=True)
@@ -1473,30 +1482,3 @@ class RwFullCoFHoleSize(models.Model):
     class Meta:
         managed = False
         db_table  = 'rw_full_cof_hole_size'
-
-## calculation toxic consequence
-class TBL_513_Ca_Toxic(models.Model):
-     toxic = models.TextField(db_column='Toxic', blank=True, primary_key=True)
-     releasetype = models.TextField(db_column='ReleaseType', blank=True, null=True)
-     contReleaseDuration = models.TextField(db_column='ContinousReleaseDuration', blank=True)
-     c = models.FloatField(db_column='c', blank=True)
-     d = models.FloatField(db_column='d', blank=True)
-     e = models.FloatField(db_column='e',blank=True)
-     f = models.FloatField(db_column='f',blank=True)
-
-     class Meta:
-         managed = False
-         db_table = 'tbl_513_ca_toxic'
-
-class TBL_511_512_Ca_Gas_Toxic(models.Model):
-    toxicname = models.TextField(db_column='ToxicName', primary_key=True, blank=True)
-    contReleaseDuration = models.TextField(db_column='ContinousReleaseDuration', blank=True)
-    c = models.FloatField(db_column='c', blank=True)
-    d = models.FloatField(db_column='d', blank=True)
-    e = models.FloatField(db_column='e', blank=True)
-    f = models.FloatField(db_column='f', blank=True)
-
-    class Meta:
-        managed = False
-        db_table = 'tbl_511_512_ca_gas_toxic'
-

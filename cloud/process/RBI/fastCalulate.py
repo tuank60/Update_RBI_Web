@@ -279,7 +279,7 @@ def caculateCorrisionRate(proposalID):
             corri.finalestimatedcorrosionrate = co_cal.FinalEstimated_CR()
             corri.save()
     except Exception as e:
-
+        print("Exception at fast calculate")
         print(e)
 
 def calculateNormal(proposalID):
@@ -998,7 +998,8 @@ def calculateTank(proposalID):
                                    CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
                                    CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),
                                    EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
-                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation,
+                                   TankMaintain653=rwequipment.tankismaintained)
         else:
             dm_cal = DM_CAL.DM_CAL(ComponentNumber=str(comp.componentnumber),
                                    Commissiondate=models.EquipmentMaster.objects.get(
@@ -1099,7 +1100,8 @@ def calculateTank(proposalID):
                                    CET_THE_MAWP=bool(rwcomponent.cetgreaterorequal),
                                    CYCLIC_SERVICE=bool(rwcomponent.cyclicservice),
                                    EQUIPMENT_CIRCUIT_SHOCK=bool(rwcomponent.equipmentcircuitshock),
-                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation)
+                                   MIN_TEMP_PRESSURE=rwequipment.minreqtemperaturepressurisation,
+                                   TankMaintain653=rwequipment.tankismaintained)
 
         if isshell:
             if rwFullCofTank.count()==0:

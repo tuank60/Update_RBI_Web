@@ -153,8 +153,8 @@ div.a:hover {
         <ul class="nav nav-pills">
             <li class="active"><a data-toggle="pill" href="#menu0" style="padding-top: 10px;padding-bottom: 10px;background-color: #4CAF50;color: white;">Inspection Scope</a></li>
             <li><a data-toggle="pill" style="padding-top: 10px;padding-bottom: 10px;background-color: #4CAF50;color: white;" href="#menu1">Inspection Method</a></li>
-            <li><a data-toggle="pill" style="padding-top: 10px;padding-bottom: 10px;background-color: #4CAF50;color: white;" href="#menu2">Damage Mechanism</a></li>
-            <li><a data-toggle="pill" style="padding-top: 10px;padding-bottom: 10px;background-color: #4CAF50;color: white;" href="#menu3">Inspection Findings/Description</a></li>
+            <!--<li><a data-toggle="pill" style="padding-top: 10px;padding-bottom: 10px;background-color: #4CAF50;color: white;" href="#menu2">Damage Mechanism</a></li>-->
+            <!--<li><a data-toggle="pill" style="padding-top: 10px;padding-bottom: 10px;background-color: #4CAF50;color: white;" href="#menu3">Inspection Findings/Description</a></li>-->
         </ul>
 
     <!-------------- Body ---------------->
@@ -212,11 +212,11 @@ div.a:hover {
                                     <th>Site Name</th>
                                     <th>Site Date</th>
                                 </tr>
-                                {% for a in site %}
+                                {% for a in siteAll %}
                                 <tr >
-                                    <td align="center"><input type="checkbox" name="{{ a.siteid }}"></td>
-                                    <td align="center">{{ a.sitename }}</td>
-                                    <td align="center">{{ a.create }}</td>
+                                    <td align="center"><input type="checkbox" name="{{ a.ID }}"></td>
+                                    <td align="center">{{ a.SiteName }}</td>
+                                    <td align="center">{{ a.Create }}</td>
                                 </tr>
                                 {% endfor %}
                                 <tr>
@@ -803,9 +803,6 @@ div.a:hover {
                                             <th>External Insulation Type</th>
                                             <th>Insulation Condition</th>
                                             <th>Insulation Contains Chlorides</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th>lAB411</th>
                                         </tr>
                                         </tfoot>
                                     </table>
@@ -828,151 +825,260 @@ div.a:hover {
         <div id="menu1" class="tab-pane fade">
             <div class="city" style="font-size: 15px; color: #444444;background-color:white">
                 <!--------------choose Inspection type ---------------->
-                <div class="city" style="text-align: left">
-                    <caption><strong>Inspection Type:</strong></caption>
-                    <label><input type="checkbox" name="check" onclick="onlyOne(this)">Intrusive</label>
-                    <label> <input type="checkbox" name="check" onclick="onlyOne(this)">Non-Intrusive</label>
-                    <script>
-                        function onlyOne(checkbox) {
-                            var checkboxes = document.getElementsByName('check')
-                            checkboxes.forEach((item) => {
-                                if (item !== checkbox) item.checked = false
-                            })
-                        }
-                    </script>
-                </div>
-                <div class="container">
+                <br>
+                <div class="row">
+                        <div class="col-md-1">Inspection Type:</div>
+                        <div class="col-md-3"><select name="InspectionType" class="form-control">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Intrusive</option>
+                            <option>Non-Intrusive</option>
+                        </select></div>
+                    </div>
+                <!--<div class="container">-->
+                <fieldset class="scheduler-border">
+                    <legend class="scheduler-border"><b>Inspection Technique</b></legend>
                     <div class="row">
-                        <div class="containerflex" title="choose inspection technique" data-toggle="tooltip" data-placement="top">
-                            <!-------------- Inspection Methods ---------------->
-                            <div class="row">
-                                <div class="col-md-8">Inspection Methods<span style="color: red">*</span></div>
-                                <div class="col-md-8">
-                                    <select class="form-control" name="inspectionMethod" id="inspectionMethod" onchange="visiblehidden(this)" required>
-                                        <option disabled selected>Please select inspection method..</option>
-                                        {% for a in imitem %}
-                                            {% if a.imdescription == a.inspectionMethod %}
-                                            <option selected>{{ a.componenttypename }}</option>
-                                            {% else %}
-                                            <option>{{ a.imdescription }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <!-------------- Inspection Technique---------------->
-                            <div class="row">
-                                <div class="col-md-8">API Component Type:<span style="color: red">*</span></div>
-                                <div class="col-md-8">
-                                    <select class="form-control" id="inspectionTechnique" name="inspectionTechnique" required>
-                                        <option disabled selected>Please select api component type..</option>
-                                        {% for a in imtype %}
-                                            {% if a.imtypename == data.inspectionTechnique %}
-                                            <option selected>{{ a.imtypename }}</option>
-                                            {% else %}
-                                            <option>{{ a.imtypename }}</option>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <!------------------Inspection Type Change------------------------->
-                            <script>
-                            $(document).ready(function () {
-                                $("#inspectionMethod").change(function () {
-                                    $("#inspectionTechnique").empty();
-                                    var inspectionmethod = $("#inspectionMethod").val();
-                                    if( inspectionmethod == "Visual"){
-                                        $("#inspectionTechnique").html("<option value ='Endoscopy'>Endoscopy</option>"+
-                                        "<option value='Hydrotesting'>Hydrotesting</option><option value='Naked Eye'>Naked Eye</option>"+
-                                        "<option value='Video'>Video</option>"+
-                                        "<option value='Holiday Test'>Holiday Test</option>");
-                                    }
-                                    else if(inspectionmethod == "Magnetic"){
-                                        $("#inspectionTechnique").html("<option value ='Magnetic Fluorescent Inspection'>Magnetic Fluorescent Inspection</option>"+
-                                        "<option value='Magnetic Flux Leakage'>Magnetic Flux Leakage</option>"+
-                                        "<option value='Magnetic Particle Inspection'>Magnetic Particle Inspection</option>");
-                                    }
-                                    else if(inspectionmethod == "Penetrant"){
-                                        $("#inspectionTechnique").html("<option value ='Liquid Penetrant Inspection'>Liquid Penetrant Inspection</option>"+
-                                        "<option value='Penetrant Leak Detection'>Penetrant Leak Detection</option>");
-                                    }
-                                    else if(inspectionmethod == "Radiography") {
-                                        $("#inspectionTechnique").html("<option value ='Compton Scatter'>Compton Scatter</option>"+
-                                        "<option value='Gamma Radiography'>Gamma Radiography</option>"+
-                                        "<option value='Real-time Radiography'>Real-time Radiography</option>"+
-                                        "<option value='X-Radiography'>X-Radiography</option>");
-                                    }
-                                    else if(inspectionmethod == "Ultrasonic") {
-                                        $("#inspectionTechnique").html("<option value ='Angled Compression Wave'>Angled Compression Wave</option>"+
-                                        "<option value='Angled Shear Wave'>Angled Shear Wave</option>"+
-                                        "<option value='A-scan Thickness Survey'>A-scan Thickness Survey</option>"+
-                                        "<option value='B-scan'>B-scan</option>"+
-                                        "<option value='Chime'>Chime</option>"+
-                                        "<option value='C-scan'>C-scan</option>"+
-                                        "<option value='Digital Ultrasonic Thickness Gauge'>Digital Ultrasonic Thickness Gauge</option>"+
-                                        "<option value='Lorus'>Lorus</option>"+
-                                        "<option value='Surface Waves'>Surface Waves</option>"+
-                                        "<option value='Teletest'>Teletest</option>"+
-                                        "<option value='TOFD'>TOFD</option>"+
-                                        "<option value='Advanced Ultrasonic Backscatter Technique'>Advanced Ultrasonic Backscatter Technique</option>"+
-                                        "<option value='Internal Rotational Inspection System'>Internal Rotational Inspection System</option>");
-                                    }
-                                    else if(inspectionmethod == "Eddy Current") {
-                                        $("#inspectionTechnique").html("<option value ='ACFM'>ACFM</option>"+
-                                        "<option value='Low frequency'>Low frequency</option>"+
-                                        "<option value='Pulsed'>Pulsed</option>"+
-                                        "<option value='Remote field'>Remote field</option>"+
-                                         "<option value='Standard (flat coil)'>Standard (flat coil)</option>");
-                                    }
-                                    else if( inspectionmethod == "Thermography"){
-                                        $("#inspectionTechnique").html("<option value ='Passive Thermography'>Passive Thermography</option>"+
-                                        "<option value='Transient Thermography'>Transient Thermography</option>");
-                                    }
-                                    else if( inspectionmethod == "Acoustic Emission"){
-                                        $("#inspectionTechnique").html("<option value ='Crack Detection'>Crack Detection</option>"+
-                                        "<option value='Leak Detection'>Leak Detection</option>");
-                                    }
-                                    else if( inspectionmethod == "Metallurgical"){
-                                        $("#inspectionTechnique").html("<option value ='Hardness Surveys'>Hardness Surveys</option>"+
-                                        "<option value='Microstructure Replication'>Microstructure Replication</option>");
-                                    }
-                                    else {
-                                        $("#inspectionTechnique").html("<option value ='On-line Monitoring'>On-line Monitoring</option>");
-                                    }
-                                    })
-                                })
-                            </script>
+                        <div class="col-md-1">Visual:</div>
+                        <div class="col-md-3"><select name="Visual" class="form-control">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Endoscopy</option>
+                            <option>Hydrotesting</option>
+                            <option>Naked Eye</option>
+                            <option>Video</option>
+                            <option>Holiday</option>
+                        </select></div>
+                        <div class="col-md-1">Magnetic:</div>
+                        <div class="col-md-3"><select class="form-control" name="Magnetic">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Magnetic Fluorescent Inspection</option>
+                            <option>Magnetic Flux Leakage</option>
+                            <option>Magnetic Particle Inspection</option>
+                        </select></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-1">Penetrant:</div>
+                        <div class="col-md-3"><select name="Penetrant" class="form-control">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Liquid Penetrant Inspection</option>
+                            <option>Liquid Penetrant Inspection</option>
+                        </select></div>
+                        <div class="col-md-1">Radiography:</div>
+                        <div class="col-md-3"><select class="form-control" name="Radiography">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Compton Scatter</option>
+                            <option>Gamma Radiography</option>
+                            <option>Real-time Radiography</option>
+                            <option>X-Radiography</option>
+                        </select></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-1">Ultrasonic:</div>
+                        <div class="col-md-3"><select name="Ultrasonic" class="form-control">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Angled Compression Wave</option>
+                            <option>Angled Shear Wave</option>
+                            <option>A-scan Thickness Survey</option>
+                            <option>B-scan</option>
+                            <option>Chime</option>
+                            <option>C-scan</option>
+                            <option>Digital Ultrasonic Thickness Gauge</option>
+                            <option>Lorus</option>
+                            <option>Surface Waves</option>
+                            <option>Teletest</option>
+                            <option>TOFD</option>
+                            <option>Advanced Ultrasonic Backscatter Technique</option>
+                            <option>Internal Rotational Inspection System</option>
+                        </select></div>
+                        <div class="col-md-1">Eddy Current:</div>
+                        <div class="col-md-3"><select class="form-control" name="EddyCurrent">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>ACFM</option>
+                            <option>Low frequency</option>
+                            <option>Pulsed</option>
+                            <option>Remote field</option>
+                            <option>Standard (flat coil)</option>
+                        </select></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-1">Thermography:</div>
+                        <div class="col-md-3"><select name="Thermography" class="form-control">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Passive Thermography</option>
+                            <option>Transient Thermography</option>
+                        </select></div>
+                        <div class="col-md-1">Acoustic Emission:</div>
+                        <div class="col-md-3"><select class="form-control" name="AcousticEmission">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Crack Detection</option>
+                            <option>Leak Detection</option>
+                        </select></div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-1">Metallurgical:</div>
+                        <div class="col-md-3"><select name="Metallurgical" class="form-control">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>Hardness Surveys</option>
+                            <option>Microstructure Replication</option>
+                        </select></div>
+                        <div class="col-md-1">Monitoring:</div>
+                        <div class="col-md-3"><select class="form-control" name="Monitoring">
+                            <option value="" selected disabled>Please select inspection technique..</option>
+                            <option>On-line Monitoring</option>
+                        </select></div>
+                    </div>
+                    <br>
+                    <div>
+                        <button type="submit" name="_ok" class="btn btn-primary"><i class="fa fa-pencil">&emsp;Submit</i></button>
+                        <button type="submit" name="_cancel" class="btn btn-warning" id="cancel" onclick="Sub()"><i class="fa fa-trash-o">&emsp;Cancel</i></button>
+                    </div>
+                </fieldset>
+
+                    <!--<div class="row">-->
+                        <!--<div class="containerflex" title="choose inspection technique" data-toggle="tooltip" data-placement="top">-->
+                            <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Inspection Methods &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+                            <!--<div class="row">-->
+                                <!--<div class="col-md-8">Inspection Methods<span style="color: red">*</span></div>-->
+                                <!--<div class="col-md-8">-->
+                                    <!--<select class="form-control" name="inspectionMethod" id="inspectionMethod" onchange="visiblehidden(this)" required>-->
+                                        <!--<option disabled selected>Please select inspection method..</option>-->
+                                        <!--{% for a in imitem %}-->
+                                            <!--{% if a.imdescription == a.inspectionMethod %}-->
+                                            <!--<option selected>{{ a.componenttypename }}</option>-->
+                                            <!--{% else %}-->
+                                            <!--<option>{{ a.imdescription }}</option>-->
+                                            <!--{% endif %}-->
+                                        <!--{% endfor %}-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Inspection Technique&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+                            <!--<div class="row">-->
+                                <!--<div class="col-md-8">Inspection Technique:<span style="color: red">*</span></div>-->
+                                <!--<div class="col-md-8">-->
+                                    <!--<select class="form-control" id="inspectionTechnique" name="inspectionTechnique" required>-->
+                                        <!--<option disabled selected>Please select inspection technique..</option>-->
+                                        <!--{% for a in imtype %}-->
+                                            <!--{% if a.imtypename == data.inspectionTechnique %}-->
+                                            <!--<option selected>{{ a.imtypename }}</option>-->
+                                            <!--{% else %}-->
+                                            <!--<option>{{ a.imtypename }}</option>-->
+                                            <!--{% endif %}-->
+                                        <!--{% endfor %}-->
+                                    <!--</select>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!---->
+                            <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;Inspection Type Change-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+                            <!--<script>-->
+                            <!--$(document).ready(function () {-->
+                                 <!--var check = $("#CheckVisual").is(':checked');-->
+                                 <!--if(check){-->
+                                     <!--$("#Visual").attr('disabled', false);-->
+                                 <!--}-->
+                                 <!--else {-->
+                                     <!--$("#Visual").prop('selectedIndex',0);-->
+                                     <!--$("#Visual").attr('disabled', true);-->
+                                 <!--}-->
+                                 <!--$("#CheckVisual").click(function () {-->
+                                     <!--if($("#CheckVisual").prop('checked') == true){-->
+                                         <!--$("#Visual").attr('disabled', false);-->
+                                     <!--}-->
+                                     <!--else {-->
+                                         <!--$("#Visual").prop('selectedIndex',0);-->
+                                         <!--$("#Visual").attr('disabled', true);-->
+                                     <!--}-->
+                                 <!--})-->
+                             <!--})-->
+                            <!--$(document).ready(function () {-->
+                                <!--$("#inspectionMethod").change(function () {-->
+                                    <!--$("#inspectionTechnique").empty();-->
+                                    <!--var inspectionmethod = $("#inspectionMethod").val();-->
+                                    <!--if( inspectionmethod == "Visual"){-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Endoscopy'>Endoscopy</option>"+-->
+                                        <!--"<option value='Hydrotesting'>Hydrotesting</option><option value='Naked Eye'>Naked Eye</option>"+-->
+                                        <!--"<option value='Video'>Video</option>"+-->
+                                        <!--"<option value='Holiday Test'>Holiday Test</option>");-->
+                                    <!--}-->
+                                    <!--else if(inspectionmethod == "Magnetic"){-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Magnetic Fluorescent Inspection'>Magnetic Fluorescent Inspection</option>"+-->
+                                        <!--"<option value='Magnetic Flux Leakage'>Magnetic Flux Leakage</option>"+-->
+                                        <!--"<option value='Magnetic Particle Inspection'>Magnetic Particle Inspection</option>");-->
+                                    <!--}-->
+                                    <!--else if(inspectionmethod == "Penetrant"){-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Liquid Penetrant Inspection'>Liquid Penetrant Inspection</option>"+-->
+                                        <!--"<option value='Penetrant Leak Detection'>Penetrant Leak Detection</option>");-->
+                                    <!--}-->
+                                    <!--else if(inspectionmethod == "Radiography") {-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Compton Scatter'>Compton Scatter</option>"+-->
+                                        <!--"<option value='Gamma Radiography'>Gamma Radiography</option>"+-->
+                                        <!--"<option value='Real-time Radiography'>Real-time Radiography</option>"+-->
+                                        <!--"<option value='X-Radiography'>X-Radiography</option>");-->
+                                    <!--}-->
+                                    <!--else if(inspectionmethod == "Ultrasonic") {-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Angled Compression Wave'>Angled Compression Wave</option>"+-->
+                                        <!--"<option value='Angled Shear Wave'>Angled Shear Wave</option>"+-->
+                                        <!--"<option value='A-scan Thickness Survey'>A-scan Thickness Survey</option>"+-->
+                                        <!--"<option value='B-scan'>B-scan</option>"+-->
+                                        <!--"<option value='Chime'>Chime</option>"+-->
+                                        <!--"<option value='C-scan'>C-scan</option>"+-->
+                                        <!--"<option value='Digital Ultrasonic Thickness Gauge'>Digital Ultrasonic Thickness Gauge</option>"+-->
+                                        <!--"<option value='Lorus'>Lorus</option>"+-->
+                                        <!--"<option value='Surface Waves'>Surface Waves</option>"+-->
+                                        <!--"<option value='Teletest'>Teletest</option>"+-->
+                                        <!--"<option value='TOFD'>TOFD</option>"+-->
+                                        <!--"<option value='Advanced Ultrasonic Backscatter Technique'>Advanced Ultrasonic Backscatter Technique</option>"+-->
+                                        <!--"<option value='Internal Rotational Inspection System'>Internal Rotational Inspection System</option>");-->
+                                    <!--}-->
+                                    <!--else if(inspectionmethod == "Eddy Current") {-->
+                                        <!--$("#inspectionTechnique").html("<option value ='ACFM'>ACFM</option>"+-->
+                                        <!--"<option value='Low frequency'>Low frequency</option>"+-->
+                                        <!--"<option value='Pulsed'>Pulsed</option>"+-->
+                                        <!--"<option value='Remote field'>Remote field</option>"+-->
+                                         <!--"<option value='Standard (flat coil)'>Standard (flat coil)</option>");-->
+                                    <!--}-->
+                                    <!--else if( inspectionmethod == "Thermography"){-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Passive Thermography'>Passive Thermography</option>"+-->
+                                        <!--"<option value='Transient Thermography'>Transient Thermography</option>");-->
+                                    <!--}-->
+                                    <!--else if( inspectionmethod == "Acoustic Emission"){-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Crack Detection'>Crack Detection</option>"+-->
+                                        <!--"<option value='Leak Detection'>Leak Detection</option>");-->
+                                    <!--}-->
+                                    <!--else if( inspectionmethod == "Metallurgical"){-->
+                                        <!--$("#inspectionTechnique").html("<option value ='Hardness Surveys'>Hardness Surveys</option>"+-->
+                                        <!--"<option value='Microstructure Replication'>Microstructure Replication</option>");-->
+                                    <!--}-->
+                                    <!--else {-->
+                                        <!--$("#inspectionTechnique").html("<option value ='On-line Monitoring'>On-line Monitoring</option>");-->
+                                    <!--}-->
+                                    <!--})-->
+                                <!--})-->
+                            <!--</script>-->
+                            <!--<div>-->
+                                <!--<div class="col-md-12" style="text-align: left"><button type="submit" class="btn btn-primary">Add</button></div>-->
+                            <!--</div>-->
                             <!----------------------------------------------------------------->
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <div class="col-md-12" style="text-align: left"><button type="submit" class="btn btn-primary">Add</button></div>
-            </div>
         </div>
-        </div>
-
 <!-------------- Damage Mechanism ---------------->
-        <div id="menu2" class="tab-pane fade">
-          <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        <!--<div id="menu2" class="tab-pane fade">-->
+          <!--<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>-->
 
-        </div>
+        <!--</div>-->
 
-          <!-------------- Inspection Findings/Description ---------------->
-        <div id="menu3" class="tab-pane fade">
-            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-            </div>
-        </div>
+          <!--&lt;!&ndash;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; Inspection Findings/Description &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+        <!--<div id="menu3" class="tab-pane fade">-->
+            <!--<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>-->
+            <!--</div>-->
+        <!--</div>-->
 <!-------------- End Body ---------------->
-        <div class="row">
-            <div class="col-md-12" style="text-align: center">
-                <button type="submit" name="_ok" id="ok" class="btn btn-primary"><i class="fa fa-pencil">&emsp;OK</i></button>
-                <button type="submit" name="_cancel" class="btn btn-warning" id="cancel" onclick="Sub()"><i class="fa fa-trash-o">Cancel</i></button>
-            </div>
-        </div>
-    </div>
 
 </form>
 {% endblock %}
