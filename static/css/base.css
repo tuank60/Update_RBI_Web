@@ -39,10 +39,10 @@ body {margin:0;}
 .header a.a-logout:hover, a.a-logout:active {color: white;background-color: #f55a10 ;}
 
 .active {
-    background-color: #305680 !important;
+    background-color: #053E6F !important;
     color: white !important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-    font-size: 22px !important;
+    font-size: 20px !important;
 }
 .vertical {
     /*background-color: #444444 !important;*/
@@ -51,10 +51,11 @@ body {margin:0;}
     font-size: 22px !important;
 }
 .activeLink {
-    background-color: #ffffff !important;
-    color: #3bbfde !important;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
-    font-size: 22px !important;
+    background-color: #DB812D !important;
+    color: #00000 !important;
+    font-family: Roboto,Helvetica Neue,sans-serif;
+    /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;*/
+    /*font-size: 22px !important;*/
 }
 
 .logout {
@@ -63,7 +64,53 @@ body {margin:0;}
 .alogin {
     background-color: red;
 }
-
+.column {
+  float: left;
+  width: 50%;
+  padding: 20px;
+}
+.columnafter {
+  float: left;
+  width: 33.33%;
+  padding: 20px;
+}
+.row {margin: 0 -5px;}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+        display: block;
+        margin-bottom: 20px;
+    }
+}
+.containerdat {
+  position: absolute;
+  margin: 20px;
+  max-width: 200%;
+  padding: 16px;
+  background-color: white;
+}
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #305680;
+    border-radius: 10px;
+    border-style: solid;
+  border-width:15px;
+  border-color:white;
+}
+.carda {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  text-align: center;
+  background-color: #305680;
+    border-radius: 10px;
+}
 .footer {
    position: fixed;
    left: 0;

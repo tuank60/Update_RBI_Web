@@ -18,13 +18,17 @@
             <table class="table" id="mytable" >
                 <thead >
                     <tr>
-                        <th width="200px" style="text-align: left"><i class="fa fa-tag"></i>&ensp;Name Company</th>
-                        <th width="200px" style="text-align: left"><i class="fa fa-bar-chart-o"></i>&ensp;Risk Summary</th>
+                        <th width="10px" style="text-align: left"><input type="checkbox" id="chkHeader"></th>
+                        <th width="10px" style="text-align: left"><i class="fa fa-tag"></i>&ensp;Created time</th>
+                        <th width="10px" style="text-align: left"><i class="fa fa-tag"></i>&ensp;Name Company</th>
+                        <th width="10px" style="text-align: left"><i class="fa fa-bar-chart-o"></i>&ensp;Risk Summary</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for a in obj %}
                     <tr >
+                        <td align="left"><input type="checkbox" name="{{ a.ID }}"></td>
+                        <td align="left"><a href="{% url 'facilitiesDisplayMana' a.ID %}">{{ a.CreatedTime }}</a></td>
                         <td align="left"><a href="{% url 'facilitiesDisplayMana' a.ID %}">{{ a.SideName }}</a></td>
                         <td align="left"><a href="{% url 'exportData' a.ID 'Facility' %}"><i class="fa fa-print" ></i></a></td>
                     </tr>

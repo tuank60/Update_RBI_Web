@@ -2,39 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7f231c43-833f-45f1-9b74-18536c96b33c" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/ManagerUI/Tool_Manager.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RbiCloud/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/RbiCloud/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloud/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloud/process/File/import_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud/process/File/import_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloud/process/RBI/CA_Flammable.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud/process/RBI/CA_Flammable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud/process/RBI/DM_CAL.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloud/process/RBI/ToxicConsequenceArea.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud/process/RBI/ToxicConsequenceArea.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud/process/RBI/fastCalulate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cloud/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_0SKXbN5.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_GMm3PsD.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_QUKinls.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_RKBfhtG.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_RPYFsek.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_U2zaRlC.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_UF0oZRn.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_Uf1OMWY.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_awGADTO.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_biTeJ20.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_fuNufom.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_ProcessPlant_05-Nov-2019-162503952_lksSe6K.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_StorageTank_09-Jun-2020-141058323.xlsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/media/RiskWISE_Import_Template_StorageTank_v2.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/base.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/base.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/bootstrap.min.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/business.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/business.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/image/logo/logocortek.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/image/logo/logocortek.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/BaseUI/BaseManager/ManagerHome.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/BaseUI/BaseManager/ManagerHome.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalListDisplay.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalListDisplay.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/BaseUI/BaseManager/baseManager.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/BaseUI/BaseManager/baseManager.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/ManagerUI/Business_List.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ManagerUI/Business_List.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ManagerUI/Calculate_Function_Manager.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ManagerUI/Calculate_Function_Manager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ManagerUI/Equipment_List.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ManagerUI/Equipment_List.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ManagerUI/component_List.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ManagerUI/component_List.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/ManagerUI/facility_List.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/ManagerUI/facility_List.html" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -67,66 +47,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Business_List.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="12" column="24" lean-forward="true" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
-              <folding>
-                <element signature="e#675#701#0" expanded="true" />
-                <element signature="n#style#0;n#b#0;n#caption#0;n#div#0;n#form#0;n#!!top" expanded="true" />
-                <element signature="e#962#986#0" expanded="true" />
-                <element signature="e#1078#1102#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/ManagerUI/facility_List.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="23" column="24" lean-forward="true" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
-              <folding>
-                <element signature="n#style#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#b#0;n#caption#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/ManagerHome.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="17" column="36" lean-forward="true" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
-              <folding>
-                <element signature="e#632#638#0" expanded="true" />
-                <element signature="e#1062#1068#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/baseManager.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="29" selection-start-column="29" selection-end-column="29" />
-              <folding>
-                <element signature="e#3675#3745#0" expanded="true" />
-                <element signature="e#6426#6473#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="55" selection-start-line="13" selection-start-column="48" selection-end-line="13" selection-end-column="55" />
+            <state relative-caret-position="-119">
+              <caret line="14" column="66" lean-forward="true" selection-start-line="14" selection-start-column="66" selection-end-line="14" selection-end-column="66" />
               <folding>
+                <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -138,28 +64,86 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/css/manager.css">
+        <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="6" column="15" lean-forward="true" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
+            <state relative-caret-position="323">
+              <caret line="40" column="33" lean-forward="true" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
+              <folding>
+                <element signature="e#521#553#0" expanded="true" />
+                <element signature="e#608#628#0" expanded="true" />
+                <element signature="e#686#709#0" expanded="true" />
+                <element signature="e#789#808#0" expanded="true" />
+                <element signature="e#871#891#0" expanded="true" />
+                <element signature="e#953#976#0" expanded="true" />
+                <element signature="e#1135#1154#0" expanded="true" />
+                <element signature="e#1490#1543#0" expanded="true" />
+                <element signature="e#1558#1581#0" expanded="true" />
+                <element signature="e#1582#1588#0" expanded="true" />
+                <element signature="e#1684#1703#0" expanded="true" />
+                <element signature="e#1788#1811#0" expanded="true" />
+                <element signature="e#2020#2039#0" expanded="true" />
+                <element signature="e#2124#2147#0" expanded="true" />
+                <element signature="e#2347#2366#0" expanded="true" />
+                <element signature="e#2453#2476#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/css/base.css">
+        <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/ManagerHome.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="16" column="16" lean-forward="true" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
+            <state relative-caret-position="156">
+              <caret line="14" column="61" lean-forward="true" selection-start-line="14" selection-start-column="61" selection-end-line="14" selection-end-column="61" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/VerificationBase.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="65" column="12" lean-forward="true" selection-start-line="65" selection-start-column="12" selection-end-line="65" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/baseManager.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="63" column="4" selection-start-line="63" selection-start-column="4" selection-end-line="63" selection-end-column="4" />
+              <folding>
+                <element signature="e#3675#3745#0" expanded="true" />
+                <element signature="e#6426#6473#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/css/bootstrap.min.css">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="279">
+              <caret line="4" column="18643" selection-start-line="4" selection-start-column="18643" selection-end-line="4" selection-end-column="18643" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="127">
+              <caret line="5012" column="15" selection-start-line="5012" selection-start-column="4" selection-end-line="5012" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-430">
-              <caret line="100" column="45" selection-start-line="100" selection-start-column="45" selection-end-line="100" selection-end-column="45" />
+            <state relative-caret-position="127">
+              <caret line="100" column="118" selection-start-line="100" selection-start-column="94" selection-end-line="100" selection-end-column="118" />
               <folding>
                 <element signature="e#632#664#0" expanded="true" />
               </folding>
@@ -168,19 +152,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cloud/views.py">
+        <entry file="file://$PROJECT_DIR$/static/css/business.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="5033" column="42" lean-forward="true" selection-start-line="5033" selection-start-column="42" selection-end-line="5033" selection-end-column="42" />
+            <state relative-caret-position="372">
+              <caret line="81" column="19" selection-start-line="81" selection-start-column="19" selection-end-line="81" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/css/business.css">
+        <entry file="file://$PROJECT_DIR$/static/css/base.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="79" column="17" lean-forward="true" selection-start-line="79" selection-start-column="17" selection-end-line="79" selection-end-column="17" />
+            <state relative-caret-position="17">
+              <caret line="31" column="34" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -197,36 +181,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>all</find>
-      <find>get</find>
-      <find>ListNormalProposalFofInpsection</find>
-      <find>equip</find>
-      <find>Equipment Name:</find>
-      <find>Inspection Methods</find>
-      <find>container</find>
-      <find>submit</find>
-      <find>equipName</find>
-      <find>damage</find>
-      <find>rw_damage_mechanism</find>
-      <find>DmItems</find>
-      <find>print</find>
-      <find>dm_items</find>
-      <find>DMItems</find>
-      <find>inspection_coverage_detail</find>
-      <find>zm_people_sent</find>
-      <find>listDesign</find>
-      <find>ManagerHome</find>
-      <find>Business_List</find>
-      <find>inspecPlan</find>
-      <find>manu</find>
-      <find>listManagement</find>
-      <find>home</find>
-      <find>manager</find>
-      <find>footer</find>
-      <find>management/</find>
-      <find>managerHomeDetail</find>
       <find>sites</find>
       <find>design</find>
+      <find>equipmentMana/</find>
+      <find>facilitiesMana/display</find>
+      <find>componentMana</find>
+      <find>navbar</find>
+      <find>sidenav</find>
+      <find>navbar navbar-fixed-top</find>
+      <find>facilitiesMana</find>
+      <find>activeLink</find>
+      <find>messagesInbox</find>
+      <find>managerHomeDetail</find>
+      <find>managerhomedetail</find>
+      <find>base_manager</find>
+      <find>forum/</find>
+      <find>home</find>
+      <find>baseManager</find>
+      <find>CalculateFunction</find>
+      <find>active</find>
+      <find>nav-pills</find>
+      <find>tank</find>
+      <find>acti</find>
+      <find>table</find>
+      <find>alog</find>
+      <find>d9</find>
+      <find>Calculate_</find>
+      <find>listManagement</find>
+      <find>ManagerHome</find>
+      <find>calculateFunctionManager</find>
+      <find>tr</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -247,7 +231,6 @@
         <option value="$PROJECT_DIR$/cloud/process/RBI/Postgresql.py" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalEdit.html" />
-        <option value="$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html" />
         <option value="$PROJECT_DIR$/RbiCloud/settings.py" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/proposal/proposalTankNew.html" />
         <option value="$PROJECT_DIR$/cloud/process/RBI/FinancialCOF.py" />
@@ -270,15 +253,23 @@
         <option value="$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseFacility.html" />
         <option value="$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html" />
         <option value="$PROJECT_DIR$/cloud/models.py" />
-        <option value="$PROJECT_DIR$/cloud/views.py" />
         <option value="$PROJECT_DIR$/templates/ManagerUI/Tool_Manager.html" />
-        <option value="$PROJECT_DIR$/RbiCloud/urls.py" />
-        <option value="$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html" />
-        <option value="$PROJECT_DIR$/templates/ManagerUI/Calculate_Function_Manager.html" />
-        <option value="$PROJECT_DIR$/static/css/base.css" />
-        <option value="$PROJECT_DIR$/templates/ManagerUI/Business_List.html" />
-        <option value="$PROJECT_DIR$/static/css/business.css" />
+        <option value="$PROJECT_DIR$/templates/ManagerUI/facility_List.html" />
+        <option value="$PROJECT_DIR$/templates/ManagerUI/Equipment_List.html" />
+        <option value="$PROJECT_DIR$/templates/ManagerUI/component_List.html" />
+        <option value="$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html" />
         <option value="$PROJECT_DIR$/templates/BaseUI/BaseManager/ManagerHome.html" />
+        <option value="$PROJECT_DIR$/templates/BaseUI/BaseForum/forumhome.html" />
+        <option value="$PROJECT_DIR$/RbiCloud/urls.py" />
+        <option value="$PROJECT_DIR$/templates/ManagerUI/Business_List.html" />
+        <option value="$PROJECT_DIR$/templates/ManagerUI/Calculate_Function_Manager.html" />
+        <option value="$PROJECT_DIR$/static/css/business.css" />
+        <option value="$PROJECT_DIR$/static/css/base.css" />
+        <option value="$PROJECT_DIR$/static/css/bootstrap.min.css" />
+        <option value="$PROJECT_DIR$/cloud/views.py" />
+        <option value="$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html" />
+        <option value="$PROJECT_DIR$/templates/BaseUI/BaseManager/VerificationBase.html" />
+        <option value="$PROJECT_DIR$/templates/BaseUI/BaseManager/baseManager.html" />
       </list>
     </option>
   </component>
@@ -362,6 +353,20 @@
               <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="BaseUI" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseFacility" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseUI" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseForum" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="BaseUI" type="462c0819:PsiDirectoryNode" />
               <item name="BaseManager" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -370,6 +375,26 @@
               <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="BaseUI" type="462c0819:PsiDirectoryNode" />
               <item name="BaseWeb" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="facility" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Update_RBI_Web" type="462c0819:PsiDirectoryNode" />
+              <item name="templates" type="462c0819:PsiDirectoryNode" />
+              <item name="FacilityUI" type="462c0819:PsiDirectoryNode" />
+              <item name="inspection_plan" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Update_RBI_Web" type="b2602c69:ProjectViewProjectNode" />
@@ -452,8 +477,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49671772" visible="true" weight="0.20461309" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49671772" visible="true" weight="0.18080357" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.50328225" side_tool="true" weight="0.20163691" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -464,8 +490,8 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3289689" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.4107143" side_tool="true" weight="0.30441898" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.58928573" visible="true" weight="0.30441898" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.41145834" side_tool="true" weight="0.2487725" />
+      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.5885417" visible="true" weight="0.2487725" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3289689" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -474,7 +500,7 @@
       <window_info anchor="right" id="Database" order="4" visible="true" weight="0.22087745" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49671772" visible="true" weight="0.20461309" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49671772" visible="true" weight="0.18080357" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.50328225" side_tool="true" weight="0.20163691" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -486,7 +512,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3289689" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.4107143" side_tool="true" weight="0.30441898" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.58928573" visible="true" weight="0.30441898" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.58928573" visible="true" weight="0.2487725" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3289689" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -502,53 +528,6 @@
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/facility/facilityNew.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="57" column="132" lean-forward="true" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="132" />
-          <folding>
-            <element signature="e#3444#3469#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/NewSensor.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/inspectionPlanNew.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="569">
-          <caret line="141" column="37" selection-start-line="141" selection-start-column="30" selection-end-line="141" selection-end-column="37" />
-          <folding>
-            <element signature="e#2639#2657#0" expanded="true" />
-            <element signature="e#2854#2880#0" expanded="true" />
-            <element signature="e#3170#3205#0" expanded="true" />
-            <element signature="e#6119#6151#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/PycharmProjects/untitled/venv/Lib/site-packages/django/db/models/fields/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="1422" selection-start-line="1422" selection-end-line="1422" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3/datetime.pyi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="242" column="8" selection-start-line="242" selection-start-column="8" selection-end-line="242" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/risk_summary/fullyShellConsequence.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="27" column="37" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cloud/process/RBI/FinancialCOF.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="178">
@@ -737,16 +716,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/facility/facilityListDisplay.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="66" selection-start-line="8" selection-start-column="66" selection-end-line="8" selection-end-column="66" />
-          <folding>
-            <element signature="e#1070#1096#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseFacility/baseFacility.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -802,19 +771,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="135" column="11" lean-forward="true" selection-start-line="135" selection-start-column="11" selection-end-line="135" selection-end-column="11" />
-          <folding>
-            <element signature="e#3519#3559#0" expanded="true" />
-            <element signature="e#3641#3681#0" expanded="true" />
-            <element signature="e#3843#3929#0" expanded="true" />
-            <element signature="e#3994#4080#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/FacilityUI/proposal/proposalNormalNew.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
@@ -848,39 +804,216 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html">
+    <entry file="file://$PROJECT_DIR$/static/image/logo/logocortek.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/facility/facilityListDisplay.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="66" selection-start-line="6" selection-start-column="66" selection-end-line="6" selection-end-column="66" />
+        <state relative-caret-position="544">
+          <caret line="32" column="24" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="89" />
+          <folding>
+            <element signature="e#1070#1096#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Calculate_Function_Manager.html">
+    <entry file="file://$PROJECT_DIR$/cloud/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="66" selection-start-line="6" selection-start-column="66" selection-end-line="6" selection-end-column="66" />
+        <state relative-caret-position="407">
+          <caret line="255" column="10" selection-start-line="255" selection-start-column="4" selection-end-line="255" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/views.py">
+    <entry file="file://$PROJECT_DIR$/static/css/index.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/component_List.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="5033" column="42" lean-forward="true" selection-start-line="5033" selection-start-column="42" selection-end-line="5033" selection-end-column="42" />
+        <state relative-caret-position="289">
+          <caret line="41" column="39" selection-start-line="41" selection-start-column="39" selection-end-line="41" selection-end-column="39" />
+          <folding>
+            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Equipment_List.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" column="78" selection-start-line="41" selection-start-column="78" selection-end-line="41" selection-end-column="78" />
+          <folding>
+            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/facility_List.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="29" column="80" selection-start-line="29" selection-start-column="80" selection-end-line="29" selection-end-column="80" />
+          <folding>
+            <element signature="n#style#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#b#0;n#caption#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#3;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseForum/forumhome.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="40" column="25" lean-forward="true" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Business_List.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="17" column="47" lean-forward="true" selection-start-line="17" selection-start-column="47" selection-end-line="17" selection-end-column="47" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#b#0;n#caption#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#0;n#form#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/css/manager.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="15" lean-forward="true" selection-start-line="6" selection-start-column="15" selection-end-line="6" selection-end-column="15" />
+        <state relative-caret-position="119">
+          <caret line="7" column="1" lean-forward="true" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/FacilityUI/inspection_plan/addInspectionPlan.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="812" column="24" selection-start-line="812" selection-start-column="24" selection-end-line="816" selection-end-column="30" />
+          <folding>
+            <element signature="e#3519#3559#0" expanded="true" />
+            <element signature="e#3641#3681#0" expanded="true" />
+            <element signature="e#3843#3929#0" expanded="true" />
+            <element signature="e#3994#4080#0" expanded="true" />
+            <element signature="e#61713#61775#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Calculate_Function_Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1887">
+          <caret line="147" column="52" lean-forward="true" selection-start-line="147" selection-start-column="52" selection-end-line="147" selection-end-column="52" />
+          <folding>
+            <element signature="e#683#769#0" expanded="true" />
+            <element signature="e#1194#1256#0" expanded="true" />
+            <element signature="e#1846#1942#0" expanded="true" />
+            <element signature="e#2016#2112#0" expanded="true" />
+            <element signature="e#2198#2294#0" expanded="true" />
+            <element signature="e#2380#2476#0" expanded="true" />
+            <element signature="e#2562#2658#0" expanded="true" />
+            <element signature="e#2732#2828#0" expanded="true" />
+            <element signature="e#3110#3136#0" expanded="true" />
+            <element signature="e#47279#47341#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/base.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="31" column="34" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/business.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="81" column="19" selection-start-line="81" selection-start-column="19" selection-end-line="81" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/bootstrap.min.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="4" column="18643" selection-start-line="4" selection-start-column="18643" selection-end-line="4" selection-end-column="18643" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="5012" column="15" selection-start-line="5012" selection-start-column="4" selection-end-line="5012" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="127">
+          <caret line="100" column="118" selection-start-line="100" selection-start-column="94" selection-end-line="100" selection-end-column="118" />
+          <folding>
+            <element signature="e#632#664#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Home_Manager.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="40" column="33" lean-forward="true" selection-start-line="40" selection-start-column="33" selection-end-line="40" selection-end-column="33" />
+          <folding>
+            <element signature="e#521#553#0" expanded="true" />
+            <element signature="e#608#628#0" expanded="true" />
+            <element signature="e#686#709#0" expanded="true" />
+            <element signature="e#789#808#0" expanded="true" />
+            <element signature="e#871#891#0" expanded="true" />
+            <element signature="e#953#976#0" expanded="true" />
+            <element signature="e#1135#1154#0" expanded="true" />
+            <element signature="e#1490#1543#0" expanded="true" />
+            <element signature="e#1558#1581#0" expanded="true" />
+            <element signature="e#1582#1588#0" expanded="true" />
+            <element signature="e#1684#1703#0" expanded="true" />
+            <element signature="e#1788#1811#0" expanded="true" />
+            <element signature="e#2020#2039#0" expanded="true" />
+            <element signature="e#2124#2147#0" expanded="true" />
+            <element signature="e#2347#2366#0" expanded="true" />
+            <element signature="e#2453#2476#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/VerificationBase.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="65" column="12" lean-forward="true" selection-start-line="65" selection-start-column="12" selection-end-line="65" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/ManagerHome.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="14" column="61" lean-forward="true" selection-start-line="14" selection-start-column="61" selection-end-line="14" selection-end-column="61" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseWeb/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="55" selection-start-line="13" selection-start-column="48" selection-end-line="13" selection-end-column="55" />
+        <state relative-caret-position="-119">
+          <caret line="14" column="66" lean-forward="true" selection-start-line="14" selection-start-column="66" selection-end-line="14" selection-end-column="66" />
           <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -890,83 +1023,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cloud/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="812" column="26" lean-forward="true" selection-start-line="812" selection-start-column="26" selection-end-line="812" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/base.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="16" column="16" lean-forward="true" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/image/logo/logocortek.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/facility_List.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="23" column="24" lean-forward="true" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
-          <folding>
-            <element signature="n#style#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#b#0;n#caption#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#1;n#form#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/ManagerUI/Business_List.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="12" column="24" lean-forward="true" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
-          <folding>
-            <element signature="e#675#701#0" expanded="true" />
-            <element signature="n#style#0;n#b#0;n#caption#0;n#div#0;n#form#0;n#!!top" expanded="true" />
-            <element signature="e#962#986#0" expanded="true" />
-            <element signature="e#1078#1102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/baseManager.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="29" selection-start-column="29" selection-end-column="29" />
+        <state relative-caret-position="306">
+          <caret line="63" column="4" selection-start-line="63" selection-start-column="4" selection-end-line="63" selection-end-column="4" />
           <folding>
             <element signature="e#3675#3745#0" expanded="true" />
             <element signature="e#6426#6473#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/business.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="79" column="17" lean-forward="true" selection-start-line="79" selection-start-column="17" selection-end-line="79" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/BaseUI/BaseManager/ManagerHome.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="17" column="36" lean-forward="true" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
-          <folding>
-            <element signature="e#632#638#0" expanded="true" />
-            <element signature="e#1062#1068#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/RbiCloud/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-430">
-          <caret line="100" column="45" selection-start-line="100" selection-start-column="45" selection-end-line="100" selection-end-column="45" />
-          <folding>
-            <element signature="e#632#664#0" expanded="true" />
           </folding>
         </state>
       </provider>

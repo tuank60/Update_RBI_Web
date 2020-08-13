@@ -4999,7 +4999,9 @@ def CalculateFunctionManager(request,siteID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
-    return render(request, 'ManagerUI/Calculate_Function_Manager.html', {'page':'calculateFunctionManager','siteID':siteID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+    data = ListNormalProposalFofInpsection(siteID=siteID, facilityID=0, equimentID=0)
+    dataTank = ListTankProposalForInpsection(siteID=siteID, facilityID=0, equimentID=0)
+    return render(request, 'ManagerUI/Calculate_Function_Manager.html', {'page':'calculateFunctionManager','siteID':siteID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count,'data':data,'dataTank':dataTank})
 def ToolManager(request,siteID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
@@ -5019,6 +5021,7 @@ def ManagerHome(request, siteID):
         for a in data:
             dataF = {}
             dataF['ID'] = a.siteid
+            dataF['CreatedTime'] = a.create
             dataF['SideName'] = a.sitename
             risk.append(dataF)
         pagiFaci = Paginator(risk, 25)
@@ -5046,6 +5049,7 @@ def ListFacilitiesMana(request, siteID):
             dataF = {}
             risTarget = models.FacilityRiskTarget.objects.get(facilityid= a.facilityid)
             dataF['ID'] = a.facilityid
+            dataF['CreatedTime'] = a.create
             dataF['FacilitiName'] = a.facilityname
             dataF['ManagementFactor'] = a.managementfactor
             dataF['RiskTarget'] = risTarget.risktarget_fc

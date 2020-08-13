@@ -22,19 +22,23 @@
             <table class="table" id="mytable" >
                 <thead >
                     <tr>
-                        <th width="200px" style="text-align: center"><i class="fa fa-tag"></i>&ensp;Facility</th>
-                        <th width="200px" style="text-align: center"><i class="fa fa-compass"></i>&ensp;Facility Management Factor</th>
-                        <th width="200px" style="text-align: center"><i class="fa fa-bullseye"></i>&ensp;Facility Risk Target</th>
-                        <th width="200px" style="text-align: center"><i class="fa fa-bar-chart-o"></i>&ensp;Risk Summary</th>
+                        <th width="50px" style="text-align: left"><input type="checkbox" id="chkHeader"></th>
+                        <th width="300px" style="text-align: left"><i class="fa fa-tag"></i>&ensp;Created time</th>
+                        <th width="200px" style="text-align: left"><i class="fa fa-tag"></i>&ensp;Facility</th>
+                        <th width="250px" style="text-align: left"><i class="fa fa-compass"></i>&ensp;Facility Management Factor</th>
+                        <th width="200px" style="text-align: left"><i class="fa fa-bullseye"></i>&ensp;Facility Risk Target</th>
+                        <th width="200px" style="text-align: left"><i class="fa fa-bar-chart-o"></i>&ensp;Risk Summary</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for a in obj %}
                     <tr >
-                        <td align="center"><a href="{% url 'equipmentDisplayMana' a.ID %}">{{ a.FacilitiName }}</a></td>
-                        <td align="center">{{ a.ManagementFactor }}</td>
-                        <td align="center">{{ a.RiskTarget }}</td>
-                        <td align="center"><a href="{% url 'exportData' a.ID 'Facility' %}"><i class="fa fa-print" ></i></a></td>
+                        <td align="left"><input type="checkbox" name="{{ a.ID }}"></td>
+                        <td align="left"><a href="{% url 'equipmentDisplayMana' a.ID %}">{{ a.CreatedTime }}</a></td>
+                        <td align="left"><a href="{% url 'equipmentDisplayMana' a.ID %}">{{ a.FacilitiName }}</a></td>
+                        <td align="left">{{ a.ManagementFactor }}</td>
+                        <td align="left">{{ a.RiskTarget }}</td>
+                        <td align="left"><a href="{% url 'exportData' a.ID 'Facility' %}"><i class="fa fa-print" ></i></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
