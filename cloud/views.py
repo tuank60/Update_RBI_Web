@@ -932,8 +932,6 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
             obj8 = {}
             obj9 = {}
             obj10 = {}
-            dataobj = []
-            listCover = []
             listCover = [listdata['cover1'],listdata['cover2'],listdata['cover3'],listdata['cover4'],listdata['cover5'],listdata['cover6'],listdata['cover7'],listdata['cover8'],listdata['cover9'],listdata['cover10']]
             if(listdata['visual'] == 'Endoscopy'):
                 obj1['IMItemID'] = 1
@@ -1054,7 +1052,6 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
                 obj10['IMItemID'] = 10
                 obj10['IMTypeID'] = 36
             dataobj = [obj1,obj2,obj3,obj4,obj5,obj6,obj7,obj8,obj9,obj10]
-            print(dataobj)
             dataobjCopy = []
             i=0
             for a in dataobj:
@@ -1062,7 +1059,6 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
                     a['Cover']= listCover[i]
                     dataobjCopy.append(a)
                 i=i+1
-            print(dataobjCopy)
         if '_select' in request.POST:
             for a in site:
                 if (request.POST.get('%d' % a.siteid)):
@@ -1108,7 +1104,6 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
                     for c in rwdama:
                         equip = models.RwAssessment.objects.get(id=u.id).equipmentid_id
                         comp = models.RwAssessment.objects.get(id=u.id).componentid_id
-                        print(equip,comp)
                         if ((d.equipmentid_id == equip) and (d.componentid_id==comp)):
                             dmitem = models.DMItems.objects.get(dmitemid=c.dmitemid_id)
                             inSpecCoverDT = models.InspectionCoverageDetail(coverageid_id=d.id, dmitemid_id=dmitem.dmitemid,inspectiondate=date)
@@ -1129,45 +1124,61 @@ def DamamgeMechanism(request,planID,siteID):
     inspecCover = models.InspectionCoverage.objects.filter(planid_id=planID)
     listDMItem = [8,9,61,57,67,34,32,66,69,60,72,62,70,73]
     dataSumary = []
-    i = 0
     try:
         if(inspecCover.count()==1):
             inspecCover1 = models.InspectionCoverage.objects.get(planid_id=planID)
             inspecCoverDetail = models.InspectionCoverageDetail.objects.filter(coverageid_id=inspecCover1.id)
             inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=inspecCover1.id)
             for b in inspecCoverDetail:
+                listSub = ""
+                obj = {}
+                obj['ID'] = b.id
+                obj['DMITemID'] = models.DMItems.objects.get(dmitemid=b.dmitemid_id).dmdescription
+                obj['EquipmentName'] = models.EquipmentMaster.objects.get(
+                    equipmentid=inspecCover1.equipmentid_id).equipmentnumber
+                obj['ComponenttName'] = models.ComponentMaster.objects.get(
+                    componentid=inspecCover1.componentid_id).componentnumber
                 if b.dmitemid_id in listDMItem:
                     inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
-                    print("go here", inspecDmRule.count())
                     for f in inspecDmRule:
                         for c in inspecTech:
                             if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
-                                print("gogo")
                                 obj1 = {}
-                                obj1['EquipmentName'] = models.EquipmentMaster.objects.get(equipmentid=inspecCover1.equipmentid_id).equipmentnumber
-                                obj1['ComponenttName'] = models.ComponentMaster.objects.get(componentid=inspecCover1.componentid_id).componentnumber
                                 if c.inspectiontype == 1:
                                     obj1['Type'] = "Intrusive"
                                 else:
-                                    c.inspectiontype = "Non-Intrusive"
+                                    obj1['Type'] = "Non-Intrusive"
                                 obj1['Coverage'] = c.coverage
-                                obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
                                 obj1['IMITemID'] = models.IMItem.objects.get(imitemid=c.imitemid_id).imdescription
                                 obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
-                                dataSumary.append(obj1)
+                                listSub = listSub+ obj1['Type']+"-"+obj1['IMITemID']+"-"+obj1['IMTypeID']+"-"+str(obj1['Coverage'])+"%"+";"
+                obj['Summary'] = listSub
+                print(listSub)
+                dataSumary.append(obj)
                 print(dataSumary)
         else:
             for a in inspecCover:
                 inspecCoverDetail2 = models.InspectionCoverageDetail.objects.filter(coverageid_id=a.id)
                 inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=a.id)
                 for b in inspecCoverDetail2:
+                    listSub = ""
+                    obj = {}
+                    obj['InspectionDate'] = models.InspecPlan.objects.get(id=planID).inspectionplandate
+                    obj['CoverageID'] = a.id
+                    obj['CoverageDetailID'] = b.id
+                    obj['DMITemID'] = b.dmitemid_id
+                    obj['ID'] = b.id
+                    obj['DMITemName'] = models.DMItems.objects.get(dmitemid=b.dmitemid_id).dmdescription
+                    obj['EquipmentName'] = models.EquipmentMaster.objects.get(
+                        equipmentid=a.equipmentid_id).equipmentnumber
+                    obj['ComponenttName'] = models.ComponentMaster.objects.get(
+                        componentid=a.componentid_id).componentnumber
                     if b.dmitemid_id in listDMItem:
                         inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
                         print("go here", inspecDmRule.count())
                         for f in inspecDmRule:
                             for c in inspecTech:
                                 if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
-                                    print("gogo")
                                     obj1 = {}
                                     if c.inspectiontype == 1:
                                         obj1['Type'] = "Intrusive"
@@ -1176,15 +1187,19 @@ def DamamgeMechanism(request,planID,siteID):
                                     obj1['Coverage'] = c.coverage
                                     obj1['IMITemID'] = models.IMItem.objects.get(imitemid=c.imitemid_id).imdescription
                                     obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
-                                    obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
-                                    obj1['EquipmentName'] = models.EquipmentMaster.objects.get(
-                                        equipmentid=a.equipmentid_id).equipmentnumber
-                                    obj1['ComponenttName'] = models.ComponentMaster.objects.get(
-                                        componentid=a.componentid_id).componentnumber
-                                    dataSumary.append(obj1)
+                                    listSub = listSub + obj1['Type'] + "-" + obj1['IMITemID'] + "-" + obj1[
+                                        'IMTypeID'] + "-" + str(obj1['Coverage']) + "%" + ";"
+                    obj['Summary'] = listSub
+                    print(listSub)
+                    dataSumary.append(obj)
                     print(dataSumary)
         if '_ok' in request.POST:
             print("test ok")
+            for a in dataSumary:
+                if (request.POST.get('%d' % a['CoverageDetailID'])):
+                    print("test save")
+                    inspectionCoverDetail = models.InspectionCoverageDetail(id=a['ID'],coverageid=a['CoverageID'],dmitemid=a['DMITemID'],inspsummary=a['Summary'],effcode=request.POST.get('EEF'))
+                    inspectionCoverDetail.save()
     except Exception as e:
         print(e)
         print("DamamgeMechanism")
@@ -4165,6 +4180,10 @@ def FullyDamageFactor(request, proposalID):
         data['pofap1category'] = df.pofap1category
         data['pofap2category'] = df.pofap2category
         data['pofap3category'] = df.pofap3category
+        if '_show1' in request.POST:
+            return redirect('thining', proposalID=proposalID)
+        if '_show2' in request.POST:
+            return redirect('governing', proposalID=proposalID)
         if request.method == 'POST':
             df.thinningtype = request.POST.get('thinningType')
             df.save()
@@ -4175,6 +4194,18 @@ def FullyDamageFactor(request, proposalID):
         raise Http404
     return render(request, 'FacilityUI/risk_summary/dfFull.html', {'page':'damageFactor', 'obj':data, 'assess': rwAss, 'isTank': isTank,
                                                                    'isShell': isShell, 'proposalID':proposalID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+def ShowThining(request,proposalID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    return render(request, 'FacilityUI/risk_summary/showThining.html',{'page':'thining','info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+def ShowGoverning(request,proposalID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    return render(request, 'FacilityUI/risk_summary/showGoverning.html',{'page':'governing','info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
 def FullyConsequence(request, proposalID): #Finance cof
     data = {}
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])

@@ -63,6 +63,7 @@ div.a:hover {
                                 <thead>
                                     <tr>
                                         <!------- Proposal-------->
+                                        <th width="100px" style="text-align: center"><input type="checkbox" id="check"></th>
                                         <th >Equipment Number</th>
                                         <th>Conponent Number</th>
                                         <th>Damage Mechanism</th>
@@ -73,12 +74,13 @@ div.a:hover {
                                 <tbody>
                                     {% for a in dataSumary %}
                                         <tr >
+                                            <td><div class="a"><input type="checkbox" name="{{ a.CoverageDetailID }}"></div></td>
                                             <td align="center">{{a.EquipmentName}}</td>
                                             <td align="center">{{a.ComponenttName}}</td>
-                                            <td align="center">{{a.DMITemID}}</td>
-                                            <td align="center">{{a.Type}}-{{a.IMITemID}}-{{a.IMTypeID}}-{{a.Coverage}}%</td>
+                                            <td align="center">{{a.DMITemName}}</td>
+                                            <td align="center" width="250px">{{a.Summary}}</td>
                                             <td align="center">
-                                                <select class="form-control" name="ConfidenceCR" >
+                                                <select class="form-control" name="EEF" >
                                                     <option>A</option>
                                                     <option>B</option>
                                                     <option>C</option>
@@ -91,6 +93,7 @@ div.a:hover {
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <th width="100px" style="text-align: center"><input type="checkbox" id=""></th>
                                         <th >Equipment Number</th>
                                         <th>Conponent Number</th>
                                         <th>Damage Mechanism</th>

@@ -37,6 +37,8 @@ urlpatterns = [
     path('designcode/', views.base_designcode, name='designcode'),
     path('manufacture/', views.base_manufacture, name= 'manufacture'),
     ########################## Facility UI################################
+    path('damage/thining/<int:proposalID>/', views.ShowThining, name='thining'),
+    path('damage/governing/<int:proposalID>/', views.ShowGoverning, name='governing'),
     path('inspection/plan/<int:siteID>/', views.MainInpsectionPlan, name='inspectionPlan'),
     path('inspection/plan/<int:siteID>/<int:planID>/damageMechanism', views.DamamgeMechanism, name='damageMechanism'),
     path('inspection/plan/<int:siteID>/InpsectionPlan<str:name>/InpsectionPlan<str:date>/', views.MainInpsectionPlan,name='inspectionPlan'),
