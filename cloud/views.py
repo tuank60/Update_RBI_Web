@@ -1129,39 +1129,13 @@ def DamamgeMechanism(request,planID,siteID):
     inspecCover = models.InspectionCoverage.objects.filter(planid_id=planID)
     listDMItem = [8,9,61,57,67,34,32,66,69,60,72,62,70,73]
     dataSumary = []
-    dataDMItem = []
-    dataIMItem = []
     i = 0
-    if(inspecCover.count()==1):
-        inspecCover1 = models.InspectionCoverage.objects.get(planid_id=planID)
-        inspecCoverDetail = models.InspectionCoverageDetail.objects.filter(coverageid_id=inspecCover1.id)
-        inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=inspecCover1.id)
-        for b in inspecCoverDetail:
-            if b.dmitemid_id in listDMItem:
-                inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
-                print("go here", inspecDmRule.count())
-                for f in inspecDmRule:
-                    for c in inspecTech:
-                        if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
-                            print("gogo")
-                            obj1 = {}
-                            obj1['EquipmentName'] = models.EquipmentMaster.objects.get(equipmentid=inspecCover1.equipmentid_id).equipmentnumber
-                            obj1['ComponenttName'] = models.ComponentMaster.objects.get(componentid=inspecCover1.componentid_id).componentnumber
-                            if c.inspectiontype == 1:
-                                obj1['Type'] = "Intrusive"
-                            else:
-                                c.inspectiontype = "Non-Intrusive"
-                            obj1['Coverage'] = c.coverage
-                            obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
-                            obj1['IMITemID'] = models.IMItem.objects.get(imitemid=c.imitemid_id).imdescription
-                            obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
-                            dataSumary.append(obj1)
-            print(dataSumary)
-    else:
-        for a in inspecCover:
-            inspecCoverDetail2 = models.InspectionCoverageDetail.objects.filter(coverageid_id=a.id)
-            inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=a.id)
-            for b in inspecCoverDetail2:
+    try:
+        if(inspecCover.count()==1):
+            inspecCover1 = models.InspectionCoverage.objects.get(planid_id=planID)
+            inspecCoverDetail = models.InspectionCoverageDetail.objects.filter(coverageid_id=inspecCover1.id)
+            inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=inspecCover1.id)
+            for b in inspecCoverDetail:
                 if b.dmitemid_id in listDMItem:
                     inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
                     print("go here", inspecDmRule.count())
@@ -1170,20 +1144,50 @@ def DamamgeMechanism(request,planID,siteID):
                             if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
                                 print("gogo")
                                 obj1 = {}
+                                obj1['EquipmentName'] = models.EquipmentMaster.objects.get(equipmentid=inspecCover1.equipmentid_id).equipmentnumber
+                                obj1['ComponenttName'] = models.ComponentMaster.objects.get(componentid=inspecCover1.componentid_id).componentnumber
                                 if c.inspectiontype == 1:
                                     obj1['Type'] = "Intrusive"
                                 else:
-                                    obj1['Type'] = "Non-Intrusive"
+                                    c.inspectiontype = "Non-Intrusive"
                                 obj1['Coverage'] = c.coverage
+                                obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
                                 obj1['IMITemID'] = models.IMItem.objects.get(imitemid=c.imitemid_id).imdescription
                                 obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
-                                obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
-                                obj1['EquipmentName'] = models.EquipmentMaster.objects.get(
-                                    equipmentid=a.equipmentid_id).equipmentnumber
-                                obj1['ComponenttName'] = models.ComponentMaster.objects.get(
-                                    componentid=a.componentid_id).componentnumber
                                 dataSumary.append(obj1)
                 print(dataSumary)
+        else:
+            for a in inspecCover:
+                inspecCoverDetail2 = models.InspectionCoverageDetail.objects.filter(coverageid_id=a.id)
+                inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=a.id)
+                for b in inspecCoverDetail2:
+                    if b.dmitemid_id in listDMItem:
+                        inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
+                        print("go here", inspecDmRule.count())
+                        for f in inspecDmRule:
+                            for c in inspecTech:
+                                if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
+                                    print("gogo")
+                                    obj1 = {}
+                                    if c.inspectiontype == 1:
+                                        obj1['Type'] = "Intrusive"
+                                    else:
+                                        obj1['Type'] = "Non-Intrusive"
+                                    obj1['Coverage'] = c.coverage
+                                    obj1['IMITemID'] = models.IMItem.objects.get(imitemid=c.imitemid_id).imdescription
+                                    obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
+                                    obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
+                                    obj1['EquipmentName'] = models.EquipmentMaster.objects.get(
+                                        equipmentid=a.equipmentid_id).equipmentnumber
+                                    obj1['ComponenttName'] = models.ComponentMaster.objects.get(
+                                        componentid=a.componentid_id).componentnumber
+                                    dataSumary.append(obj1)
+                    print(dataSumary)
+        if '_ok' in request.POST:
+            print("test ok")
+    except Exception as e:
+        print(e)
+        print("DamamgeMechanism")
     return render(request, 'FacilityUI/inspection_plan/damageMechanism.html', {'page':'DamageMechanism','siteID':siteID,'count':count,'noti':noti,'countnoti':countnoti,
                                                                                'dataSumary':dataSumary})
 
