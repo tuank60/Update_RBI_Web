@@ -839,7 +839,7 @@ div.a:hover {
                     <legend class="scheduler-border"><b>Inspection Technique</b></legend>
                     <div class="row">
                         <div class="col-md-1">Visual:</div>
-                        <div class="col-md-3"><select name="Visual" class="form-control">
+                        <div class="col-md-2"><select name="Visual" class="form-control">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Endoscopy</option>
                             <option>Hydrotesting</option>
@@ -847,35 +847,43 @@ div.a:hover {
                             <option>Video</option>
                             <option>Holiday</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover1" class="form-control" name="Min" value="0" max="100" required/></div>
                         <div class="col-md-1">Magnetic:</div>
-                        <div class="col-md-3"><select class="form-control" name="Magnetic">
+                        <div class="col-md-2"><select class="form-control" name="Magnetic">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Magnetic Fluorescent Inspection</option>
                             <option>Magnetic Flux Leakage</option>
                             <option>Magnetic Particle Inspection</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover2" class="form-control" name="Min" value="0" max="100" required/></div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-1">Penetrant:</div>
-                        <div class="col-md-3"><select name="Penetrant" class="form-control">
+                        <div class="col-md-2"><select name="Penetrant" class="form-control">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Liquid Penetrant Inspection</option>
                             <option>Liquid Penetrant Inspection</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover3" class="form-control" name="Min" value="0" max="100" required/></div>
                         <div class="col-md-1">Radiography:</div>
-                        <div class="col-md-3"><select class="form-control" name="Radiography">
+                        <div class="col-md-2"><select class="form-control" name="Radiography">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Compton Scatter</option>
                             <option>Gamma Radiography</option>
                             <option>Real-time Radiography</option>
                             <option>X-Radiography</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover4" class="form-control" name="Min" value="0" max="100" required/></div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-1">Ultrasonic:</div>
-                        <div class="col-md-3"><select name="Ultrasonic" class="form-control">
+                        <div class="col-md-2"><select name="Ultrasonic" class="form-control">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Angled Compression Wave</option>
                             <option>Angled Shear Wave</option>
@@ -891,8 +899,10 @@ div.a:hover {
                             <option>Advanced Ultrasonic Backscatter Technique</option>
                             <option>Internal Rotational Inspection System</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover5" class="form-control" name="Min" value="0" max="100" required/></div>
                         <div class="col-md-1">Eddy Current:</div>
-                        <div class="col-md-3"><select class="form-control" name="EddyCurrent">
+                        <div class="col-md-2"><select class="form-control" name="EddyCurrent">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>ACFM</option>
                             <option>Low frequency</option>
@@ -900,35 +910,45 @@ div.a:hover {
                             <option>Remote field</option>
                             <option>Standard (flat coil)</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover6" class="form-control" name="Min" value="0" max="100" required/></div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-1">Thermography:</div>
-                        <div class="col-md-3"><select name="Thermography" class="form-control">
+                        <div class="col-md-2"><select name="Thermography" class="form-control">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Passive Thermography</option>
                             <option>Transient Thermography</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover7" class="form-control" name="Min" value="0" max="100" required/></div>
                         <div class="col-md-1">Acoustic Emission:</div>
-                        <div class="col-md-3"><select class="form-control" name="AcousticEmission">
+                        <div class="col-md-2"><select class="form-control" name="AcousticEmission">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Crack Detection</option>
                             <option>Leak Detection</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover8" class="form-control" name="Min" value="0" max="100" required/></div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-1">Metallurgical:</div>
-                        <div class="col-md-3"><select name="Metallurgical" class="form-control">
+                        <div class="col-md-2"><select name="Metallurgical" class="form-control">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>Hardness Surveys</option>
                             <option>Microstructure Replication</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover9" class="form-control" name="Min" value="0" max="100" required/></div>
                         <div class="col-md-1">Monitoring:</div>
-                        <div class="col-md-3"><select class="form-control" name="Monitoring">
+                        <div class="col-md-2"><select class="form-control" name="Monitoring">
                             <option value="" selected disabled>Please select inspection technique..</option>
                             <option>On-line Monitoring</option>
                         </select></div>
+                        <div class="col-md-1">Coverage, %:</div>
+                        <div class="col-md-1"><input type="number" name="Cover10" class="form-control" name="Min" value="0" max="100" required/></div>
                     </div>
                     <br>
                     <div>

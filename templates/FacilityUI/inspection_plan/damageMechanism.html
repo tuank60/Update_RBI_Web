@@ -1,0 +1,115 @@
+{% extends 'BaseUI/BaseFacility/baseFacility.html' %}
+
+<!-------------- BLOCK MENU ---------------->
+{% block listfaci %}{% url 'facilitiesDisplay' siteID %}{% endblock %}
+{% block newfaci %}{% url 'facilitiesNew' siteID %}{% endblock %}
+{% block design %}{% url 'designcodeDisplay' siteID %}{% endblock %}
+{% block manu %}{% url 'manufactureDisplay' siteID %}{% endblock %}
+{% block uploadInsp %}{% url 'upload' siteID %}{% endblock %}
+{% block uploadPlant %}{% url 'uploadPlan' siteID %}{% endblock %}
+{% block inspecPlan %}{% url 'inspectionPlan' siteID %}{% endblock %}
+<!----------------- END BLOCK----------------->
+{% block data-content %}
+<style>
+div.a {
+  white-space: nowrap;
+  width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+div.a:hover {
+  overflow: visible;
+}
+.city{
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 13px;
+}
+
+.city td, .city th{
+  border: 1px solid #ddd;
+  padding: 0px;
+  text-align: center;
+}
+
+.city tr:nth-child(even){background-color: white;}
+.city tr:hover {background-color: #ddd;}
+
+.city th {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  background-color: #305680;
+  color: white;
+}
+
+
+</style>
+<form id="damageMechanism" method="post" >
+    {% csrf_token %}
+    <div class="container">
+        <div class="city">
+            <ul class="nav nav-pills">
+                <li class="active"><a data-toggle="pill" href="#process" style="padding-top: 2px;padding-bottom: 2px;background-color: #DB812D;color: white;">Damage Mechanism</a></li>
+                <li><a data-toggle="pill" style="padding-top: 2px;padding-bottom: 2px;background-color: #DB812D;color: White;" href="#tank">Inspection Findings/Description</a></li>
+            </ul>
+            <div class="tab-content">
+                <!---------------- Process Plant------------------>
+                <div id="process" class="tab-pane fade in active">
+                    <div class="city" style="font-size: 13px; color: #305680;background-color:white">
+                        <div class="container">
+                            <div class="table-responsive">
+                            <table width=90% id="testing">
+                                <thead>
+                                    <tr>
+                                        <!------- Proposal-------->
+                                        <th >Equipment Number</th>
+                                        <th>Conponent Number</th>
+                                        <th>Damage Mechanism</th>
+                                        <th>Inspection Summary</th>
+                                        <th>Inspection Effectiveness</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in dataSumary %}
+                                        <tr >
+                                            <td align="center">{{a.EquipmentName}}</td>
+                                            <td align="center">{{a.ComponenttName}}</td>
+                                            <td align="center">{{a.DMITemID}}</td>
+                                            <td align="center">{{a.Type}}-{{a.IMITemID}}-{{a.IMTypeID}}-{{a.Coverage}}%</td>
+                                            <td align="center">
+                                                <select class="form-control" name="ConfidenceCR" >
+                                                    <option>A</option>
+                                                    <option>B</option>
+                                                    <option>C</option>
+                                                    <option>D</option>
+                                                    <option selected >E</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th >Equipment Number</th>
+                                        <th>Conponent Number</th>
+                                        <th>Damage Mechanism</th>
+                                        <th>Inspection Summary</th>
+                                        <th>Inspection Effectiveness</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!---------------- Tank------------------>
+                <div id="tank" class="tab-pane fade in active">
+                    <div class="city" style="font-size: 13px; color: #444444;background-color:white">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

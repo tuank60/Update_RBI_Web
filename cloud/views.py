@@ -855,6 +855,7 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
         siteAll = []
         typeInspec = []
         dataF = []
+        listdata = {}
         equipName = ''
         dataSite = models.Sites.objects.all()
         for a in dataSite:
@@ -894,6 +895,174 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
         else:
             data = ListNormalProposalFofInpsection(siteID=siteID, facilityID=facilityID, equimentID=equipID)
             dataTank = ListTankProposalForInpsection(siteID=siteID, facilityID=facilityID, equimentID=equipID)
+        if request.method == 'POST':
+            listdata['inspectiontype'] = request.POST.get('InspectionType')
+            listdata['visual'] = request.POST.get('Visual')
+            listdata['nagnetic'] = request.POST.get('Magnetic')
+            listdata['penetrant'] = request.POST.get('Penetrant')
+            listdata['radiography'] = request.POST.get('Radiography')
+            listdata['ultrasonic'] = request.POST.get('Ultrasonic')
+            listdata['eddycurrent'] = request.POST.get('EddyCurrent')
+            listdata['thermography'] = request.POST.get('Thermography')
+            listdata['acousticemission'] = request.POST.get('AcousticEmission')
+            listdata['metallurgical'] = request.POST.get('Metallurgical')
+            listdata['monitoring'] = request.POST.get('Monitoring')
+            if (listdata['inspectiontype'] == 'Intrusive'):
+                inspectiontype = 1
+            else:
+                inspectiontype = 2
+            listdata['cover1'] = request.POST.get('Cover1')
+            listdata['cover2'] = request.POST.get('Cover2')
+            listdata['cover3'] = request.POST.get('Cover3')
+            listdata['cover4'] = request.POST.get('Cover4')
+            listdata['cover5'] = request.POST.get('Cover5')
+            listdata['cover6'] = request.POST.get('Cover6')
+            listdata['cover7'] = request.POST.get('Cover7')
+            listdata['cover8'] = request.POST.get('Cover8')
+            listdata['cover9'] = request.POST.get('Cover9')
+            listdata['cover10'] = request.POST.get('Cover10')
+            obj1 = {}
+            obj2 = {}
+            obj3 = {}
+            obj4 = {}
+            obj5 = {}
+            obj5 = {}
+            obj6 = {}
+            obj7 = {}
+            obj8 = {}
+            obj9 = {}
+            obj10 = {}
+            dataobj = []
+            listCover = []
+            listCover = [listdata['cover1'],listdata['cover2'],listdata['cover3'],listdata['cover4'],listdata['cover5'],listdata['cover6'],listdata['cover7'],listdata['cover8'],listdata['cover9'],listdata['cover10']]
+            if(listdata['visual'] == 'Endoscopy'):
+                obj1['IMItemID'] = 1
+                obj1['IMTypeID'] = 1
+            elif(listdata['visual'] == 'Hydrotesting'):
+                obj1['IMItemID'] = 1
+                obj1['IMTypeID'] = 2
+            elif (listdata['visual'] == 'Naked Eye'):
+                obj1['IMItemID'] = 1
+                obj1['IMTypeID'] = 3
+            elif (listdata['visual'] == 'Video'):
+                obj1['IMItemID'] = 1
+                obj1['IMTypeID'] = 4
+            elif (listdata['visual'] == 'Holiday'):
+                obj1['IMItemID'] = 1
+                obj1['IMTypeID'] = 37
+            if (listdata['nagnetic'] == 'Magnetic Fluorescent Inspection'):
+                obj2['IMItemID'] = 2
+                obj2['IMTypeID'] = 5
+            elif(listdata['nagnetic'] == 'Magnetic Flux Leakage'):
+                obj2['IMItemID'] = 2
+                obj2['IMTypeID'] = 6
+            elif(listdata['nagnetic'] == 'Magnetic Particle Inspection'):
+                obj2['IMItemID'] = 2
+                obj2['IMTypeID'] = 7
+            if (listdata['penetrant'] == 'Liquid Penetrant Inspection'):
+                obj3['IMItemID'] = 3
+                obj3['IMTypeID'] = 8
+            elif(listdata['penetrant'] == 'Liquid Penetrant Inspection'):
+                obj3['IMItemID'] = 3
+                obj3['IMTypeID'] = 9
+            if (listdata['radiography'] == 'Compton Scatter'):
+                obj4['IMItemID'] = 4
+                obj4['IMTypeID'] = 10
+            elif (listdata['radiography'] == 'Gamma Radiography'):
+                obj4['IMItemID'] = 4
+                obj4['IMTypeID'] = 11
+            elif (listdata['radiography'] == 'Real-time Radiography'):
+                obj4['IMItemID'] = 4
+                obj4['IMTypeID'] = 12
+            elif(listdata['radiography'] == 'X-Radiography'):
+                obj4['IMItemID'] = 4
+                obj4['IMTypeID'] = 13
+            if (listdata['ultrasonic'] == 'Angled Compression Wave'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 14
+            elif(listdata['ultrasonic'] == 'Angled Shear Wave'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 15
+            elif (listdata['ultrasonic'] == 'A-scan Thickness Survey'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 16
+            elif (listdata['ultrasonic'] == 'B-scan'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 17
+            elif (listdata['ultrasonic'] == 'Chime'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 18
+            elif (listdata['ultrasonic'] == 'C-scan'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 19
+            elif (listdata['ultrasonic'] == 'Digital Ultrasonic Thickness Gauge'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 20
+            elif (listdata['ultrasonic'] == 'Lorus'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 21
+            elif (listdata['ultrasonic'] == 'Surface Waves'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 22
+            elif (listdata['ultrasonic'] == 'Teletest'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 23
+            elif (listdata['ultrasonic'] == 'TOFD'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 24
+            elif (listdata['ultrasonic'] == 'Advanced Ultrasonic Backscatter Technique'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 38
+            elif(listdata['ultrasonic'] == 'Internal Rotational Inspection System'):
+                obj5['IMItemID'] = 5
+                obj5['IMTypeID'] = 39
+            if (listdata['eddycurrent'] == 'ACFM'):
+                obj6['IMItemID'] = 6
+                obj6['IMTypeID'] = 25
+            elif (listdata['eddycurrent'] == 'Low frequency'):
+                obj6['IMItemID'] = 6
+                obj6['IMTypeID'] = 26
+            elif (listdata['eddycurrent'] == 'Pulsed'):
+                obj6['IMItemID'] = 6
+                obj6['IMTypeID'] = 27
+            elif (listdata['eddycurrent'] == 'Remote field'):
+                obj6['IMItemID'] = 6
+                obj6['IMTypeID'] = 28
+            elif(listdata['eddycurrent']=='Standard (flat coil)'):
+                obj6['IMItemID'] = 6
+                obj6['IMTypeID'] = 29
+            if (listdata['thermography'] == 'Passive Thermography'):
+                obj7['IMItemID'] = 7
+                obj7['IMTypeID'] = 30
+            elif(listdata['thermography'] =='Transient Thermography'):
+                obj7['IMItemID'] = 7
+                obj7['IMTypeID'] = 31
+
+            if (listdata['acousticemission'] == 'Crack Detection'):
+                obj8['IMItemID'] = 8
+                obj8['IMTypeID'] = 32
+            elif(listdata['acousticemission'] == 'Leak Detection'):
+                obj8['IMItemID'] = 8
+                obj8['IMTypeID'] = 33
+            if (listdata['metallurgical'] == 'Hardness Surveys'):
+                obj9['IMItemID'] = 9
+                obj9['IMTypeID'] = 34
+            elif(listdata['metallurgical'] == 'Microstructure Replication'):
+                obj9['IMItemID'] = 9
+                obj9['IMTypeID'] = 35
+            if (listdata['monitoring'] == 'On-line Monitoring'):
+                obj10['IMItemID'] = 10
+                obj10['IMTypeID'] = 36
+            dataobj = [obj1,obj2,obj3,obj4,obj5,obj6,obj7,obj8,obj9,obj10]
+            print(dataobj)
+            dataobjCopy = []
+            i=0
+            for a in dataobj:
+                if a:
+                    a['Cover']= listCover[i]
+                    dataobjCopy.append(a)
+                i=i+1
+            print(dataobjCopy)
         if '_select' in request.POST:
             for a in site:
                 if (request.POST.get('%d' % a.siteid)):
@@ -915,19 +1084,36 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
                     if (inspectionCover.count() > 0):
                         for c in inspectionCover:
                             c.delete()
+                            inspectionCoverDT = models.InspectionCoverageDetail.objects.filter(coverageid_id=c.id)
+                            inspectDeTech = models.InspectionTechnique.objects.filter(coverageid_id=c.id)
+                            for f in inspectDeTech:
+                                f.delete()
+                            for d in inspectionCoverDT:
+                                d.delete()
+            dataprosal = []
             for a in pros:
                 if (request.POST.get('%d' % a.id)):
                     for b in inspecplan:
                         if (b.inspectionplanname == name):
                             inspecCover = models.InspectionCoverage(planid_id=b.id, equipmentid_id=a.equipmentid_id,componentid_id=a.componentid_id)
                             inspecCover.save()
-                    rwdama = models.RwDamageMechanism.objects.filter(id_dm_id=a.id)
+                    dataprosal.append(a)
+            inspectionCover = models.InspectionCoverage.objects.filter(planid_id=GetIdInpsecPlan(name))
+            for d in inspectionCover:
+                for f in dataobjCopy:
+                    inspDetailTech = models.InspectionTechnique(coverageid_id=d.id,imitemid_id=f['IMItemID'],imtypeid_id=f['IMTypeID'],inspectiontype=inspectiontype,coverage=f['Cover'])
+                    inspDetailTech.save()
+                for u in dataprosal:
+                    rwdama = models.RwDamageMechanism.objects.filter(id_dm_id=u.id)
                     for c in rwdama:
-                        print("test",c.dmitemid_id)
-                        dmitem = models.DMItems.objects.filter(dmitemid=c.dmitemid_id)
-                        for d in dmitem:
-                            print("description",d.dmdescription)
-            # return redirect('inspectionPlan', siteID=siteID, name=name, date=date)
+                        equip = models.RwAssessment.objects.get(id=u.id).equipmentid_id
+                        comp = models.RwAssessment.objects.get(id=u.id).componentid_id
+                        print(equip,comp)
+                        if ((d.equipmentid_id == equip) and (d.componentid_id==comp)):
+                            dmitem = models.DMItems.objects.get(dmitemid=c.dmitemid_id)
+                            inSpecCoverDT = models.InspectionCoverageDetail(coverageid_id=d.id, dmitemid_id=dmitem.dmitemid,inspectiondate=date)
+                            inSpecCoverDT.save()
+            return redirect('damageMechanism', planID=GetIdInpsecPlan(name),siteID=siteID)
     except Exception as e:
         print(e)
     return render(request, 'FacilityUI/inspection_plan/addInspectionPlan.html',
@@ -935,6 +1121,77 @@ def AdddInssepctionPlan(request,siteID,facilityID,equipID,name,date):
                    'countnoti': countnoti,'allSite':allSite,'siteAll':siteAll,'siteT':siteT,'allSite':allSite,'facName':facName,'facility':facility,
                    'equipName':equipName,'equip':equip,'data':data,'dataTank':dataTank,'dataF':dataF,'imtype':imtype,'imitem':imitem,'name':name,'date':date})
 
+def DamamgeMechanism(request,planID,siteID):
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    inspecCover = models.InspectionCoverage.objects.filter(planid_id=planID)
+    listDMItem = [8,9,61,57,67,34,32,66,69,60,72,62,70,73]
+    dataSumary = []
+    dataDMItem = []
+    dataIMItem = []
+    i = 0
+    if(inspecCover.count()==1):
+        inspecCover1 = models.InspectionCoverage.objects.get(planid_id=planID)
+        inspecCoverDetail = models.InspectionCoverageDetail.objects.filter(coverageid_id=inspecCover1.id)
+        inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=inspecCover1.id)
+        for b in inspecCoverDetail:
+            if b.dmitemid_id in listDMItem:
+                inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
+                print("go here", inspecDmRule.count())
+                for f in inspecDmRule:
+                    for c in inspecTech:
+                        if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
+                            print("gogo")
+                            obj1 = {}
+                            obj1['EquipmentName'] = models.EquipmentMaster.objects.get(equipmentid=inspecCover1.equipmentid_id).equipmentnumber
+                            obj1['ComponenttName'] = models.ComponentMaster.objects.get(componentid=inspecCover1.componentid_id).componentnumber
+                            if c.inspectiontype == 1:
+                                obj1['Type'] = "Intrusive"
+                            else:
+                                c.inspectiontype = "Non-Intrusive"
+                            obj1['Coverage'] = c.coverage
+                            obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
+                            obj1['IMITemID'] = models.IMItem.objects.get(imitemid=c.imitemid_id).imdescription
+                            obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
+                            dataSumary.append(obj1)
+            print(dataSumary)
+    else:
+        for a in inspecCover:
+            inspecCoverDetail2 = models.InspectionCoverageDetail.objects.filter(coverageid_id=a.id)
+            inspecTech = models.InspectionTechnique.objects.filter(coverageid_id=a.id)
+            for b in inspecCoverDetail2:
+                if b.dmitemid_id in listDMItem:
+                    inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
+                    print("go here", inspecDmRule.count())
+                    for f in inspecDmRule:
+                        for c in inspecTech:
+                            if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
+                                print("gogo")
+                                obj1 = {}
+                                if c.inspectiontype == 1:
+                                    obj1['Type'] = "Intrusive"
+                                else:
+                                    obj1['Type'] = "Non-Intrusive"
+                                obj1['Coverage'] = c.coverage
+                                obj1['IMITemID'] = models.IMItem.objects.get(imitemid=c.imitemid_id).imdescription
+                                obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
+                                obj1['DMITemID'] = models.DMItems.objects.get(dmitemid=f.dmitemid_id).dmdescription
+                                obj1['EquipmentName'] = models.EquipmentMaster.objects.get(
+                                    equipmentid=a.equipmentid_id).equipmentnumber
+                                obj1['ComponenttName'] = models.ComponentMaster.objects.get(
+                                    componentid=a.componentid_id).componentnumber
+                                dataSumary.append(obj1)
+                print(dataSumary)
+    return render(request, 'FacilityUI/inspection_plan/damageMechanism.html', {'page':'DamageMechanism','siteID':siteID,'count':count,'noti':noti,'countnoti':countnoti,
+                                                                               'dataSumary':dataSumary})
+
+def GetIdInpsecPlan(name):
+    inspecplan = models.InspecPlan.objects.all()
+    for b in inspecplan:
+        if (b.inspectionplanname == name):
+            return b.id
 ################ Business UI Control ###################
 def ListFacilities(request, siteID):
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email), Q(Is_see=0)).count()
@@ -4999,9 +5256,9 @@ def CalculateFunctionManager(request,siteID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
-    data = ListNormalProposalFofInpsection(siteID=siteID, facilityID=0, equimentID=0)
-    dataTank = ListTankProposalForInpsection(siteID=siteID, facilityID=0, equimentID=0)
-    return render(request, 'ManagerUI/Calculate_Function_Manager.html', {'page':'calculateFunctionManager','siteID':siteID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count,'data':data,'dataTank':dataTank})
+    # data = ListNormalProposalFofInpsection(siteID=siteID, facilityID=0, equimentID=0)
+    # dataTank = ListTankProposalForInpsection(siteID=siteID, facilityID=0, equimentID=0)
+    return render(request, 'ManagerUI/Calculate_Function_Manager.html', {'page':'calculateFunctionManager','siteID':siteID,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
 def ToolManager(request,siteID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()

@@ -1356,7 +1356,7 @@ class DMItems(models.Model):
 
 class InspectionCoverageDetail(models.Model):
     id = models.AutoField(primary_key=True, blank=True, null=False, db_column='ID')
-    coverageid = models.IntegerField(db_column="CoverageID", blank=True, null=True)
+    coverageid = models.ForeignKey('InspectionCoverage',db_column="CoverageID", on_delete=models.CASCADE, blank=True, null=True)
     dmitemid = models.ForeignKey('DMItems', db_column='DMItemID', on_delete=models.CASCADE, blank=True, null=True )
     inspectiondate = models.DateTimeField(db_column='InspectionDate', blank=True, null=True)
     effcode = models.CharField(db_column='EffectivenessCode',max_length=50, blank=True, null=True)
@@ -1369,11 +1369,23 @@ class InspectionCoverageDetail(models.Model):
         managed = False
         db_table = 'inspection_coverage_detail'
 
+class InspectionDMRule(models.Model):
+    dmitemid = models.ForeignKey('DmItems', db_column='DMItemID', on_delete=models.CASCADE, primary_key=True )
+    imitemid = models.ForeignKey('IMItem', db_column='IMItemID', on_delete=models.CASCADE, blank=True, null=True)
+    imtypeid = models.ForeignKey('IMType', db_column='IMTypeID', on_delete=models.CASCADE, blank=True, null=True)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
 
+    class Meta:
+        managed = False
+        db_table = 'inspection_dm_rule'
 class InspectionTechnique(models.Model):
     id = models.AutoField(primary_key=True, blank=True, null=False, db_column='ID')
-    coverageid = models.IntegerField(db_column="CoverageID", blank=True, null=True)
-
+    coverageid = models.ForeignKey('InspectionCoverage',db_column="CoverageID", on_delete=models.CASCADE, blank=True, null=True)
+    imitemid = models.ForeignKey('IMItem', db_column='IMItemID', on_delete=models.CASCADE, blank=True, null=True)
+    imtypeid = models.ForeignKey('IMType', db_column='IMTypeID', on_delete=models.CASCADE, blank=True, null=True)
+    inspectiontype = models.IntegerField(db_column='InspectionType', blank=True, null=True)
+    coverage = models.IntegerField(db_column='Coverage', blank=True, null=True,default=0)
+    created = models.DateTimeField(db_column='Created', default=datetime.datetime.now())
     class Meta:
         managed = False
         db_table = 'inspection_detail_technique'
