@@ -296,6 +296,7 @@
                                 <option>Sandy Clay</option>
                                 <option>Clay</option>
                                 <option>Concrete-Asphalt</option>
+                                <option>Gravel</option>
                             </select></div>
                             <script>
                                 {% if rwEq.typeofsoil %}
@@ -313,7 +314,7 @@
                             </select></div>
                             <script>
                                 {% if rwEq.environmentsensitivity %}
-                                $("#EnvironmentSensitivity").val("{{ rwEq.environmentsensitivity }}")
+                                $("#EnvironmentSensitivity").val("{{ rwEq.environmentsensitivity }}");
                                 {% endif %}
                             </script>
                         </div>

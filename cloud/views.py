@@ -1122,6 +1122,7 @@ def DamamgeMechanism(request,planID,siteID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
     inspecCover = models.InspectionCoverage.objects.filter(planid_id=planID)
+    inspecPlan = models.InspecPlan.objects.get(id=planID)
     listDMItem = [8,9,61,57,67,34,32,66,69,60,72,62,70,73]
     dataSumary = []
     try:
@@ -1132,6 +1133,10 @@ def DamamgeMechanism(request,planID,siteID):
             for b in inspecCoverDetail:
                 listSub = ""
                 obj = {}
+                obj['InspectionDate'] = models.InspecPlan.objects.get(id=planID).inspectionplandate
+                obj['CoverageID'] = inspecCover1.id
+                obj['CoverageDetailID'] = b.id
+                obj['DMITemID'] = b.dmitemid_id
                 obj['ID'] = b.id
                 obj['DMITemID'] = models.DMItems.objects.get(dmitemid=b.dmitemid_id).dmdescription
                 obj['EquipmentName'] = models.EquipmentMaster.objects.get(
@@ -1153,9 +1158,7 @@ def DamamgeMechanism(request,planID,siteID):
                                 obj1['IMTypeID'] = models.IMType.objects.get(imtypeid=c.imtypeid_id).imtypename
                                 listSub = listSub+ obj1['Type']+"-"+obj1['IMITemID']+"-"+obj1['IMTypeID']+"-"+str(obj1['Coverage'])+"%"+";"
                 obj['Summary'] = listSub
-                print(listSub)
                 dataSumary.append(obj)
-                print(dataSumary)
         else:
             for a in inspecCover:
                 inspecCoverDetail2 = models.InspectionCoverageDetail.objects.filter(coverageid_id=a.id)
@@ -1175,7 +1178,6 @@ def DamamgeMechanism(request,planID,siteID):
                         componentid=a.componentid_id).componentnumber
                     if b.dmitemid_id in listDMItem:
                         inspecDmRule = models.InspectionDMRule.objects.filter(dmitemid_id=b.dmitemid_id)
-                        print("go here", inspecDmRule.count())
                         for f in inspecDmRule:
                             for c in inspecTech:
                                 if ((f.imitemid_id == c.imitemid_id) and (f.imtypeid_id == c.imtypeid_id)):
@@ -1190,19 +1192,21 @@ def DamamgeMechanism(request,planID,siteID):
                                     listSub = listSub + obj1['Type'] + "-" + obj1['IMITemID'] + "-" + obj1[
                                         'IMTypeID'] + "-" + str(obj1['Coverage']) + "%" + ";"
                     obj['Summary'] = listSub
-                    print(listSub)
                     dataSumary.append(obj)
-                    print(dataSumary)
         if '_ok' in request.POST:
             print("test ok")
             for a in dataSumary:
                 if (request.POST.get('%d' % a['CoverageDetailID'])):
                     print("test save")
-                    inspectionCoverDetail = models.InspectionCoverageDetail(id=a['ID'],coverageid=a['CoverageID'],dmitemid=a['DMITemID'],inspsummary=a['Summary'],effcode=request.POST.get('EEF'))
+                    print(request.POST.get('EEF'+str(a['CoverageDetailID'])))
+                    inspectionCoverDetail = models.InspectionCoverageDetail(id=a['ID'],coverageid_id=a['CoverageID'],dmitemid_id=a['DMITemID'],
+                        inspsummary=a['Summary'],effcode=request.POST.get('EEF'+str(a['CoverageDetailID'])),inspectiondate=a['InspectionDate'],carriedoutdate=a['InspectionDate'],iscarriedout=0)
                     inspectionCoverDetail.save()
+            return redirect('inspectionPlan', siteID=siteID, name=inspecPlan.inspectionplanname,
+                                    date=inspecPlan.inspectionplandate)
     except Exception as e:
         print(e)
-        print("DamamgeMechanism")
+        print("error in DamamgeMechanism")
     return render(request, 'FacilityUI/inspection_plan/damageMechanism.html', {'page':'DamageMechanism','siteID':siteID,'count':count,'noti':noti,'countnoti':countnoti,
                                                                                'dataSumary':dataSumary})
 
@@ -3531,12 +3535,10 @@ def EditTank(request, proposalID):
     try:
         rwassessment = models.RwAssessment.objects.get(id=proposalID)
         rwequipment = models.RwEquipment.objects.get(id=proposalID)
-        print("test externalenvironment")
-        print(rwequipment.externalenvironment)
+        print("test type of soil")
+        print(rwequipment.typeofsoil)
         rwcomponent = models.RwComponent.objects.get(id=proposalID)
         rwstream = models.RwStream.objects.get(id=proposalID)
-        print("test flowrate")
-        print(rwstream.flowrate)
         rwexcor = models.RwExtcorTemperature.objects.get(id=proposalID)
         rwcoat = models.RwCoating.objects.get(id=proposalID)
         rwmaterial = models.RwMaterial.objects.get(id=proposalID)
@@ -5365,7 +5367,6 @@ def ListEquipmentMana(request, facilityID):
                                           Q(Is_see=0)).count()
     try:
         faci = models.Facility.objects.get(facilityid= facilityID)
-        # print(faci.si)
         si=models.Sites.objects.get(siteid=faci.siteid_id)
         data = models.EquipmentMaster.objects.filter(facilityid= facilityID)
         pagiEquip = Paginator(data,25)
@@ -5391,6 +5392,8 @@ def ListComponentMana(request, equipmentID):
         data = models.ComponentMaster.objects.filter(equipmentid= equipmentID)
         pagiComp = Paginator(data,25)
         pageComp = request.GET.get('page',1)
+        print("hihihihihihihihi")
+        print(faci.siteid_id)
         try:
             obj = pagiComp.page(pageComp)
         except PageNotAnInteger:
@@ -5399,7 +5402,7 @@ def ListComponentMana(request, equipmentID):
             obj = pageComp.page(pagiComp.num_pages)
     except:
         raise Http404
-    return render(request, 'ManagerUI/component_List.html', {'page':'listComp', 'obj':obj, 'equipmentID':equipmentID, 'facilityID': eq.facilityid_id,'eq':eq,'faci':faci,'si':si,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
+    return render(request, 'ManagerUI/component_List.html', {'page':'listComp', 'obj':obj, 'equipmentID':equipmentID, 'facilityID': eq.facilityid_id,'siteID':faci.siteid_id,'eq':eq,'faci':faci,'si':si,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
 def ListManufactureMana(request, siteID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
@@ -5477,9 +5480,8 @@ def ListProposalMana(request, componentID):
             isshell = 0
     except:
         raise Http404
-    return render(request, 'ManagerUI/proposal_List.html', {'page':'listProposal','obj':obj, 'istank': istank, 'isshell':isshell,
-                                                                            'componentID':componentID,
-                                                                            'equipmentID':comp.equipmentid_id,'comp':comp,'equip':equip,'faci':faci,'si':si,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
+    return render(request, 'ManagerUI/proposal_List.html', {'page':'listProposal','obj':obj, 'istank': istank, 'isshell':isshell, 'facilityID': equip.facilityid_id,'componentID':componentID,'siteID': faci.siteid_id,
+                                                            'equipmentID':comp.equipmentid_id,'comp':comp,'equip':equip,'faci':faci,'si':si,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
 def ListDesignCodeMana(request, siteID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
@@ -5509,6 +5511,8 @@ def FullyDamageFactorMana(request, proposalID):
         rwAss = models.RwAssessment.objects.get(id= proposalID)
         data={}
         component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        equip = models.EquipmentMaster.objects.get(equipmentid=component.equipmentid_id)
+        siteID = equip.siteid_id
         if component.componenttypeid_id == 8 or component.componenttypeid_id == 12 or component.componenttypeid_id == 14 or component.componenttypeid_id == 15:
             isTank = 1
         else:
@@ -5561,7 +5565,7 @@ def FullyDamageFactorMana(request, proposalID):
     except Exception as e:
         print(e)
         raise Http404
-    return render(request, 'ManagerUI/RiskSummaryMana/FullDF.html', {'page':'damageFactor', 'obj':data, 'assess': rwAss, 'isTank': isTank,
+    return render(request, 'ManagerUI/RiskSummaryMana/FullDF.html', {'page':'damageFactor', 'obj':data, 'assess': rwAss, 'isTank': isTank,'siteID':siteID,
                                                                    'isShell': isShell, 'proposalID':proposalID,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
 def FullyConsequenceMana(request, proposalID):
     data = {}
@@ -5572,6 +5576,8 @@ def FullyConsequenceMana(request, proposalID):
     try:
         rwAss = models.RwAssessment.objects.get(id=proposalID)
         component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        equip = models.EquipmentMaster.objects.get(equipmentid=component.equipmentid_id)
+        siteID = equip.siteid_id
         if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
             isBottom = 1
         else:
@@ -5664,7 +5670,7 @@ def FullyConsequenceMana(request, proposalID):
             data['fcof_category'] = ca.fcof_category
             if request.method == 'POST':
                 return redirect('verifullyConsequenceMana', proposalID)
-            return render(request, 'ManagerUI/RiskSummaryMana/fullyNormalConsequenceMana.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
+            return render(request, 'ManagerUI/RiskSummaryMana/fullyNormalConsequenceMana.html', {'page':'fullyConse', 'data': data, 'proposalID':proposalID, 'ass':rwAss,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session,'siteID':siteID})
     except:
         raise Http404
 
@@ -5675,7 +5681,9 @@ def RiskChartMana(request, proposalID):
                                           Q(Is_see=0)).count()
     try:
         rwAssessment = models.RwAssessment.objects.get(id= proposalID)
-        print(rwAssessment)
+        component = models.ComponentMaster.objects.get(componentid=rwAssessment.componentid_id)
+        equip = models.EquipmentMaster.objects.get(equipmentid=component.equipmentid_id)
+        siteID = equip.siteid_id
         rwFullpof = models.RwFullPof.objects.get(id= proposalID)
         rwFullcof = models.RwFullFcof.objects.get(id= proposalID)
         risk = rwFullpof.pofap1 * rwFullcof.fcofvalue
@@ -5697,7 +5705,7 @@ def RiskChartMana(request, proposalID):
                       chart.risktarget,chart.risktarget,chart.risktarget,chart.risktarget]
         endLabel = date2Str.date2str(date2Str.dateFuture(assessmentDate, 15))
         content = {'page':'riskChart', 'label': dataLabel, 'data':dataChart, 'target':dataTarget, 'endLabel':endLabel, 'proposalname':rwAssessment.proposalname,
-                   'proposalID':rwAssessment.id, 'componentID':rwAssessment.componentid_id,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session}
+                   'proposalID':rwAssessment.id, 'componentID':rwAssessment.componentid_id,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session,'siteID':siteID}
         return render(request, 'ManagerUI/RiskSummaryMana/riskChartMana.html', content)
     except:
         raise Http404
@@ -5706,6 +5714,10 @@ def RiskMatrixMana(request, proposalID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
+    rwAss = models.RwAssessment.objects.get(id=proposalID)
+    component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+    equip = models.EquipmentMaster.objects.get(equipmentid=component.equipmentid_id)
+    siteID = equip.siteid_id
     try:
         locatAPI1 = {}
         locatAPI2 = {}
@@ -5739,7 +5751,7 @@ def RiskMatrixMana(request, proposalID):
     except:
         raise Http404
     return render(request, 'ManagerUI/RiskSummaryMana/RiskMatrixMana.html',{'page':'riskMatrix', 'API1':location.locat(df.totaldfap1, ca.fcofvalue), 'API2':location.locat(df.totaldfap2, ca.fcofvalue),
-                                                                      'API3':location.locat(df.totaldfap3, ca.fcofvalue),'DF1': DF1,'DF2': DF2,'DF3': DF3, 'ca':Ca,
+                                                                      'API3':location.locat(df.totaldfap3, ca.fcofvalue),'DF1': DF1,'DF2': DF2,'DF3': DF3, 'ca':Ca,'siteID':siteID,
                                                                       'ass':rwAss,'isTank': isTank, 'isShell': isShell, 'df':df, 'proposalID':proposalID,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
 def Inputdata(request, proposalID):
     try:
@@ -6929,4 +6941,182 @@ def DataChart(request,componentID):
     return render(request,'FacilityUI/proposal/SensorChart.html',{'sensorName':sensordata[0].Name, 'page': 'newsensor', 'componentID': componentID,
                            'info': request.session, 'noti': noti,
                            'countnoti': countnoti, 'count': count,'humidity':humidity,'temperature':temperature,'luminance':luminance,'datetimes':datetimes})
+#Đạt 18/08/2020
+def ReportProposal(request, componentID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    try:
+        rwass = models.RwAssessment.objects.filter(componentid= componentID)
+        data = []
+        comp = models.ComponentMaster.objects.get(componentid= componentID)
+        equip = models.EquipmentMaster.objects.get(equipmentid= comp.equipmentid_id)
+        faci = models.Facility.objects.get(facilityid=equip.facilityid_id)
+        si=models.Sites.objects.get(siteid=faci.siteid_id)
+        tank = [8,12,14,15]
+        for a in rwass:
+            df = models.RwFullPof.objects.filter(id= a.id)
+            fc = models.RwFullFcof.objects.filter(id= a.id)
+            dm = models.RwDamageMechanism.objects.filter(id_dm= a.id)
+            obj1 = {}
+            obj1['id'] = a.id
+            obj1['name'] = a.proposalname
+            obj1['lastinsp'] = a.assessmentdate.strftime('%Y-%m-%d')
+            if df.count() != 0:
+                obj1['df'] = round(df[0].totaldfap1, 2)
+                obj1['gff'] = df[0].gfftotal
+                obj1['fms'] = df[0].fms
+            else:
+                obj1['df'] = 0
+                obj1['gff'] = 0
+                obj1['fms'] = 0
+            if fc.count() != 0:
+                obj1['fc'] = round(fc[0].fcofvalue, 2)
+            else:
+                obj1['fc'] = 0
+            if dm.count() != 0:
+                obj1['duedate'] = dm[0].inspduedate.date().strftime('%Y-%m-%d')
+            else:
+                obj1['duedate'] = (a.assessmentdate.date() + relativedelta(years=15)).strftime('%Y-%m-%d')
+                obj1['lastinsp'] = equip.commissiondate.date().strftime('%Y-%m-%d')
+            obj1['risk'] = round(obj1['df'] * obj1['gff'] * obj1['fms'] * obj1['fc'], 2)
+            data.append(obj1)
+        pagidata = Paginator(data,25)
+        pagedata = request.GET.get('page',1)
+        try:
+            obj = pagidata.page(pagedata)
+        except PageNotAnInteger:
+            obj = pagidata.page(1)
+        except EmptyPage:
+            obj = pagedata.page(pagidata.num_pages)
 
+        if comp.componenttypeid_id in tank:
+            istank = 1
+        else:
+            istank = 0
+        if comp.componenttypeid_id == 8 or comp.componenttypeid_id == 14:
+            isshell = 1
+        else:
+            isshell = 0
+    except:
+        raise Http404
+    return render(request, 'ManagerUI/Report_Proposal.html', {'page':'reportproposal','obj':obj, 'istank': istank, 'isshell':isshell,
+                                                                            'componentID':componentID,
+                                                                            'equipmentID':comp.equipmentid_id,'comp':comp,'equip':equip,'faci':faci,'si':si,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})
+def base_report(request, siteID):
+    try:
+        count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),Q(Is_see=0)).count()
+    except:
+        Http404
+    return render(request, 'BaseUI/BaseWeb/basedat.html',{'siteID':siteID, 'count':count})
+def ReportMana(request):
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    # print(siteID)
+    try:
+        risk = []
+        data = models.Sites.objects.all()
+        for a in data:
+            dataF = {}
+            dataF['ID'] = a.siteid
+            dataF['CreatedTime'] = a.create
+            dataF['SiteName'] = a.sitename
+            risk.append(dataF)
+        pagiFaci = Paginator(risk, 25)
+        pageFaci = request.GET.get('page', 1)
+        try:
+            users = pagiFaci.page(pageFaci)
+        except PageNotAnInteger:
+            users = pagiFaci.page(1)
+        except EmptyPage:
+            users = pageFaci.page(pagiFaci.num_pages)
+        list=[]
+        print("hjxhjx")
+        if '_viewdetail' in request.POST:
+            print("ccacscsa")
+            for a in data:
+                if(request.POST.get('%d' %a.siteid)):
+                    dataA={}
+                    dataA['ID']=a.siteid
+                    dataA['Name'] = a.sitename
+                    list.append(dataA)
+                    print(list)
+            return redirect('facilitiesEdit', a.siteid)
+    except Exception as e:
+        print(e)
+        raise Http404
+    return render(request, 'ManagerUI/Report_Mana.html', {'page': 'reportmana', 'obj': users, 'list':list , 'data':dataF, 'count': count, 'noti': noti, 'countnoti': countnoti, 'info': request.session})
+
+def ReportFacilities(request, siteID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email), Q(Is_see=0)).count()
+    try:
+        risk = []
+        si=models.Sites.objects.get(siteid=siteID)
+        data= models.Facility.objects.filter(siteid=siteID)
+        for a in data:
+            dataF = {}
+            risTarget = models.FacilityRiskTarget.objects.get(facilityid= a.facilityid)
+            dataF['ID'] = a.facilityid
+            dataF['CreatedTime'] = a.create
+            dataF['FacilitiName'] = a.facilityname
+            dataF['ManagementFactor'] = a.managementfactor
+            dataF['RiskTarget'] = risTarget.risktarget_fc
+            risk.append(dataF)
+
+        pagiFaci = Paginator(risk, 25)
+        pageFaci = request.GET.get('page',1)
+        try:
+            users = pagiFaci.page(pageFaci)
+        except PageNotAnInteger:
+            users = pagiFaci.page(1)
+        except EmptyPage:
+            users = pageFaci.page(pagiFaci.num_pages)
+    except:
+        raise Http404
+    return render(request, 'ManagerUI/Report_Facilities.html', {'page':'reportfacilities', 'obj': users,'siteID':siteID,'count':count,'si':si,'noti':noti,'countnoti':countnoti,'info':request.session})
+def ReportEquipment(request, facilityID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    try:
+        faci = models.Facility.objects.get(facilityid= facilityID)
+        si=models.Sites.objects.get(siteid=faci.siteid_id)
+        data = models.EquipmentMaster.objects.filter(facilityid= facilityID)
+        pagiEquip = Paginator(data,25)
+        pageEquip = request.GET.get('page',1)
+        try:
+            obj = pagiEquip.page(pageEquip)
+        except PageNotAnInteger:
+            obj = pagiEquip.page(1)
+        except EmptyPage:
+            obj = pageEquip.page(pagiEquip.num_pages)
+    except:
+        raise Http404
+    return render(request, 'ManagerUI/Report_Equipment.html', {'page': 'reportequipment', 'obj':obj, 'facilityID':facilityID, 'faci':faci, 'si':si, 'count':count, 'noti':noti, 'countnoti':countnoti, 'info':request.session})
+def ReportComponent(request, equipmentID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    try:
+        eq = models.EquipmentMaster.objects.get(equipmentid= equipmentID)
+        faci = models.Facility.objects.get(facilityid=eq.facilityid_id)
+        si=models.Sites.objects.get(siteid=faci.siteid_id)
+        data = models.ComponentMaster.objects.filter(equipmentid= equipmentID)
+        pagiComp = Paginator(data,25)
+        pageComp = request.GET.get('page',1)
+        try:
+            obj = pagiComp.page(pageComp)
+        except PageNotAnInteger:
+            obj= pagiComp.page(1)
+        except EmptyPage:
+            obj = pageComp.page(pagiComp.num_pages)
+    except:
+        raise Http404
+    return render(request, 'ManagerUI/Report_Component.html', {'page':'reportcomponent', 'obj':obj, 'equipmentID':equipmentID, 'facilityID': eq.facilityid_id,'eq':eq,'faci':faci,'si':si,'count':count,'noti':noti,'countnoti':countnoti,'info':request.session})

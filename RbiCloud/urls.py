@@ -36,6 +36,7 @@ urlpatterns = [
     path('risksummary/', views.base_risksummary, name='risk'),
     path('designcode/', views.base_designcode, name='designcode'),
     path('manufacture/', views.base_manufacture, name= 'manufacture'),
+    path('basereport/', views.base_report,name='basereport'), #Dat sua
     ########################## Facility UI################################
     path('damage/thining/<int:proposalID>/', views.ShowThining, name='thining'),
     path('damage/governing/<int:proposalID>/', views.ShowGoverning, name='governing'),
@@ -133,7 +134,13 @@ urlpatterns = [
     path('proposalCitizen/<int:proposalID>/fully-consequence/',views.FullyConsequenceCitizen, name='fullyConsequenceCitizen'),
     #############connect thingsboard _____ sensor, gateway #############
     path('newsensor/<int:componentID>/', views.NewSensor, name='newsensor'),
-    path('sensor/<int:componentID>/chart/', views.DataChart, name='sensorchart')
+    path('sensor/<int:componentID>/chart/', views.DataChart, name='sensorchart'),
+    # Datdz
+    path('report/', views.ReportMana, name='reportmana'),
+    path('reportfac/<int:siteID>/', views.ReportFacilities, name='reportfacilities'),
+    path('reportequip/<int:facilityID>/', views.ReportEquipment, name='reportequipment'),
+    path('reportcomp/<int:equipmentID>/', views.ReportComponent, name='reportcomponent'),
+    path('reportproposal/<int:componentID>/', views.ReportProposal, name='reportproposal')
 ]
 '''
 Dkm cuong luong

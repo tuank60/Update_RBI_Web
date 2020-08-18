@@ -23,7 +23,7 @@ def checkEquipmentComponentExist(equipmentNumber,componentNumber):
         return count
     except Exception as e:
         print(e)
-        print("bug")
+        print("error in checkEquipmentComponentExist")
         return False
 
 def convertInt(floatnumber):
@@ -61,10 +61,9 @@ def xldate_to_datetime(xldatetime):  # something like 43705.6158241088
         TheTime = (tempDate + deltaDays + detlaSeconds)
         timeinsp = TheTime.strftime("%Y-%m-%d %H:%M:%S")
         inspdatetime = datetime.datetime.strptime(timeinsp, "%Y-%m-%d %H:%M:%S")
-        print(inspdatetime)
         return inspdatetime
     except Exception as e:
-        print("error in xldate")
+        print("error in xldate_to_datetime")
         print(e)
 
 
@@ -87,7 +86,7 @@ def convertDateInsp(dateString):
         return datetime.utcfromtimestamp(seconds)
     except Exception as e:
         print(e)
-        print("error here")
+        print("error in convertDateInsp")
         return datetime.now().date()
 
 def convertTF(data):
@@ -250,15 +249,9 @@ def checkEquipmentAvaiable(site,facility,equipmentnumber, equipmentName):
 
 def checkComponentAvaiable(equipmentnumber, componentnumber):
     try:
-        print("checkComponentAvaiable")
-        print(equipmentnumber)
-        print(componentnumber)
         equ = models.EquipmentMaster.objects.get(equipmentnumber= equipmentnumber)
         countComp = models.ComponentMaster.objects.filter(componentnumber= componentnumber, equipmentid= equ.equipmentid).exists()
         avaiComp = models.ComponentMaster.objects.filter(componentnumber= componentnumber).exists()
-        print("test")
-        print(countComp)
-        print(avaiComp)
         if countComp or not avaiComp:
             return True
         else:
@@ -496,7 +489,6 @@ def processAssessment(ws):
         ncol = ws.ncols
         nrow = ws.nrows
         if ncol == 44:
-            print("1111111")
             for row in range(1,nrow):
                 if ws.cell(row, 0).value and ws.cell(row, 1).value and ws.cell(row, 2).value and ws.cell(row,
                                                                                                          3).value and ws.cell(
@@ -534,13 +526,10 @@ def processAssessment(ws):
 
 
         elif ncol == 33:
-            print("22222222222222")
             for row in range(1, nrow):
-                print("get value")
                 if ws.cell(row, 0).value and ws.cell(row, 1).value and ws.cell(row, 2).value and ws.cell(row,
                                                                                                          3).value and ws.cell(
                     row, 4).value and ws.cell(row, 7).value:
-                    print("get value 2")
                     if checkComponentAvaiable(ws.cell(row, 0).value, ws.cell(row, 1).value):
                         rwAss = models.RwAssessment(equipmentid_id=getEquipmentID(ws.cell(row, 0).value),
                                                     componentid_id=getComponentID(ws.cell(row, 1).value),
@@ -550,34 +539,27 @@ def processAssessment(ws):
                                                     proposalname="New Excel Proposal " + str(
                                                         datetime.datetime.now().strftime('%m-%d-%y')))
                         rwAss.save()
-                        print("get value 3")
 
                         # Luu lai cac bang trung gian
                         rwEquip = models.RwEquipment(id= rwAss, commissiondate= datetime.datetime.now())
                         # rwEquip = models.RwEquipment(id=rwAss)  # Cương Sửa
                         rwEquip.save()
-                        print("get value 4")
 
                         rwComp = models.RwComponent(id=rwAss)
                         rwComp.save()
-                        print("get value 5")
 
                         rwExco = models.RwExtcorTemperature(id=rwAss)
                         rwExco.save()
-                        print("get value 6")
 
                         rwStream = models.RwStream(id=rwAss)
                         rwStream.save()
-                        print("get value 7")
 
                         rwMater = models.RwMaterial(id=rwAss)
                         rwMater.save()
-                        print("get value 8")
 
                         rwCoat = models.RwCoating(id= rwAss, externalcoatingdate= datetime.datetime.now())
                         # rwCoat = models.RwCoating(id=rwAss)  # Cương Sửa
                         rwCoat.save()
-                        print("get value 9")
 
                         rwInputTank = models.RwInputCaTank(id= rwAss)
                         rwInputTank.save()
@@ -668,7 +650,9 @@ def processRwEquipment(ws):
                                     rwEq.managementfactor = float(ws.cell(row,14).value)
                                 except:
                                     rwEq.managementfactor = 0.1
+                                print("go test type of soil")
                                 if ws.cell(row,31).value:
+                                    print("go typeofsoil")
                                     rwEq.typeofsoil = ws.cell(row,31).value
                                     rwInputCaTank.soil_type = ws.cell(row,31).value
                                 rwEq.distancetogroundwater = convertFloat(ws.cell(row,33).value)
@@ -1037,15 +1021,10 @@ def processCoating(ws):
         ncol = ws.ncols
         nrow = ws.nrows
         if ncol == 16:
-            print("processCoating")
             for row in range(1,nrow):
                 if ws.cell(row,0).value:
                     for a in listProposal:
-                        print("========1")
-                        print(a.componentid_id)
-                        print(getComponentID(ws.cell(row,0).value))
                         if a.componentid_id == getComponentID(ws.cell(row,0).value):
-                            print("============2")
                             rwCoating = models.RwCoating.objects.get(id= a.id)
                             rwCoating.internalcoating = convertTF(ws.cell(row,8).value)
                             rwCoating.externalcoating = convertTF(ws.cell(row,7).value)
@@ -1115,7 +1094,6 @@ def importPlanProcess(filename):
 
 def ImportSCADA(filename,proposalID):
     try:
-        print(proposalID)
         workbook = open_workbook(filename)
         sheet_names = workbook.sheet_names()
         for name in sheet_names:
