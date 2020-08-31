@@ -20,6 +20,33 @@
 
                 <!-------- BLOCK CONSEQUENCE ------->
                 <fieldset class="scheduler-border">
+                    <legend class="scheduler-border"><b>Input</b></legend>
+                    <div class="row">
+                        <div class="col-md-8">Process unit placement cost for component</div>
+                        <div class="col-md-4">{{data.process_unit}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">Equipment Outage Multiplier</div>
+                        <div class="col-md-4">{{data.equip_outage_multiplier}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">Loss of Product Cost</div>
+                        <div class="col-md-4">{{data.production_cost}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">The unit Population Density of Personal or Employees</div>
+                        <div class="col-md-4">{{data.personal_density}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">The cost associated with serious injury of fatality of personal</div>
+                        <div class="col-md-4">{{data.equipment_cost}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">Environmental clean up Cost</div>
+                        <div class="col-md-4">{{data.evironment_cost}}</div>
+                    </div>
+                </fieldset>
+                <fieldset class="scheduler-border">
                     <legend class="scheduler-border"><b>Fully-Quantitative Financial Consequence of Failure and Category</b></legend>
                     <div class="row">
                         <div class="col-md-8">Financial Consequence of Falure, $</div>
@@ -39,7 +66,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-8">Fration of Fluid to Evaporate in 24 Hours </div>
-                        <div class="col-md-4"></div>
+                        <div class="col-md-4">{{ data.frac_evap }}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-4"><b>Release Hole Size</b></div>

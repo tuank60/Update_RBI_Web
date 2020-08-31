@@ -1361,8 +1361,6 @@ class DM_CAL:
                 return 6500;
                 # return 1390
             else:
-                print(DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
-                                                     self.EXTERNAL_INSP_EFF))
                 return DAL_CAL.POSTGRESQL.GET_TBL_512(self.API_ART(self.API_ART_EXTERNAL(age)), self.EXTERNAL_INSP_NUM,
                                                      self.EXTERNAL_INSP_EFF)
         else:
@@ -1370,14 +1368,12 @@ class DM_CAL:
             (self.YieldStrengthDesignTemp == 0 and self.TensileStrengthDesignTemp == 0) or self.EXTERN_COAT_QUALITY == "" or (bool(self.COMPONENT_INSTALL_DATE) == False)):
                 return 6500;
             elif(self.APIComponentType =="TANKBOTTOM" and self.ShapeFactor==0.0 and self.MINIUM_STRUCTURAL_THICKNESS_GOVERS==False):#bổ sung trường hợp
-                print("go here")
                 return 6500
             else:
                 try:
                     a = self.Po_P1_EXTERNAL() * self.ncdf(- self.B1_EXTERNAL(age))
                     b = self.Po_P2_EXTERNAL() * self.ncdf(- self.B2_EXTERNAL(age))
                     c = self.Pr_P3_EXTERNAL() * self.ncdf(- self.B3_EXTERNAL(age))
-                    print((a + b + c) / (1.56 * pow(10, -4)))
                     return (a + b + c) / (1.56 * pow(10, -4))
                 except Exception as e:
                     print(e)
@@ -1596,7 +1592,6 @@ class DM_CAL:
                         b = self.Po_P2_FERRITIC() * self.ncdf(- self.B2_FERRITIC(age))
                         c = self.Po_P3_FERRITIC() * self.ncdf(- self.B3_FERRITIC(age))
                         s=(a + b + c) / (1.56 * pow(10, -4))
-                        print(s)
                         return (a + b + c) / (1.56 * pow(10, -4))
                     except Exception as e:
                         print(e)
@@ -2311,8 +2306,6 @@ class DM_CAL:
         return DF_SCC
 
     def DF_EXT_TOTAL_API(self, i):#done
-        print("DF_EXTERNAL_CORROSION_API")
-        print(self.DF_EXTERNAL_CORROSION_API(i))
         DF_EXT = max(self.DF_EXTERNAL_CORROSION_API(i), self.DF_CUI_API(i),self.DF_EXTERN_CLSCC_API(i), self.DF_CUI_CLSCC_API(i))
         return DF_EXT
         #return 0.07
@@ -2323,9 +2316,6 @@ class DM_CAL:
 
     def DF_THINNING_TOTAL_API(self, i):#done
         try:
-            print("DF_THINNING_TOTAL_API")
-            print(self.DF_THINNING_API(i))
-            print(self.DF_LINNING_API(i))
             if self.INTERNAL_LINNING and (self.DF_LINNING_API(i) != 0):
                 DF_THINNING_TOTAL = min(self.DF_THINNING_API(i), self.DF_LINNING_API(i))
             else:
@@ -2408,12 +2398,6 @@ class DM_CAL:
 
     def DF_TOTAL_API(self,i):#testing df_htha
         try:
-            print(self.DF_THINNING_TOTAL_API(i))
-            print(self.DF_EXT_TOTAL_API(i))
-            print(self.DF_SSC_TOTAL_API(i))
-            print(self.DF_HTHA_API(i))
-            print(self.DF_BRIT_TOTAL_API(i))
-            print(self.DF_PIPE_API(i))
 
             TOTAL_DF_API = max(self.DF_THINNING_TOTAL_API(i), self.DF_EXT_TOTAL_API(i)) + self.DF_SSC_TOTAL_API(
                 i) + self.DF_HTHA_API(i) + self.DF_BRIT_TOTAL_API(i) + self.DF_PIPE_API(i)
@@ -2450,7 +2434,6 @@ class DM_CAL:
         return data
 
     def INSP_DUE_DATE(self, FC_Total, GFF, FSM, Risk_Target):
-        print("INSP_DUE_DATE")
         DF_TARGET = Risk_Target/(FC_Total * GFF * FSM)
         for a in range(1,16):
             if self.DF_TOTAL_API(a) >= DF_TARGET:
@@ -2461,7 +2444,6 @@ class DM_CAL:
             return self.AssesmentDate + relativedelta(years=a-1)
 
     def INSP_DUE_DATE_General(self, FC_total, GFF, FSM, Risk_Target):
-        print("INSP_DUE_DATE_General")
         DF_TARGET = Risk_Target/(FC_total*GFF*FSM)
         for a in range(1,16):
             if self.DF_TOTAL_GENERAL(a) >= DF_TARGET:

@@ -160,17 +160,13 @@ class CA_NORMAL: #LEVEL 1
             data = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
             t = self.MAX_OPERATING_TEMP + 273
             if (self.MAX_OPERATING_TEMP != 0):
-                CP_C2 = (data[6] / t) / ( math.sinh(data[6] / t))
-                CP_E2 = (data[8] / t) / ( math.cosh(data[8] / t))
+                CP_C2 = round((data[6] / t) / ( math.sinh(data[6] / t)),5)
+                CP_E2 = round((data[8] / t) / ( math.cosh(data[8] / t)),5)
                 if (data[3] == 1):
-                    # print("1")
-                    # print(data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3))
                     return data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3)
                 elif(data[3] == 2):
-                    # print("2")
                     return data[4] + data[5] * CP_C2 * CP_C2 + data[6] * CP_E2 * CP_E2
                 elif(data[3] == 3):
-                    # print("3")
                     return data[4] + data[5] * t + data[6] * pow(t, 2) + data[7] * pow(t, 3) + data[8] * pow(t, 4)
                 else:
                     return 0
@@ -195,35 +191,20 @@ class CA_NORMAL: #LEVEL 1
             # print(self.ambient())
             C1 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(1)
             C2 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(2)
-            # print("fluid_phase = ", self.ambient())
             if (self.ReleasePhase() != "Liquid"):
                 R = 8.314
                 k = self.ideal_gas_ratio()
-                # print("k=" + str(k))
                 p_trans = 101.325 * pow((k + 1) / 2, k / (k - 1))
-                # print(self.FLUID)
-                # print(p_trans)
-                # print("moleculer_weight=" + str(self.moleculer_weight()))
-                # print("STORED_PRESSURE=" + str(self.STORED_PRESSURE))
                 if (self.STORED_PRESSURE > p_trans):
-                    # print("okok")
-                    x = (
-                    (k * self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * pow(2 / (k + 1), (k + 1) / (k - 1)))
-                    # print("W_n0" + str(i) + "=" + str((0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)))
-                    return (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
+                    x = ((k * self.moleculer_weight() / (R * (self.MAX_OPERATING_TEMP+273.15))) * pow(2 / (k + 1), (k + 1) / (k - 1)))
+                    return round(0.0009 * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x),5)
                 else:
-                    # print("nono")
-                    x = (self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * ((2 * k) / (k - 1)) * pow(
+                    x = (self.moleculer_weight() / (R * (self.MAX_OPERATING_TEMP+273.15))) * ((2 * k) / (k - 1)) * pow(
                         101.325 / self.STORED_PRESSURE, 2 / k) * (
                         1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
-                    # print("W_n0" + str(i) + "=" + str(
-                    #     (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(abs(x))))
-                    # print(((((0.9 / C2) * self.a_n(i)) * self.STORED_PRESSURE) * math.sqrt((((self.moleculer_weight() / (R * self.STORED_PRESSURE)) * ((2.0 * k) / (k - 1.0))) * math.pow(101.325 / self.STORED_PRESSURE, 2.0 / k)) * (1.0 - math.pow(101.325 / self.STORED_PRESSURE, (k - 1.0) / k)))))
-                    return (0.9 / C2) * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
+                    return round(0.0009 * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x),5)
             else:
-                # print("W_n0" + str(i) + "=" + str(0.61 * self.liquid_density() * (self.a_n(i) / C1) * pow(
-                #     (2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)))
-                return 0.61 * self.liquid_density() * (self.a_n(i) / C1) * math.pow((2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)
+                return round(0.61 * self.liquid_density() * (self.a_n(i) / C1) * math.pow((2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2),5)
 
         except Exception as e :
             return 0
@@ -236,31 +217,22 @@ class CA_NORMAL: #LEVEL 1
             # print(self.ambient())
             C1 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(1)
             C2 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(2)
-            # print("fluid_phase = ", self.ambient())
             if (self.ReleasePhase() != "Liquid"):
                 R = 8.314
                 k = self.ideal_gas_ratio()
-                # print("k=" + str(k))
                 p_trans = 101.325 * pow((k + 1) / 2, k / (k - 1))
-                # print(self.FLUID)
-                # print(p_trans)
-                # print("moleculer_weight=" + str(self.moleculer_weight()))
-                # print("STORED_PRESSURE=" + str(self.STORED_PRESSURE))
                 if (self.STORED_PRESSURE > p_trans):
                     # print("okok")
                     x = (
-                    (k * self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * pow(2 / (k + 1), (k + 1) / (k - 1)))
+                    (k * self.moleculer_weight() / (R * (self.MAX_OPERATING_TEMP+273.15))) * pow(2 / (k + 1), (k + 1) / (k - 1)))
                     # print("W_n0" + str(i) + "=" + str((0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)))
-                    return (0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)
+                    return 0.0009 * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
                 else:
                     # print("nono")
-                    x = (self.moleculer_weight() / (R * self.MAX_OPERATING_TEMP)) * ((2 * k) / (k - 1)) * pow(
+                    x = (self.moleculer_weight() / (R * (self.MAX_OPERATING_TEMP+273.15))) * ((2 * k) / (k - 1)) * pow(
                         101.325 / self.STORED_PRESSURE, 2 / k) * (
                         1 - pow(self.ATMOSPHERIC_PRESSURE / self.STORED_PRESSURE, (k - 1) / k))
-                    # print("W_n0" + str(i) + "=" + str(
-                    #     (0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(abs(x))))
-                    # print(((((0.9 / C2) * 32.45) * self.STORED_PRESSURE) * math.sqrt((((self.moleculer_weight() / (R * self.STORED_PRESSURE)) * ((2.0 * k) / (k - 1.0))) * math.pow(101.325 / self.STORED_PRESSURE, 2.0 / k)) * (1.0 - math.pow(101.325 / self.STORED_PRESSURE, (k - 1.0) / k)))))
-                    return (0.9 / C2) * 32.45 * self.STORED_PRESSURE * math.sqrt(x)
+                    return 0.0009 * self.a_n(i) * self.STORED_PRESSURE * math.sqrt(x)
             else:
                 # print("W_n0" + str(i) + "=" + str(0.61 * self.liquid_density() * (32.45 / C1) * pow(
                 #     (2 * (self.STORED_PRESSURE - 101.325)) / self.liquid_density(), 1 / 2)))
@@ -284,7 +256,7 @@ class CA_NORMAL: #LEVEL 1
 
     def mass_avail_n(self, i): #checked
         try:
-            return min(float(self.MASS_COMPONENT + self.mass_addn(i)), float(self.MASS_INVERT))
+            return self.MASS_INVERT
         except Exception as e:
             print(e)
             return 0
@@ -333,6 +305,8 @@ class CA_NORMAL: #LEVEL 1
 
     def ld_n_max(self, i):#checked
         try:
+            massavail=self.mass_avail_n(i)
+            rate=self.rate_n(i)
             dn = self.d_n(i)
             if (self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "A"):
                 if (dn == 6.4):
@@ -342,7 +316,7 @@ class CA_NORMAL: #LEVEL 1
                 elif (dn == 102):
                     ld_max = 5
                 else:
-                    ld_max = 1
+                    ld_max = round((massavail/rate)/60,5)
             elif(self.DETECTION_TYPE == "A" and self.ISOLATION_TYPE == "B"):
                 if (dn == 6.4):
                     ld_max = 30
@@ -360,7 +334,7 @@ class CA_NORMAL: #LEVEL 1
                 elif (dn == 102):
                     ld_max = 20
                 else:
-                    ld_max = 1
+                    ld_max = round((massavail/rate)/60,5)
             elif((self.ISOLATION_TYPE == "A" or self.ISOLATION_TYPE == "B") and self.DETECTION_TYPE == "B"):
                 if (dn == 6.4):
                     ld_max = 40
@@ -369,7 +343,7 @@ class CA_NORMAL: #LEVEL 1
                 elif (dn == 102):
                     ld_max = 20
                 else:
-                    ld_max = 1
+                    ld_max = round((massavail/rate)/60,5)
             elif(self.DETECTION_TYPE == "B" and self.ISOLATION_TYPE == "C"):
                 if (dn == 6.4):
                     ld_max = 60
@@ -378,7 +352,7 @@ class CA_NORMAL: #LEVEL 1
                 elif (dn == 102):
                     ld_max = 20
                 else:
-                    ld_max = 1
+                    ld_max = round((massavail/rate)/60,5)
             elif(self.DETECTION_TYPE == "C" and (self.ISOLATION_TYPE == "A" or self.ISOLATION_TYPE == "B" or self.ISOLATION_TYPE == "C")):
                 if (dn == 6.4):
                     ld_max = 60
@@ -387,9 +361,9 @@ class CA_NORMAL: #LEVEL 1
                 elif (dn == 102):
                     ld_max = 20
                 else:
-                    ld_max = 1
+                    ld_max = round((massavail/rate)/60,5)
             else:
-                ld_max = 1
+                ld_max = 0
             return ld_max
         except:
             return 0
@@ -400,7 +374,10 @@ class CA_NORMAL: #LEVEL 1
             wn = self.W_n(i)
             factdi = self.fact_di()
             rate = wn * (1 - factdi)
-            return rate
+            if(rate==0):
+                return 1
+            else:
+                return rate
         except Exception as e:
             return 0
             print(e)
@@ -415,7 +392,7 @@ class CA_NORMAL: #LEVEL 1
                 if (ldmax != 0):
                     return min(self.mass_avail_n(i) / self.rate_n(i), 60 * ldmax)
                 else:
-                    return (self.mass_avail_n(i) / self.rate_n(i))
+                    return self.mass_avail_n(i) / self.rate_n(i)
         except Exception as e:
             return 0
             print(e)
@@ -596,10 +573,6 @@ class CA_NORMAL: #LEVEL 1
     def fact_n_ic(self, i): #checked
         try:
             releasetype = self.releaseType(i)
-            # print('releasetype1 = ',self.releaseType(1))
-            # print('releasetype2 = ', self.releaseType(2))
-            # print('releasetype3 = ', self.releaseType(3))
-            # print('releasetype4 = ', self.releaseType(4))
             if (releasetype == "Continuous"):
                 return min(self.rate_n(i) / (DAL_CAL.POSTGRESQL.GET_TBL_3B21(5)), 1.0)
             else:
@@ -611,9 +584,7 @@ class CA_NORMAL: #LEVEL 1
 
     def fact_ait(self): #checked
         try:
-            print('test fact_ait')
             data = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
-            print('data = ', data)
             ait = 273 + (data[9] - 32) / 1.8 #doi do f sang do C roi doi sang do K
             if ((self.STORED_TEMP + (DAL_CAL.POSTGRESQL.GET_TBL_3B21(6))) <= ait):
                 return 0
@@ -672,7 +643,6 @@ class CA_NORMAL: #LEVEL 1
             print('exception at ca_cmd_flame')
     def ca_inj_flame(self): #test
         try:
-            print('test ca_inj_flame')
             if(not self.checkFlame()):
                 return 0
             else:
@@ -680,7 +650,6 @@ class CA_NORMAL: #LEVEL 1
                 t = obj[0] * self.ca_injn_flame(1) + obj[1] * self.ca_injn_flame(2) + obj[2] * self.ca_injn_flame(3) + obj[3] * self.ca_injn_flame(4)
                 ca_inj = t / obj[4]
                 return math.fabs(ca_inj)
-            print('ca_inj=', ca_inj)
         except Exception as e:
             return 0
             print(e)
@@ -1045,7 +1014,6 @@ class CA_NORMAL: #LEVEL 1
 
     def ca_inj_tox(self): #done
         try:
-            print('test ca_inj_tox')
             obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
             if(not self.checkToxic()):
                 return 0
@@ -1123,7 +1091,6 @@ class CA_NORMAL: #LEVEL 1
 
     def ca_inj_nfnt(self): #done
      try:
-         print('test ca_inj_nfnt')
          if(not self.checkNone()):
              return 0
          else:
@@ -1137,7 +1104,6 @@ class CA_NORMAL: #LEVEL 1
 
     def ca_cmd(self): #done
         try:
-            print('test ca_cmd')
             return self.ca_cmd_flame()
         except Exception as e:
             print(e)
@@ -1154,8 +1120,6 @@ class CA_NORMAL: #LEVEL 1
             print('exception at ca_inj')
     def ca_final(self): #final consequence area
         try:
-            print('test ca_final')
-            print('ca_final = ', max(self.ca_inj(), self.ca_cmd()))
             return max(self.ca_inj(), self.ca_cmd())
         except Exception as e:
             print(e)
@@ -1242,7 +1206,7 @@ class CA_NORMAL: #LEVEL 1
 class CA_SHELL:
     def __init__(self, FLUID, FLUID_HEIGHT, SHELL_COURSE_HEIGHT, TANK_DIAMETER, EnvironSensitivity,
                  P_lvdike, P_onsite, P_offsite, MATERIAL_COST, API_COMPONENT_TYPE_NAME, PRODUCTION_COST,Soil_type,
-                 TANK_FLUID,CHT,PROD_COST,EQUIP_OUTAGE_MULTIPLIER,EQUIP_COST,POP_DENS,INJ_COST):
+                 TANK_FLUID,CHT,PROD_COST,EQUIP_OUTAGE_MULTIPLIER,EQUIP_COST,POP_DENS,INJ_COST,release_Fluid_Percent_Toxic):
         self.FLUID = FLUID
         self.FLUID_HEIGHT = FLUID_HEIGHT
         self.SHELL_COURSE_HEIGHT = SHELL_COURSE_HEIGHT
@@ -1264,6 +1228,7 @@ class CA_SHELL:
         self.EQUIP_COST = EQUIP_COST
         self.POP_DENS = POP_DENS
         self.INJ_COST = INJ_COST
+        self.release_Fluid_Percent_Toxic = release_Fluid_Percent_Toxic
 
     def FC_Category(self, fc):
         if (fc <= 10000):
@@ -1318,8 +1283,8 @@ class CA_SHELL:
         k_h = self.k_h_bottom()
         return C31 * (k_h[0] + k_h[1]) / 2
 
-    def GET_PL_UL(self):
-        data = [0, 0]
+    def GET_PL_UL_SHELL(self,select):
+        data = [0,0]
         if (self.TANK_FLUID == "Gasoline"):
             data[0] = 684.018
             data[1] = 4.01 * pow(10, -3)
@@ -1344,11 +1309,10 @@ class CA_SHELL:
         else:
             data[0] = 1000
             data[1] = 1
-        return data
+        return data[select]
 
     def k_h_prod(self):
-        pl_ul = self.GET_PL_UL()
-        return self.k_h_water() * (pl_ul[0] / 1000) * (1 / pl_ul[1])
+        return self.k_h_water() * (self.GET_PL_UL_SHELL(0) / 1000) * (1 / self.GET_PL_UL_SHELL(1))
 
     def vel_s_prod(self):
         kh = self.k_h_bottom()
@@ -1609,13 +1573,13 @@ class CA_SHELL:
             return fc_affa
         else:
             return 0
-    def outage_affa_tank(self):
+    def  outage_affa_tank(self):
         fcaffa = abs(self.fc_affa_tank())
         if fcaffa != 0:
-            b = 1.242 + 0.585 * math.log10(fcaffa * pow(10, -6))
+            b = 1.242 + 0.585 * math.log10(fcaffa * pow(10.0, -6.0))
         else:
             b = 0
-        return pow(10, b)
+        return pow(10.0, b)
     def ca_cmd_flame_shell(self):
         t=7*pow(10,-5)*self.AINL_Cmd(1)+2.5*pow(10,-5)*self.AINL_Cmd(2)+5*pow(10,-6)*self.AINL_Cmd(3)+ pow(10,-7)*self.AINL_Cmd(4)
         ca_cmd_flame = t/0.0001001
@@ -1629,8 +1593,8 @@ class CA_SHELL:
             return 0
 
     def rate_Flammable(self,i):
-        pl_ul = CA_TANK_BOTTOM.GET_PL_UL(self)
-        rate_Flammable = (self.W_n_Tank(i)*1.84*pow(10,-6))*pl_ul[0]
+        # rate_Flammable = (self.W_n_Tank(i)*1.84*pow(10,-6))*pl_ul[0]
+        rate_Flammable = (self.W_n_Tank(i) * 1.84 * pow(10, -6)) * self.GET_PL_UL_SHELL(0)
         if(rate_Flammable>0):
             return rate_Flammable
         else:
@@ -1638,48 +1602,113 @@ class CA_SHELL:
 
     def getEquationConstants(self, select):
         try:
+            print(self.TANK_FLUID)
             data1 = DAL_CAL.POSTGRESQL.GET_TBL_58(self.FLUID)
             data2 = DAL_CAL.POSTGRESQL.GET_TBL_59(self.FLUID)
             input = [0, 0, 0, 0, 0, 0, 0, 0]
-
-            if (self.FLUID == "Water"):
+            if (self.TANK_FLUID == "Water"):
                 return 0
             else:
                 input[0] = data1[2]
                 input[1] = data1[3]
                 input[2] = data1[6]
                 input[3] = data1[7]
-                input[0] = data2[2]
-                input[1] = data2[3]
-                input[2] = data2[6]
-                input[3] = data2[7]
-            return input[select - 1]
+                input[4] = data2[2]
+                input[5] = data2[3]
+                input[6] = data2[6]
+                input[7] = data2[7]
+            return input[select]
         except Exception as e:
             return 0
             print(e)
             print('exception at getEquationConstants')
 
     def fc_prod_tank(self):
-        fc_prod = (CA_NORMAL.outage_cmd(self)+self.outage_affa_tank())*self.PROD_COST
-        print("fc_prod_tank")
-        print(self.PROD_COST)
+        fc_prod = (CA_NORMAL.outage_cmd(self)*self.EQUIP_OUTAGE_MULTIPLIER +self.outage_affa_tank())*self.PROD_COST
+        print(self.outage_affa_tank())
         print(fc_prod)
         if(fc_prod>0):
             return fc_prod
         else:
             return 0
+    def ca_inj_flame_shell(self):
+        t = 7 * pow(10, -5) * self.AINL_Cmd(1) + 2.5 * pow(10, -5) * self.AINL_Cmd(2) + 5 * pow(10, -6) * self.AINL_Cmd(3) + pow(10, -7) * self.AINL_Cmd(4)
+        ca_inj = t / 0.0001001
+        return abs(ca_inj)
+    def leakDurationToxic(self,i):
+        volume_Fluid_Shell= self.Lvol_abouve()
+        mass_Available=volume_Fluid_Shell*self.GET_PL_UL_SHELL(0)
+        return min(mass_Available/self.rate_Flammable(i),3600.0)
+    def ldToxicMinutes(self,i):
+        a=max(self.leakDurationToxic(i)/60.0,5.0)
+        b=min(a,60.0)
+        return b
+    def ConstC(self,i):
+        input = self.ldToxicMinutes(i)
+        if (input >= 60):
+            return 1.2266
+        elif(input >= 40):
+            return 1.2297
+        elif(input >= 20):
+            return 1.2370
+        elif(input >= 10):
+            return 1.2410
+        elif(input >= 5):
+            return 1.2411
+        else:
+            return 0.9674
+    def ConstD(self,i):
+        input = self.ldToxicMinutes(i)
+        if (input >= 60):
+            return 4.4365
+        elif(input >= 40):
+            return 4.3626
+        elif(input >= 20):
+            return 4.238
+        elif(input >= 10):
+            return 4.0948
+        elif(input >= 5):
+            return 3.9686
+        else:
+            return 2.7840
+
+    def releaseRateMass(self,i):
+        return self.releaseFluidPercentToxic*self.rate_Flammable(i)
+    def toxic_Inj(self,i):
+        t=DAL_CAL.POSTGRESQL.GET_TBL_3B21(8) * pow(10.0,(self.ConstC(i)*math.log10(DAL_CAL.POSTGRESQL.GET_TBL_3B21(4)*self.releaseRateMass(i))+self.ConstD(i)))
+        return t
+    def total_toxic_Inj(self):
+        obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
+        t = obj[0] * obj[9] + obj[1] * obj[10] + obj[2] * obj[11] + obj[3] * obj[12]
+        return t / obj[4]
+        t = obj[0] * self.toxic_Inj(1) + obj[1] * self.toxic_Inj(2) + obj[3] * self.toxic_Inj(3) + obj[4] * self.toxic_Inj(4)
+        total_toxic_Inj = t / obj.GFFTotal
+        return abs(total_toxic_Inj)
+    def ca_inj_shell(self):
+        cainjflame = self.ca_inj_flame_shell()
+        cainjtoxic = self.total_toxic_Inj()
+        return max(cainjflame,cainjtoxic)
+    def fc_inj_tank(self):
+        fc_inj = self.ca_inj_shell() * self.POP_DENS * self.INJ_COST
+        return fc_inj
         # def CA_cmd(self):
     #     return 0
     #
     # def FC_affa(self):
     #     return self.CA_cmd()*self.EQUIPMENT_COST
-
+    def ca_inj_shell(self):
+        cainjflame = self.ca_inj_flame_shell()
+        cainjtoxic = self.total_toxic_Inj()
+        return max(cainjflame,cainjtoxic)
+    def fc_inj_tank(self):
+        fc_inj = self.ca_inj_shell() * self.POP_DENS * self.INJ_COST
+        return fc_inj
     def FC_total_shell(self):
-        FC_TOTAL_SHELL = self.fc_cmd() + self.FC_environ_shell() + self.FC_PROD_SHELL()
+        FC_TOTAL_SHELL = self.fc_cmd() + self.FC_environ_shell() + self.FC_PROD_SHELL()+self.fc_prod_tank()+self.fc_affa_tank()+self.fc_inj_tank()
         if FC_TOTAL_SHELL == 0:
             return 100000000
         else:
-            return self.fc_cmd() + self.FC_environ_shell() + self.FC_PROD_SHELL()
+            return FC_TOTAL_SHELL
 
 class CA_TANK_BOTTOM:
     def __init__(self, Soil_type, TANK_FLUID, Swg, TANK_DIAMETER, FLUID_HEIGHT, API_COMPONENT_TYPE_NAME, PREVENTION_BARRIER, EnvironSensitivity, MATERIAL_COST, PRODUCTION_COST, P_lvdike,P_onsite,P_offsite,Concrete_Asphalt):

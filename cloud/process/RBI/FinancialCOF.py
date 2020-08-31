@@ -5,7 +5,7 @@ from cloud.process.RBI import Postgresql as DAL_CAL
 from cloud import models
 
 class FinancialCOF: #LEVEL 1
-    def __init__(self,proposalID,FLUID,TOXIC_FLUID,toxic_percent,API_COMPONENT_TYPE_NAME,MATERIAL_COST,CA_cmd,CA_inj):
+    def __init__(self,proposalID,FLUID,TOXIC_FLUID,toxic_percent,API_COMPONENT_TYPE_NAME,MATERIAL_COST,CA_cmd,CA_inj,FLUID_PHASE,MITIGATION_SYSTEM,STORED_TEMP,store_pressure):
         self.proposalID = proposalID
         self.FLUID = FLUID
         self.TOXIC_FLUID = TOXIC_FLUID
@@ -14,6 +14,10 @@ class FinancialCOF: #LEVEL 1
         self.MATERIAL_COST =MATERIAL_COST
         self.CA_cmd = CA_cmd
         self.CA_inj = CA_inj
+        self.FLUID_PHASE = FLUID_PHASE
+        self.MITIGATION_SYSTEM = MITIGATION_SYSTEM
+        self.STORED_TEMP = STORED_TEMP
+        self.store_pressure=store_pressure
 
     def outage_cmd_n(self,i):
         obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
@@ -81,11 +85,36 @@ class FinancialCOF: #LEVEL 1
 
     def frac_evap(self):
         try:
-            C12= DAL_CAL.POSTGRESQL.GET_TBL_3B21(12)
-            C41 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(41)
-            return -7.1408 + 8.5827*math.pow(10,-3)*C12*(self.NBP()+C41)-3.5594*pow(10,-6)*pow((C12*(self.NBP()+C41)),2)+(2331.1/(C12*(self.NBP()+C41)))-(203545/pow((C12*(self.NBP()+C41)),2))
+            if self.FLUID=="C6-C8":
+                return 0.9
+            elif self.FLUID=="Acid":
+                return 0.9
+            elif self.FLUID=="C9-C12":
+                return 0.5
+            elif self.FLUID=="C13-C16":
+                return 0.1
+            elif self.FLUID=="C17-C25":
+                return 0.05
+            elif self.FLUID=="C25+":
+                return 0.02
+            elif self.FLUID=="Nitric Acid":
+                return 0.8
+            elif self.FLUID=="NO2":
+                return 0.75
+            elif self.FLUID=="EE":
+                return 0.75
+            elif self.FLUID=="TDI":
+                return 0.15
+            elif self.FLUID=="Styrene":
+                return 0.6
+            elif self.FLUID=="EEA":
+                return 0.65
+            elif self.FLUID=="EG":
+                return 0.45
+            else:
+                return 1
         except:
-            return 0
+            return 1
 
     def mass_n(self,i):
         rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=self.proposalID)
@@ -102,14 +131,13 @@ class FinancialCOF: #LEVEL 1
         try:
             data = DAL_CAL.POSTGRESQL.GET_TBL_52(self.FLUID)
             return data[1] * 16.02
-            # return data[1]
         except:
             return 0
 
     def Vol_env_n(self,i):
         try:
             C13 = DAL_CAL.POSTGRESQL.GET_TBL_3B21(13)
-            return (C13*self.mass_n(i)*(1-self.frac_evap()))/self.liquid_density()
+            return (1.8*self.mass_n(i)*(1-self.frac_evap()))/self.liquid_density()
         except:
             return 0
 
@@ -119,7 +147,7 @@ class FinancialCOF: #LEVEL 1
             evironment_cost = rwInputCa.evironment_cost
             obj = DAL_CAL.POSTGRESQL.GET_API_COM(self.API_COMPONENT_TYPE_NAME)
             x = obj[0]*self.Vol_env_n(1) + obj[1]*self.Vol_env_n(2) + obj[2]*self.Vol_env_n(3) + obj[3]*self.Vol_env_n(4)
-            return (x/obj[4])*evironment_cost
+            return x*evironment_cost/obj[4]
         except:
             return 0
 

@@ -140,7 +140,8 @@ urlpatterns = [
     path('reportfac/<int:siteID>/', views.ReportFacilities, name='reportfacilities'),
     path('reportequip/<int:facilityID>/', views.ReportEquipment, name='reportequipment'),
     path('reportcomp/<int:equipmentID>/', views.ReportComponent, name='reportcomponent'),
-    path('reportproposal/<int:componentID>/', views.ReportProposal, name='reportproposal')
+    path('reportproposal/<int:componentID>/', views.ReportProposal, name='reportproposal'),
+    path('propasal/<int:proposalID>/areaBased-CoF-shell/',views.AreaBasedCoFShell, name='AreaBasedCoFShell')
 ]
 '''
 Dkm cuong luong

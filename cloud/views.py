@@ -2310,6 +2310,15 @@ def NewProposal(request, componentID):
             else:
                 isolationtype = 'C'
             data['IsolationType'] = isolationtype
+            if request.POST.get('MitigationSystem')=="Inventory blowdown, couple with isolation system activated remotely or automatically":
+                mitigationsystem=0.25
+            elif request.POST.get('MitigationSystem')=="Fire water deluge system and monitors":
+                mitigationsystem=0.2
+            elif request.POST.get('MitigationSystem')=="Fire water monitors only":
+                mitigationsystem=0.05
+            else:
+                mitigationsystem=0.15
+            data['MitigationSystem']=mitigationsystem
             rwassessment = models.RwAssessment(equipmentid_id=comp.equipmentid_id, componentid_id=comp.componentid, assessmentdate=data['assessmentdate'],
                                         riskanalysisperiod=data['riskperiod'], isequipmentlinked= comp.isequipmentlinked,assessmentmethod = data['assessmentmethod'],
                                         proposalname=data['assessmentname'])
@@ -4201,7 +4210,40 @@ def ShowThining(request,proposalID):
     countnoti = noti.filter(state=0).count()
     count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
                                           Q(Is_see=0)).count()
-    return render(request, 'FacilityUI/risk_summary/showThining.html',{'page':'thining','info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+    try:
+        data = []
+        rwcomponent = models.RwComponent.objects.get(id=proposalID)
+        rwassessment = models.RwAssessment.objects.get(id=proposalID)
+        rwcoat = models.RwCoating.objects.get(id=proposalID)
+        rwmaterial = models.RwMaterial.objects.get(id=proposalID)
+        rwequipment = models.RwEquipment.objects.get(id=proposalID)
+        damageMachinsm = models.RwDamageMechanism.objects.get(id_dm=proposalID)
+        obj = {}
+        obj['AllowableStress'] = rwcomponent.allowablestress
+        obj['MinimunRequiredThickness'] = rwcomponent.minreqthickness
+        obj['WeltJointEfficiency'] = rwcomponent.weldjointefficiency
+        obj['CorrosionRate'] = rwcomponent.currentcorrosionrate
+        obj['Diameter'] = rwcomponent.nominaldiameter
+        obj['NominalThickness'] = rwcomponent.nominalthickness
+        obj['CurentThickness'] = rwcomponent.currentthickness
+        obj['ChemicalInjection'] = rwcomponent.chemicalinjection
+        obj['HighlyEffectiveInspectionforChemicalInjection'] = rwcomponent.highlyinjectioninsp
+        obj['assessmentDate'] = rwassessment.assessmentdate
+        obj['InternalCladding'] = rwcoat.internalcladding
+        obj['CladdingCorrosionRate'] = rwcoat.claddingcorrosionrate
+        obj['YeildStrength'] = rwmaterial.yieldstrength
+        obj['TensileStrength'] = rwmaterial.tensilestrength
+        obj['DesignPressure'] = rwmaterial.designpressure
+        obj['Onlinemonitoring'] = rwequipment.onlinemonitoring
+        obj['HighEffectiveDeadlegs'] = rwequipment.highlydeadleginsp
+        obj['LastInspectionDate']=damageMachinsm.lastinspdate
+        obj['NumberofInspection']=damageMachinsm.numberofinspections
+        data.append(obj)
+        return render(request, 'FacilityUI/risk_summary/showThining.html',{'page':'thining','proposalID':proposalID,'data':data,'info':request.session,'noti':noti,'countnoti':countnoti,'count':count})
+    except Exception as e:
+        print(e)
+        raise Http404
+
 def ShowGoverning(request,proposalID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()
@@ -4339,10 +4381,11 @@ def FullyConsequence(request, proposalID): #Finance cof
             data['material_cost'] = material.costfactor
             data['phase_fluid_storage'] = rwstream.storagephase
             data['toxic_fluid_percentage'] = inputCa.toxic_percent
-            data['api_com_type'] = models.ApiComponentType.objects.get(
-                apicomponenttypeid=component.apicomponenttypeid).apicomponenttypename
+            data['api_com_type'] = models.ApiComponentType.objects.get(apicomponenttypeid=component.apicomponenttypeid).apicomponenttypename
+            data['process_unit']=roundData.roundMoney(inputCa.process_unit)
+            data['equip_outage_multiplier']=roundData.roundMoney((inputCa.outage_multiplier))
             data['production_cost'] = roundData.roundMoney(inputCa.production_cost)
-            data['equipment_cost'] = roundData.roundMoney(inputCa.equipment_cost)
+            data['equipment_cost'] = roundData.roundMoney(inputCa.injure_cost)
             data['personal_density'] = inputCa.personal_density
             data['evironment_cost'] = roundData.roundMoney(inputCa.evironment_cost)
             data['ca_cmd'] = roundData.roundFC(ca.ca_cmd)
@@ -4352,15 +4395,16 @@ def FullyConsequence(request, proposalID): #Finance cof
             data['gff_large'] = rwholezize.gff_large
             data['gff_rupture'] = rwholezize.gff_rupture
             data['MATERIAL_COST'] = material.costfactor
-            caflammable = CA_Flammable.CA_Flammable(data['toxic_fluid'], data['phase_fluid_storage'],
+            data['max_operating_pressure'] = rwstream.maxoperatingpressure * 1000
+            caflammable = CA_Flammable.CA_Flammable(data['model_fluid'], data['phase_fluid_storage'],
                                                     inputCa.mitigation_system, proposalID,
-                                                    rwstream.minoperatingtemperature + 273,
-                                                    data['api_com_type'], data['toxic_fluid_percentage'])
+                                                    rwstream.maxoperatingtemperature + 273,
+                                                    data['api_com_type'], data['toxic_fluid_percentage'],data['toxic_fluid'])
             catoxic = ToxicConsequenceArea.CA_Toxic(proposalID, inputCa.toxic_fluid, caflammable.ReleasePhase(),
-                                                    data['toxic_fluid_percentage'], data['api_com_type'])
+                                                    data['toxic_fluid_percentage'], data['api_com_type'],data['model_fluid'],data['max_operating_pressure'])
             data['CA_cmd'] = caflammable.CA_Flam_Cmd()
-            data['CA_inj'] = max(caflammable.CA_Flam_inj(),catoxic.CA_toxic_inj(),catoxic.NoneCA_leck())
-            fullcof = FinancialCOF.FinancialCOF(proposalID,data['model_fluid'],data['toxic_fluid'],data['toxic_fluid_percentage'],data['api_com_type'],data['MATERIAL_COST'],data['CA_cmd'],data['CA_inj'])
+            data['CA_inj'] = max(caflammable.CA_Flam_inj(),caflammable.CA_Flam_inj_toxic(),catoxic.CA_toxic_inj(),catoxic.CA_toxic_inj2(),catoxic.NoneCA_leck())
+            fullcof = FinancialCOF.FinancialCOF(proposalID,data['model_fluid'],data['toxic_fluid'],data['toxic_fluid_percentage'],data['api_com_type'],data['MATERIAL_COST'],data['CA_cmd'],data['CA_inj'],data['phase_fluid_storage'],inputCa.mitigation_system,rwstream.maxoperatingtemperature + 273,data['max_operating_pressure'])
             data['Damage_outage_small'] = fullcof.outage_cmd_n(1)
             data['Damage_outage_medium'] = fullcof.outage_cmd_n(2)
             data['Damage_outage_large'] = fullcof.outage_cmd_n(3)
@@ -4369,6 +4413,7 @@ def FullyConsequence(request, proposalID): #Finance cof
             data['Equiment_cost_medium'] = fullcof.HoleCost(2)
             data['Equiment_cost_large'] = fullcof.HoleCost(3)
             data['Equiment_cost_rupture'] = fullcof.HoleCost(4)
+            data['frac_evap']=roundData.roundFC(fullcof.frac_evap())
             data['FC_cmd'] = roundData.roundFC(fullcof.FC_cmd())
             data['FC_affa'] = roundData.roundFC(fullcof.FC_affa())
             data['outage_affa'] = roundData.roundFC(fullcof.Outage_affa())
@@ -4480,14 +4525,14 @@ def AreaBasedCoF(request, proposalID):
         data['mass_n_large'] = roundData.roundFC(rwcofholesize.mass_n_large)
         data['mass_n_rupture'] = roundData.roundFC(rwcofholesize.mass_n_rupture)
 
-        caflammable = CA_Flammable.CA_Flammable(data['toxic_fluid'],data['phase_fluid_storage'],inputCa.mitigation_system,proposalID,rwstream.minoperatingtemperature + 273,
-                                                data['api_com_type'],data['toxic_fluid_percentage'])
-        catoxic = ToxicConsequenceArea.CA_Toxic(proposalID,inputCa.toxic_fluid,caflammable.ReleasePhase(),data['toxic_fluid_percentage'],data['api_com_type'])
+        caflammable = CA_Flammable.CA_Flammable(data['model_fluid'],data['phase_fluid_storage'],inputCa.mitigation_system,proposalID,rwstream.minoperatingtemperature + 273,
+                                                data['api_com_type'],data['toxic_fluid_percentage'],data['toxic_fluid'])
+        catoxic = ToxicConsequenceArea.CA_Toxic(proposalID,inputCa.toxic_fluid,caflammable.ReleasePhase(),data['toxic_fluid_percentage'],data['api_com_type'],data['model_fluid'],data['max_operating_pressure'])
 
         #Consequence Analysis Properties
         data['Phase_of_Fluid'] = caflammable.ambient()
         data['release_phase_n'] = caflammable.ReleasePhase()
-        #flammable CA
+        #flammable CA_model
         data['cainl_cmd_a']=caflammable.a_cmd(1)
         data['cainl_cmd_b'] = caflammable.b_cmd(1)
         data['cail_cmd_a'] = caflammable.a_cmd(2)
@@ -4582,10 +4627,104 @@ def AreaBasedCoF(request, proposalID):
 
         data['ca_flam_cmd'] = roundData.roundFC(caflammable.CA_Flam_Cmd())
         data['ca_flam_inj'] = roundData.roundFC(caflammable.CA_Flam_inj())
-        #toxic
-        data['ld_tox_small']=roundData.roundFC(catoxic.ld_tox_n(1))
+        #Flammable CA_toxic
+        data['cainl_cmd_a_toxic'] = caflammable.a_cmd_toxic(1)
+        data['cainl_cmd_b_toxic'] = caflammable.b_cmd_toxic(1)
+        data['cail_cmd_a_toxic'] = caflammable.a_cmd_toxic(2)
+        data['cail_cmd_b_toxic'] = caflammable.b_cmd_toxic(2)
+        data['iainl_cmd_a_toxic'] = caflammable.a_cmd_toxic(3)
+        data['iainl_cmd_b_toxic'] = caflammable.b_cmd_toxic(3)
+        data['iail_cmd_a_toxic'] = caflammable.a_cmd_toxic(4)
+        data['iail_cmd_b_toxic'] = caflammable.b_cmd_toxic(4)
+
+        data['cainl_inj_a_toxic'] = caflammable.a_inj_toxic(1)
+        data['cainl_inj_b_toxic'] = caflammable.b_inj_toxic(1)
+        data['cail_inj_a_toxic'] = caflammable.a_inj_toxic(2)
+        data['cail_inj_b_toxic'] = caflammable.b_inj_toxic(2)
+        data['iainl_inj_a_toxic'] = caflammable.a_inj_toxic(3)
+        data['iainl_inj_b_toxic'] = caflammable.b_inj_toxic(3)
+        data['iail_inj_a_toxic'] = caflammable.a_inj_toxic(4)
+        data['iail_inj_b_toxic'] = caflammable.b_inj_toxic(4)
+
+        data['cainl_cmd_cont_small_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(1, 1))
+        data['cainl_cmd_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(1, 2))
+        data['cainl_cmd_cont_large_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(1, 3))
+        data['cainl_cmd_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(1, 4))
+        data['cail_cmd_cont_small_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(2, 1))
+        data['cail_cmd_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(2, 2))
+        data['cail_cmd_cont_large_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(2, 3))
+        data['cail_cmd_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_cmdn_cont_toxic(2, 4))
+        data['iainl_cmd_cont_small_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(3, 1))
+        data['iainl_cmd_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(3, 2))
+        data['iainl_cmd_cont_large_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(3, 3))
+        data['iainl_cmd_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(3, 4))
+        data['iail_cmd_cont_small_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(4, 1))
+        data['iail_cmd_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(4, 2))
+        data['iail_cmd_cont_large_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(4, 3))
+        data['iail_cmd_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_cmdn_inst_toxic(4, 4))
+
+        data['cainl_inj_cont_small_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(1, 1))
+        data['cainl_inj_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(1, 2))
+        data['cainl_inj_cont_large_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(1, 3))
+        data['cainl_inj_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(1, 4))
+        data['cail_inj_cont_small_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(2, 1))
+        data['cail_inj_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(2, 2))
+        data['cail_inj_cont_large_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(2, 3))
+        data['cail_inj_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_injn_cont_toxic(2, 4))
+        data['iainl_inj_cont_small_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(3, 1))
+        data['iainl_inj_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(3, 2))
+        data['iainl_inj_cont_large_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(3, 3))
+        data['iainl_inj_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(3, 4))
+        data['iail_inj_cont_small_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(4, 1))
+        data['iail_inj_cont_medium_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(4, 2))
+        data['iail_inj_cont_large_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(4, 3))
+        data['iail_inj_cont_rupture_toxic'] = roundData.roundFC(caflammable.ca_injn_inst_toxic(4, 4))
+
+        data['blemding_cmd_ainl_small_toxic'] = roundData.roundFC(caflammable.CA_AINL_CMD_n_toxic(1))
+        data['blemding_cmd_ainl_medium_toxic'] = roundData.roundFC(caflammable.CA_AINL_CMD_n_toxic(2))
+        data['blemding_cmd_ainl_large_toxic'] = roundData.roundFC(caflammable.CA_AINL_CMD_n_toxic(3))
+        data['blemding_cmd_ainl_rupture_toxic'] = roundData.roundFC(caflammable.CA_AINL_CMD_n_toxic(4))
+
+        data['blemding_cmd_ail_small_toxic'] = roundData.roundFC(caflammable.CA_AIL_CMD_n_toxic(1))
+        data['blemding_cmd_ail_medium_toxic'] = roundData.roundFC(caflammable.CA_AIL_CMD_n_toxic(2))
+        data['blemding_cmd_ail_large_toxic'] = roundData.roundFC(caflammable.CA_AIL_CMD_n_toxic(3))
+        data['blemding_cmd_ail_rupture_toxic'] = roundData.roundFC(caflammable.CA_AIL_CMD_n_toxic(4))
+
+        data['blemding_inj_ainl_small_toxic'] = roundData.roundFC(caflammable.CA_AINL_INJ_n_toxic(1))
+        data['blemding_inj_ainl_medium_toxic'] = roundData.roundFC(caflammable.CA_AINL_INJ_n_toxic(2))
+        data['blemding_inj_ainl_large_toxic'] = roundData.roundFC(caflammable.CA_AINL_INJ_n_toxic(3))
+        data['blemding_inj_ainl_rupture_toxic'] = roundData.roundFC(caflammable.CA_AINL_INJ_n_toxic(4))
+
+        data['blemding_inj_ail_small_toxic'] = roundData.roundFC(caflammable.CA_AIL_INJ_n_toxic(1))
+        data['blemding_inj_ail_medium_toxic'] = roundData.roundFC(caflammable.CA_AIL_INJ_n_toxic(2))
+        data['blemding_inj_ail_large_toxic'] = roundData.roundFC(caflammable.CA_AIL_INJ_n_toxic(3))
+        data['blemding_inj_ail_rupture_toxic'] = roundData.roundFC(caflammable.CA_AIL_INJ_n_toxic(4))
+
+        data['ALT_cmd_small_toxic'] = roundData.roundFC(caflammable.CA_Flam_Cmd_n_toxic(1))
+        data['ALT_cmd_medium_toxic'] = roundData.roundFC(caflammable.CA_Flam_Cmd_n_toxic(2))
+        data['ALT_cmd_large_toxic'] = roundData.roundFC(caflammable.CA_Flam_Cmd_n_toxic(3))
+        data['ALT_cmd_rupture_toxic'] = roundData.roundFC(caflammable.CA_Flam_Cmd_n_toxic(4))
+
+        data['ALT_inj_small_toxic'] = roundData.roundFC(caflammable.CA_Flam_inj_n_toxic(1))
+        data['ALT_inj_medium_toxic'] = roundData.roundFC(caflammable.CA_Flam_inj_n_toxic(2))
+        data['ALT_inj_large_toxic'] = roundData.roundFC(caflammable.CA_Flam_inj_n_toxic(3))
+        data['ALT_inj_rupture_toxic'] = roundData.roundFC(caflammable.CA_Flam_inj_n_toxic(4))
+
+        data['eneff_n_small'] = rwcofholesize.eneff_n_small
+        data['eneff_n_medium'] = rwcofholesize.eneff_n_medium
+        data['eneff_n_large'] = rwcofholesize.eneff_n_large
+        data['eneff_n_rupture'] = rwcofholesize.eneff_n_rupture
+        data['factIC_n_small_toxic'] = roundData.roundFC(rwcofholesize.factIC_n_small)
+        data['factIC_n_medium_toxic'] = roundData.roundFC(rwcofholesize.factIC_n_medium)
+        data['factIC_n_large_toxic'] = roundData.roundFC(rwcofholesize.factIC_n_large)
+        data['factIC_n_rupture_toxic'] = roundData.roundFC(rwcofholesize.factIC_n_rupture)
+
+        data['ca_flam_cmd_toxic'] = roundData.roundFC(caflammable.CA_Flam_Cmd_toxic())
+        data['ca_flam_inj_toxic'] = roundData.roundFC(caflammable.CA_Flam_inj_toxic())
+        # toxic1
+        data['ld_tox_small'] = roundData.roundFC(catoxic.ld_tox_n(1))
         data['ld_tox_medium'] = roundData.roundFC(catoxic.ld_tox_n(2))
-        data['ld_tox_large']=roundData.roundFC(catoxic.ld_tox_n(3))
+        data['ld_tox_large'] = roundData.roundFC(catoxic.ld_tox_n(3))
         data['ld_tox_rupture'] = roundData.roundFC(catoxic.ld_tox_n(4))
         data['Cont_C_small'] = catoxic.ContantC(1)
         data['Cont_C_medium'] = catoxic.ContantC(2)
@@ -4614,19 +4753,85 @@ def AreaBasedCoF(request, proposalID):
         data['mass_tox_large'] = roundData.roundFC(catoxic.Mass_tox_n(3))
         data['mass_tox_rupture'] = roundData.roundFC(catoxic.Mass_tox_n(4))
 
-        data['toxic_ca_small'] = roundData.roundFC(catoxic.CA_toxic(1))
-        data['toxic_ca_medium'] = roundData.roundFC(catoxic.CA_toxic(2))
-        data['toxic_ca_large'] = roundData.roundFC(catoxic.CA_toxic(3))
-        data['toxic_ca_rupture'] = roundData.roundFC(catoxic.CA_toxic(4))
+        data['toxic_ca_small'] = roundData.roundFC(catoxic.CA_injn_tox(1))
+        data['toxic_ca_medium'] = roundData.roundFC(catoxic.CA_injn_tox(2))
+        data['toxic_ca_large'] = roundData.roundFC(catoxic.CA_injn_tox(3))
+        data['toxic_ca_rupture'] = roundData.roundFC(catoxic.CA_injn_tox(4))
 
         data['CA_toxic_inj'] = roundData.roundFC(catoxic.CA_toxic_inj())
+        #toxic2
+        data['Cont_C_small2'] = catoxic.ContantC_toxic2(1)
+        data['Cont_C_medium2'] = catoxic.ContantC_toxic2(2)
+        data['Cont_C_large2'] = catoxic.ContantC_toxic2(3)
+        data['Cont_C_rupture2'] = catoxic.ContantC_toxic2(4)
+        data['Cont_D_small2'] = catoxic.ContantD_toxic2(1)
+        data['Cont_D_medium2'] = catoxic.ContantD_toxic2(2)
+        data['Cont_D_large2'] = catoxic.ContantD_toxic2(3)
+        data['Cont_D_rupture2'] = catoxic.ContantD_toxic2(4)
+        data['Cont_E_small2'] = catoxic.ContantE_toxic2(1)
+        data['Cont_E_medium2'] = catoxic.ContantE_toxic2(2)
+        data['Cont_E_large2'] = catoxic.ContantE_toxic2(3)
+        data['Cont_E_rupture2'] = catoxic.ContantE_toxic2(4)
+        data['Cont_F_small2'] = catoxic.ContantF_toxic2(1)
+        data['Cont_F_medium2'] = catoxic.ContantF_toxic2(2)
+        data['Cont_F_large2'] = catoxic.ContantF_toxic2(3)
+        data['Cont_F_rupture2'] = catoxic.ContantF_toxic2(4)
+
+        data['toxic_ca_small2'] = roundData.roundFC(catoxic.CA_injn_tox2(1))
+        data['toxic_ca_medium2'] = roundData.roundFC(catoxic.CA_injn_tox2(2))
+        data['toxic_ca_large2'] = roundData.roundFC(catoxic.CA_injn_tox2(3))
+        data['toxic_ca_rupture2'] = roundData.roundFC(catoxic.CA_injn_tox2(4))
+
+        data['CA_toxic_inj2'] = roundData.roundFC(catoxic.CA_toxic_inj2())
+        #non
+        data['NoneCA_cont_Inj_1'] = roundData.roundFC(catoxic.NoneCA_cont_Inj_n(1))
+        data['NoneCA_cont_Inj_2'] = roundData.roundFC(catoxic.NoneCA_cont_Inj_n(2))
+        data['NoneCA_cont_Inj_3'] = roundData.roundFC(catoxic.NoneCA_cont_Inj_n(3))
+        data['NoneCA_cont_Inj_4'] = roundData.roundFC(catoxic.NoneCA_cont_Inj_n(4))
+        data['NoneCA_Inst_Inj_1'] = roundData.roundFC(catoxic.NoneCA_Inst_Inj_n(1))
+        data['NoneCA_Inst_Inj_2'] = roundData.roundFC(catoxic.NoneCA_Inst_Inj_n(2))
+        data['NoneCA_Inst_Inj_3'] = roundData.roundFC(catoxic.NoneCA_Inst_Inj_n(3))
+        data['NoneCA_Inst_Inj_4'] = roundData.roundFC(catoxic.NoneCA_Inst_Inj_n(4))
+        data['NoneCA_leck_Inj_1'] = roundData.roundFC(catoxic.NoneCA_leck_Inj_n(1))
+        data['NoneCA_leck_Inj_2'] = roundData.roundFC(catoxic.NoneCA_leck_Inj_n(2))
+        data['NoneCA_leck_Inj_3'] = roundData.roundFC(catoxic.NoneCA_leck_Inj_n(3))
+        data['NoneCA_leck_Inj_4'] = roundData.roundFC(catoxic.NoneCA_leck_Inj_n(4))
+        data['NoneCA_leck'] = roundData.roundFC(catoxic.NoneCA_leck())
+
         data['CA_total'] = roundData.roundFC(catoxic.CA_total(data['ca_flam_cmd'],data['ca_flam_inj']))
         data['CA_Category'] = catoxic.CA_Category(data['ca_flam_cmd'],data['ca_flam_inj'])
     except Exception as e:
         print(e)
     return render(request, 'FacilityUI/risk_summary/areaBasedCoFforNormal.html',{'page':'areaBasedCoF','noti':noti, 'countnoti':countnoti,'count':count,'proposalID':proposalID,'ass':rwAss,'data': data,'info':request.session,'isTank': isBottom,
                                                                    'isShell': isShell})
-
+def AreaBasedCoFShell(request, proposalID):
+    noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
+    countnoti = noti.filter(state=0).count()
+    count = models.Emailto.objects.filter(Q(Emailt=models.ZUser.objects.filter(id=request.session['id'])[0].email),
+                                          Q(Is_see=0)).count()
+    data = {}
+    try:
+        rwAss = models.RwAssessment.objects.get(id=proposalID)
+        component = models.ComponentMaster.objects.get(componentid=rwAss.componentid_id)
+        if component.componenttypeid_id == 12 or component.componenttypeid_id == 15:
+            isBottom = 1
+        else:
+            isBottom = 0
+        if component.componenttypeid_id == 9 or component.componenttypeid_id == 13:
+            isShell = 1
+        else:
+            isShell = 0
+        ca = models.RwCaLevel1.objects.get(id=proposalID)
+        apiComType = models.ApiComponentType.objects.get(apicomponenttypeid=component.apicomponenttypeid)
+        inputCa = models.RwInputCaLevel1.objects.get(id=proposalID)
+        rwcomponent = models.RwComponent.objects.get(id=proposalID)
+        rwstream = models.RwStream.objects.get(id=proposalID)
+        rwcalevel1 = models.RwCaLevel1.objects.get(id=proposalID)
+        rwcofholesize = models.RwFullCoFHoleSize.objects.get(id=proposalID)
+    except Exception as e:
+        print(e)
+    return render(request, 'FacilityUI/risk_summary/areaBasedCoFforShell.html',{'page':'AreaBasedCoFShell','noti':noti, 'countnoti':countnoti,'count':count,'proposalID':proposalID,'ass':rwAss,'data': data,'info':request.session,'isTank': isBottom,
+                                                                   'isShell': isShell})
 def RiskChart(request, proposalID):
     noti = models.ZNotification.objects.all().filter(id_user=request.session['id'])
     countnoti = noti.filter(state=0).count()

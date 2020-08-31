@@ -624,25 +624,25 @@ def calculateNormal(proposalID):
             refullPOF.save()
         # ca level 1( CoF)
         try:
-            print('test cof level 1')
-            toxic_fluid = rwinputca.api_fluid
+            toxic_fluid = rwinputca.toxic_fluid
             phase_fluid_storage = rwstream.storagephase
             api_com_type = models.ApiComponentType.objects.get(
                                    apicomponenttypeid=comp.apicomponenttypeid).apicomponenttypename
             toxic_fluid_percentage = rwinputca.toxic_percent
             model_fluid = rwinputca.api_fluid
             MATERIAL_COST = rwmaterial.costfactor
-            caflammable = CA_Flammable.CA_Flammable(toxic_fluid, phase_fluid_storage,
+            store_pressure=rwstream.maxoperatingpressure
+            caflammable = CA_Flammable.CA_Flammable(model_fluid, phase_fluid_storage,
                                                     rwinputca.mitigation_system, proposalID,
-                                                    rwstream.minoperatingtemperature + 273,
-                                                    api_com_type, toxic_fluid_percentage)
+                                                    rwstream.maxoperatingtemperature + 273,
+                                                    api_com_type, toxic_fluid_percentage,toxic_fluid)
             catoxic = ToxicConsequenceArea.CA_Toxic(proposalID, rwinputca.toxic_fluid, caflammable.ReleasePhase(),
-                                                    toxic_fluid_percentage, api_com_type)
+                                                    toxic_fluid_percentage, api_com_type,model_fluid,store_pressure)
             CA_cmd = caflammable.CA_Flam_Cmd()
-            CA_inj = max(caflammable.CA_Flam_inj(),catoxic.CA_toxic_inj(),catoxic.NoneCA_leck())
+            CA_inj = max(caflammable.CA_Flam_inj(),caflammable.CA_Flam_inj_toxic(),catoxic.CA_toxic_inj(),catoxic.CA_toxic_inj2(),catoxic.NoneCA_leck())
             fullcof = FinancialCOF.FinancialCOF(proposalID, model_fluid, toxic_fluid,
                                                 toxic_fluid_percentage, api_com_type,
-                                                MATERIAL_COST, CA_cmd, CA_inj)
+                                                MATERIAL_COST, CA_cmd, CA_inj,phase_fluid_storage,rwinputca.mitigation_system,rwstream.maxoperatingtemperature + 273,store_pressure)
             print("ok1")
             if rwcofholesize.count() != 0:
                 print('test cof level 11')
@@ -1121,7 +1121,7 @@ def calculateTank(proposalID):
                                         CHT=rwcomponent.shellheight,PROD_COST=0,
                                         EQUIP_OUTAGE_MULTIPLIER=0,
                                         EQUIP_COST=0,POP_DENS=0,
-                                        INJ_COST=0)
+                                        INJ_COST=0, release_Fluid_Percent_Toxic=rwstream.releasefluidpercenttoxic)
                                         # EQUIPMENT_COST=FullFCof.equipcost)
             else:
                 rwFullCofTank = models.RWFullCofTank.objects.get(id=proposalID)
@@ -1141,7 +1141,8 @@ def calculateTank(proposalID):
                                         CHT=rwcomponent.shellheight, PROD_COST=rwFullCofTank.prodcost,
                                         EQUIP_OUTAGE_MULTIPLIER=rwFullCofTank.equipoutagemultiplier,
                                         EQUIP_COST=rwFullCofTank.equipcost, POP_DENS=rwFullCofTank.popdens,
-                                        INJ_COST=rwFullCofTank.injcost)
+                                        INJ_COST=rwFullCofTank.injcost,
+                                        release_Fluid_Percent_Toxic=rwstream.releasefluidpercenttoxic)
                 # EQUIPMENT_COST=FullFCof.equipcost)
             if countRwcatank.count() != 0:
                 rwcatank = models.RwCaTank.objects.get(id=proposalID)
@@ -1187,6 +1188,8 @@ def calculateTank(proposalID):
                 rwcatank.consequencecategory = cacal.FC_Category(cacal.FC_total_shell())
                 #bổ sung 3 tham số đầu ra
                 rwcatank.damage_surrounding_equipment_cost=cacal.fc_affa_tank()
+                rwcatank.business_cost = cacal.fc_prod_tank()
+                rwcatank.associated_personnel_injury_cost = cacal.fc_inj_tank()
                 rwcatank.save()
             else:
                 rwcatank = models.RwCaTank(id=rwassessment, hydraulic_water=cacal.k_h_water(),
@@ -1228,7 +1231,8 @@ def calculateTank(proposalID):
                                            business_cost=cacal.fc_prod_tank(),
                                            consequence=cacal.FC_total_shell(),
                                            consequencecategory=cacal.FC_Category(cacal.FC_total_shell()),
-                                           damage_surrounding_equipment_cost=cacal.fc_affa_tank())
+                                           damage_surrounding_equipment_cost=cacal.fc_affa_tank(),
+                                           associated_personnel_injury_cost=cacal.fc_inj_tank())
                 rwcatank.save()
             FC_TOTAL = cacal.FC_total_shell()
             FC_CATEGORY = cacal.FC_Category(cacal.FC_total_shell())

@@ -12,7 +12,7 @@ def roundFC(fc):
     if fc is None:
         return "N/A"
     else:
-        return round(fc,2)
+        return round(fc,5)
 def roundMoney(money):
     if money is None:
         return "N/A"
